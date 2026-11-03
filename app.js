@@ -811,10 +811,11 @@ function brazilHTML(r,title="No Brasil, quem pensa como você"){
 // For a thinker's page: the closest Brazilians to an international thinker, or the
 // international kin of a Brazilian one.
 // Three books per thinker: the starter book from the catalog plus two from support.js, each an Amazon search.
+// Covers come from Open Library (covers.js); a missing or broken one falls back to the colored spine.
 function readingHTML(p){
-  const books=[p.b,...(SUP.READING[p.id]||[])];
+  const books=[p.b,...(SUP.READING[p.id]||[])],cov=(window.AgoraCovers||{})[p.id]||[];
   const note=[SUP.SUPPORT.amazonTag?"Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você.":"",HAS_PIX?'Prefere ajudar direto? <a href="#/apoie">Faça um Pix</a>.':""].filter(Boolean).join(" ");
-  return `<ol class="reads">${books.map((t,i)=>`<li><a href="${esc(SUP.bookURL(t,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span><span class="t">${esc(t)}</span><span class="muted">${i?"":"Comece por este · "}Ver na Amazon</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`).join("")}</ol>${note?`<p class="aff-note">${note}</p>`:""}`;
+  return `<ol class="reads">${books.map((t,i)=>`<li><a href="${esc(SUP.bookURL(t,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov[i]?`<img src="https://covers.openlibrary.org/b/id/${cov[i]}-M.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(t)}</span><span class="muted">${i?"":"Comece por este · "}Ver na Amazon</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`).join("")}</ol>${note?`<p class="aff-note">${note}</p>`:""}`;
 }
 function kinHTML(p){
   if(p.era==="Brasil"){
@@ -1371,11 +1372,13 @@ async function shareCard(r,usePic=true){
   // Brazilian match and opposite.
   x.fillStyle=muted;x.font="500 28px 'Inter Tight'";
   const lineBr=[br?`No Brasil: ${br.n}`:"",opp?`Oposto: ${opp.n}`:""].filter(Boolean).join("   ·   ");
-  x.fillText(lineBr,W/2,1730);
-  // Call to action band.
-  pill(x,90,1768,W-180,120,accent);
-  x.fillStyle="#140B07";x.font="600 30px 'Inter Tight'";x.fillText("Qual filósofo pensa como você?",W/2,1816);
-  x.font="700 38px 'Inter Tight'";x.fillText(location.host||"filosofometro.vercel.app",W/2,1862);
+  x.fillText(lineBr,W/2,1712);
+  // Sign-off: a hairline, the question in the display serif, then the address with the brand dot in accent.
+  x.fillStyle=line;x.fillRect(W/2-180,1756,360,2);
+  x.fillStyle=ink;x.font="italic 400 58px 'Instrument Serif'";x.fillText("Qual filósofo pensa como você?",W/2,1824);
+  x.font="600 32px 'Inter Tight'";
+  const host="filosofometro",tld=".com.br",hw=x.measureText(host).width,tw=x.measureText(tld).width;
+  x.textAlign="left";x.fillStyle=muted;x.fillText(host,W/2-(hw+tw)/2,1878);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1878);x.textAlign="center";
   // A portrait served without CORS taints the canvas; redraw without images rather than fail.
   let blob;
   try{blob=await new Promise((res,rej)=>{try{c.toBlob(b=>b?res(b):rej(new Error("empty")),"image/png")}catch(e){rej(e)}})}

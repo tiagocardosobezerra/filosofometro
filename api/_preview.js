@@ -114,7 +114,7 @@ const defs = `<defs>
 </defs>`;
 const frame = body => `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${defs}
 <rect width="${W}" height="${H}" fill="${C.bg}"/><rect width="${W}" height="${H}" fill="url(#glow)"/>${body}
-<text x="1120" y="590" text-anchor="end" font-family="${sans}" font-size="22" fill="${C.muted}">filosofometro.vercel.app</text></svg>`;
+<text x="1120" y="590" text-anchor="end" font-family="${sans}" font-size="22" fill="${C.muted}">filosofometro.com.br</text></svg>`;
 const brand = (x, y) => `<path d="M${x + 14} ${y - 22}L${x + 28} ${y + 4}L${x} ${y + 4}Z" fill="none" stroke="${C.ink}" stroke-width="2" stroke-linejoin="round"/><circle cx="${x + 14}" cy="${y - 4}" r="3.6" fill="${C.accent}"/><text x="${x + 42}" y="${y + 2}" font-family="${serif}" font-size="34" fill="${C.ink}">${SITE}</text>`;
 
 async function inviteSVG(info) {
