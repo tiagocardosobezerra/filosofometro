@@ -245,6 +245,65 @@ function renderHome(){
   </section>`);
   app.querySelectorAll("[data-fresh]").forEach(a=>a.addEventListener("click",()=>store.del("progress")));
   heroAnimation();
+  wireDiscover();
+}
+
+// The "O que você descobre" tiles answer the pointer with real catalog data: profiles morph, axes explain
+// themselves, the timeline names who was born where you point, and the story card counts up.
+function wireDiscover(){
+  const root=app.querySelector(".discover");if(!root)return;
+  const tip=document.getElementById("tip");
+  // 01: the pair tile cycles through contrasting thinkers while hovered (or on each tap).
+  const par=root.querySelector(".bt-par"),host=par.querySelector(".bt-sigil"),who=par.querySelector(".bt-who");
+  const deck=["simone-de-beauvoir","david-hume","confucio","karl-marx","ayn-rand","buda","friedrich-hayek","spinoza"].map(id=>byId[id]).filter(Boolean);
+  let i=0,cur=deck[0].v.slice(),raf=0,cycle=0,count=0;
+  onLeave(()=>{clearInterval(cycle);cancelAnimationFrame(raf);cancelAnimationFrame(count)});
+  host.innerHTML=sigil(cur,{cls:"sg-user",tips:true,title:`Perfil de ${deck[0].n} nos 11 eixos`});
+  wireTips(host,()=>({p:deck[i]}));
+  // Portraits load ahead so each swap shows a face, not an empty frame.
+  deck.forEach(p=>{if(p.img){const im=new Image();im.crossOrigin="anonymous";im.referrerPolicy="no-referrer";im.src=p.img}});
+  const next=()=>{
+    if(tip.classList.contains("show"))return;
+    i=(i+1)%deck.length;const p=deck[i],from=cur.slice(),t0=performance.now();
+    const fig=par.querySelector(".bt-pic");fig.classList.add("out");
+    setTimeout(()=>{fig.outerHTML=portrait(p,{cls:"bt-pic out"});requestAnimationFrame(()=>par.querySelector(".bt-pic").classList.remove("out"))},250);
+    who.classList.add("out");setTimeout(()=>{who.innerHTML=`<b>${esc(p.n)}</b> · ${esc(p.s)}`;who.classList.remove("out")},250);
+    host.querySelector("svg").setAttribute("aria-label",`Perfil de ${p.n} nos 11 eixos`);
+    cancelAnimationFrame(raf);
+    const step=now=>{
+      const t=reduceMotion?1:Math.min(1,(now-t0)/800),e=1-Math.pow(1-t,4);
+      cur=from.map((x,k)=>x+(p.v[k]-x)*e);
+      host.querySelector(".sg-user").setAttribute("d",path(cur));
+      host.querySelectorAll(".sg-dot").forEach((d,k)=>{const [x,y]=pts(cur)[k];d.setAttribute("cx",x.toFixed(1));d.setAttribute("cy",y.toFixed(1))});
+      if(t<1)raf=requestAnimationFrame(step);
+    };
+    raf=requestAnimationFrame(step);
+  };
+  par.addEventListener("pointerenter",e=>{if(e.pointerType!=="mouse")return;next();clearInterval(cycle);cycle=setInterval(next,1800)});
+  par.addEventListener("pointerleave",()=>clearInterval(cycle));
+  par.addEventListener("click",e=>{if(TOUCH&&!e.target.closest(".sg-hit"))next()});
+  // 04: the marker follows the pointer and names the thinker born closest to that year.
+  const tl=root.querySelector(".bt-tl"),line=tl.querySelector(".bt-time"),mark=line.querySelector("b"),year=line.querySelector(".bt-year");
+  const born=PH.map(p=>p.born),min=Math.min(...born),max=Math.max(...born),dots=[...line.querySelectorAll("i")];
+  const at=x=>{
+    const r=line.getBoundingClientRect(),f=Math.max(0,Math.min(1,(x-r.left)/r.width)),y=min+f*(max-min);
+    let k=0;PH.forEach((p,j)=>{if(Math.abs(p.born-y)<Math.abs(PH[k].born-y))k=j});
+    const p=PH[k],left=(p.born-min)/(max-min)*100;
+    mark.style.left=left+"%";dots.forEach((d,j)=>d.classList.toggle("on",j===k));
+    year.textContent=`${p.n} · ${p.born<0?`${-p.born} a.C.`:p.born}`;year.style.left=Math.max(14,Math.min(86,left))+"%";tl.classList.add("live");
+  };
+  tl.addEventListener("pointermove",e=>at(e.clientX));
+  tl.addEventListener("pointerleave",()=>{tl.classList.remove("live");mark.style.left="62%";dots.forEach(d=>d.classList.remove("on"))});
+  // 05: both profiles explain each axis.
+  const [a,b]=["simone-de-beauvoir","nietzsche"].map(id=>byId[id]);
+  if(a&&b)wireTips(root.querySelector(".bt-duo"),{p:b,user:a.v,you:a.n});
+  // 06: the story card counts up to its match.
+  const story=root.querySelector(".bt-story"),pct=story.querySelector(".ph-pct");
+  story.addEventListener("pointerenter",()=>{
+    if(reduceMotion)return;const t0=performance.now();cancelAnimationFrame(count);
+    const step=now=>{const t=Math.min(1,(now-t0)/900);pct.textContent=Math.round(94*(1-Math.pow(1-t,3)))+"%";if(t<1)count=requestAnimationFrame(step)};
+    count=requestAnimationFrame(step);
+  });
 }
 
 // What a result contains, previewed with real catalog data so the page shows instead of telling.
@@ -261,24 +320,24 @@ function discoverHTML(){
     </div>
     <div class="bento">
       <article class="bt bt-par">
-        <div class="bt-art">${portrait(a,{cls:"bt-pic"})}<div class="bt-sigil">${sigil(a.v,{cls:"sg-user",decorative:true})}</div></div>
+        <div class="bt-art">${portrait(a,{cls:"bt-pic"})}<div class="bt-sigil"></div><span class="bt-who"><b>${esc(a.n)}</b> · ${esc(a.s)}</span></div>
         <div><span class="bt-k">01 · Seu par</span><h3>O pensador com o formato mais parecido com o seu</h3><p>Com percentual de compatibilidade, biografia, ideias centrais e onde vocês concordam e divergem.</p></div>
       </article>
       <article class="bt bt-opp">
-        <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}</div>
+        <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}<span class="bt-reveal">${esc(shortName(b.n))} e ${esc(shortName(opp.n))} concordam em ${AXES.filter((_,i)=>Math.sign(b.v[i])===Math.sign(opp.v[i])).length} de ${AXES.length} eixos</span></div>
         <span class="bt-k">02 · Seu oposto</span><h3>Quem mais discordaria de você</h3>
       </article>
       <article class="bt bt-br">
         <span class="br-flag" aria-hidden="true"></span>
-        <div class="bt-stack">${brs.map(p=>portrait(p,{cls:"bt-av"})).join("")}</div>
+        <div class="bt-stack">${brs.map(p=>portrait(p,{cls:"bt-av"})).join("")}<span class="bt-reveal">${brs.map(p=>esc(shortName(p.n))).join(", ")} e mais</span></div>
         <span class="bt-k">03 · No Brasil</span><h3>Quem pensa como você entre ${BR.length+PH.filter(p=>p.br).length} brasileiros</h3>
       </article>
       <article class="bt bt-tl">
-        <div class="bt-time" aria-hidden="true">${dots}<b style="left:62%"></b></div>
+        <div class="bt-time" aria-hidden="true">${dots}<b style="left:62%"></b><span class="bt-year"></span></div>
         <span class="bt-k">04 · Linha do tempo</span><h3>Onde você está na história, de ${Math.abs(min)} a.C. até hoje</h3>
       </article>
       <article class="bt bt-vsf">
-        <div class="bt-duo">${sigil(a.v,{compare:b.v,cls:"sg-user",decorative:true})}</div>
+        <div class="bt-duo">${sigil(a.v,{compare:b.v,cls:"sg-user",tips:true,title:`${a.n} e ${b.n} nos 11 eixos`})}</div>
         <span class="bt-k">05 · Desafie um amigo</span><h3>Mande o link e vejam, eixo por eixo, quanto são compatíveis</h3>
       </article>
       <article class="bt bt-story">
