@@ -829,7 +829,8 @@ footer a.author svg{width:15px;height:15px}
 
 /* Installed app: room for the notch and the home bar; footer install button */
 .bar{padding-top:env(safe-area-inset-top)}
-footer{padding-bottom:env(safe-area-inset-bottom)}
+footer{padding:28px 0 max(28px,calc(env(safe-area-inset-bottom) + 16px))}
+footer .wrap{align-items:center}
 .install-btn{margin-left:10px;padding:4px 12px;border-radius:999px;border:1px solid var(--line2);background:none;color:var(--ink);font-size:13px;font-weight:600;cursor:pointer}
 @media (hover:hover){.install-btn:hover{border-color:var(--accent);color:var(--accent)}}
 @media (max-width:560px){.install-btn{display:block;margin:12px 0 0}.install-btn.hidden{display:none}}
