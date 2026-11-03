@@ -471,5 +471,16 @@ section("Apoio (support.js)");
   ok(!/[–—]/.test(Object.values(S.READING).flat().join(" ")), "book titles have no long dashes");
 }
 
+section("Páginas estáticas (pensadores/)");
+{
+  const people = [...PH, ...(DATA.BR || [])];
+  const page = id => { try { return fs.readFileSync(path.join(ROOT, "pensadores", id, "index.html"), "utf8"); } catch (e) { return ""; } };
+  ok(people.every(p => { const h = page(p.id); return h.includes(`<link rel="canonical" href="https://filosofometro.com.br/pensadores/${p.id}/">`) && h.includes("application/ld+json") && h.includes('href="/#/teste"'); }), "every thinker has a static page with canonical URL, structured data and a link to the test");
+  const sitemap = fs.readFileSync(path.join(ROOT, "sitemap.xml"), "utf8");
+  ok(people.every(p => sitemap.includes(`/pensadores/${p.id}/</loc>`)), "sitemap lists every thinker page");
+  ok(fs.readFileSync(path.join(ROOT, "robots.txt"), "utf8").includes("Sitemap: https://filosofometro.com.br/sitemap.xml"), "robots.txt points to the sitemap");
+  ok(!/[–—]/.test(page("nietzsche").replace(/<script[\s\S]*?<\/script>/g, "")), "static pages have no long dashes");
+}
+
 console.log(`\n${passes} passed, ${fails} failed`);
 process.exit(fails ? 1 : 0);

@@ -13,6 +13,11 @@ const byId=Object.fromEntries([...PH,...BR].map(p=>[p.id,p]));
 // The order statements are shown in comes from the engine, so the audit can report it.
 const ORDER=E.ORDER;
 
+// Privacy-friendly analytics (Vercel Web Analytics, no cookies). Hash routes and funnel steps are sent as
+// readable virtual pages; result codes never leave the browser, so "/r/<code>" is reported as "/resultado".
+const track=path=>{try{window.va&&window.va("pageview",{route:path,path})}catch(e){}};
+const PAGE={"":"/",teste:"/teste",r:"/resultado",pensadores:"/pensadores",metodo:"/metodo",verificar:"/verificar",vs:"/convite",comparar:"/comparacao",apoie:"/apoie"};
+
 const store={
   get(k){try{return JSON.parse(localStorage.getItem("agora."+k))}catch(e){return null}},
   set(k,v){try{localStorage.setItem("agora."+k,JSON.stringify(v))}catch(e){}},
@@ -147,6 +152,7 @@ function route(){
   const cta=document.getElementById("navCta"),lastCode=store.get("last");
   if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.innerHTML=hasLast?`<span class="cta-lg">Meu resultado</span><span class="cta-sm">Resultado</span>`:`<span class="cta-lg">Fazer o teste</span><span class="cta-sm">Teste</span>`;cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
   if(a11yNav(name))return;
+  track(name==="p"&&byId[parts[1]]?"/p/"+parts[1]:name==="r"&&parts[2]==="ver"?"/resultado-de-outra-pessoa":PAGE[name]||"/nao-encontrado");
   if(name==="teste")renderQuiz(parts[1]);
   else if(name==="r")renderResult(parts[1],parts[2]);
   else if(name==="pensadores")renderCatalog();
@@ -389,6 +395,7 @@ function heroAnimation(){
 /* ---------- Quiz ---------- */
 // After the last answer: open the result, or the comparison when the person came from an invite.
 function finishQuiz(answers){
+  track("/evento/teste-concluido");
   const code=E.encode(answers),vs=store.get("vs");
   store.set("last",code);
   if(vs&&E.decode(vs.code)){store.del("vs");location.replace(`#/comparar/${vs.code}/${code}${vs.name?`/${encName(vs.name)}`:""}`);return}
@@ -733,6 +740,7 @@ const compareURL=(a,b,nA,nB)=>{const tail=`${a}/${b}${nA||nB?`/${encName(nA)}/${
 const challengeText=r=>r.directionless?`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:`Fiz o Filosofômetro e deu ${r.top.pct}% ${r.top.p.n}. Faz o teste e vê quanto a gente pensa parecido:`;
 // Native share sheet on phones; copy to clipboard elsewhere.
 async function challenge(r){
+  track("/evento/convite");
   const url=inviteURL(r),text=challengeText(r);
   if(navigator.share){try{await navigator.share({title:"Filosofômetro",text,url});return}catch(e){if(e.name==="AbortError")return}}
   try{await navigator.clipboard.writeText(`${text} ${url}`);toast("Convite copiado. Agora é só mandar!")}catch(e){prompt("Copie o convite:",url)}
@@ -908,7 +916,7 @@ function readingHTML(p){
 // One book row: cover (or the colored spine), title, a short line under it and the Amazon link.
 function bookItem(p,i,title,line){
   const cov=((window.AgoraCovers||{})[p.id]||[])[i];
-  return `<li><a href="${esc(SUP.bookURL(title,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov?`<img src="https://covers.openlibrary.org/b/id/${cov}-M.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(title)}</span><span class="muted">${line}</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`;
+  return `<li><a href="${esc(SUP.bookURL(title,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov?`<img src="/covers/${cov}.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(title)}</span><span class="muted">${line}</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`;
 }
 function affNote(){
   const note=[SUP.SUPPORT.amazonTag?"Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você.":"",HAS_PIX?'Prefere ajudar direto? <a href="#/apoie">Faça um Pix</a>.':""].filter(Boolean).join(" ");
@@ -1387,7 +1395,7 @@ function renderSupport(){
     </div>
   </section>`,"Apoie");
   document.getElementById("pixCopy").onclick=async()=>{
-    try{await navigator.clipboard.writeText(code);toast("Código Pix copiado. Cole no app do banco.",3200)}catch(e){prompt("Copie o código Pix:",code)}
+    try{await navigator.clipboard.writeText(code);toast("Código Pix copiado. Cole no app do banco.",3200);track("/evento/pix-copiado")}catch(e){prompt("Copie o código Pix:",code)}
   };
   const draw=()=>{
     const host=document.getElementById("pixQr");if(!host||!window.qrcode)return;
@@ -1407,6 +1415,7 @@ async function copyLink(){
   catch(e){prompt("Copie o link:",location.href)}
 }
 async function shareCard(r,usePic=true){
+  if(usePic)track("/evento/story");
   await document.fonts.ready;
   const W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;
   const x=c.getContext("2d"),p=r.top.p;
@@ -1560,7 +1569,9 @@ if(PREVIEW&&"serviceWorker" in navigator)addEventListener("load",()=>navigator.s
   const ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
   let deferred=null;
   addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(!standalone)btn.classList.remove("hidden")});
-  addEventListener("appinstalled",()=>{btn.classList.add("hidden");deferred=null;toast("App instalado")});
+  addEventListener("appinstalled",()=>{btn.classList.add("hidden");deferred=null;toast("App instalado");track("/evento/app-instalado")});
+  // Clicks on any book link (all of them carry rel="sponsored").
+  document.addEventListener("click",e=>{if(e.target.closest('a[rel~="sponsored"]'))track("/evento/livro")});
   if(ios&&!standalone)btn.classList.remove("hidden");
   btn.addEventListener("click",async()=>{
     if(deferred){deferred.prompt();await deferred.userChoice.catch(()=>{});deferred=null;btn.classList.add("hidden");return}

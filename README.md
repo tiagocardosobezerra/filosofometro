@@ -66,6 +66,18 @@ Preencha `SUPPORT` no topo de `support.js`:
 - `pixKey`, `pixName` e `pixCity` ativam a página `#/apoie` (QR Code e Pix copia e cola, montados no próprio navegador) e o link "Apoie o projeto" no rodapé. Com `pixKey` vazio, nada disso aparece.
 - `amazonTag` é o ID de associado da Amazon. Cada pensador mostra três livros, e cada um leva a uma busca na Amazon Brasil com esse ID. Com o ID preenchido, aparece o aviso de associado exigido pela Amazon.
 
+## Páginas dos pensadores (SEO)
+
+O app vive depois do `#`, que os buscadores quase não indexam. `node tests/make-pages.js` gera uma página estática por pensador em `pensadores/<id>/` (biografia, ideias, posição nos 11 eixos, três livros, pensadores parecidos e o convite para o teste), o índice `pensadores/`, `sitemap.xml` e `robots.txt`. Cada página tem endereço canônico em `https://filosofometro.com.br` e dados estruturados (schema.org). Rode de novo sempre que `data.js`, `support.js` ou `covers.js` mudarem.
+
+## Capas dos livros
+
+`node tests/make-covers.js` procura na Open Library a capa de cada livro indicado e grava os ids em `covers.js` (relatório para revisão em `tests/covers-report.md`; correções manuais em `OVERRIDE`). `node tests/fetch-covers.js` baixa as capas para `covers/`, e o site as serve direto. Livro sem capa mostra a lombada colorida.
+
+## Medição
+
+Vercel Web Analytics, sem cookies (ative em Analytics no painel do projeto). As rotas do app e os passos do funil chegam como páginas legíveis: `/teste`, `/evento/teste-concluido`, `/resultado`, `/evento/story`, `/evento/convite`, `/evento/livro`, `/evento/pix-copiado`, `/evento/app-instalado`. O código das respostas nunca sai do navegador.
+
 ## Publicar na Vercel
 
 É um site estático com duas funções em `api/`: importe a pasta na Vercel sem framework e sem comando de build. `vercel.json` define as reescritas de `/s/` e `/c/`.
