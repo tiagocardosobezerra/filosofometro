@@ -79,7 +79,7 @@ function a11yNav(name){
 }
 function mount(html,title){
   app.innerHTML=`<div class="view">${html}</div>`;
-  document.title=title?`${title} — Filosofômetro`:"Filosofômetro — Qual filósofo pensa como você?";
+  document.title=title?`${title} | Filosofômetro`:"Filosofômetro: qual filósofo pensa como você?";
 }
 function focusHeading(){
   const h=app.querySelector("h1");
@@ -224,7 +224,7 @@ function renderQuiz(){
     </div>
     <div class="quiz-foot">
       <span style="display:flex;gap:20px;align-items:center"><button type="button" class="link-btn" id="prevBtn">${icon.back} Anterior</button><button type="button" class="link-btn accent hidden" id="toResult">Ver resultado ${icon.arrow}</button></span>
-      <span class="kbd-help">Atalhos: <span class="kbd">1</span>–<span class="kbd">5</span> responder · <span class="kbd">⌫</span> voltar</span>
+      <span class="kbd-help">Atalhos: <span class="kbd">1</span> a <span class="kbd">5</span> responder · <span class="kbd">⌫</span> voltar</span>
     </div>
   </section>`,"Teste");
   const ticks=[...app.querySelectorAll(".progress i")];
@@ -291,7 +291,7 @@ function renderQuiz(){
 
 /* ---------- Result ---------- */
 let current=null;
-const pctText=x=>x===null?"—":`${x}%`;
+const pctText=x=>x===null?"sem %":`${x}%`;
 function renderResult(code){
   const answers=E.decode(code);
   if(!answers){renderNotFound("Este link de resultado está incompleto ou é de uma versão antiga do teste.");return}
@@ -393,7 +393,7 @@ function axisRow(a,main,other,mainLabel,otherLabel){
 }
 
 /* ---------- Audit ---------- */
-const num=(x,d=6)=>x===null?"—":x.toFixed(d);
+const num=(x,d=6)=>x===null?"sem valor":x.toFixed(d);
 function auditPanel(r){
   const P=r.params,u=r.user;
   return `<details class="audit" id="audit">
@@ -429,7 +429,7 @@ compatibilidade = ${esc(E.PERCENT_RULE)}      (τ = ${P.tau})</div>
       <div class="formula">ordem: ${esc(E.TIE_BREAK)}
 eps = ${P.eps}      distância bruta = média de |sua posição − posição do pensador|, sem normalizar</div>
       <div class="tbl-wrap" style="margin-top:12px"><table class="tbl"><thead><tr><th class="n">#</th><th>Pensador</th><th class="n">Distância</th><th class="n">Dist. bruta</th><th class="n">%</th><th>Desempate</th></tr></thead><tbody>
-      ${r.ranking.map((x,i)=>`<tr class="${i===0||(r.opposite&&i===r.ranking.length-1)?"hl":""}"><td class="n">${x.rank}</td><td>${esc(x.p.n)} <span class="muted mono" style="font-size:11px">${x.p.id}</span></td><td class="n">${num(x.distance)}</td><td class="n">${num(x.rawDistance)}</td><td class="n">${x.pct===null?"—":x.pct}</td><td>${x.tiedWithPrev||x.tiedWithNext?`<span class="tie">empate de distância</span>`:""}</td></tr>`).join("")}
+      ${r.ranking.map((x,i)=>`<tr class="${i===0||(r.opposite&&i===r.ranking.length-1)?"hl":""}"><td class="n">${x.rank}</td><td>${esc(x.p.n)} <span class="muted mono" style="font-size:11px">${x.p.id}</span></td><td class="n">${num(x.distance)}</td><td class="n">${num(x.rawDistance)}</td><td class="n">${x.pct===null?"sem %":x.pct}</td><td>${x.tiedWithPrev||x.tiedWithNext?`<span class="tie">empate de distância</span>`:""}</td></tr>`).join("")}
       </tbody></table></div>
 
       <h3 class="h-audit">Suas 44 respostas</h3>
@@ -493,7 +493,7 @@ function renderCatalog(){
       <select class="select" id="sortSel">
         ${lastR?`<option value="match">Mais compatíveis comigo</option>`:""}
         <option value="era">Ordem histórica</option>
-        <option value="az">A–Z</option>
+        <option value="az">Ordem alfabética</option>
       </select>
     </div>
     <p class="sr" id="count" aria-live="polite"></p>

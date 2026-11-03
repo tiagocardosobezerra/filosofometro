@@ -1,4 +1,4 @@
-# Filosofômetro — Qual filósofo pensa como você?
+# Filosofômetro: qual filósofo pensa como você?
 
 Teste filosófico com 44 afirmações, 11 eixos e 93 pensadores. Site estático, sem build e sem backend.
 
