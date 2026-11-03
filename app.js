@@ -103,7 +103,7 @@ function wireTips(root,ctx){
   };
   root.querySelectorAll(".sg-hit").forEach(el=>{
     const showAt=(x,y)=>{tip.innerHTML=tipHTML(+el.dataset.ax,typeof ctx==="function"?ctx():ctx);tip.classList.add("show");place(x,y)};
-    el.addEventListener("pointerenter",e=>showAt(e.clientX,e.clientY));
+    el.addEventListener("pointerenter",e=>{if(e.pointerType==="mouse")showAt(e.clientX,e.clientY)});
     el.addEventListener("pointermove",e=>place(e.clientX,e.clientY));
     el.addEventListener("pointerleave",hide);
     el.addEventListener("focus",()=>{const b=el.getBoundingClientRect();showAt(b.left+b.width/2,b.top+b.height/2)});
@@ -127,6 +127,9 @@ function route(){
   const parts=h.replace(/^#\/?/,"").split("/");
   const name=parts[0]||"";
   document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(name==="p"&&a.dataset.nav==="pensadores")));
+  // Header call to action: the last result if there is one, otherwise the quiz. Hidden while taking the quiz.
+  const cta=document.getElementById("navCta"),lastCode=store.get("last");
+  if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.textContent=hasLast?"Meu resultado":"Fazer o teste";cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
   if(a11yNav(name))return;
   if(name==="teste")renderQuiz(parts[1]);
   else if(name==="r")renderResult(parts[1],parts[2]);
@@ -155,6 +158,8 @@ function focusHeading(){
   if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true})}
 }
 addEventListener("hashchange",()=>{route();focusHeading()});
+// The logo on the page it points to scrolls back to the top instead of doing nothing.
+document.querySelector(".brand").addEventListener("click",e=>{if((location.hash||"#/")==="#/"){e.preventDefault();scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"})}});
 
 /* ---------- Home ---------- */
 function renderHome(){
@@ -179,11 +184,12 @@ function renderHome(){
         <figure class="portrait" id="heroPic" aria-hidden="true"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"></figure>
         <div class="sigil-badge" id="heroSigil"></div>
       </div>
-      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint">Passe o mouse (ou toque) na mandala para ver cada eixo.</p></div>
+      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> na mandala para ver cada eixo.</p></div>
     </div>
   </section>
   <div class="marquee" aria-hidden="true"><div class="track">${names}${names}</div></div>
-  <section class="wrap section">
+  ${discoverHTML()}
+  <section class="wrap section" style="padding-top:0">
     <div class="section-head">
       <div><span class="eyebrow">O mapa</span><h2 class="h2">Onze tensões que <em class="it">definem</em> um pensamento</h2></div>
       <p>Cada eixo opõe duas respostas legítimas a uma pergunta antiga. Não existe lado certo: existe o seu lado, e quem esteve nele antes de você.</p>
@@ -207,6 +213,48 @@ function renderHome(){
   </section>`);
   app.querySelectorAll("[data-fresh]").forEach(a=>a.addEventListener("click",()=>store.del("progress")));
   heroAnimation();
+}
+
+// What a result contains, previewed with real catalog data so the page shows instead of telling.
+function discoverHTML(){
+  const pick=id=>byId[id]||PH[0];
+  const a=pick("simone-de-beauvoir"),b=pick("nietzsche")||PH[1],opp=pick("tomas-de-aquino");
+  const brs=["paulo-freire","marilena-chaui","lelia-gonzalez","milton-santos"].map(id=>byId[id]).filter(Boolean).slice(0,3);
+  const span=Math.max(...PH.map(p=>p.born))-Math.min(...PH.map(p=>p.born)),min=Math.min(...PH.map(p=>p.born));
+  const dots=PH.map(p=>`<i style="left:${((p.born-min)/span*100).toFixed(1)}%"></i>`).join("");
+  return `<section class="wrap section discover">
+    <div class="section-head">
+      <div><span class="eyebrow">O resultado</span><h2 class="h2">O que você <em class="it">descobre</em></h2></div>
+      <p>Não é só um nome. É um retrato do seu jeito de pensar, com gente de verdade dos dois lados, e uma conversa pronta para começar com os amigos.</p>
+    </div>
+    <div class="bento">
+      <article class="bt bt-par">
+        <div class="bt-art">${portrait(a,{cls:"bt-pic"})}<div class="bt-sigil">${sigil(a.v,{cls:"sg-user",decorative:true})}</div></div>
+        <div><span class="bt-k">01 · Seu par</span><h3>O pensador com o formato mais parecido com o seu</h3><p>Com percentual de compatibilidade, biografia, ideias centrais e onde vocês concordam e divergem.</p></div>
+      </article>
+      <article class="bt bt-opp">
+        <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}</div>
+        <span class="bt-k">02 · Seu oposto</span><h3>Quem mais discordaria de você</h3>
+      </article>
+      <article class="bt bt-br">
+        <span class="br-flag" aria-hidden="true"></span>
+        <div class="bt-stack">${brs.map(p=>portrait(p,{cls:"bt-av"})).join("")}</div>
+        <span class="bt-k">03 · No Brasil</span><h3>Quem pensa como você entre ${BR.length+PH.filter(p=>p.br).length} brasileiros</h3>
+      </article>
+      <article class="bt bt-tl">
+        <div class="bt-time" aria-hidden="true">${dots}<b style="left:62%"></b></div>
+        <span class="bt-k">04 · Linha do tempo</span><h3>Onde você está na história, de ${Math.abs(min)} a.C. até hoje</h3>
+      </article>
+      <article class="bt bt-vsf">
+        <div class="bt-duo">${sigil(a.v,{compare:b.v,cls:"sg-user",decorative:true})}</div>
+        <span class="bt-k">05 · Desafie um amigo</span><h3>Mande o link e vejam, eixo por eixo, quanto são compatíveis</h3>
+      </article>
+      <article class="bt bt-story">
+        <div class="bt-phone" aria-hidden="true"><span class="ph-pct">94%</span><span class="ph-nm">${esc(shortName(a.n))}</span><span class="ph-bar"></span></div>
+        <span class="bt-k">06 · Story</span><h3>Um card pronto para postar</h3>
+      </article>
+    </div>
+  </section>`;
 }
 
 function heroAnimation(){
@@ -291,6 +339,7 @@ function renderLevelPick(){
       <span class="lv-tag">${esc(i.tag)}</span>
       <span class="lv-name">${esc(l.name)}</span>
       <span class="lv-n"><b>${l.n}</b> afirmações · ≈ ${l.minutes} min</span>
+      <span class="lv-bars" aria-hidden="true">${[1,2,3].map(k=>`<i class="${k<=l.id?"on":""}"></i>`).join("")}</span>
       <span class="lv-desc">${esc(i.desc)}</span>
       <span class="lv-meta">Precisão ${esc(i.precision).toLowerCase()} · mesmo par ao refazer em ${i.retest} das vezes</span>
       <span class="btn ${l.id===2?"accent":"ghost"} sm">Começar ${icon.arrow}</span>
@@ -332,6 +381,7 @@ function renderQuiz(arg){
       <a class="link-btn" href="#/">Sair <span class="sr">do teste (seu progresso fica salvo)</span></a>
     </div>
     <div class="progress ${total>44?"dense":""}" style="grid-template-columns:repeat(${total},1fr)" aria-hidden="true">${order.map(()=>"<i></i>").join("")}</div>
+    <div class="quiz-body">
     <div class="q-stage">
       <div class="q-anim" id="qAnim">
         <div class="q-count mono" id="qCount" aria-hidden="true"></div>
@@ -346,6 +396,11 @@ function renderQuiz(arg){
         <div class="choices">${UI.map((code,j)=>`<button type="button" class="choice" role="radio" aria-checked="false" data-code="${code}" data-tone="${TONE[j]}"><span class="ch-mark" aria-hidden="true"><i></i><i></i></span><span class="ch-lbl">${SCALE[code].label}</span><span class="ch-k" aria-hidden="true">${j+1}</span></button>`).join("")}</div>
       </div>
     </div>
+    <aside class="quiz-aside" aria-hidden="true">
+      <div class="qa-sigil" id="qaSigil">${sigil(AXES.map(()=>0),{cls:"sg-user",labels:true,decorative:true})}</div>
+      <div class="qa-cap"><span class="eyebrow">Seu formato até agora</span><p id="qaAxis"></p></div>
+    </aside>
+    </div>
     <div class="quiz-foot">
       <span style="display:flex;gap:20px;align-items:center"><button type="button" class="link-btn" id="prevBtn">${icon.back} Anterior</button><button type="button" class="link-btn accent hidden" id="toResult">Ver resultado ${icon.arrow}</button></span>
       <span class="kbd-help">Atalhos: <span class="kbd">1</span> a <span class="kbd">5</span> responder · <span class="kbd">⌫</span> voltar</span>
@@ -354,8 +409,22 @@ function renderQuiz(arg){
   const ticks=[...app.querySelectorAll(".progress i")];
   const btns=[...app.querySelectorAll(".choice")];
   const anim=document.getElementById("qAnim");
+  // Live sigil: the position on each axis from the statements answered so far (unanswered axes sit in the middle).
+  const qaPath=app.querySelector("#qaSigil .sg-user"),qaDots=[...app.querySelectorAll("#qaSigil .sg-dot")];
+  const qaLbls=[...app.querySelectorAll("#qaSigil .sg-lbl")],qaSpokes=[...app.querySelectorAll("#qaSigil .sg-spoke")];
+  function paintAside(ax){
+    const sum=AXES.map(()=>0),n=AXES.map(()=>0);
+    answers.forEach((a,i)=>{if(a===null)return;const q=QS[i];sum[q[1]]+=SCALE[a].value*q[2];n[q[1]]++});
+    const v=sum.map((x,i)=>n[i]?x/(2*n[i]):0);
+    qaPath.setAttribute("d",path(v));
+    pts(v).forEach(([x,y],i)=>{qaDots[i].setAttribute("cx",x.toFixed(1));qaDots[i].setAttribute("cy",y.toFixed(1))});
+    qaLbls.forEach((t,i)=>t.classList.toggle("on",i===ax));qaSpokes.forEach((t,i)=>t.classList.toggle("on",i===ax));
+    const done=answers.filter(a=>a!==null).length;
+    document.getElementById("qaAxis").innerHTML=`Agora: <b>${esc(cap(AXES[ax].name))}</b>, entre ${esc(AXES[ax].l)} e ${esc(AXES[ax].r)}.<br><span class="muted">${done?`${done} de ${total} respondidas.`:"A mandala ganha forma a cada resposta."}</span>`;
+  }
   function paint(){
     const qi=order[pos],[text,ax,,exAgree,exDisagree]=QS[qi];
+    paintAside(ax);
     document.getElementById("qText").textContent=text;
     document.getElementById("exA").innerHTML=citation(exAgree);
     document.getElementById("exD").innerHTML=citation(exDisagree);
@@ -375,7 +444,7 @@ function renderQuiz(arg){
   }
   function pick(code){
     if(busy)return;
-    const qi=order[pos];answers[qi]=code;save();
+    const qi=order[pos];answers[qi]=code;save();paintAside(QS[qi][1]);
     btns.forEach(b=>b.setAttribute("aria-checked",+b.dataset.code===code));
     // Next: the first open statement ahead; when reviewing past answers, simply the next one;
     // at the end, any statement still open. The result opens only when every statement is answered.
@@ -462,7 +531,7 @@ function renderResult(code,mode){
       <div class="panel">
         <h2>${T.axes}</h2>
         <p class="sub">Laranja: ${T.you}. Tracejado: ${esc(p.n)}. Os gráficos mostram as posições brutas; a comparação usa o formato normalizado (passo 2 da auditoria).</p>
-        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint">Passe o mouse (ou toque) em cada eixo para ver o que ele mede e por que ficou ali.</p>
+        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver o que ele mede e por que ficou ali.</p>
         ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],T.you,p.n)).join("")}
       </div>
       <div style="display:grid;gap:20px;align-content:start">
@@ -809,7 +878,7 @@ function timelineHTML(r){
     <h2>Sua linhagem no tempo</h2>
     <p class="sub">Os ${PH.length} pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.</p>
     <div class="tl-scroll"><div class="tl" style="--rows:${rows.length}">
-      <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">Você está aqui</span>`:""}</a>`).join("")}</div>
+      <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}${l.x<9?" edge-l":l.x>91?" edge-r":""}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">Você está aqui</span>`:""}</a>`).join("")}</div>
       <div class="tl-line"></div>
       <div class="tl-dots">${dots.map(d=>`<a class="tl-dot" href="#/p/${d.p.id}" style="left:${d.x}%;--row:${d.row}" title="${esc(d.p.n)} (${esc(lifeText(d.p))})" aria-label="${esc(d.p.n)}, ${esc(lifeText(d.p))}"></a>`).join("")}</div>
       <div class="tl-eras">${eraMarks}</div>
@@ -964,7 +1033,7 @@ function renderThinker(id){
   <section class="wrap" style="padding-bottom:64px">
     <div class="grid2">
       <div class="panel"><h2>Posições</h2><p class="sub">Laranja: ${esc(p.n)}.${lastR?" Tracejado: você.":""} Posições do catálogo, de −1 a +1.</p>
-        <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:`Perfil de ${p.n} nos 11 eixos`})}</div><p class="tip-hint">Passe o mouse (ou toque) em cada eixo para ver a posição de ${esc(p.n)}.</p>
+        <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:`Perfil de ${p.n} nos 11 eixos`})}</div><p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver a posição de ${esc(p.n)}.</p>
         ${AXES.map((a,i)=>axisRow(a,p.v[i],lastR?lastR.scores[i]:undefined,p.n,"você")).join("")}</div>
       <div style="display:grid;gap:20px;align-content:start">
         ${aboutHTML(p,{title:"Quem foi"})}
