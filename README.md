@@ -2,6 +2,8 @@
 
 Teste filosófico com 44 afirmações, 11 eixos e 93 pensadores. Site estático, sem build e sem backend.
 
+**No ar:** https://filosofometro.vercel.app · **Criado por** [Tiago Cardoso Bezerra](https://github.com/tiagocardosobezerra)
+
 ## Arquivos
 
 | Arquivo | Papel |
