@@ -90,7 +90,7 @@ async function portraitData(p) {
   if (!p.img) return null;
   try {
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 4000);
-    const res = await fetch(p.img, { signal: ctl.signal, headers: { "User-Agent": "Filosofometro/1.0 (https://filosofometro.vercel.app)" } });
+    const res = await fetch(p.img, { signal: ctl.signal, headers: { "User-Agent": "Filosofometro/1.0 (https://filosofometro.com.br)" } });
     clearTimeout(t);
     if (!res.ok) return null;
     const type = res.headers.get("content-type") || "image/jpeg";

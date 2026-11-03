@@ -47,5 +47,29 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "filosofometro.vercel.app"
+        }
+      ],
+      "destination": "https://filosofometro.com.br/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.filosofometro.com.br"
+        }
+      ],
+      "destination": "https://filosofometro.com.br/:path*",
+      "permanent": true
+    }
   ]
 }
