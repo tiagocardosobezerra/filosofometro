@@ -53,6 +53,10 @@ Duas impressões digitais aparecem em cada auditoria. A do **catálogo** é FNV-
 
 O app roteia pelo hash (`#/vs/...`), que nunca chega ao servidor. Por isso os links compartilhados usam `/s/<código>[/<nome>]` e `/c/<a>/<b>[/<nomeA>/<nomeB>]`. A Vercel reescreve esses caminhos para `api/share.js`, que devolve uma página com título, descrição e imagem do resultado (Open Graph) e manda a pessoa direto para o app. A imagem de 1200 × 630 sai de `api/og.js`: um SVG desenhado com o mesmo motor e as mesmas cores do site, rasterizado com `@resvg/resvg-js` e as fontes de `fonts/` (Instrument Serif e Inter Tight, licença OFL). `og.png` é a prévia do site sem resultado; para gerar de novo, rode `node tests/make-og.js`.
 
+## App instalável
+
+`manifest.webmanifest` e `sw.js` tornam o site instalável ("Instalar o app" no rodapé, ou Adicionar à Tela de Início no iPhone) e utilizável offline depois da primeira visita. O service worker busca os arquivos do site sempre na rede primeiro, então uma nova versão aparece assim que publicada; retratos e fontes ficam em cache. Ele só é registrado no site publicado, nunca em `localhost`. Os ícones de `icons/` saem de `node tests/make-icons.js`.
+
 ## Publicar na Vercel
 
 É um site estático com duas funções em `api/`: importe a pasta na Vercel sem framework e sem comando de build. `vercel.json` define as reescritas de `/s/` e `/c/`.

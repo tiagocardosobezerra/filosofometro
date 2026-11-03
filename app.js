@@ -4,6 +4,7 @@ const E=AgoraEngine.create(AgoraData);
 const {AXES,QS,PH,SCALE}=E;
 const app=document.getElementById("app");
 const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TOUCH=matchMedia("(hover:none)").matches;
 const BR=AgoraData.BR||[];
 const byId=Object.fromEntries([...PH,...BR].map(p=>[p.id,p]));
 
@@ -431,6 +432,7 @@ function renderQuiz(arg){
     </div>
     <div class="quiz-foot">
       <span style="display:flex;gap:20px;align-items:center"><button type="button" class="link-btn" id="prevBtn">${icon.back} Anterior</button><button type="button" class="link-btn accent hidden" id="toResult">Ver resultado ${icon.arrow}</button></span>
+      <span class="qf-count mono" id="qfCount" aria-hidden="true"></span>
       <span class="kbd-help">Atalhos: <span class="kbd">1</span> a <span class="kbd">5</span> responder · <span class="kbd">⌫</span> voltar</span>
     </div>
   </section>`,"Teste");
@@ -457,6 +459,7 @@ function renderQuiz(arg){
     document.getElementById("exA").innerHTML=citation(exAgree);
     document.getElementById("exD").innerHTML=citation(exDisagree);
     document.getElementById("qCount").textContent=`${pad(pos+1)} / ${total}`;
+    document.getElementById("qfCount").textContent=`${answers.filter(a=>a!==null).length} de ${total}`;
     document.getElementById("qLive").textContent=`Afirmação ${pos+1} de ${total}: ${text}`;
     document.getElementById("axisTag").innerHTML=`Eixo <b>${pad(ax+1)}</b> · ${esc(AXES[ax].name)}`;
     ticks.forEach((t,i)=>{t.className=i===pos?"now":answers[order[i]]!==null?"done":""});
@@ -473,6 +476,9 @@ function renderQuiz(arg){
   function pick(code){
     if(busy)return;
     const qi=order[pos];answers[qi]=code;save();paintAside(QS[qi][1]);
+    // A short tick under the finger on phones that support it, and a one-time tip about swiping back.
+    if(TOUCH){if(navigator.vibrate)try{navigator.vibrate(8)}catch(e){}
+      if(!store.get("swipeTip")&&answers.filter(a=>a!==null).length===2){store.set("swipeTip",1);later(()=>toast("Dica: deslize para a direita para voltar",3500),500)}}
     btns.forEach(b=>b.setAttribute("aria-checked",+b.dataset.code===code));
     // Next: the first open statement ahead; when reviewing past answers, simply the next one;
     // at the end, any statement still open. The result opens only when every statement is answered.
@@ -500,6 +506,17 @@ function renderQuiz(arg){
     if(answers.some(a=>a===null))return;
     store.del("progress");finishQuiz(answers);
   });
+  // Swipe right to go back one statement, left to move ahead over statements already answered.
+  let sx=null,sy=0;
+  const stage=app.querySelector(".quiz-body");
+  stage.addEventListener("touchstart",e=>{if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}},{passive:true});
+  stage.addEventListener("touchend",e=>{
+    if(sx===null||busy)return;
+    const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;sx=null;
+    if(Math.abs(dx)<70||Math.abs(dy)>Math.abs(dx)*0.6)return;
+    if(dx>0&&pos>0)go(pos-1);
+    else if(dx<0&&answers[order[pos]]!==null&&pos+1<order.length)go(pos+1);
+  },{passive:true});
   const onKey=e=>{
     if(e.metaKey||e.ctrlKey||e.altKey)return;
     if(/^[1-5]$/.test(e.key)){document.body.classList.add("kbd-mode");pick(UI[+e.key-1])}
@@ -1239,7 +1256,7 @@ function renderNotFound(msg="Esta página não existe."){
 }
 
 /* ---------- Share ---------- */
-function toast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),2200)}
+function toast(t,ms=2200){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),ms)}
 async function copyLink(){
   try{await navigator.clipboard.writeText(location.href);toast("Link copiado")}
   catch(e){prompt("Copie o link:",location.href)}
@@ -1380,5 +1397,24 @@ function wireTimeline(){
     tip.style.left=tip.style.top="";tip.classList.add("show","sheet");
   }));
   tip.ontransitionend=()=>{if(!tip.classList.contains("show"))armed=null};
+}
+
+/* ---------- Installable app ---------- */
+// Offline support on the published site only (a service worker on localhost would cache the files being edited).
+if(PREVIEW&&"serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
+// "Instalar o app" in the footer: the browser prompt where there is one (Android, desktop Chrome and Edge),
+// short instructions on iPhone and iPad, and nothing once the app is already installed.
+{
+  const btn=document.getElementById("installBtn");
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  const ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  let deferred=null;
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(!standalone)btn.classList.remove("hidden")});
+  addEventListener("appinstalled",()=>{btn.classList.add("hidden");deferred=null;toast("App instalado")});
+  if(ios&&!standalone)btn.classList.remove("hidden");
+  btn.addEventListener("click",async()=>{
+    if(deferred){deferred.prompt();await deferred.userChoice.catch(()=>{});deferred=null;btn.classList.add("hidden");return}
+    if(ios)toast("No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início",6000);
+  });
 }
 })();

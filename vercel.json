@@ -1,11 +1,51 @@
 {
   "rewrites": [
-    { "source": "/s/:code", "destination": "/api/share?code=:code" },
-    { "source": "/s/:code/:name", "destination": "/api/share?code=:code&name=:name" },
-    { "source": "/c/:a/:b", "destination": "/api/share?a=:a&b=:b" },
-    { "source": "/c/:a/:b/:na/:nb", "destination": "/api/share?a=:a&b=:b&na=:na&nb=:nb" }
+    {
+      "source": "/s/:code",
+      "destination": "/api/share?code=:code"
+    },
+    {
+      "source": "/s/:code/:name",
+      "destination": "/api/share?code=:code&name=:name"
+    },
+    {
+      "source": "/c/:a/:b",
+      "destination": "/api/share?a=:a&b=:b"
+    },
+    {
+      "source": "/c/:a/:b/:na/:nb",
+      "destination": "/api/share?a=:a&b=:b&na=:na&nb=:nb"
+    }
   ],
   "functions": {
-    "api/og.js": { "includeFiles": "fonts/**", "memory": 1024, "maxDuration": 15 }
-  }
+    "api/og.js": {
+      "includeFiles": "fonts/**",
+      "memory": 1024,
+      "maxDuration": 15
+    }
+  },
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        }
+      ]
+    }
+  ]
 }
