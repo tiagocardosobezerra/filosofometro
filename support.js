@@ -3,10 +3,10 @@
 // Fill SUPPORT with your own data. An empty pixKey hides the Pix page; an empty amazonTag keeps plain links.
 (function(root){
 const SUPPORT={
-  pixKey:"",      // chave Pix: e-mail, celular (+55...), CPF/CNPJ ou chave aleatória
-  pixName:"",     // nome de quem recebe, até 25 letras, sem acento
-  pixCity:"",     // cidade de quem recebe, até 15 letras, sem acento
-  amazonTag:"",   // ID de associado da Amazon, por exemplo "filosofometro-20"
+  pixKey:"95db9cec-d47b-4ac6-abe2-86492b59ec7b", // chave Pix: e-mail, celular (+55...), CPF/CNPJ ou chave aleatória
+  pixName:"Tiago Cardoso Bezerra", // nome de quem recebe, até 25 letras, sem acento
+  pixCity:"Brasil", // cidade de quem recebe, até 15 letras, sem acento
+  amazonTag:"filosofometro-20", // ID de associado da Amazon, por exemplo "filosofometro-20"
 };
 
 // Two more works per thinker. Together with the book in data.js (field b) every thinker has three.
