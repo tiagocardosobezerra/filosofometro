@@ -567,3 +567,23 @@ footer a.author svg{width:15px;height:15px}
 .finale-quote{font-family:var(--serif);font-style:italic;font-size:clamp(30px,4.4vw,58px);line-height:1.08;letter-spacing:-.01em;max-width:22ch;margin:0 auto;color:var(--ink)}
 .finale-by{margin:16px 0 0;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .finale-lede{max-width:46ch;margin:20px auto 26px;color:var(--ink2);font-size:17px}
+
+/* Levels */
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.level{position:relative;display:flex;flex-direction:column;gap:8px;padding:24px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line);text-decoration:none;transition:transform .35s var(--ease),border-color .25s,box-shadow .35s var(--ease)}
+.level:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:0 22px 40px -28px rgba(0,0,0,.5)}
+.level.rec{border-color:var(--accent);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 10%,var(--card)),var(--card) 60%)}
+.lv-tag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.level.rec .lv-tag{color:var(--accent)}
+.lv-name{font-family:var(--serif);font-size:44px;line-height:1}
+.lv-n{font-size:15px;color:var(--ink2)}
+.lv-n b{color:var(--ink)}
+.lv-desc{font-size:15px;color:var(--ink2);line-height:1.45}
+.lv-meta{font-size:12.5px;color:var(--muted);margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}
+.level .btn{align-self:flex-start;margin-top:8px}
+@media (max-width:860px){.levels{grid-template-columns:1fr}}
+.lv-chip{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--ink2)}
+.lvl-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px;font-size:14px;color:var(--muted)}
+.lvl-up{color:var(--accent);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.lvl-up:hover{text-decoration:underline}
+.progress.dense{gap:1px}

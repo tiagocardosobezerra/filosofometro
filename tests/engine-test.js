@@ -8,7 +8,10 @@ const DATA = require(path.join(ROOT, "data.js"));
 const Engine = require(path.join(ROOT, "engine.js"));
 const Verify = require(path.join(ROOT, "verify.js"));
 const E = Engine.create(DATA);
-const { AXES, QS, PH } = DATA;
+const { AXES, PH } = DATA;
+const QS_ALL = DATA.QS;
+// Most checks run on the Rápido level (the first 44 statements); the "Níveis" section covers the others.
+const QS = QS_ALL.slice(0, E.LEVELS[0].n);
 const clone = x => JSON.parse(JSON.stringify(x));
 
 let fails = 0, passes = 0;
@@ -46,18 +49,20 @@ function answersForSums(sums) {
 }
 
 section("Catálogo");
-ok(QS.every(([t, ax, d]) => t && ax >= 0 && ax < AXES.length && (d === 1 || d === -1)), "every statement has a valid axis and direction");
-AXES.forEach((a, i) => {
-  const q = QS.filter(x => x[1] === i), pos = q.filter(x => x[2] === 1).length;
-  ok(q.length === 4 && pos === 2, `axis ${a.l}/${a.r}: 4 statements, 2 per direction`);
+ok(QS_ALL.every(([t, ax, d]) => t && ax >= 0 && ax < AXES.length && (d === 1 || d === -1)), `all ${QS_ALL.length} statements have a valid axis and direction`);
+ok(QS_ALL.every((q, i) => (q[5] || 1) === E.LEVELS.find(l => i < l.n).id), "statements are stored level by level, so each level is a prefix of the next");
+E.LEVELS.forEach(l => {
+  const block = QS_ALL.filter(q => (q[5] || 1) === l.id);
+  const okBlock = AXES.every((_, ax) => { const q = block.filter(x => x[1] === ax); return q.length === 4 && q.filter(x => x[2] === 1).length === 2; });
+  ok(okBlock, `level ${l.name}: every axis gets 4 new statements, 2 per direction`);
 });
-ok(new Set(QS.map(q => q[0])).size === QS.length, "statements are unique");
-ok(QS.every(q => typeof q[3] === "string" && q[3].length > 10 && typeof q[4] === "string" && q[4].length > 10 && q[3] !== q[4]), "every statement has an example for each extreme");
+ok(new Set(QS_ALL.map(q => q[0])).size === QS_ALL.length, "all statements are unique");
+ok(QS_ALL.every(q => typeof q[3] === "string" && q[3].length > 10 && typeof q[4] === "string" && q[4].length > 10 && q[3] !== q[4]), "every statement has an example for each extreme");
 {
   // Each example is "Name: position". The named thinker must be in the catalog and sit on that side of the axis.
   const alias = { "Espinosa": "spinoza", "Calvino": "joao-calvino", "Lao Tsé": "lao-tse" };
   const find = name => alias[name] ? PH.find(p => p.id === alias[name]) : PH.find(p => p.n === name) || PH.find(p => p.n.endsWith(" " + name)) || PH.find(p => p.n.split(" ").includes(name));
-  const cites = QS.flatMap((q, i) => [[q[3], 1], [q[4], -1]].map(([ex, side]) => ({ i, name: ex.split(":")[0], p: find(ex.split(":")[0]), q, side })));
+  const cites = QS_ALL.flatMap((q, i) => [[q[3], 1], [q[4], -1]].map(([ex, side]) => ({ i, name: ex.split(":")[0], p: find(ex.split(":")[0]), q, side })));
   const unknown = cites.filter(c => !c.p).map(c => c.name);
   ok(QS.every(q => /^[^:]+: \S/.test(q[3]) && /^[^:]+: \S/.test(q[4])) && unknown.length === 0, `every example names a thinker from the catalog ${unknown.join(", ")}`);
   const wrong = cites.filter(c => c.p && c.p.v[c.q[1]] * c.q[2] * c.side < 0.3).map(c => `#${c.i + 1} ${c.name}`);
@@ -79,8 +84,8 @@ ok(Math.abs(ci - E.catalogIntensity) < 1e-15, `catalog intensity ${E.catalogInte
 ok(PH.every(p => { const n = E.normalize(p.v); return !n.capped && n.k > 0; }), "no thinker is capped or directionless, so every thinker is compared at full shape");
 
 section("Ordem de apresentação");
-ok(E.ORDER.length === QS.length && new Set(E.ORDER).size === QS.length && E.ORDER.every(i => i >= 0 && i < QS.length), "presentation order is a permutation of the 44 statements");
-ok(E.ORDER.every((q, k) => QS[q][1] === k % AXES.length), "presentation order is round-robin across the 11 axes");
+ok(E.ORDER.length === QS_ALL.length && new Set(E.ORDER).size === QS_ALL.length && E.LEVELS.every(l => E.ORDER.slice(0, l.n).every(i => i < l.n)), "presentation order is a permutation of all statements, level by level");
+ok(E.ORDER.every((q, k) => QS_ALL[q][1] === k % AXES.length), "presentation order is round-robin across the 11 axes in every level");
 ok(E.evaluate(randomAnswers()).perQuestion.every(q => E.ORDER[q.shown - 1] === q.i), "each answer reports the position it was shown in");
 
 section("Cálculo dos eixos");
@@ -194,7 +199,7 @@ for (let k = 0; k < 400; k++) {
   if (rows.some((x, i) => x.id !== j.ranking[i].id || x.pct !== j.ranking[i].percent || x.d !== j.ranking[i].distance || x.raw !== j.ranking[i].rawDistance)) auditOnlyBad++;
 }
 ok(auditOnlyBad === 0, "the audit file alone (after JSON round-trip) recomputes the exact ranking, distances and percents (400 results)");
-ok(E.auditJSON(E.evaluate(a0)).answers.code === E.encode(a0) && E.auditJSON(E.evaluate(a0)).answers.shownOrder.join() === E.ORDER.join(), "the audit carries the answer code and the order shown");
+ok(E.auditJSON(E.evaluate(a0)).answers.code === E.encode(a0) && E.auditJSON(E.evaluate(a0)).answers.shownOrder.join() === E.ORDER.slice(0, QS.length).join(), "the audit carries the answer code and the order shown");
 
 section("Verificador independente");
 const current = { catalog: E.fingerprint(), code: E.codeFingerprint() };
@@ -269,6 +274,41 @@ ok(kinHits / BRD.length >= 0.8, "Brazilian positions agree with their stated int
   ok(aa.pct === 100 && aa.distance === 0, "a person compared with themselves is 100%");
   ok(E.comparePeople(a, QS.map(() => 2)).pct === null, "comparison with a directionless profile gives no percent");
   ok(ab.pct === E.percent(ab.distance), "comparison percent uses the same curve as the result");
+}
+
+section("Níveis");
+{
+  const Qn = n => QS_ALL.slice(0, n);
+  const idealN = (v, n) => Qn(n).map(([, ax, d]) => nearest(v[ax] * d * 2));
+  const noisyN = (v, n) => Qn(n).map(([, ax, d]) => { const x = v[ax] * d * 0.8 + (rnd() - 0.5) * 1.6; return x > 1.2 ? 0 : x > 0.4 ? 1 : x > -0.4 ? 2 : x > -1.2 ? 3 : 4; });
+  ok(E.LEVELS.map(l => l.n).join() === "44,88,132" && E.LEVELS.map(l => l.name).join() === "Rápido,Completo,Profundo", "three levels: Rápido 44, Completo 88, Profundo 132");
+  ok([44, 88, 132].every(n => E.decode("2".repeat(n)) !== null) && [43, 45, 87, 100, 131, 133].every(n => E.decode("2".repeat(n)) === null), "codes of 44, 88 or 132 digits are accepted; any other length is rejected");
+  ok(E.LEVELS.every(l => E.evaluate(new Array(l.n).fill(2)).level.id === l.id), "a result knows its level from the number of answers");
+  E.LEVELS.forEach(l => {
+    const miss = PH.filter(p => E.evaluate(idealN(p.v, l.n)).top.id !== p.id).map(p => p.n);
+    ok(miss.length === 0, `level ${l.name}: every thinker wins their own profile ${miss.join(", ")}`);
+    let bad = 0;
+    for (let k = 0; k < 400; k++) {
+      const j = JSON.parse(JSON.stringify(E.auditJSON(E.evaluate(noisyN(randomPh().v, l.n)))));
+      if (!Verify.checkAudit(DATA, j, current).every(c => c.ok)) bad++;
+      if (k < 100) { const rows = fromAuditOnly(j); if (rows.some((x, i) => x.id !== j.ranking[i].id || x.pct !== j.ranking[i].percent)) bad++; }
+    }
+    ok(bad === 0, `level ${l.name}: verifier and audit-only recomputation agree with the engine (400 results)`);
+  });
+  // Deepening keeps the earlier answers: the level 2 position is the average of both blocks.
+  const a44 = noisyN(PH[40].v, 44), extra = noisyN(PH[40].v, 88).slice(44), a88 = a44.concat(extra);
+  const s44 = E.axisScores(a44), s88 = E.axisScores(a88), sExtra = E.axisScores(a88).perQuestion.slice(44);
+  const sum2 = AXES.map((_, ax) => sExtra.filter(q => q.axis === ax).reduce((t, q) => t + q.contribution, 0));
+  ok(AXES.every((_, ax) => Math.abs(s88.scores[ax] - (s44.perAxis[ax].sum + sum2[ax]) / 16) < 1e-12) && s88.perQuestion.slice(0, 44).every((q, i) => q.contribution === s44.perQuestion[i].contribution), "deepening keeps the first answers and combines both blocks on each axis");
+  const retest = n => { let same = 0; for (let k = 0; k < 1500; k++) { const p = randomPh(); if (E.evaluate(noisyN(p.v, n)).top.id === E.evaluate(noisyN(p.v, n)).top.id) same++; } return same / 1500; };
+  const rt = E.LEVELS.map(l => retest(l.n));
+  info(`same match when retaking: ${E.LEVELS.map((l, i) => `${l.name} ${(rt[i] * 100).toFixed(0)}%`).join(", ")}`);
+  ok(rt[1] > rt[0] + 0.1 && rt[2] > rt[1], "each level gives a clearly more stable result than the one before");
+  const cross = E.comparePeople(noisyN(PH[5].v, 44), noisyN(PH[60].v, 132)), crossR = E.comparePeople(noisyN(PH[60].v, 132), noisyN(PH[5].v, 44));
+  ok(cross.pct !== null && typeof cross.pct === "number", "people who took different levels can be compared");
+  const w = {}; for (let k = 0; k < 3000; k++) { const n = E.evaluate(noisyN(randomPh().v, 132)).top.p.n; w[n] = (w[n] || 0) + 1; }
+  const mx = Math.max(...Object.values(w)) / 3000;
+  ok(Object.keys(w).length === PH.length && mx < 0.05, `level Profundo: every thinker comes up and none takes more than 5% (max ${(mx * 100).toFixed(1)}%)`);
 }
 
 section("Cada pensador é alcançável");

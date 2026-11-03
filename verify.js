@@ -16,7 +16,7 @@ const avgAbs=v=>{let t=0;for(const x of v)t+=Math.abs(x);return t/v.length};
 function recompute(data,answers,pool=data.PH){
   const nAxes=data.AXES.length;
   const sums=new Array(nAxes).fill(0),counts=new Array(nAxes).fill(0);
-  data.QS.forEach((q,i)=>{sums[q[1]]+=METHOD.values[answers[i]]*q[2];counts[q[1]]++});
+  data.QS.slice(0,answers.length).forEach((q,i)=>{sums[q[1]]+=METHOD.values[answers[i]]*q[2];counts[q[1]]++});
   const positions=sums.map((s,ax)=>s/(2*counts[ax]));
   const catalog=avgAbs(data.PH.map(p=>avgAbs(p.v)));
   const shape=v=>{
@@ -51,7 +51,8 @@ function checkAudit(data,audit,current){
   const add=(ok,label,detail)=>checks.push({ok:!!ok,label,detail});
   const close=(a,b)=>a===b||(typeof a==="number"&&typeof b==="number"&&Math.abs(a-b)<=1e-12);
   const code=audit&&audit.answers&&audit.answers.code;
-  if(typeof code!=="string"||!new RegExp(`^[0-4]{${data.QS.length}}$`).test(code)){
+  const sizes=[1,2,3].map(l=>data.QS.filter(q=>(q[5]||1)<=l).length).filter((n,i,a)=>n>0&&a.indexOf(n)===i);
+  if(typeof code!=="string"||!/^[0-4]+$/.test(code)||!sizes.includes(code.length)){
     add(false,"Respostas na auditoria","código de respostas ausente ou inválido");return checks;
   }
   const answers=code.split("").map(Number);
@@ -66,10 +67,10 @@ function checkAudit(data,audit,current){
     "Constantes iguais às do método",`τ=${p.tau}, mín=${p.minIntensity}, teto=${p.maxGain}, eps=${p.eps}`);
 
   const items=audit.answers.items||[];
-  const itemBad=items.length!==data.QS.length?"quantidade de respostas":
+  const itemBad=items.length!==answers.length?"quantidade de respostas":
     (()=>{for(let i=0;i<items.length;i++){const it=items[i],q=data.QS[i];
       if(it.index!==i||it.answer!==answers[i]||it.direction!==q[2]||it.value!==METHOD.values[answers[i]]||it.contribution!==METHOD.values[answers[i]]*q[2])return `resposta ${i+1}`}return null})();
-  add(!itemBad,"Respostas, valores e contribuições",itemBad?`diverge em ${itemBad}`:"44 de 44 conferem");
+  add(!itemBad,"Respostas, valores e contribuições",itemBad?`diverge em ${itemBad}`:`${answers.length} de ${answers.length} conferem`);
 
   const axes=audit.axes||[];
   const axisBad=axes.findIndex((a,i)=>!close(a.score,ref.positions[i]));

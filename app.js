@@ -127,7 +127,7 @@ function route(){
   const name=parts[0]||"";
   document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(name==="p"&&a.dataset.nav==="pensadores")));
   if(a11yNav(name))return;
-  if(name==="teste")renderQuiz();
+  if(name==="teste")renderQuiz(parts[1]);
   else if(name==="r")renderResult(parts[1],parts[2]);
   else if(name==="pensadores")renderCatalog();
   else if(name==="p")renderThinker(parts[1]);
@@ -166,12 +166,12 @@ function renderHome(){
     <div>
       <span class="eyebrow">Teste filosófico</span>
       <h1 class="display"><span class="line"><span>Qual filósofo</span></span><span class="line"><span>pensa como</span></span><span class="line"><span><em class="it accent">você?</em></span></span></h1>
-      <p class="lede">Responda 44 afirmações sobre verdade, liberdade, moral e poder. Descubra seu par entre 93 pensadores, sua corrente e quem mais discordaria de você.</p>
+      <p class="lede">Responda afirmações sobre verdade, liberdade, moral e poder, em três níveis de profundidade. Descubra seu par entre ${PH.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.</p>
       <div class="cta-row">
-        <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?`Continuar de onde parei · ${done}/44`:"Começar o teste"} ${icon.arrow}</a>
+        <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?`Continuar de onde parei · ${done}/${saved.answers.length}`:"Começar o teste"} ${icon.arrow}</a>
         ${resume?`<a class="btn ghost" href="#/teste" data-fresh="1">Recomeçar</a>`:`<a class="btn ghost" href="#/metodo">Como funciona</a>`}
       </div>
-      <div class="facts"><span><b>≈ 6 min</b></span><span><b>44</b> afirmações</span><span><b>11</b> eixos</span><span><b>93</b> pensadores</span><span>Sem cadastro</span></div>
+      <div class="facts"><span><b>3</b> níveis: ${E.LEVELS.map(l=>l.n).join(", ")} afirmações</span><span><b>11</b> eixos</span><span><b>${PH.length+BR.length}</b> pensadores</span><span>Sem cadastro</span></div>
     </div>
     <div class="hero-art" aria-hidden="true">
       <div class="duo hero-duo">
@@ -195,7 +195,7 @@ function renderHome(){
       <p>O cálculo inteiro aparece no seu resultado: cada resposta, cada eixo, cada distância. Você pode refazer a conta à mão.</p>
     </div>
     <div class="steps">
-      <div class="step"><span class="num">i.</span><h3>Você responde</h3><p>Concorde ou discorde de 44 afirmações. Elas vêm misturadas, e metade de cada eixo puxa para cada lado.</p></div>
+      <div class="step"><span class="num">i.</span><h3>Você responde</h3><p>Escolha o nível e concorde ou discorde das afirmações. Elas vêm misturadas, e metade de cada eixo puxa para cada lado.</p></div>
       <div class="step"><span class="num">ii.</span><h3>Mapeamos seu formato</h3><p>Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de 93 pensadores.</p></div>
       <div class="step"><span class="num">iii.</span><h3>Você audita</h3><p>Veja passo a passo por que deu quem deu, compare com qualquer pensador e baixe os dados.</p></div>
     </div>
@@ -260,14 +260,54 @@ function citation(ex){
   const text=ex.charAt(i+2).toUpperCase()+ex.slice(i+3);
   return `<div class="ex-who">${p?portrait(p,{cls:"ex-pic"}):""}<b>${esc(name)}</b></div><p>${esc(text)}</p>`;
 }
-function renderQuiz(){
-  // Saved progress is used only if every stored answer is empty or a valid code and the position is in range.
+// What a simulated retest shows for each level (tests/levels in the method page): accuracy grows with statements.
+const LEVEL_INFO={
+  1:{tag:"Para começar",precision:"Boa",retest:"55%",desc:"O suficiente para conhecer seu par e se divertir."},
+  2:{tag:"Recomendado",precision:"Alta",retest:"82%",desc:"Resultado bem mais estável. Inclui as 44 do Rápido."},
+  3:{tag:"Para quem quer ir fundo",precision:"Muito alta",retest:"92%",desc:"O retrato mais fiel. Inclui as 88 do Completo."},
+};
+const levelBy=id=>E.LEVELS.find(l=>l.id===id);
+const nextLevel=n=>E.LEVELS.find(l=>l.n>n)||null;
+function newProgress(level,base=[]){
+  const answers=base.concat(new Array(level.n-base.length).fill(null));
+  const order=ORDER.filter(i=>i<level.n);
+  return {answers,pos:Math.max(0,order.findIndex(i=>answers[i]===null))};
+}
+function renderLevelPick(){
+  const vs=store.get("vs");
+  mount(`
+  <section class="wrap section" style="padding-top:clamp(28px,6vh,64px)">
+    <span class="eyebrow">${vs?"Desafio aceito":"Antes de começar"}</span>
+    <h1 class="h2" style="font-size:clamp(44px,min(7vw,10vh),96px)">Quanto você quer <em class="it accent">ir fundo?</em></h1>
+    <p class="lede" style="margin-top:14px;max-width:56ch">Os três níveis usam os mesmos 11 eixos. Quanto mais afirmações, mais preciso fica o resultado. Dá para começar no Rápido e aprofundar depois, sem perder nada.</p>
+    <div class="levels">${E.LEVELS.map(l=>{const i=LEVEL_INFO[l.id];return `<a class="level ${l.id===2?"rec":""}" href="#/teste/${l.id}">
+      <span class="lv-tag">${esc(i.tag)}</span>
+      <span class="lv-name">${esc(l.name)}</span>
+      <span class="lv-n"><b>${l.n}</b> afirmações · ≈ ${l.minutes} min</span>
+      <span class="lv-desc">${esc(i.desc)}</span>
+      <span class="lv-meta">Precisão ${esc(i.precision).toLowerCase()} · mesmo par ao refazer em ${i.retest} das vezes</span>
+      <span class="btn ${l.id===2?"accent":"ghost"} sm">Começar ${icon.arrow}</span>
+    </a>`}).join("")}</div>
+  </section>`,"Escolha o nível");
+}
+function renderQuiz(arg){
+  // "#/teste/1|2|3" starts that level from zero; "#/teste/aprofundar" continues from the last result.
+  if(arg==="aprofundar"){
+    const last=E.decode(store.get("last")||""),nl=last&&nextLevel(last.length);
+    if(!nl){location.replace("#/teste");return}
+    store.set("progress",newProgress(nl,last));history.replaceState(null,"","#/teste");
+  }else if(/^[123]$/.test(arg||"")){
+    const lv=levelBy(+arg);
+    if(lv){store.set("progress",newProgress(lv));history.replaceState(null,"","#/teste");}
+  }
+  // Saved progress is used only if its size is a level and every stored answer is empty or a valid code.
   let saved=store.get("progress");
-  const validSaved=saved&&Array.isArray(saved.answers)&&saved.answers.length===QS.length&&
+  const validSaved=saved&&Array.isArray(saved.answers)&&E.SIZES.includes(saved.answers.length)&&
     saved.answers.every(a=>a===null||(Number.isInteger(a)&&a>=0&&a<=4))&&
-    Number.isInteger(saved.pos)&&saved.pos>=0&&saved.pos<QS.length;
-  if(!validSaved)saved={answers:new Array(QS.length).fill(null),pos:0};
-  const answers=saved.answers;
+    Number.isInteger(saved.pos)&&saved.pos>=0&&saved.pos<saved.answers.length;
+  if(!validSaved){renderLevelPick();return}
+  const answers=saved.answers,total=answers.length,lv=E.levelOf(total);
+  const order=ORDER.filter(i=>i<total);
   let pos=saved.pos,busy=false,alive=true;
   // Timers are tracked so nothing fires after leaving the quiz.
   const timers=new Set();
@@ -281,9 +321,10 @@ function renderQuiz(){
   <section class="wrap quiz" aria-labelledby="qText">
     <div class="quiz-top">
       <span class="axis-tag" id="axisTag"></span>
+      <span class="lv-chip">${esc(lv.name)}</span>
       <a class="link-btn" href="#/">Sair <span class="sr">do teste (seu progresso fica salvo)</span></a>
     </div>
-    <div class="progress" aria-hidden="true">${ORDER.map(()=>"<i></i>").join("")}</div>
+    <div class="progress ${total>44?"dense":""}" style="grid-template-columns:repeat(${total},1fr)" aria-hidden="true">${order.map(()=>"<i></i>").join("")}</div>
     <div class="q-stage">
       <div class="q-anim" id="qAnim">
         <div class="q-count mono" id="qCount" aria-hidden="true"></div>
@@ -307,14 +348,14 @@ function renderQuiz(){
   const btns=[...app.querySelectorAll(".choice")];
   const anim=document.getElementById("qAnim");
   function paint(){
-    const qi=ORDER[pos],[text,ax,,exAgree,exDisagree]=QS[qi];
+    const qi=order[pos],[text,ax,,exAgree,exDisagree]=QS[qi];
     document.getElementById("qText").textContent=text;
     document.getElementById("exA").innerHTML=citation(exAgree);
     document.getElementById("exD").innerHTML=citation(exDisagree);
-    document.getElementById("qCount").textContent=`${pad(pos+1)} / ${QS.length}`;
-    document.getElementById("qLive").textContent=`Afirmação ${pos+1} de ${QS.length}: ${text}`;
+    document.getElementById("qCount").textContent=`${pad(pos+1)} / ${total}`;
+    document.getElementById("qLive").textContent=`Afirmação ${pos+1} de ${total}: ${text}`;
     document.getElementById("axisTag").innerHTML=`Eixo <b>${pad(ax+1)}</b> · ${esc(AXES[ax].name)}`;
-    ticks.forEach((t,i)=>{t.className=i===pos?"now":answers[ORDER[i]]!==null?"done":""});
+    ticks.forEach((t,i)=>{t.className=i===pos?"now":answers[order[i]]!==null?"done":""});
     btns.forEach(b=>{const on=answers[qi]===+b.dataset.code;b.setAttribute("aria-checked",on);b.tabIndex=on||(answers[qi]===null&&b.dataset.code==="2")?0:-1});
     document.getElementById("prevBtn").disabled=pos===0;
     // While reviewing a finished quiz, the result is one click away.
@@ -327,17 +368,17 @@ function renderQuiz(){
   }
   function pick(code){
     if(busy)return;
-    const qi=ORDER[pos];answers[qi]=code;save();
+    const qi=order[pos];answers[qi]=code;save();
     btns.forEach(b=>b.setAttribute("aria-checked",+b.dataset.code===code));
     // Next: the first open statement ahead; when reviewing past answers, simply the next one;
-    // at the end, any statement still open. The result opens only when all 44 are answered.
-    const ahead=ORDER.findIndex((q,i)=>i>pos&&answers[q]===null);
-    const firstOpen=ORDER.findIndex(q=>answers[q]===null);
-    const next=ahead!==-1?ahead:pos+1<ORDER.length?pos+1:firstOpen;
+    // at the end, any statement still open. The result opens only when every statement is answered.
+    const ahead=order.findIndex((q,i)=>i>pos&&answers[q]===null);
+    const firstOpen=order.findIndex(q=>answers[q]===null);
+    const next=ahead!==-1?ahead:pos+1<order.length?pos+1:firstOpen;
     busy=true;
     later(()=>{
       // Replace the quiz entry so the back button leaves the result instead of reopening an empty quiz.
-      if(firstOpen===-1&&(next===-1||pos===ORDER.length-1)){store.del("progress");finishQuiz(answers);return}
+      if(firstOpen===-1&&(next===-1||pos===order.length-1)){store.del("progress");finishQuiz(answers);return}
       go(next===-1?firstOpen:next);
       if(reduceMotion)busy=false;
     },reduceMotion?60:220);
@@ -393,6 +434,7 @@ function renderResult(code,mode){
       ${flat?"":`<div class="res-pct" aria-hidden="true"><span id="pctNum">${reduceMotion?top.pct:0}</span>%</div>`}
       <h1 class="res-name">${flat?"":`<span class="sr">${top.pct}% de compatibilidade com </span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
+      ${r.level?`<div class="lvl-line"><span class="lv-chip">Nível ${esc(r.level.name)}</span><span>${r.level.n} afirmações · precisão ${esc(LEVEL_INFO[r.level.id].precision.toLowerCase())}</span>${!visitor&&nextLevel(r.level.n)?`<a class="lvl-up" href="#/teste/aprofundar">Aprofundar com mais ${nextLevel(r.level.n).n-r.level.n} ${icon.arrow}</a>`:""}</div>`:""}
       ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map(t=>`<span class="trait">${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
       ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
       <div class="res-actions">
@@ -447,10 +489,11 @@ function renderResult(code,mode){
       ${portrait(p,{cls:"finale-pic"})}
       <blockquote class="finale-quote">“${esc(p.q)}”</blockquote>
       <p class="finale-by">${esc(p.n)}${visitor?"":`, ${flat?"o pensador mais perto de você":`seu par com ${top.pct}%`}`}</p>
-      <p class="finale-lede">${visitor?"Quer saber quem pensa como você? São 44 afirmações e uns 6 minutos.":"Agora descubra qual dos seus amigos pensa como você. Mande o desafio e vejam, eixo por eixo, onde concordam e onde vão discutir."}</p>
+      <p class="finale-lede">${visitor?"Quer saber quem pensa como você? O teste rápido leva uns 6 minutos.":"Agora descubra qual dos seus amigos pensa como você. Mande o desafio e vejam, eixo por eixo, onde concordam e onde vão discutir."}</p>
       <div class="cta-row" style="justify-content:center">
         ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
         <button class="btn accent" id="challengeBtn2" type="button">${icon.link} Desafiar um amigo</button>
+        ${r.level&&nextLevel(r.level.n)?`<a class="btn ghost" href="#/teste/aprofundar">Aprofundar: nível ${esc(nextLevel(r.level.n).name)}</a>`:""}
         ${flat?"":`<button class="btn ghost" id="shareBtn2" type="button">${icon.share} Compartilhar no story</button>`}`}
         <a class="btn ghost" href="#/pensadores">Ver os ${PH.length+BR.length} pensadores</a>
       </div>
@@ -492,7 +535,7 @@ const cleanName=s=>{try{s=decodeURIComponent(s||"")}catch(e){s=""}return s.repla
 const encName=s=>encodeURIComponent(cleanName(s));
 // Accepts any Filosofômetro link (result, invite or comparison) or a bare code, and returns the answers.
 function answersFromLink(t){
-  const m=String(t||"").trim().match(/(?:#\/(?:r|vs|verificar)\/|^)([0-4]{44})(?:$|[/?#\s])/);
+  const m=String(t||"").trim().match(/(?:#\/(?:r|vs|verificar)\/|^)([0-4]{44,132})(?:$|[/?#\s])/);
   return m?E.decode(m[1]):null;
 }
 // The invite link: opens as "Name te desafiou" for whoever receives it, never as a plain result.
@@ -549,7 +592,7 @@ function renderInvite(code,rawName){
     <div>
       <span class="eyebrow">Desafio filosófico</span>
       <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${esc(who)} te desafiou</span></span></h1>
-      <p class="lede">${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Responda 44 afirmações (uns 6 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.</p>
+      <p class="lede">${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Escolha um nível (de 6 a 18 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.</p>
       <div class="cta-row">
         <a class="btn accent" href="#/teste" data-fresh="1">${hasMine?"Fazer o teste de novo e comparar":"Aceitar o desafio"} ${icon.arrow}</a>
         ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">Comparar com meu resultado</a>`:""}
@@ -803,7 +846,7 @@ eps = ${P.eps}      distância bruta = média de |sua posição − posição do
       ${r.ranking.map((x,i)=>`<tr class="${i===0||(r.opposite&&i===r.ranking.length-1)?"hl":""}"><td class="n">${x.rank}</td><td>${esc(x.p.n)} <span class="muted mono" style="font-size:11px">${x.p.id}</span></td><td class="n">${num(x.distance)}</td><td class="n">${num(x.rawDistance)}</td><td class="n">${x.pct===null?"sem %":x.pct}</td><td>${x.tiedWithPrev||x.tiedWithNext?`<span class="tie">empate de distância</span>`:""}</td></tr>`).join("")}
       </tbody></table></div>
 
-      <h3 class="h-audit">Suas 44 respostas</h3>
+      <h3 class="h-audit">Suas ${r.answers.length} respostas</h3>
       <p class="muted" style="font-size:13px;margin:0 0 10px">“Nº” é a posição da afirmação no catálogo, usada no código de respostas. “No teste” é a ordem em que ela apareceu para você.</p>
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th class="n">Nº</th><th class="n">No teste</th><th>Afirmação</th><th>Eixo</th><th>Resposta</th><th class="n">Contribuição</th></tr></thead><tbody>
       ${r.perQuestion.map(q=>`<tr><td class="n">${q.i+1}</td><td class="n">${q.shown}</td><td class="wrap">${esc(q.text)}</td><td>${esc(AXES[q.axis].name)} → ${esc(q.dir>0?AXES[q.axis].r:AXES[q.axis].l)}</td><td>${esc(SCALE[q.answer].label)} <span class="muted mono">(${q.answer})</span></td><td class="n">${q.contribution>0?"+":""}${q.contribution}</td></tr>`).join("")}
@@ -932,20 +975,21 @@ function renderMethod(){
     <span class="eyebrow">Método</span>
     <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">Como o <em class="it accent">motor</em> pensa</h1>
     <div class="stat-grid">
-      <div class="stat"><b>${QS.length}</b><span>afirmações, 4 por eixo</span></div>
+      <div class="stat"><b>${E.LEVELS.map(l=>l.n).join(" · ")}</b><span>afirmações nos 3 níveis</span></div>
       <div class="stat"><b>${AXES.length}</b><span>eixos independentes</span></div>
       <div class="stat"><b>${PH.length}</b><span>pensadores</span></div>
       <div class="stat"><b class="mono" style="font-size:24px;padding:8px 0 6px">${E.codeFingerprint()}</b><span>código do motor v${E.VERSION}</span></div>
       <div class="stat"><b class="mono" style="font-size:24px;padding:8px 0 6px">${E.fingerprint()}</b><span>catálogo</span></div>
     </div>
     <div class="prose">
-      <h2>1. Afirmações equilibradas</h2>
-      <p>Cada eixo tem quatro afirmações: duas puxam para um polo e duas para o outro. Quem concorda com tudo, ou discorda de tudo, cai exatamente no centro. Isso anula o viés de quem tende a dizer sim.</p>
-      <p>As afirmações aparecem misturadas entre os eixos, em rodízio: a 1ª de cada eixo, depois a 2ª de cada eixo, e assim por diante. As respostas são guardadas sempre pela posição da afirmação no catálogo, e a auditoria mostra as duas numerações.</p>
+      <h2>1. Afirmações equilibradas, em três níveis</h2>
+      <p>O teste tem três níveis que se somam: ${E.LEVELS.map(l=>`${l.name}, com ${l.n} afirmações`).join("; ")}. Cada nível acrescenta 4 afirmações por eixo, e em cada bloco duas puxam para um polo e duas para o outro. Quem concorda com tudo, ou discorda de tudo, cai exatamente no centro em qualquer nível. Isso anula o viés de quem tende a dizer sim.</p>
+      <p>Mais afirmações reduzem o efeito de uma resposta dada no impulso. Numa simulação com respostas imprecisas, a mesma pessoa recebe o mesmo par ao refazer o teste em ${E.LEVELS.map(l=>`${LEVEL_INFO[l.id].retest} das vezes no ${l.name}`).join(", ")}.</p>
+      <p>As afirmações aparecem misturadas entre os eixos, em rodízio dentro de cada nível. As respostas são guardadas sempre pela posição da afirmação no catálogo, por isso um resultado do nível Rápido pode ser aprofundado sem perder nada, e a auditoria mostra as duas numerações.</p>
       <h2>2. Da resposta ao eixo</h2>
       <div class="formula">concordo totalmente +2 · concordo +1 · neutro 0 · discordo −1 · discordo totalmente −2
 contribuição = valor × direção (+1 ou −1)
-posição = soma das 4 contribuições ÷ 8        ∈ [−1, +1]</div>
+posição = soma das contribuições do eixo ÷ (2 × afirmações do eixo)        ∈ [−1, +1]</div>
       <h2>3. Formato, não força</h2>
       <p>Duas pessoas podem pensar na mesma direção com intensidades diferentes: uma marca “concordo”, outra “concordo totalmente”. Para que as duas encontrem o mesmo par, ajustamos a intensidade.</p>
       <div class="formula">intensidade = média de |posição| nos 11 eixos
@@ -970,7 +1014,7 @@ distância bruta = média de |sua posição − posição do pensador|, sem norm
       <h3>Comparar com outra pessoa</h3>
       <p>Duas pessoas são comparadas exatamente como uma pessoa e um pensador: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos e a compatibilidade usa a mesma curva. A conta é simétrica, e uma pessoa comparada consigo mesma dá 100%.</p>
       <h2>6. Aviso de confiabilidade</h2>
-      <p>Se você escolhe a mesma opção em ${Math.round(P.repeatWarning*100)}% das afirmações ou mais (${Math.ceil(P.repeatWarning*QS.length)} de ${QS.length}), ou se a intensidade fica abaixo de ${P.centerWarning}, o resultado vem com um aviso.</p>
+      <p>Se você escolhe a mesma opção em ${Math.round(P.repeatWarning*100)}% das afirmações ou mais (no nível Rápido, ${Math.ceil(P.repeatWarning*E.LEVELS[0].n)} de ${E.LEVELS[0].n}), ou se a intensidade fica abaixo de ${P.centerWarning}, o resultado vem com um aviso.</p>
       <h2>7. Como verificamos</h2>
       <p>Uma bateria de testes automatizados roda sobre o motor e o catálogo. Ela confere, entre outras coisas:</p>
       <ul>
@@ -1015,7 +1059,7 @@ distância bruta = média de |sua posição − posição do pensador|, sem norm
 
 /* ---------- Verifier ---------- */
 // Accepts a full result link, a #/r/ or #/verificar/ path, or the bare code. The code must be
-// exactly 44 digits from 0 to 4: anything longer or shorter is rejected, never truncated.
+// exactly 44, 88 or 132 digits from 0 to 4: any other length is rejected, never truncated.
 function codeFromText(t){
   const s=String(t||"").trim();
   const m=s.match(/(?:#\/(?:r|verificar)\/|#r=)?([^/#=\s]*)$/);
@@ -1030,7 +1074,7 @@ function renderVerify(code){
     <p class="lede" style="margin-top:16px;max-width:58ch">Cole um link de resultado ou envie o arquivo de auditoria. Esta página refaz a conta com uma segunda implementação, que não compartilha código com o motor, e compara cada número: respostas, eixos, normalização, distâncias, desempates e percentuais.</p>
     <div class="verify-form">
       <label class="sr" for="vIn">Link ou código do resultado</label>
-      <input class="search" id="vIn" placeholder="Cole o link do resultado ou os 44 dígitos" value="${code?esc(code):""}" autocomplete="off" spellcheck="false">
+      <input class="search" id="vIn" placeholder="Cole o link do resultado ou o código de respostas" value="${code?esc(code):""}" autocomplete="off" spellcheck="false">
       <button class="btn accent" id="vGo" type="button">Verificar</button>
       <label class="btn ghost" for="vFile" style="cursor:pointer">Enviar auditoria (JSON)</label>
       <input type="file" id="vFile" accept="application/json,.json" class="sr">
@@ -1053,7 +1097,7 @@ function renderVerify(code){
   };
   const fromLink=t=>{
     const answers=codeFromText(t);
-    if(!answers){fail("Não reconheci esse resultado. O código precisa ter exatamente 44 dígitos de 0 a 4, como nos links do Filosofômetro.");return}
+    if(!answers){fail("Não reconheci esse resultado. O código precisa ter 44, 88 ou 132 dígitos de 0 a 4, como nos links do Filosofômetro.");return}
     show(E.auditJSON(E.evaluate(answers)),"link de resultado, recalculado pelo motor agora");
   };
   document.getElementById("vGo").addEventListener("click",()=>fromLink(document.getElementById("vIn").value));

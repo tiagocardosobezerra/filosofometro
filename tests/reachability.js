@@ -6,7 +6,10 @@ const path = require("path");
 const DATA = require(path.join(__dirname, "..", "data.js"));
 const Engine = require(path.join(__dirname, "..", "engine.js"));
 const E = Engine.create(DATA);
-const { AXES, QS, PH } = DATA;
+const { AXES, PH } = DATA;
+// Reachability is proven on the Rápido level (the first 44 statements): it has the least information,
+// so if every thinker is reachable there, deeper levels only make it easier.
+const QS = DATA.QS.slice(0, E.LEVELS[0].n);
 
 let seed = 2026;
 const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);

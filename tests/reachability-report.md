@@ -1,6 +1,6 @@
 # Auditoria de alcance do motor
 
-Motor v1.1.0 · catálogo `009b49e1` · 93 pensadores · 90 correntes
+Motor v1.2.0 · catálogo `6ad411d8` · 93 pensadores · 90 correntes
 
 ## Resultado
 

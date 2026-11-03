@@ -5,7 +5,7 @@
 // Everything the engine does lives inside build(), so the code fingerprint covers
 // every line, helper and constant that can change a result.
 function build(){
-const VERSION="1.1.0";
+const VERSION="1.2.0";
 
 // Answer codes as stored in links: 0 = concordo totalmente ... 4 = discordo totalmente.
 const SCALE=[
@@ -42,7 +42,7 @@ function fnv(s){
 function fingerprintInput(data){
   return {
     axes:data.AXES.map(a=>[a.id,a.l,a.r]),
-    statements:data.QS.map(q=>[q[0],q[1],q[2]]),
+    statements:data.QS.map(q=>[q[0],q[1],q[2],q[5]||1]),
     thinkers:data.PH.map(p=>[p.id,p.n,p.v]),
     brazil:[...(data.BR||[]),...data.PH.filter(p=>p.br)].map(p=>[p.id,p.n,p.v]),
   };
@@ -52,10 +52,16 @@ const fingerprint=data=>fnv(JSON.stringify(fingerprintInput(data)));
 const codeFingerprint=()=>fnv(build.toString().replace(/\r\n?/g,"\n"));
 
 // Statements are shown round-robin across axes, so no axis gets four in a row.
+// Each level is its own block of 44, shown in full before the next one.
 // Answers are always stored by statement index, never by the order shown.
 function presentationOrder(QS,nAxes){
   const order=[];
-  for(let k=0;k<4;k++)for(let ax=0;ax<nAxes;ax++)order.push(QS.map((q,i)=>[q,i]).filter(([q])=>q[1]===ax)[k][1]);
+  const levels=[...new Set(QS.map(q=>q[5]||1))].sort();
+  for(const lv of levels){
+    const block=QS.map((q,i)=>[q,i]).filter(([q])=>(q[5]||1)===lv);
+    const per=block.length/nAxes;
+    for(let k=0;k<per;k++)for(let ax=0;ax<nAxes;ax++)order.push(block.filter(([q])=>q[1]===ax)[k][1]);
+  }
   return order;
 }
 
@@ -63,14 +69,21 @@ function create(data){
   const {AXES,QS,PH}=data;
   const catalogIntensity=PH.reduce((t,p)=>t+meanAbs(p.v),0)/PH.length;
   const ORDER=presentationOrder(QS,AXES.length);
+  // Levels add up: level 2 is level 1 plus 44 new statements, level 3 adds 44 more.
+  // A level is identified by how many answers there are, so links stay prefixes of each other.
+  const LEVELS=[{id:1,name:"Rápido",minutes:6},{id:2,name:"Completo",minutes:12},{id:3,name:"Profundo",minutes:18}]
+    .map(l=>({...l,n:QS.filter(q=>(q[5]||1)<=l.id).length})).filter((l,i,a)=>l.n>0&&(i===0||l.n>a[i-1].n));
+  const SIZES=LEVELS.map(l=>l.n);
+  const levelOf=n=>LEVELS.find(l=>l.n===n)||null;
 
   // Step 1: each answer adds value × direction to its axis; the sum is divided by the axis maximum.
   function axisScores(answers){
     const sum=AXES.map(()=>0),max=AXES.map(()=>0);
-    const perQuestion=QS.map(([text,axis,dir],i)=>{
+    const shownOrder=ORDER.filter(i=>i<answers.length);
+    const perQuestion=QS.slice(0,answers.length).map(([text,axis,dir],i)=>{
       const value=SCALE[answers[i]].value,contribution=value*dir;
       sum[axis]+=contribution;max[axis]+=2;
-      return {i,shown:ORDER.indexOf(i)+1,text,axis,dir,answer:answers[i],value,contribution};
+      return {i,shown:shownOrder.indexOf(i)+1,text,axis,dir,answer:answers[i],value,contribution};
     });
     const scores=sum.map((s,i)=>s/max[i]);
     return {scores,perQuestion,perAxis:AXES.map((a,i)=>({axis:i,sum:sum[i],max:max[i],score:scores[i]}))};
@@ -134,6 +147,7 @@ function create(data){
     const directionless=user.k===0;
     return {
       version:VERSION,fingerprint:fingerprint(data),code:codeFingerprint(),params:{...PARAMS},catalogIntensity,
+      level:levelOf(answers.length),
       answers:answers.slice(),...axis,user,directionless,ranking:rows,
       top:rows[0],opposite:directionless?null:rows[rows.length-1],
       brazil:BRAZIL.length?rank(axis.scores,BRAZIL).rows:[],
@@ -151,10 +165,10 @@ function create(data){
     return {a,b,perAxis:c.perAxis,distance:c.distance,rawDistance:c.rawDistance,pct:flat?null:percent(c.distance),directionless:flat};
   }
 
-  const isValid=a=>Array.isArray(a)&&a.length===QS.length&&a.every(x=>Number.isInteger(x)&&x>=0&&x<=4);
+  const isValid=a=>Array.isArray(a)&&SIZES.includes(a.length)&&a.every(x=>Number.isInteger(x)&&x>=0&&x<=4);
   const encode=a=>a.join("");
   const decode=s=>{
-    if(typeof s!=="string"||!new RegExp(`^[0-4]{${QS.length}}$`).test(s))return null;
+    if(typeof s!=="string"||!/^[0-4]+$/.test(s)||!SIZES.includes(s.length))return null;
     return s.split("").map(Number);
   };
 
@@ -167,7 +181,8 @@ function create(data){
       engine:{version:r.version,code:r.code,catalog:r.fingerprint,params:r.params,catalogIntensity:r.catalogIntensity,
         rules:{percent:PERCENT_RULE,tieBreak:TIE_BREAK,hash:HASH_RULE}},
       scale:SCALE,
-      answers:{code:encode(r.answers),shownOrder:ORDER,
+      level:r.level&&{id:r.level.id,name:r.level.name,statements:r.level.n},
+      answers:{code:encode(r.answers),shownOrder:ORDER.filter(i=>i<r.answers.length),
         items:r.perQuestion.map(q=>({index:q.i,shown:q.shown,statement:q.text,axis:AXES[q.axis].id,direction:q.dir,
           answer:q.answer,label:SCALE[q.answer].label,value:q.value,contribution:q.contribution}))},
       axes:r.perAxis.map(a=>({id:AXES[a.axis].id,name:AXES[a.axis].name,left:AXES[a.axis].l,right:AXES[a.axis].r,sum:a.sum,max:a.max,score:a.score})),
@@ -184,7 +199,7 @@ function create(data){
     };
   }
 
-  return {VERSION,SCALE,PARAMS,TIE_BREAK,PERCENT_RULE,HASH_RULE,AXES,QS,PH,BRAZIL,ORDER,catalogIntensity,meanAbs,percent,
+  return {VERSION,SCALE,PARAMS,TIE_BREAK,PERCENT_RULE,HASH_RULE,AXES,QS,PH,BRAZIL,ORDER,LEVELS,SIZES,levelOf,catalogIntensity,meanAbs,percent,
     axisScores,normalize,compare,rank,reliability,evaluate,comparePeople,isValid,encode,decode,auditJSON,
     fingerprint:()=>fingerprint(data),fingerprintInput:()=>fingerprintInput(data),codeFingerprint};
 }
