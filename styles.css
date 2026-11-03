@@ -430,3 +430,10 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .scale{margin-top:16px}
 }
 .tie{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+
+/* Example citation: portrait + thinker name above the paraphrase */
+.ex-who{display:flex;align-items:center;gap:8px;margin:2px 0 6px}
+.ex-who b{font-family:var(--serif);font-weight:400;font-size:19px;line-height:1;color:var(--ink)}
+.ex-pic{width:26px;height:26px;border-radius:50%;flex:0 0 26px}
+.ex-pic::after{display:none}
+@media (max-width:640px){.ex-who b{font-size:17px}.ex-pic{width:22px;height:22px;flex-basis:22px}}

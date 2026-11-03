@@ -53,6 +53,16 @@ AXES.forEach((a, i) => {
 });
 ok(new Set(QS.map(q => q[0])).size === QS.length, "statements are unique");
 ok(QS.every(q => typeof q[3] === "string" && q[3].length > 10 && typeof q[4] === "string" && q[4].length > 10 && q[3] !== q[4]), "every statement has an example for each extreme");
+{
+  // Each example is "Name: position". The named thinker must be in the catalog and sit on that side of the axis.
+  const alias = { "Espinosa": "spinoza", "Calvino": "joao-calvino", "Lao Tsé": "lao-tse" };
+  const find = name => alias[name] ? PH.find(p => p.id === alias[name]) : PH.find(p => p.n === name) || PH.find(p => p.n.endsWith(" " + name)) || PH.find(p => p.n.split(" ").includes(name));
+  const cites = QS.flatMap((q, i) => [[q[3], 1], [q[4], -1]].map(([ex, side]) => ({ i, name: ex.split(":")[0], p: find(ex.split(":")[0]), q, side })));
+  const unknown = cites.filter(c => !c.p).map(c => c.name);
+  ok(QS.every(q => /^[^:]+: \S/.test(q[3]) && /^[^:]+: \S/.test(q[4])) && unknown.length === 0, `every example names a thinker from the catalog ${unknown.join(", ")}`);
+  const wrong = cites.filter(c => c.p && c.p.v[c.q[1]] * c.q[2] * c.side < 0.3).map(c => `#${c.i + 1} ${c.name}`);
+  ok(wrong.length === 0, `every cited thinker clearly holds that side in the catalog (≥ 0.3 toward it) ${wrong.join(", ")}`);
+}
 ok(PH.every(p => p.v.length === AXES.length && p.v.every(x => x >= -1 && x <= 1 && Math.abs(x * 10 - Math.round(x * 10)) < 1e-9)), "every thinker has 11 positions in [-1,1], in steps of 0.1");
 ok(new Set(PH.map(p => p.n)).size === PH.length && new Set(PH.map(p => p.id)).size === PH.length, "names and ids are unique");
 ok(PH.every(p => /^[a-z0-9-]+$/.test(p.id)), "ids are plain ASCII, so the id tie-break never depends on locale");

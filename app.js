@@ -173,6 +173,17 @@ function heroAnimation(){
 }
 
 /* ---------- Quiz ---------- */
+// Examples are "Name: position". The name is matched to the catalog to show the thinker's portrait.
+const NAME_ALIAS={"Espinosa":"spinoza","Calvino":"joao-calvino","Lao Tsé":"lao-tse"};
+function thinkerByName(name){
+  if(NAME_ALIAS[name])return byId[NAME_ALIAS[name]];
+  return PH.find(p=>p.n===name)||PH.find(p=>p.n.endsWith(" "+name))||PH.find(p=>p.n.split(" ").includes(name));
+}
+function citation(ex){
+  const i=ex.indexOf(": "),name=ex.slice(0,i),p=thinkerByName(name);
+  const text=ex.charAt(i+2).toUpperCase()+ex.slice(i+3);
+  return `<div class="ex-who">${p?portrait(p,{cls:"ex-pic"}):""}<b>${esc(name)}</b></div><p>${esc(text)}</p>`;
+}
 function renderQuiz(){
   // Saved progress is used only if every stored answer is empty or a valid code and the position is in range.
   let saved=store.get("progress");
@@ -203,8 +214,8 @@ function renderQuiz(){
         <p class="sr" id="qLive" aria-live="polite"></p>
         <h1 class="q-text" id="qText"></h1>
         <div class="examples" id="examples">
-          <div class="ex ex-d"><span class="ex-k">Quem discorda pensa assim</span><p id="exD"></p></div>
-          <div class="ex ex-a"><span class="ex-k">Quem concorda pensa assim</span><p id="exA"></p></div>
+          <div class="ex ex-d"><span class="ex-k">Quem discorda</span><div id="exD"></div></div>
+          <div class="ex ex-a"><span class="ex-k">Quem concorda</span><div id="exA"></div></div>
         </div>
       </div>
       <div class="scale" role="radiogroup" aria-labelledby="qText" aria-describedby="examples" id="scale">
@@ -222,8 +233,8 @@ function renderQuiz(){
   function paint(){
     const qi=ORDER[pos],[text,ax,,exAgree,exDisagree]=QS[qi];
     document.getElementById("qText").textContent=text;
-    document.getElementById("exA").textContent=exAgree;
-    document.getElementById("exD").textContent=exDisagree;
+    document.getElementById("exA").innerHTML=citation(exAgree);
+    document.getElementById("exD").innerHTML=citation(exDisagree);
     document.getElementById("qCount").textContent=`${pad(pos+1)} / ${QS.length}`;
     document.getElementById("qLive").textContent=`Afirmação ${pos+1} de ${QS.length}: ${text}`;
     document.getElementById("axisTag").innerHTML=`Eixo <b>${pad(ax+1)}</b> · ${esc(AXES[ax].name)}`;
