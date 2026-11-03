@@ -13,7 +13,7 @@ const METHOD={
 const avgAbs=v=>{let t=0;for(const x of v)t+=Math.abs(x);return t/v.length};
 
 // Recomputes the full result from the catalog and the 44 answers (in statement order).
-function recompute(data,answers){
+function recompute(data,answers,pool=data.PH){
   const nAxes=data.AXES.length;
   const sums=new Array(nAxes).fill(0),counts=new Array(nAxes).fill(0);
   data.QS.forEach((q,i)=>{sums[q[1]]+=METHOD.values[answers[i]]*q[2];counts[q[1]]++});
@@ -26,7 +26,7 @@ function recompute(data,answers){
     return {f,v:v.map(x=>x*f)};
   };
   const me=shape(positions);
-  const rows=data.PH.map(p=>{
+  const rows=pool.map(p=>{
     const them=shape(p.v);
     const diffs=them.v.map((x,i)=>Math.abs(x-me.v[i]));
     let d=0,raw=0;
@@ -79,20 +79,29 @@ function checkAudit(data,audit,current){
   const userOk=close(u.factor,ref.factor)&&Array.isArray(u.normalized)&&u.normalized.every((x,i)=>close(x,ref.normalized[i]))&&u.directionless===(ref.factor===0);
   add(userOk,"Normalização do seu perfil",`fator ${typeof u.factor==="number"?u.factor.toFixed(6):"?"} · esperado ${ref.factor.toFixed(6)}`);
 
-  const rk=audit.ranking||[];
-  let rowBad=null;
-  if(rk.length!==ref.rows.length)rowBad="quantidade de pensadores";
-  else for(let i=0;i<rk.length&&!rowBad;i++){
-    const a=rk[i],b=ref.rows[i];
-    if(a.id!==b.id)rowBad=`posição ${i+1}: ${a.id} ≠ ${b.id}`;
-    else if(!close(a.distance,b.d))rowBad=`distância de ${b.name}`;
-    else if(!close(a.rawDistance,b.raw))rowBad=`distância bruta de ${b.name}`;
-    else if(a.percent!==b.pct)rowBad=`percentual de ${b.name}`;
-    else if(!close(a.factor,b.f))rowBad=`fator de ${b.name}`;
-    else if(!a.normalized||a.normalized.some((x,j)=>!close(x,b.normalized[j])))rowBad=`perfil normalizado de ${b.name}`;
-    else if(!a.diffs||a.diffs.some((x,j)=>!close(x,b.diffs[j])))rowBad=`diferenças por eixo de ${b.name}`;
+  const firstBad=(rk,rows)=>{
+    if(!Array.isArray(rk)||rk.length!==rows.length)return "quantidade de pensadores";
+    for(let i=0;i<rk.length;i++){
+      const a=rk[i],b=rows[i];
+      if(a.id!==b.id)return `posição ${i+1}: ${a.id} ≠ ${b.id}`;
+      if(!close(a.distance,b.d))return `distância de ${b.name}`;
+      if(!close(a.rawDistance,b.raw))return `distância bruta de ${b.name}`;
+      if(a.percent!==b.pct)return `percentual de ${b.name}`;
+      if(!close(a.factor,b.f))return `fator de ${b.name}`;
+      if(!a.normalized||a.normalized.some((x,j)=>!close(x,b.normalized[j])))return `perfil normalizado de ${b.name}`;
+      if(!a.diffs||a.diffs.some((x,j)=>!close(x,b.diffs[j])))return `diferenças por eixo de ${b.name}`;
+    }
+    return null;
+  };
+  const rowBad=firstBad(audit.ranking,ref.rows);
+  add(!rowBad,"Ranking: ordem, distâncias, desempates e percentuais",rowBad?`diverge em ${rowBad}`:`${ref.rows.length} de ${ref.rows.length} conferem`);
+  // Brazilian ranking: same rule over the Brazilian catalog plus Brazilians in the main catalog.
+  const brPool=[...(data.BR||[]),...data.PH.filter(p=>p.br)];
+  if(brPool.length){
+    const brRef=recompute(data,answers,brPool).rows;
+    const brBad=firstBad(audit.brazil,brRef);
+    add(!brBad,"Ranking brasileiro",brBad?`diverge em ${brBad}`:`${brRef.length} de ${brRef.length} conferem`);
   }
-  add(!rowBad,"Ranking: ordem, distâncias, desempates e percentuais",rowBad?`diverge em ${rowBad}`:`${rk.length} de ${ref.rows.length} conferem`);
   return checks;
 }
 

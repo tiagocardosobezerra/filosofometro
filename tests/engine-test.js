@@ -247,6 +247,30 @@ ok(E.evaluate(a0).code === Engine.codeFingerprint() && E.auditJSON(E.evaluate(a0
   ok(epsChanged !== src && load(epsChanged).codeFingerprint() !== Engine.codeFingerprint(), "engine code fingerprint changes when a constant changes");
 }
 
+section("Conteúdo, Brasil e comparação");
+ok(PH.every(p => p.bio && p.bio.length >= 200 && Array.isArray(p.ideas) && p.ideas.length === 3 && p.line && p.place && Number.isInteger(p.born) && (p.died === null || p.died > p.born)), "every thinker has bio, 3 ideas, line, place and consistent years");
+ok(!/[—–]/.test(JSON.stringify(DATA)), "no em or en dash anywhere in the catalog text");
+const BRD = DATA.BR || [];
+ok(BRD.length >= 20 && BRD.every(b => b.era === "Brasil" && b.v.length === AXES.length && b.v.every(x => x >= -1 && x <= 1 && Math.abs(x * 10 - Math.round(x * 10)) < 1e-9) && b.bio && b.ideas.length === 3 && !PH.some(p => p.id === b.id)), `Brazilian catalog: ${BRD.length} thinkers, valid positions and texts, ids distinct from the main catalog`);
+ok(E.BRAZIL.length === BRD.length + PH.filter(p => p.br).length && PH.filter(p => p.br).length === 3, "Brazilian ranking pool = Brazilian catalog + the 3 Brazilians of the main catalog");
+const kinHits = BRD.filter(b => E.rank(b.v).rows.slice(0, 5).some(x => (b.akin || []).includes(x.p.id))).length;
+info(`Brazilians whose engine-computed top 5 includes a stated kin: ${kinHits}/${BRD.length}`);
+ok(kinHits / BRD.length >= 0.8, "Brazilian positions agree with their stated intellectual kin (≥ 80%)");
+{
+  const r = E.evaluate(noisy(PH[12].v));
+  ok(r.brazil.length === E.BRAZIL.length && r.brazil.every((x, i) => x.rank === i + 1) && r.ranking.length === PH.length, "every result has a full Brazilian ranking, and the main ranking keeps exactly the 93 thinkers");
+  const j = clone(E.auditJSON(r)); j.brazil[0].percent += 1;
+  ok(Verify.checkAudit(DATA, j, current).some(c => !c.ok), "tampering is caught: Brazilian ranking percent");
+}
+{
+  const a = noisy(PH[2].v), b = noisy(PH[70].v);
+  const ab = E.comparePeople(a, b), ba = E.comparePeople(b, a), aa = E.comparePeople(a, a);
+  ok(ab.pct === ba.pct && Math.abs(ab.distance - ba.distance) < 1e-12, "comparing two people is symmetric");
+  ok(aa.pct === 100 && aa.distance === 0, "a person compared with themselves is 100%");
+  ok(E.comparePeople(a, QS.map(() => 2)).pct === null, "comparison with a directionless profile gives no percent");
+  ok(ab.pct === E.percent(ab.distance), "comparison percent uses the same curve as the result");
+}
+
 section("Cada pensador é alcançável");
 const missFull = PH.filter(p => top(ideal(p.v)).id !== p.id).map(p => p.n);
 ok(missFull.length === 0, `every thinker wins their own profile ${missFull.join(", ")}`);

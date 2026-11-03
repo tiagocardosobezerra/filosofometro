@@ -4,7 +4,8 @@ const E=AgoraEngine.create(AgoraData);
 const {AXES,QS,PH,SCALE}=E;
 const app=document.getElementById("app");
 const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
-const byId=Object.fromEntries(PH.map(p=>[p.id,p]));
+const BR=AgoraData.BR||[];
+const byId=Object.fromEntries([...PH,...BR].map(p=>[p.id,p]));
 
 // The order statements are shown in comes from the engine, so the audit can report it.
 const ORDER=E.ORDER;
@@ -16,7 +17,7 @@ const store={
 };
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const fmt=(x,d=2)=>(x>=0?"+":"−")+Math.abs(x).toFixed(d);
+const fmt=(x,d=2)=>(x>=0?"+":"−")+Math.abs(x).toFixed(d).replace(".",",");
 const pad=n=>String(n).padStart(2,"0");
 const icon={
   arrow:'<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
@@ -33,7 +34,7 @@ const angle=i=>-Math.PI/2+i*2*Math.PI/AXES.length;
 const radius=v=>R*(.16+.84*(Math.max(-1,Math.min(1,v))+1)/2);
 const pts=v=>v.map((x,i)=>[Math.cos(angle(i))*radius(x),Math.sin(angle(i))*radius(x)]);
 const path=v=>"M"+pts(v).map(p=>p.map(n=>n.toFixed(2)).join(" ")).join("L")+"Z";
-function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",decorative=false}={}){
+function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",decorative=false,tips=false}={}){
   const pad=labels?66:6;
   let s=`<svg viewBox="${-R-pad} ${-R-pad} ${2*(R+pad)} ${2*(R+pad)}" ${decorative?'aria-hidden="true" focusable="false"':`role="img" aria-label="${esc(title||"Perfil nos 11 eixos")}"`}>`;
   [.33,.66,1].forEach(f=>s+=`<circle class="sg-ring" r="${(R*(.16+.84*f)).toFixed(1)}"/>`);
@@ -46,7 +47,72 @@ function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",de
     const anchor=Math.abs(x)<8?"middle":x>0?"start":"end";
     s+=`<text class="sg-lbl" x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${anchor}">${esc(a.name)}</text>`;
   });
+  // One invisible wedge per axis catches hover and keyboard focus for the explanation tooltip.
+  if(tips){
+    const half=Math.PI/AXES.length,rr=R+(labels?40:8);
+    AXES.forEach((a,i)=>{
+      const a1=angle(i)-half,a2=angle(i)+half;
+      const p1=[Math.cos(a1)*rr,Math.sin(a1)*rr],p2=[Math.cos(a2)*rr,Math.sin(a2)*rr];
+      s+=`<path class="sg-hit" data-ax="${i}" tabindex="0" role="button" aria-label="${esc(a.name)}: ${esc(a.l)} ou ${esc(a.r)}. Ver explicação" d="M0 0L${p1[0].toFixed(1)} ${p1[1].toFixed(1)}A${rr} ${rr} 0 0 1 ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}Z"/>`;
+    });
+  }
   return s+"</svg>";
+}
+
+/* ---------- Sigil explanations ---------- */
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const lean=(a,x)=>Math.abs(x)<.13?"equilíbrio":`${x<0?a.l:a.r}${Math.abs(x)>=.6?", forte":""}`;
+const num2=x=>(x>=0?"+":"−")+Math.abs(x).toFixed(2).replace(".",",");
+// Why the user sits where they do on one axis: the answers that pulled hardest in that direction.
+function whyUser(r,ax){
+  const qs=r.perQuestion.filter(q=>q.axis===ax);
+  const score=r.scores[ax];
+  if(Math.abs(score)<.13){
+    const pulls=qs.filter(q=>q.contribution!==0);
+    return pulls.length?`Suas respostas se equilibraram: ${pulls.length} puxaram para lados opostos.`:"Você ficou neutro nas 4 afirmações deste eixo.";
+  }
+  const dir=Math.sign(score);
+  const top=qs.filter(q=>Math.sign(q.contribution)===dir).sort((a,b)=>Math.abs(b.contribution)-Math.abs(a.contribution)).slice(0,2);
+  const said=q=>`“${SCALE[q.answer].label.toLowerCase()}” para “${q.text.replace(/\.$/,"")}”`;
+  return `Você respondeu ${top.map(said).join(" e ")}.`;
+}
+// The example in the quiz where this thinker is cited on this axis, if any.
+function thinkerCite(p,ax){
+  for(const q of QS){if(q[1]!==ax)continue;for(const ex of [q[3],q[4]]){const n=ex.slice(0,ex.indexOf(": "));if(thinkerByName(n)===p)return ex.slice(ex.indexOf(": ")+2)}}
+  return null;
+}
+function tipHTML(ax,{user=null,r=null,p=null}){
+  const a=AXES[ax];
+  let h=`<b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} ↔ ${esc(a.r)}</span>`;
+  if(user)h+=`<span class="tip-row"><i class="tip-dot you"></i>Você: ${num2(user[ax])} · ${esc(lean(a,user[ax]))}</span>`;
+  if(p)h+=`<span class="tip-row"><i class="tip-dot them"></i>${esc(p.n)}: ${num2(p.v[ax])} · ${esc(lean(a,p.v[ax]))}</span>`;
+  if(r)h+=`<span class="tip-why"><b>Por quê:</b> ${esc(whyUser(r,ax))}</span>`;
+  else if(p){const c=thinkerCite(p,ax);if(c)h+=`<span class="tip-why"><b>${esc(p.n)}:</b> ${esc(c)}</span>`;}
+  return h;
+}
+function wireTips(root,ctx){
+  const tip=document.getElementById("tip");
+  const hide=()=>{tip.classList.remove("show")};
+  const place=(x,y)=>{
+    const w=tip.offsetWidth,h=tip.offsetHeight,m=12;
+    let left=x+16,top=y+16;
+    if(left+w>innerWidth-m)left=x-w-16;
+    if(top+h>innerHeight-m)top=y-h-16;
+    tip.style.left=Math.max(m,left)+"px";tip.style.top=Math.max(m,top)+"px";
+  };
+  root.querySelectorAll(".sg-hit").forEach(el=>{
+    const showAt=(x,y)=>{tip.innerHTML=tipHTML(+el.dataset.ax,ctx);tip.classList.add("show");place(x,y)};
+    el.addEventListener("pointerenter",e=>showAt(e.clientX,e.clientY));
+    el.addEventListener("pointermove",e=>place(e.clientX,e.clientY));
+    el.addEventListener("pointerleave",hide);
+    el.addEventListener("focus",()=>{const b=el.getBoundingClientRect();showAt(b.left+b.width/2,b.top+b.height/2)});
+    el.addEventListener("blur",hide);
+    // On touch screens a tap shows the explanation; tapping elsewhere hides it.
+    el.addEventListener("click",e=>{const b=el.getBoundingClientRect();showAt(e.clientX||b.left,e.clientY||b.top)});
+  });
+  const onDoc=e=>{if(!e.target.closest||!e.target.closest(".sg-hit"))hide()};
+  document.addEventListener("pointerdown",onDoc);
+  onLeave(()=>{document.removeEventListener("pointerdown",onDoc);hide()});
 }
 
 /* ---------- Routing ---------- */
@@ -67,6 +133,8 @@ function route(){
   else if(name==="p")renderThinker(parts[1]);
   else if(name==="metodo")renderMethod();
   else if(name==="verificar")renderVerify(parts[1]);
+  else if(name==="vs")renderInvite(parts[1],parts[2]);
+  else if(name==="comparar")renderCompare(parts[1],parts[2],parts[3],parts[4]);
   else if(name===""||name==="app")renderHome();
   else renderNotFound();
   window.scrollTo({top:0,behavior:"instant"});
@@ -173,6 +241,14 @@ function heroAnimation(){
 }
 
 /* ---------- Quiz ---------- */
+// After the last answer: open the result, or the comparison when the person came from an invite.
+function finishQuiz(answers){
+  const code=E.encode(answers),vs=store.get("vs");
+  store.set("last",code);
+  if(vs&&E.decode(vs.code)){store.del("vs");location.replace(`#/comparar/${vs.code}/${code}${vs.name?`/${encName(vs.name)}`:""}`);return}
+  location.replace("#/r/"+code);
+}
+
 // Examples are "Name: position". The name is matched to the catalog to show the thinker's portrait.
 const NAME_ALIAS={"Espinosa":"spinoza","Calvino":"joao-calvino","Lao Tsé":"lao-tse"};
 function thinkerByName(name){
@@ -261,7 +337,7 @@ function renderQuiz(){
     busy=true;
     later(()=>{
       // Replace the quiz entry so the back button leaves the result instead of reopening an empty quiz.
-      if(firstOpen===-1&&(next===-1||pos===ORDER.length-1)){store.del("progress");location.replace("#/r/"+E.encode(answers));return}
+      if(firstOpen===-1&&(next===-1||pos===ORDER.length-1)){store.del("progress");finishQuiz(answers);return}
       go(next===-1?firstOpen:next);
       if(reduceMotion)busy=false;
     },reduceMotion?60:220);
@@ -277,7 +353,7 @@ function renderQuiz(){
   document.getElementById("prevBtn").addEventListener("click",()=>{if(pos>0&&!busy)go(pos-1)});
   document.getElementById("toResult").addEventListener("click",()=>{
     if(answers.some(a=>a===null))return;
-    store.del("progress");location.replace("#/r/"+E.encode(answers));
+    store.del("progress");finishQuiz(answers);
   });
   const onKey=e=>{
     if(e.metaKey||e.ctrlKey||e.altKey)return;
@@ -319,11 +395,12 @@ function renderResult(code){
     ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`})}
   </section>
   <section class="wrap" style="padding-bottom:24px">
+    ${p.bio||!flat?`<div class="grid2" style="margin-bottom:20px">${aboutHTML(p)}${agreementHTML(r,top)}</div>`:""}
     <div class="grid2">
       <div class="panel">
         <h2>Seus 11 eixos</h2>
         <p class="sub">Laranja: você. Tracejado: ${esc(p.n)}. Os gráficos mostram as posições brutas; a comparação usa o formato normalizado (passo 2 da auditoria).</p>
-        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,title:`Seu perfil nos 11 eixos comparado ao de ${p.n}`})}</div>
+        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Seu perfil nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint">Passe o mouse (ou toque) em cada eixo para ver o que ele mede e por que você ficou ali.</p>
         ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],"você",p.n)).join("")}
       </div>
       <div style="display:grid;gap:20px;align-content:start">
@@ -332,6 +409,7 @@ function renderResult(code){
           <p class="sub">Os próximos da lista, pela mesma conta.</p>
           <ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul>
         </div>
+        ${brazilHTML(r)}
         ${opp?`<div class="panel">
           <h2>Seu oposto</h2>
           <p class="sub">Quem mais discordaria de você.</p>
@@ -343,6 +421,8 @@ function renderResult(code){
         </div>
       </div>
     </div>
+    ${invitePanelHTML(r)}
+    ${timelineHTML(r)}
     ${auditPanel(r)}
   </section>`,flat?`Mais perto: ${p.n}`:`${top.pct}% ${p.n}`);
   // Count-up for the percentage.
@@ -358,6 +438,8 @@ function renderResult(code){
   if(!flat)document.getElementById("shareBtn").addEventListener("click",()=>shareCard(r));
   document.getElementById("copyBtn").addEventListener("click",copyLink);
   document.getElementById("redoBtn").addEventListener("click",()=>store.del("progress"));
+  wireTips(app,{user:userV,r,p});
+  wireInvite(r);
   wireAudit(r);
 }
 
@@ -365,7 +447,151 @@ function renderResult(code){
 // Portraits are Wikimedia Commons images linked from the catalog; a monogram shows if one fails to load.
 function portrait(p,{cls="",eager=false}={}){
   const initials=p.n.split(" ").filter(w=>/^[A-ZÀ-Ý]/.test(w)).slice(0,2).map(w=>w[0]).join("");
+  if(!p.img)return `<figure class="portrait noimg ${cls}" role="img" aria-label="${esc(p.n)} (sem retrato livre disponível)"><span class="mono-fallback" aria-hidden="true">${esc(initials)}</span></figure>`;
   return `<figure class="portrait ${cls}"><img src="${esc(p.img)}" alt="Retrato de ${esc(p.n)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')"><span class="mono-fallback" aria-hidden="true">${esc(initials)}</span></figure>`;
+}
+
+/* ---------- Compare with a friend ---------- */
+// Names are optional, typed by the person, and travel only inside the link they choose to share.
+const cleanName=s=>{try{s=decodeURIComponent(s||"")}catch(e){s=""}return s.replace(/[^\p{L}\p{N} .'-]/gu,"").trim().slice(0,24)};
+const encName=s=>encodeURIComponent(cleanName(s));
+// Accepts any Filosofômetro link (result, invite or comparison) or a bare code, and returns the answers.
+function answersFromLink(t){
+  const m=String(t||"").trim().match(/(?:#\/(?:r|vs|verificar)\/|^)([0-4]{44})(?:$|[/?#\s])/);
+  return m?E.decode(m[1]):null;
+}
+function invitePanelHTML(r){
+  return `<div class="panel compare-cta">
+    <h2>Compare com alguém</h2>
+    <p class="sub">Mande o seu link para um amigo. Quando ele terminar o teste, vocês veem lado a lado onde pensam igual e onde divergem.</p>
+    <div class="cmp-form">
+      <label class="sr" for="myName">Seu nome (opcional)</label>
+      <input class="search sm" id="myName" placeholder="Seu primeiro nome (opcional)" maxlength="24" autocomplete="given-name">
+      <button class="btn accent sm" id="inviteBtn" type="button">${icon.link} Copiar convite</button>
+    </div>
+    <div class="cmp-form">
+      <label class="sr" for="theirLink">Link de outra pessoa</label>
+      <input class="search sm" id="theirLink" placeholder="Já tem o link de alguém? Cole aqui" autocomplete="off" spellcheck="false">
+      <button class="btn ghost sm" id="compareBtn" type="button">Comparar</button>
+    </div>
+  </div>`;
+}
+function wireInvite(r){
+  const mine=E.encode(r.answers);
+  const base=location.href.split("#")[0];
+  document.getElementById("inviteBtn").addEventListener("click",async()=>{
+    const nm=encName(document.getElementById("myName").value);
+    const url=`${base}#/vs/${mine}${nm?`/${nm}`:""}`;
+    try{await navigator.clipboard.writeText(url);toast("Convite copiado. Agora é só mandar!")}catch(e){prompt("Copie o convite:",url)}
+  });
+  const go=()=>{
+    const theirs=answersFromLink(document.getElementById("theirLink").value);
+    if(!theirs){toast("Não reconheci esse link");return}
+    location.hash=`#/comparar/${E.encode(theirs)}/${mine}`;
+  };
+  document.getElementById("compareBtn").addEventListener("click",go);
+  document.getElementById("theirLink").addEventListener("keydown",e=>{if(e.key==="Enter")go()});
+}
+// Landing for an invite link: show who invited and start the test; the comparison opens after it.
+function renderInvite(code,rawName){
+  const a=E.decode(code);
+  if(!a){renderNotFound("Este convite está incompleto ou é de uma versão antiga do teste.");return}
+  const r=E.evaluate(a),p=r.top.p,who=cleanName(rawName)||"Alguém";
+  store.set("vs",{code,name:cleanName(rawName)});
+  const mineCode=store.get("last");
+  mount(`
+  <section class="wrap res-hero">
+    <div>
+      <span class="eyebrow">Convite</span>
+      <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${esc(who)} quer comparar com você</span></span></h1>
+      <p class="lede">${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Faça o teste e descubra quanto vocês pensam parecido, eixo por eixo.</p>
+      <div class="cta-row">
+        <a class="btn accent" href="#/teste" data-fresh="1">Fazer o teste e comparar ${icon.arrow}</a>
+        ${mineCode&&E.decode(mineCode)?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(rawName)}">Usar meu último resultado</a>`:""}
+      </div>
+    </div>
+    ${duo(p,{title:`Perfil de ${p.n}`})}
+  </section>`,"Convite");
+  app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
+}
+function renderCompare(codeA,codeB,rawA,rawB){
+  const a=E.decode(codeA),b=E.decode(codeB);
+  if(!a||!b){renderNotFound("Este link de comparação está incompleto.");return}
+  const c=E.comparePeople(a,b),ra=c.a,rb=c.b;
+  const nameA=cleanName(rawA)||"Seu amigo",nameB=cleanName(rawB)||"Você";
+  const rows=c.perAxis.map(x=>({ax:x.axis,diff:x.diff,A:ra.scores[x.axis],B:rb.scores[x.axis]}));
+  const close=rows.slice().sort((x,y)=>x.diff-y.diff).slice(0,3),far=rows.slice().sort((x,y)=>y.diff-x.diff).slice(0,3);
+  const topA=new Set(ra.ranking.slice(0,10).map(x=>x.p.id));
+  const shared=rb.ranking.slice(0,10).filter(x=>topA.has(x.p.id)).slice(0,4).map(x=>x.p);
+  const verdict=c.pct===null?"Um dos perfis ficou sem direção, então não dá para medir compatibilidade.":c.pct>=80?"Almas filosóficas gêmeas.":c.pct>=60?"Bastante em comum, com boas brigas pela frente.":c.pct>=40?"Concordam em algumas coisas e discordam com vontade em outras.":"Pensam quase ao contrário. Rende uma ótima conversa.";
+  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?"perfil sem direção":`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
+  const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?`Os dois tendem a <b>${esc(lean(ax,x.A).replace(", forte",""))}</b>.`:`${esc(nameA)}: <b>${esc(lean(ax,x.A))}</b>. ${esc(nameB)}: <b>${esc(lean(ax,x.B))}</b>.`}</span></li>`};
+  mount(`
+  <section class="wrap section" style="padding-top:clamp(24px,5vh,56px)">
+    <span class="eyebrow">Comparação</span>
+    <h1 class="res-name" style="font-size:clamp(44px,min(8vw,11vh),120px)"><span class="line"><span>${c.pct===null?"Sem direção":`${c.pct}% compatíveis`}</span></span></h1>
+    <p class="lede" style="margin-top:6px">${esc(verdict)}</p>
+    <div class="cmp-grid">
+      ${card(nameA,ra)}
+      <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,title:`${nameB} e ${nameA} nos 11 eixos`})}
+        <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div></div>
+      ${card(nameB,rb)}
+    </div>
+    <div class="grid2" style="margin-top:24px">
+      <div class="panel agree">
+        <h2>Onde vocês se encontram</h2>
+        <p class="sub">Os eixos com o formato de pensamento mais parecido entre vocês.</p>
+        <ul class="ag-list">${close.map(x=>item(x,"close")).join("")}</ul>
+        <h3 class="about-h ag-no">Onde vocês divergem</h3>
+        <ul class="ag-list">${far.map(x=>item(x,"far")).join("")}</ul>
+      </div>
+      <div style="display:grid;gap:20px;align-content:start">
+        <div class="panel">
+          <h2>Pensadores em comum</h2>
+          <p class="sub">Aparecem entre os 10 mais parecidos com os dois.</p>
+          ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.</p>`}
+        </div>
+        <div class="panel">
+          <h2>Como calculamos</h2>
+          <p class="sub" style="margin:0">A mesma regra do resultado: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos (${num(c.distance,4)}) e a compatibilidade é ${esc(E.PERCENT_RULE)}.</p>
+        </div>
+      </div>
+    </div>
+    <div class="res-actions" style="justify-content:center;margin-top:28px">
+      <button class="btn accent" id="cmpCopy" type="button">${icon.link} Copiar esta comparação</button>
+      <a class="btn ghost" href="#/teste" data-fresh="1">Fazer o teste de novo</a>
+    </div>
+  </section>`,c.pct===null?"Comparação":`${c.pct}% compatíveis`);
+  document.getElementById("cmpCopy").addEventListener("click",copyLink);
+  app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
+  store.del("vs");
+}
+
+/* ---------- Brazil ---------- */
+// Brazilian thinkers ranked against the user with the engine's own rule (audited as "brazil").
+function brazilHTML(r){
+  if(!r.brazil.length)return "";
+  const [first,...rest]=r.brazil,b=first.p;
+  return `<div class="panel brazil">
+    <span class="br-flag" aria-hidden="true"></span>
+    <h2>No Brasil, quem pensa como você</h2>
+    <p class="sub">Entre ${r.brazil.length} pensadores brasileiros, pela mesma conta do seu resultado.</p>
+    <a class="br-main" href="#/p/${b.id}">${portrait(b,{cls:"br-pic"})}<span><span class="nm">${esc(b.n)}</span><span class="sc">${esc(b.s)}${first.pct!==null?` · ${first.pct}% com você`:""}</span>${b.bio?`<span class="br-bio">${esc(b.bio)}</span>`:""}</span></a>
+    <ul class="match-list">${rest.slice(0,3).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul>
+  </div>`;
+}
+// For a thinker's page: the closest Brazilians to an international thinker, or the
+// international kin of a Brazilian one.
+function kinHTML(p){
+  if(p.era==="Brasil"){
+    const kin=(p.akin||[]).map(id=>byId[id]).filter(Boolean);
+    if(!kin.length)return "";
+    return `<div class="panel"><h2>Parentes pelo mundo</h2><p class="sub">Pensadores do catálogo internacional na mesma linha de ${esc(p.n)}.</p>
+      <ul class="match-list">${kin.map(x=>`<li><a href="#/p/${x.id}">${portrait(x,{cls:"avatar"})}<span><span class="nm">${esc(x.n)}</span><span class="sc">${esc(x.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul></div>`;
+  }
+  const near=E.rank(p.v,E.BRAZIL).rows.filter(x=>x.p.id!==p.id).slice(0,3);
+  return `<div class="panel brazil"><span class="br-flag" aria-hidden="true"></span><h2>No Brasil, na mesma linha</h2><p class="sub">Os pensadores brasileiros com o formato de pensamento mais parecido com o de ${esc(p.n)}.</p>
+    <ul class="match-list">${near.map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${x.pct}%</span></a></li>`).join("")}</ul></div>`;
 }
 const credit=p=>`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">Imagem: Wikimedia Commons, via Wikipédia ↗</a>`;
 // Portrait and sigil together: the face of the thinker and the shape of the thought.
@@ -375,7 +601,7 @@ function duo(p,{user=null,title="",thinkerFirst=false}={}){
   const mainName=user&&!thinkerFirst?"Você":p.n,otherName=thinkerFirst?"Você":p.n;
   return `<div class="duo">
     ${portrait(p,{eager:true})}
-    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,title:title||`Perfil de ${p.n}`})}</div>
+    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||`Perfil de ${p.n}`})}</div>
     ${user?`<div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(mainName)}</span><span><i class="dash"></i>${esc(otherName)}</span></div>`:""}
     ${credit(p)}
   </div>`;
@@ -392,8 +618,104 @@ function axisRow(a,main,other,mainLabel,otherLabel){
   </div>`;
 }
 
+/* ---------- Thinker profile and agreement ---------- */
+// Who the thinker was: life, bio, central ideas and the line of thought.
+function aboutHTML(p,{title=`Quem foi ${p.n}`}={}){
+  if(!p.bio)return "";
+  const sameLine=PH.filter(x=>x!==p&&x.s===p.s);
+  return `<div class="panel about">
+    <h2>${esc(title)}</h2>
+    <p class="sub">${esc(lifeText(p))}${p.place?` · ${esc(p.place)}`:""}</p>
+    <p class="about-bio">${esc(p.bio)}</p>
+    <h3 class="about-h">Ideias centrais</h3>
+    <ul class="about-ideas">${p.ideas.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+    <h3 class="about-h">A linha: ${esc(p.s)}</h3>
+    <p class="about-line">${esc(p.line)}</p>
+    ${sameLine.length?`<p class="about-same">Na mesma linha: ${sameLine.map(x=>`<a href="#/p/${x.id}">${esc(x.n)}</a>`).join(", ")}</p>`:""}
+  </div>`;
+}
+// Where the user and the thinker agree and differ most, axis by axis, on the normalized shapes the match uses.
+function agreementHTML(r,x){
+  if(r.directionless)return "";
+  const rows=x.perAxis.map(a=>({ax:a.axis,diff:a.diff,you:r.scores[a.axis],them:x.p.v[a.axis]}));
+  const close=rows.slice().sort((a,b)=>a.diff-b.diff).slice(0,3);
+  const far=rows.slice().sort((a,b)=>b.diff-a.diff).slice(0,3);
+  const item=(c,kind)=>{const a=AXES[c.ax];
+    const text=kind==="close"
+      ?(Math.sign(c.you)===Math.sign(c.them)&&Math.abs(c.you)>=.13?`Os dois tendem a <b>${esc(lean(a,c.you).replace(", forte",""))}</b>.`:`Os dois ficam perto do equilíbrio entre ${esc(a.l)} e ${esc(a.r)}.`)
+      :`Você: <b>${esc(lean(a,c.you))}</b>. ${esc(x.p.n)}: <b>${esc(lean(a,c.them))}</b>.`;
+    return `<li><span class="ag-axis">${esc(cap(a.name))}</span><span>${text}</span></li>`;};
+  return `<div class="panel agree">
+    <h2>Você e ${esc(x.p.n)}</h2>
+    <p class="sub">Os eixos onde seus formatos de pensamento mais se encontram e mais se afastam.</p>
+    <h3 class="about-h ag-yes">Onde vocês concordam</h3>
+    <ul class="ag-list">${close.map(c=>item(c,"close")).join("")}</ul>
+    <h3 class="about-h ag-no">Onde vocês divergem</h3>
+    <ul class="ag-list">${far.map(c=>item(c,"far")).join("")}</ul>
+  </div>`;
+}
+
+/* ---------- Timeline ---------- */
+// Eras get fixed shares of the width, so the crowded modern centuries are readable
+// next to the long ancient ones. A thinker is placed at their prime (birth + 35 years).
+const ERAS=[
+  {name:"Antiguidade",from:-650,to:450,w:.22},
+  {name:"Idade Média e Renascimento",from:450,to:1600,w:.18},
+  {name:"Modernidade",from:1600,to:1880,w:.28},
+  {name:"Contemporâneo",from:1880,to:2030,w:.32},
+];
+function timeX(year){
+  let left=0;
+  for(const e of ERAS){
+    if(year<=e.to||e===ERAS[ERAS.length-1])return (left+e.w*Math.max(0,Math.min(1,(year-e.from)/(e.to-e.from))))*100;
+    left+=e.w;
+  }
+}
+const yearText=y=>y<0?`${-y} a.C.`:`${y}`;
+const lifeText=p=>p.born===undefined?"":p.legend?`séc. VI a.C. (data tradicional)`:
+  `${p.approx?"c. ":""}${yearText(p.born)}${p.died===null?" até hoje":` a ${yearText(p.died)}`}`;
+function timelineHTML(r){
+  if(PH.some(p=>p.born===undefined))return "";
+  const prime=p=>p.born+35;
+  const hl=new Map();
+  hl.set(r.top.p.id,"top");
+  r.ranking.slice(1,6).forEach(x=>hl.set(x.p.id,"near"));
+  if(r.opposite)hl.set(r.opposite.p.id,"opp");
+  // Highlighted thinkers get labels above the line, stacked so labels never overlap.
+  // The match always gets the top row (its "você está aqui" badge sits above it); the rest
+  // take the first row where they don't collide with any label already placed.
+  const rows=[],labels=[];
+  const place=p=>{
+    const x=timeX(prime(p));let row=0;
+    // Labels are 132px wide on a timeline at least 880px wide: 15.5% keeps them apart at any width.
+    while(rows[row]&&rows[row].some(o=>Math.abs(o-x)<15.5))row++;
+    (rows[row]=rows[row]||[]).push(x);labels.push({p,x,row,kind:hl.get(p.id)});
+  };
+  place(r.top.p);
+  [...hl.keys()].filter(id=>id!==r.top.p.id).map(id=>byId[id]).sort((a,b)=>prime(a)-prime(b)).forEach(place);
+  const dotRows=[];
+  const dots=PH.filter(p=>!hl.has(p.id)).sort((a,b)=>prime(a)-prime(b)).map(p=>{
+    const x=timeX(prime(p));let row=0;
+    while(dotRows[row]!==undefined&&x-dotRows[row]<.9)row++;
+    dotRows[row]=x;return {p,x,row};
+  });
+  const tag={top:"Seu par",near:"Parecido",opp:"Oposto"};
+  let left=0;
+  const eraMarks=ERAS.map(e=>{const s=`<span class="tl-era" style="left:${left*100}%;width:${e.w*100}%">${esc(e.name)}</span>`;left+=e.w;return s}).join("");
+  return `<div class="panel tl-panel">
+    <h2>Sua linhagem no tempo</h2>
+    <p class="sub">Os 93 pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.</p>
+    <div class="tl-scroll"><div class="tl" style="--rows:${rows.length}">
+      <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">Você está aqui</span>`:""}</a>`).join("")}</div>
+      <div class="tl-line"></div>
+      <div class="tl-dots">${dots.map(d=>`<a class="tl-dot" href="#/p/${d.p.id}" style="left:${d.x}%;--row:${d.row}" title="${esc(d.p.n)} (${esc(lifeText(d.p))})" aria-label="${esc(d.p.n)}, ${esc(lifeText(d.p))}"></a>`).join("")}</div>
+      <div class="tl-eras">${eraMarks}</div>
+    </div></div>
+  </div>`;
+}
+
 /* ---------- Audit ---------- */
-const num=(x,d=6)=>x===null?"sem valor":x.toFixed(d);
+const num=(x,d=6)=>x===null?"sem valor":x.toFixed(d).replace(".",",");
 function auditPanel(r){
   const P=r.params,u=r.user;
   return `<details class="audit" id="audit">
@@ -470,17 +792,18 @@ function wireAudit(r){
 
 /* ---------- Catalog ---------- */
 function renderCatalog(){
-  const eras=[...new Set(PH.map(p=>p.era))];
+  const ALL=[...PH,...BR];
+  const eras=[...new Set(ALL.map(p=>p.era))];
   const last=store.get("last"),lastR=last&&E.decode(last)?E.evaluate(E.decode(last)):null;
   // Sorting by match follows the engine's ranking exactly, ties included.
-  const rankOf=Object.fromEntries(lastR?lastR.ranking.map(x=>[x.p.id,x]):[]);
+  const rankOf=Object.fromEntries(lastR?[...lastR.brazil,...lastR.ranking].map(x=>[x.p.id,x]):[]);
   const pctOf=id=>lastR?rankOf[id].pct:null;
   const hasPct=!!lastR&&!lastR.directionless;
   let era="",q="",sort=lastR?"match":"era";
   mount(`
   <section class="wrap section" style="padding-top:clamp(32px,6vh,64px)">
     <span class="eyebrow">Catálogo</span>
-    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${PH.length} pensadores</h1>
+    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${ALL.length} pensadores</h1>
     <p class="lede" style="margin-top:16px">${new Set(PH.map(p=>p.s)).size} correntes, da Grécia antiga a hoje. ${lastR?"Cada card mostra sua compatibilidade e sua posição no ranking.":"Faça o teste para ver sua compatibilidade com cada um."}</p>
     <div class="cat-tools">
       <label class="sr" for="q">Buscar pensador ou corrente</label>
@@ -501,11 +824,12 @@ function renderCatalog(){
   </section>`,"Pensadores");
   const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
   const draw=()=>{
-    const list=PH.filter(p=>(!era||p.era===era)&&(!q||norm(p.n+" "+p.s).includes(norm(q))));
+    const list=ALL.filter(p=>(!era||p.era===era)&&(!q||norm(p.n+" "+p.s).includes(norm(q))));
     if(sort==="az")list.sort((a,b)=>a.n.localeCompare(b.n));
-    if(sort==="match")list.sort((a,b)=>rankOf[a.id].rank-rankOf[b.id].rank);
+    // Main and Brazilian thinkers share one scale (same normalized distance), so they sort together.
+    if(sort==="match")list.sort((a,b)=>rankOf[a.id].distance-rankOf[b.id].distance||(a.id<b.id?-1:1));
     document.getElementById("count").textContent=`${list.length} pensadores`;
-    document.getElementById("cards").innerHTML=list.length?list.map(p=>`<a class="tcard" href="#/p/${p.id}"><span class="tcard-art">${portrait(p)}<span class="mini">${sigil(p.v,{decorative:true,cls:"sg-user"})}</span></span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(p.era)}</span>${lastR?`<span class="pc">${hasPct?`${pctOf(p.id)}% com você · `:""}${rankOf[p.id].rank}º</span>`:""}</a>`).join(""):`<p class="empty">Nenhum pensador encontrado.</p>`;
+    document.getElementById("cards").innerHTML=list.length?list.map(p=>`<a class="tcard" href="#/p/${p.id}"><span class="tcard-art">${portrait(p)}<span class="mini">${sigil(p.v,{decorative:true,cls:"sg-user"})}</span></span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(p.era)}</span>${lastR?`<span class="pc">${hasPct?`${pctOf(p.id)}% com você`:""}${p.era==="Brasil"?"":`${hasPct?" · ":""}${rankOf[p.id].rank}º`}</span>`:""}</a>`).join(""):`<p class="empty">Nenhum pensador encontrado.</p>`;
   };
   document.getElementById("q").addEventListener("input",e=>{q=e.target.value;draw()});
   document.getElementById("sortSel").addEventListener("change",e=>{sort=e.target.value;draw()});
@@ -519,7 +843,8 @@ function renderThinker(id){
   const p=byId[id];
   if(!p){renderNotFound("Não encontramos esse pensador.");return}
   const last=store.get("last"),lastR=last&&E.decode(last)?E.evaluate(E.decode(last)):null;
-  const mine=lastR&&lastR.ranking.find(x=>x.p.id===id);
+  const mine=lastR&&(lastR.ranking.find(x=>x.p.id===id)||lastR.brazil.find(x=>x.p.id===id));
+  const ofN=lastR&&lastR.ranking.some(x=>x.p.id===id)?`${PH.length}`:`${E.BRAZIL.length} brasileiros`;
   // Closest thinkers by the same rule the engine uses for users: this thinker's positions as the profile.
   const twins=E.rank(p.v).rows.filter(x=>x.p.id!==p.id).slice(0,4).map(x=>({x:x.p}));
   mount(`
@@ -529,22 +854,25 @@ function renderThinker(id){
       <h1 class="res-name" style="margin-top:18px"><span class="line"><span>${esc(p.n)}</span></span></h1>
       <div class="res-school">${esc(p.s)} · ${esc(p.era)}</div>
       <blockquote class="res-quote">“${esc(p.q)}”</blockquote>
-      <div class="res-actions">${mine?`<span class="btn ghost" style="cursor:default">${mine.pct===null?"":`${mine.pct}% com você · `}${mine.rank}º de ${PH.length}</span>`:`<a class="btn accent" href="#/teste">Ver minha compatibilidade ${icon.arrow}</a>`}</div>
+      <div class="res-actions">${mine?`<span class="btn ghost" style="cursor:default">${mine.pct===null?"":`${mine.pct}% com você · `}${mine.rank}º de ${ofN}</span>`:`<a class="btn accent" href="#/teste">Ver minha compatibilidade ${icon.arrow}</a>`}</div>
     </div>
     ${duo(p,{user:lastR?lastR.scores:null,thinkerFirst:true,title:lastR?`Perfil de ${p.n} comparado ao seu`:`Perfil de ${p.n}`})}
   </section>
   <section class="wrap" style="padding-bottom:64px">
     <div class="grid2">
       <div class="panel"><h2>Posições</h2><p class="sub">Laranja: ${esc(p.n)}.${lastR?" Tracejado: você.":""} Posições do catálogo, de −1 a +1.</p>
-        <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,title:`Perfil de ${p.n} nos 11 eixos`})}</div>
+        <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:`Perfil de ${p.n} nos 11 eixos`})}</div><p class="tip-hint">Passe o mouse (ou toque) em cada eixo para ver a posição de ${esc(p.n)}.</p>
         ${AXES.map((a,i)=>axisRow(a,p.v[i],lastR?lastR.scores[i]:undefined,p.n,"você")).join("")}</div>
       <div style="display:grid;gap:20px;align-content:start">
+        ${aboutHTML(p,{title:"Quem foi"})}
+        ${kinHTML(p)}
         <div class="panel"><h2>Para ler</h2><div class="book" style="margin-top:16px"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span class="t">${esc(p.b)}</span></div></div>
         <div class="panel"><h2>Parentes próximos</h2><p class="sub">Pensadores com o formato mais parecido.</p>
           <ul class="match-list">${twins.map(({x})=>`<li><a href="#/p/${x.id}">${portrait(x,{cls:"avatar"})}<span><span class="nm">${esc(x.n)}</span><span class="sc">${esc(x.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul></div>
       </div>
     </div>
   </section>`,p.n);
+  wireTips(app,{user:lastR?lastR.scores:null,r:null,p});
 }
 
 /* ---------- Method ---------- */
@@ -588,6 +916,10 @@ compatibilidade = ${esc(E.PERCENT_RULE)}
 eps = ${P.eps}
 distância bruta = média de |sua posição − posição do pensador|, sem normalizar</div>
       <p>O id é comparado pelos códigos dos caracteres, sem depender do idioma do navegador. Assim, as mesmas respostas dão sempre o mesmo ranking, em qualquer computador. A auditoria marca cada empate e mostra a distância bruta usada para desfazê-lo.</p>
+      <h3>Pensadores brasileiros</h3>
+      <p>O resultado também mostra quem, no Brasil, pensa como você. São ${E.BRAZIL.length} pensadores brasileiros: um catálogo próprio de ${BR.length}, mais os ${PH.filter(p=>p.br).length} brasileiros do catálogo principal. Eles são comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos ${PH.length} pensadores.</p>
+      <h3>Comparar com outra pessoa</h3>
+      <p>Duas pessoas são comparadas exatamente como uma pessoa e um pensador: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos e a compatibilidade usa a mesma curva. A conta é simétrica, e uma pessoa comparada consigo mesma dá 100%.</p>
       <h2>6. Aviso de confiabilidade</h2>
       <p>Se você escolhe a mesma opção em ${Math.round(P.repeatWarning*100)}% das afirmações ou mais (${Math.ceil(P.repeatWarning*QS.length)} de ${QS.length}), ou se a intensidade fica abaixo de ${P.centerWarning}, o resultado vem com um aviso.</p>
       <h2>7. Como verificamos</h2>

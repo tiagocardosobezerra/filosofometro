@@ -1,6 +1,6 @@
 # Filosofômetro: qual filósofo pensa como você?
 
-Teste filosófico com 44 afirmações, 11 eixos e 93 pensadores. Site estático, sem build e sem backend.
+Teste filosófico com 44 afirmações, 11 eixos e 93 pensadores, mais 27 pensadores brasileiros num ranking próprio. Mostra o seu par, os mais parecidos, o seu oposto, quem pensa como você no Brasil, uma linha do tempo e a comparação com amigos pelo link. Site estático, sem build e sem backend.
 
 **No ar:** https://filosofometro.vercel.app · **Criado por** [Tiago Cardoso Bezerra](https://github.com/tiagocardosobezerra)
 

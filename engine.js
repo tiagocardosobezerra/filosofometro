@@ -44,6 +44,7 @@ function fingerprintInput(data){
     axes:data.AXES.map(a=>[a.id,a.l,a.r]),
     statements:data.QS.map(q=>[q[0],q[1],q[2]]),
     thinkers:data.PH.map(p=>[p.id,p.n,p.v]),
+    brazil:[...(data.BR||[]),...data.PH.filter(p=>p.br)].map(p=>[p.id,p.n,p.v]),
   };
 }
 const fingerprint=data=>fnv(JSON.stringify(fingerprintInput(data)));
@@ -95,11 +96,15 @@ function create(data){
       pct:directionless?null:percent(distance)};
   }
 
+  // Brazilian thinkers: the separate Brazilian catalog plus Brazilians already in the main one.
+  // They are ranked with exactly the same rule, but apart, so the main ranking never changes.
+  const BRAZIL=[...(data.BR||[]),...PH.filter(p=>p.br)];
+
   // Step 4: rank by distance, then raw distance, then id. Ids are ASCII, so the order
   // never depends on the browser's language.
-  function rank(scores){
+  function rank(scores,pool=PH){
     const user=normalize(scores);
-    const rows=PH.map(p=>({p,...compare(scores,p,user)}));
+    const rows=pool.map(p=>({p,...compare(scores,p,user)}));
     rows.sort((a,b)=>
       (tied(a.distance,b.distance)?0:a.distance-b.distance)||
       (tied(a.rawDistance,b.rawDistance)?0:a.rawDistance-b.rawDistance)||
@@ -131,8 +136,19 @@ function create(data){
       version:VERSION,fingerprint:fingerprint(data),code:codeFingerprint(),params:{...PARAMS},catalogIntensity,
       answers:answers.slice(),...axis,user,directionless,ranking:rows,
       top:rows[0],opposite:directionless?null:rows[rows.length-1],
+      brazil:BRAZIL.length?rank(axis.scores,BRAZIL).rows:[],
       note:reliability(answers,axis.scores),
     };
+  }
+
+  // Two people compared with the same rule as a person and a thinker: both profiles are
+  // normalized, the distance is the mean axis difference, and the percent uses the same curve.
+  function comparePeople(answersA,answersB){
+    const a=evaluate(answersA),b=evaluate(answersB);
+    const other={id:"outra-pessoa",n:"outra pessoa",v:b.scores};
+    const c=compare(a.scores,other);
+    const flat=a.directionless||b.directionless;
+    return {a,b,perAxis:c.perAxis,distance:c.distance,rawDistance:c.rawDistance,pct:flat?null:percent(c.distance),directionless:flat};
   }
 
   const isValid=a=>Array.isArray(a)&&a.length===QS.length&&a.every(x=>Number.isInteger(x)&&x>=0&&x<=4);
@@ -160,12 +176,16 @@ function create(data){
         intensity:x.thinkerIntensity,factor:x.thinkerK,normalized:x.perAxis.map(a=>a.thinker),
         diffs:x.perAxis.map(a=>a.diff),distance:x.distance,rawDistance:x.rawDistance,percent:x.pct,
         tiedWithPrev:x.tiedWithPrev})),
+      brazil:r.brazil.map(x=>({rank:x.rank,id:x.p.id,name:x.p.n,school:x.p.s,positions:x.p.v,
+        intensity:x.thinkerIntensity,factor:x.thinkerK,normalized:x.perAxis.map(a=>a.thinker),
+        diffs:x.perAxis.map(a=>a.diff),distance:x.distance,rawDistance:x.rawDistance,percent:x.pct,
+        tiedWithPrev:x.tiedWithPrev})),
       note:r.note&&r.note.code,
     };
   }
 
-  return {VERSION,SCALE,PARAMS,TIE_BREAK,PERCENT_RULE,HASH_RULE,AXES,QS,PH,ORDER,catalogIntensity,meanAbs,percent,
-    axisScores,normalize,compare,rank,reliability,evaluate,isValid,encode,decode,auditJSON,
+  return {VERSION,SCALE,PARAMS,TIE_BREAK,PERCENT_RULE,HASH_RULE,AXES,QS,PH,BRAZIL,ORDER,catalogIntensity,meanAbs,percent,
+    axisScores,normalize,compare,rank,reliability,evaluate,comparePeople,isValid,encode,decode,auditJSON,
     fingerprint:()=>fingerprint(data),fingerprintInput:()=>fingerprintInput(data),codeFingerprint};
 }
 
