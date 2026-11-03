@@ -49,9 +49,13 @@ A página `#/metodo` explica tudo para o usuário. Cada resultado tem uma audito
 
 Duas impressões digitais aparecem em cada auditoria. A do **catálogo** é FNV-1a do objeto `fingerprintInput` (eixos, afirmações, ids, nomes e posições), que vai junto no catálogo para download. A do **código** cobre o motor inteiro, com as quebras de linha normalizadas.
 
+## Prévias de link
+
+O app roteia pelo hash (`#/vs/...`), que nunca chega ao servidor. Por isso os links compartilhados usam `/s/<código>[/<nome>]` e `/c/<a>/<b>[/<nomeA>/<nomeB>]`. A Vercel reescreve esses caminhos para `api/share.js`, que devolve uma página com título, descrição e imagem do resultado (Open Graph) e manda a pessoa direto para o app. A imagem de 1200 × 630 sai de `api/og.js`: um SVG desenhado com o mesmo motor e as mesmas cores do site, rasterizado com `@resvg/resvg-js` e as fontes de `fonts/` (Instrument Serif e Inter Tight, licença OFL). `og.png` é a prévia do site sem resultado; para gerar de novo, rode `node tests/make-og.js`.
+
 ## Publicar na Vercel
 
-É um site estático: importe a pasta na Vercel sem framework e sem comando de build.
+É um site estático com duas funções em `api/`: importe a pasta na Vercel sem framework e sem comando de build. `vercel.json` define as reescritas de `/s/` e `/c/`.
 
 ## Retratos
 
@@ -61,5 +65,4 @@ Quem não tem foto de licença livre na Commons (Yang Zhu, Oswaldo Porchat, Carl
 
 ## Limites conhecidos
 
-- O card de prévia ao colar o link (Open Graph) é o mesmo para todos. Uma imagem por resultado exige uma função no servidor.
 - As posições dos pensadores passaram por uma revisão, mas continuam sendo leituras resumidas e discutíveis.

@@ -695,3 +695,19 @@ footer a.author svg{width:15px;height:15px}
   .bt-opp,.bt-br,.bt-tl,.bt-vsf{grid-column:auto}
   .bt-art{min-height:220px}
 }
+
+/* Scroll reveal (added by revealOnScroll, never without JS) */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--rv,0) * 70ms)}
+.rv.in{opacity:1;transform:none}
+.axis-row.rv{transform:none}
+.axis-row.rv .fill{transform:scaleX(0);transition:transform 1s var(--ease) calc(var(--rv,0) * 60ms + .15s)}
+.axis-row.rv .you,.axis-row.rv .them{opacity:0;transition:opacity .5s var(--ease) calc(var(--rv,0) * 60ms + .5s)}
+.axis-row.rv.in .fill{transform:none}
+.axis-row.rv.in .you,.axis-row.rv.in .them{opacity:1}
+/* Result hero: the details arrive after the name */
+.res-hero .res-school,.res-hero .lvl-line,.res-hero .traits,.res-hero .note,.res-hero .res-actions{animation:viewIn .8s var(--ease) both}
+.res-hero .res-school{animation-delay:.5s}.res-hero .lvl-line{animation-delay:.6s}.res-hero .traits{animation-delay:.7s}
+.res-hero .note{animation-delay:.75s}.res-hero .res-actions{animation-delay:.85s}
+.res-hero .trait{animation:popIn .5s var(--ease) both;animation-delay:calc(.8s + var(--i,0) * 90ms)}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@media print{.rv{opacity:1!important;transform:none!important}}

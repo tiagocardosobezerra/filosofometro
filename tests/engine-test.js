@@ -446,5 +446,18 @@ ok([E.decode("0".repeat(QS.length - 1)), E.decode("0".repeat(QS.length + 1)), E.
 let threw = false; try { E.evaluate([1, 2, 3]); } catch (e) { threw = true; }
 ok(threw, "evaluate refuses invalid answer arrays");
 
+section("Prévias de link (api/)");
+{
+  const P = require(path.join(ROOT, "api", "_preview.js"));
+  const code = E.encode(noisy(PH[20].v)), other = E.encode(noisy(PH[60].v)), r = E.evaluate(E.decode(code));
+  const inv = P.inviteInfo(code, "Ana%20Clara");
+  ok(inv && inv.title.includes(`${r.top.pct}% ${r.top.p.n}`) && inv.hash === `#/vs/${code}/Ana%20Clara`, "invite preview uses the engine result and points to the invite page");
+  ok(P.inviteInfo("123", "") === null && P.inviteInfo(code + "0", "") === null && P.compareInfo(code, "x") === null, "invalid codes give no preview");
+  const evil = P.inviteInfo(code, encodeURIComponent('<script>alert(1)</script>"'));
+  ok(!/[<>"]/.test(evil.name) && !P.sharePage(evil, "https://x.test", "code=" + code).includes("<script>alert"), "names are cleaned and the share page escapes everything it prints");
+  const cmp = P.compareInfo(code, other, "Ana", "Bia");
+  ok(cmp.title.includes(`${E.comparePeople(E.decode(code), E.decode(other)).pct}%`) && cmp.hash === `#/comparar/${code}/${other}/Ana/Bia`, "comparison preview uses the engine's compatibility and points to the comparison");
+}
+
 console.log(`\n${passes} passed, ${fails} failed`);
 process.exit(fails ? 1 : 0);

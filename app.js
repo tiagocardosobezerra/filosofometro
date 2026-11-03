@@ -152,6 +152,21 @@ function a11yNav(name){
 function mount(html,title){
   app.innerHTML=`<div class="view">${html}</div>`;
   document.title=title?`${title} | Filosofômetro`:"Filosofômetro: qual filósofo pensa como você?";
+  revealOnScroll();
+}
+// Blocks below the fold rise in as they enter the screen; siblings follow one another by a few frames.
+// Without IntersectionObserver, or with reduced motion, everything is simply shown.
+const REVEAL=".chapter,.panel,.step,.bt,.tcard,.level,.axes-list li,.finale,.audit,.match-list li,.axis-row";
+function revealOnScroll(){
+  if(reduceMotion||!("IntersectionObserver" in window))return;
+  const els=[...app.querySelectorAll(REVEAL)];
+  const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -8% 0px"});
+  els.forEach(el=>{
+    const sibs=[...el.parentNode.children].filter(c=>c.matches(REVEAL));
+    el.style.setProperty("--rv",Math.min(sibs.indexOf(el),8));
+    el.classList.add("rv");io.observe(el);
+  });
+  onLeave(()=>io.disconnect());
 }
 function focusHeading(){
   const h=app.querySelector("h1");
@@ -511,7 +526,7 @@ function renderResult(code,mode){
       <h1 class="res-name">${flat?"":`<span class="sr">${top.pct}% de compatibilidade com </span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
       ${r.level?`<div class="lvl-line"><span class="lv-chip">Nível ${esc(r.level.name)}</span><span>${r.level.n} afirmações · precisão ${esc(LEVEL_INFO[r.level.id].precision.toLowerCase())}</span>${!visitor&&nextLevel(r.level.n)?`<a class="lvl-up" href="#/teste/aprofundar">Aprofundar com mais ${nextLevel(r.level.n).n-r.level.n} ${icon.arrow}</a>`:""}</div>`:""}
-      ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map(t=>`<span class="trait">${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
+      ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map((t,i)=>`<span class="trait" style="--i:${i}">${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
       ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
       <div class="res-actions">
         ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
@@ -613,11 +628,15 @@ const cleanName=s=>{try{s=decodeURIComponent(s||"")}catch(e){s=""}return s.repla
 const encName=s=>encodeURIComponent(cleanName(s));
 // Accepts any Filosofômetro link (result, invite or comparison) or a bare code, and returns the answers.
 function answersFromLink(t){
-  const m=String(t||"").trim().match(/(?:#\/(?:r|vs|verificar)\/|^)([0-4]{44,132})(?:$|[/?#\s])/);
+  const m=String(t||"").trim().match(/(?:#\/(?:r|vs|verificar)\/|\/s\/|^)([0-4]{44,132})(?:$|[/?#\s])/);
   return m?E.decode(m[1]):null;
 }
 // The invite link: opens as "Name te desafiou" for whoever receives it, never as a plain result.
-const inviteURL=r=>{const nm=encName(store.get("name")||"");return `${location.href.split("#")[0]}#/vs/${E.encode(r.answers)}${nm?`/${nm}`:""}`};
+// On the published site, shared links go through /s/ and /c/ so chat apps show a picture of the result
+// (api/share.js). Locally there is no server function, so the plain hash link is used.
+const PREVIEW=location.protocol==="https:"&&!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+const inviteURL=r=>{const nm=encName(store.get("name")||""),tail=`${E.encode(r.answers)}${nm?`/${nm}`:""}`;return PREVIEW?`${location.origin}/s/${tail}`:`${location.href.split("#")[0]}#/vs/${tail}`};
+const compareURL=(a,b,nA,nB)=>{const tail=`${a}/${b}${nA||nB?`/${encName(nA)}/${encName(nB)}`:""}`;return PREVIEW?`${location.origin}/c/${tail}`:`${location.href.split("#")[0]}#/comparar/${tail}`};
 const challengeText=r=>r.directionless?`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:`Fiz o Filosofômetro e deu ${r.top.pct}% ${r.top.p.n}. Faz o teste e vê quanto a gente pensa parecido:`;
 // Native share sheet on phones; copy to clipboard elsewhere.
 async function challenge(r){
@@ -733,7 +752,10 @@ function renderCompare(codeA,codeB,rawA,rawB){
     </div>
   </section>`,c.pct===null?"Comparação":`${c.pct}% compatíveis`);
   wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
-  document.getElementById("cmpCopy").addEventListener("click",copyLink);
+  document.getElementById("cmpCopy").addEventListener("click",async()=>{
+    const url=compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB));
+    try{await navigator.clipboard.writeText(url);toast("Link copiado")}catch(e){prompt("Copie o link:",url)}
+  });
   const cc=document.getElementById("cmpChallenge");if(cc)cc.addEventListener("click",()=>challenge(rb));
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
   store.del("vs");
@@ -786,7 +808,7 @@ function axisRow(a,main,other,mainLabel,otherLabel){
   const label=`${a.name}: ${mainLabel} ${fmt(main)}${other===undefined?"":`, ${otherLabel} ${fmt(other)}`}`;
   return `<div class="axis-row">
     <div class="poles"><span>${Math.abs(main)>=.13&&main<0?`<b>${esc(a.l)}</b>`:esc(a.l)}</span><span class="val">${esc(lean)} · ${fmt(main)}</span><span>${Math.abs(main)>=.13&&main>0?`<b>${esc(a.r)}</b>`:esc(a.r)}</span></div>
-    <div class="track" role="img" aria-label="${esc(label)}"><span class="center"></span><span class="fill" style="left:${left}%;width:${width}%"></span>${other===undefined?"":`<span class="them" style="left:${(other+1)*50}%"></span>`}<span class="you" style="left:${(main+1)*50}%"></span></div>
+    <div class="track" role="img" aria-label="${esc(label)}"><span class="center"></span><span class="fill" style="left:${left}%;width:${width}%;transform-origin:${main<0?"right":"left"}"></span>${other===undefined?"":`<span class="them" style="left:${(other+1)*50}%"></span>`}<span class="you" style="left:${(main+1)*50}%"></span></div>
   </div>`;
 }
 
