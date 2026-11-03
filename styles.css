@@ -550,3 +550,20 @@ footer a.author svg{width:15px;height:15px}
 .cmp-person .sc{font-size:13px;color:var(--muted)}
 .cmp-sigil svg{width:100%;height:auto;overflow:visible}
 @media (max-width:860px){.cmp-grid{grid-template-columns:1fr 1fr}.cmp-sigil{grid-column:1/-1;grid-row:1;max-width:380px;justify-self:center}}
+
+/* Result: chapters, traits, visitor bar and closing */
+.chapter{display:flex;align-items:center;gap:14px;font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,46px);line-height:1;letter-spacing:-.01em;margin:clamp(40px,7vh,72px) 0 18px}
+.chapter span{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border-radius:50%;border:1px solid var(--line2);font-family:var(--mono);font-size:14px;color:var(--accent)}
+.chapter:first-child{margin-top:8px}
+.traits{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.trait{font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.visitor-bar{background:var(--ink);color:var(--bg)}
+.visitor-bar .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-block:10px;font-size:14px;font-weight:500}
+.invite-peek{margin:18px 0 0;font-size:14px}
+.invite-peek a{color:var(--ink2)}
+.finale{position:relative;text-align:center;margin:clamp(48px,8vh,88px) 0 20px;padding:clamp(40px,7vh,72px) clamp(20px,5vw,64px);border-radius:28px;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--accent) 22%,var(--card)),var(--card) 70%);border:1px solid var(--line)}
+.finale-pic{width:96px;height:120px;margin:0 auto 22px}
+.finale-quote{font-family:var(--serif);font-style:italic;font-size:clamp(30px,4.4vw,58px);line-height:1.08;letter-spacing:-.01em;max-width:22ch;margin:0 auto;color:var(--ink)}
+.finale-by{margin:16px 0 0;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.finale-lede{max-width:46ch;margin:20px auto 26px;color:var(--ink2);font-size:17px}

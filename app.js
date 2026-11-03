@@ -128,7 +128,7 @@ function route(){
   document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(name==="p"&&a.dataset.nav==="pensadores")));
   if(a11yNav(name))return;
   if(name==="teste")renderQuiz();
-  else if(name==="r")renderResult(parts[1]);
+  else if(name==="r")renderResult(parts[1],parts[2]);
   else if(name==="pensadores")renderCatalog();
   else if(name==="p")renderThinker(parts[1]);
   else if(name==="metodo")renderMethod();
@@ -368,61 +368,94 @@ function renderQuiz(){
 /* ---------- Result ---------- */
 let current=null;
 const pctText=x=>x===null?"sem %":`${x}%`;
-function renderResult(code){
+function renderResult(code,mode){
   const answers=E.decode(code);
   if(!answers){renderNotFound("Este link de resultado está incompleto ou é de uma versão antiga do teste.");return}
+  // A link someone else sent opens as an invite: the visitor is asked to take the test and compare.
+  // Only the person who finished the test on this browser sees it as their own result.
+  const own=store.get("last")===code;
+  if(!own&&mode!=="ver"){renderInvite(code,(store.get("vs")||{}).code===code?(store.get("vs")||{}).name:"");return}
+  const visitor=!own;
   const r=E.evaluate(answers);current=r;
-  store.set("last",code);
   const top=r.top,p=top.p,opp=r.opposite,flat=r.directionless;
   const nameLines=p.n.split(" ").length>2?[p.n.split(" ").slice(0,-1).join(" "),p.n.split(" ").slice(-1)[0]]:[p.n];
   const userV=r.scores;
+  const T=visitor
+    ?{kicker:flat?"Mais perto desta pessoa":"Par filosófico desta pessoa",axes:"Os 11 eixos desta pessoa",also:"Também pensam assim",br:"No Brasil, quem pensa assim",opp:"O oposto",you:"esta pessoa"}
+    :{kicker:flat?"Mais perto de você":"Seu par filosófico",axes:"Seus 11 eixos",also:flat?"Também perto de você":"Também pensam como você",br:"No Brasil, quem pensa como você",opp:"Seu oposto",you:"você"};
   const flatNote="Suas respostas se equilibraram e seu perfil ficou sem direção. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador cujas posições ficam mais perto das suas.";
+  const strongest=AXES.map((a,i)=>({a,i,x:userV[i]})).filter(t=>Math.abs(t.x)>=.25).sort((s,t)=>Math.abs(t.x)-Math.abs(s.x)).slice(0,3);
   mount(`
+  ${visitor?`<div class="visitor-bar"><div class="wrap"><span>Este é o resultado de outra pessoa.</span><a class="btn accent sm" href="#/vs/${code}" >Fazer o teste e comparar ${icon.arrow}</a></div></div>`:""}
   <section class="wrap res-hero">
     <div>
-      <div class="res-kicker"><span class="eyebrow">${flat?"Mais perto de você":"Seu par filosófico"}</span></div>
+      <div class="res-kicker"><span class="eyebrow">${T.kicker}</span></div>
       ${flat?"":`<div class="res-pct" aria-hidden="true"><span id="pctNum">${reduceMotion?top.pct:0}</span>%</div>`}
       <h1 class="res-name">${flat?"":`<span class="sr">${top.pct}% de compatibilidade com </span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
-      <div class="res-school">${esc(p.s)} · ${esc(p.era)}</div>
-      <blockquote class="res-quote">“${esc(p.q)}”</blockquote>
-      ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
+      <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
+      ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map(t=>`<span class="trait">${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
+      ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
       <div class="res-actions">
+        ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
         ${flat?"":`<button class="btn accent" id="shareBtn" type="button">${icon.share} Compartilhar no story</button>`}
-        <button class="btn ghost" id="copyBtn" type="button">${icon.link} Copiar link</button>
-        <a class="btn ${flat?"accent":"ghost"}" href="#/teste" id="redoBtn">Refazer</a>
+        <button class="btn ghost" id="challengeBtn" type="button">${icon.link} Desafiar um amigo</button>
+        <a class="btn ghost" href="#/teste" id="redoBtn">Refazer</a>`}
       </div>
     </div>
-    ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`})}
+    ${duo(p,{user:userV,title:`Perfil de ${T.you} comparado ao de ${p.n}`})}
   </section>
   <section class="wrap" style="padding-bottom:24px">
-    ${p.bio||!flat?`<div class="grid2" style="margin-bottom:20px">${aboutHTML(p)}${agreementHTML(r,top)}</div>`:""}
+    <h2 class="chapter"><span>1</span>${visitor?"Quem é o par desta pessoa":"Quem é o seu par"}</h2>
+    ${p.bio||!flat?`<div class="grid2">${aboutHTML(p)}${agreementHTML(r,top)}</div>`:""}
+
+    <h2 class="chapter"><span>2</span>Por que deu ${esc(p.n)}</h2>
     <div class="grid2">
       <div class="panel">
-        <h2>Seus 11 eixos</h2>
-        <p class="sub">Laranja: você. Tracejado: ${esc(p.n)}. Os gráficos mostram as posições brutas; a comparação usa o formato normalizado (passo 2 da auditoria).</p>
-        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Seu perfil nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint">Passe o mouse (ou toque) em cada eixo para ver o que ele mede e por que você ficou ali.</p>
-        ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],"você",p.n)).join("")}
+        <h2>${T.axes}</h2>
+        <p class="sub">Laranja: ${T.you}. Tracejado: ${esc(p.n)}. Os gráficos mostram as posições brutas; a comparação usa o formato normalizado (passo 2 da auditoria).</p>
+        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint">Passe o mouse (ou toque) em cada eixo para ver o que ele mede e por que ficou ali.</p>
+        ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],T.you,p.n)).join("")}
       </div>
       <div style="display:grid;gap:20px;align-content:start">
         <div class="panel">
-          <h2>${flat?"Também perto de você":"Também pensam como você"}</h2>
+          <h2>${T.also}</h2>
           <p class="sub">Os próximos da lista, pela mesma conta.</p>
           <ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul>
         </div>
-        ${brazilHTML(r)}
-        ${opp?`<div class="panel">
-          <h2>Seu oposto</h2>
-          <p class="sub">Quem mais discordaria de você.</p>
-          <a class="opp" href="#/p/${opp.p.id}" style="text-decoration:none">${portrait(opp.p,{cls:"opp-pic"})}<span><span class="nm">${esc(opp.p.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(opp.p.s)} · ${pctText(opp.pct)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(opp.p.q)}”</span></span></a>
-        </div>`:""}
-        <div class="panel">
-          <h2>Comece por aqui</h2>
-          <div class="book" style="margin-top:16px"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span><span class="t">${esc(p.b)}</span><span class="muted" style="display:block;margin-top:6px">de ${esc(p.n)}</span></span></div>
-        </div>
+        ${brazilHTML(r,T.br)}
       </div>
     </div>
-    ${invitePanelHTML(r)}
+
+    <h2 class="chapter"><span>3</span>Onde ${visitor?"essa pessoa está":"você está"} na história</h2>
     ${timelineHTML(r)}
+    <div class="grid2" style="margin-top:20px">
+      ${opp?`<div class="panel">
+        <h2>${T.opp}</h2>
+        <p class="sub">Quem mais discordaria${visitor?"":" de você"}.</p>
+        <a class="opp" href="#/p/${opp.p.id}" style="text-decoration:none">${portrait(opp.p,{cls:"opp-pic"})}<span><span class="nm">${esc(opp.p.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(opp.p.s)} · ${pctText(opp.pct)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(opp.p.q)}”</span></span></a>
+      </div>`:""}
+      <div class="panel">
+        <h2>Comece por aqui</h2>
+        <p class="sub">Uma porta de entrada para ler ${esc(p.n)}.</p>
+        <div class="book" style="margin-top:6px"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span><span class="t">${esc(p.b)}</span><span class="muted" style="display:block;margin-top:6px">de ${esc(p.n)}</span></span></div>
+      </div>
+    </div>
+
+    ${visitor?"":invitePanelHTML(r)}
+
+    <div class="finale">
+      ${portrait(p,{cls:"finale-pic"})}
+      <blockquote class="finale-quote">“${esc(p.q)}”</blockquote>
+      <p class="finale-by">${esc(p.n)}${visitor?"":`, ${flat?"o pensador mais perto de você":`seu par com ${top.pct}%`}`}</p>
+      <p class="finale-lede">${visitor?"Quer saber quem pensa como você? São 44 afirmações e uns 6 minutos.":"Agora descubra qual dos seus amigos pensa como você. Mande o desafio e vejam, eixo por eixo, onde concordam e onde vão discutir."}</p>
+      <div class="cta-row" style="justify-content:center">
+        ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
+        <button class="btn accent" id="challengeBtn2" type="button">${icon.link} Desafiar um amigo</button>
+        ${flat?"":`<button class="btn ghost" id="shareBtn2" type="button">${icon.share} Compartilhar no story</button>`}`}
+        <a class="btn ghost" href="#/pensadores">Ver os ${PH.length+BR.length} pensadores</a>
+      </div>
+    </div>
+
     ${auditPanel(r)}
   </section>`,flat?`Mais perto: ${p.n}`:`${top.pct}% ${p.n}`);
   // Count-up for the percentage.
@@ -435,11 +468,13 @@ function renderResult(code){
     const done=setTimeout(()=>{el.textContent=top.pct},1500);
     onLeave(()=>{live=false;clearTimeout(done)});
   }
-  if(!flat)document.getElementById("shareBtn").addEventListener("click",()=>shareCard(r));
-  document.getElementById("copyBtn").addEventListener("click",copyLink);
-  document.getElementById("redoBtn").addEventListener("click",()=>store.del("progress"));
+  if(!visitor){
+    ["shareBtn","shareBtn2"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>shareCard(r))});
+    ["challengeBtn","challengeBtn2"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>challenge(r))});
+    document.getElementById("redoBtn").addEventListener("click",()=>store.del("progress"));
+    wireInvite(r);
+  }
   wireTips(app,{user:userV,r,p});
-  wireInvite(r);
   wireAudit(r);
 }
 
@@ -460,14 +495,23 @@ function answersFromLink(t){
   const m=String(t||"").trim().match(/(?:#\/(?:r|vs|verificar)\/|^)([0-4]{44})(?:$|[/?#\s])/);
   return m?E.decode(m[1]):null;
 }
+// The invite link: opens as "Name te desafiou" for whoever receives it, never as a plain result.
+const inviteURL=r=>{const nm=encName(store.get("name")||"");return `${location.href.split("#")[0]}#/vs/${E.encode(r.answers)}${nm?`/${nm}`:""}`};
+const challengeText=r=>r.directionless?`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:`Fiz o Filosofômetro e deu ${r.top.pct}% ${r.top.p.n}. Faz o teste e vê quanto a gente pensa parecido:`;
+// Native share sheet on phones; copy to clipboard elsewhere.
+async function challenge(r){
+  const url=inviteURL(r),text=challengeText(r);
+  if(navigator.share){try{await navigator.share({title:"Filosofômetro",text,url});return}catch(e){if(e.name==="AbortError")return}}
+  try{await navigator.clipboard.writeText(`${text} ${url}`);toast("Convite copiado. Agora é só mandar!")}catch(e){prompt("Copie o convite:",url)}
+}
 function invitePanelHTML(r){
   return `<div class="panel compare-cta">
     <h2>Compare com alguém</h2>
-    <p class="sub">Mande o seu link para um amigo. Quando ele terminar o teste, vocês veem lado a lado onde pensam igual e onde divergem.</p>
+    <p class="sub">Quem abrir o seu convite faz o teste e cai direto numa comparação com você: onde pensam igual, onde divergem e quanto são compatíveis.</p>
     <div class="cmp-form">
       <label class="sr" for="myName">Seu nome (opcional)</label>
-      <input class="search sm" id="myName" placeholder="Seu primeiro nome (opcional)" maxlength="24" autocomplete="given-name">
-      <button class="btn accent sm" id="inviteBtn" type="button">${icon.link} Copiar convite</button>
+      <input class="search sm" id="myName" placeholder="Como você quer aparecer no convite (opcional)" maxlength="24" autocomplete="given-name" value="${esc(cleanName(store.get("name")||""))}">
+      <button class="btn accent sm" id="inviteBtn" type="button">${icon.link} Desafiar um amigo</button>
     </div>
     <div class="cmp-form">
       <label class="sr" for="theirLink">Link de outra pessoa</label>
@@ -478,12 +522,10 @@ function invitePanelHTML(r){
 }
 function wireInvite(r){
   const mine=E.encode(r.answers);
-  const base=location.href.split("#")[0];
-  document.getElementById("inviteBtn").addEventListener("click",async()=>{
-    const nm=encName(document.getElementById("myName").value);
-    const url=`${base}#/vs/${mine}${nm?`/${nm}`:""}`;
-    try{await navigator.clipboard.writeText(url);toast("Convite copiado. Agora é só mandar!")}catch(e){prompt("Copie o convite:",url)}
-  });
+  // The name is remembered on this browser so every share button uses it.
+  const nameInput=document.getElementById("myName");
+  nameInput.addEventListener("input",()=>store.set("name",cleanName(nameInput.value)));
+  document.getElementById("inviteBtn").addEventListener("click",()=>{store.set("name",cleanName(nameInput.value));challenge(r)});
   const go=()=>{
     const theirs=answersFromLink(document.getElementById("theirLink").value);
     if(!theirs){toast("Não reconheci esse link");return}
@@ -496,22 +538,26 @@ function wireInvite(r){
 function renderInvite(code,rawName){
   const a=E.decode(code);
   if(!a){renderNotFound("Este convite está incompleto ou é de uma versão antiga do teste.");return}
-  const r=E.evaluate(a),p=r.top.p,who=cleanName(rawName)||"Alguém";
-  store.set("vs",{code,name:cleanName(rawName)});
+  const r=E.evaluate(a),p=r.top.p,named=cleanName(rawName),who=named||"Alguém";
+  // Opening your own invite link (another device, or testing it) goes straight to your result.
+  if(store.get("last")===code){location.replace(`#/r/${code}`);return}
+  store.set("vs",{code,name:named});
   const mineCode=store.get("last");
+  const hasMine=mineCode&&E.decode(mineCode)&&mineCode!==code;
   mount(`
   <section class="wrap res-hero">
     <div>
-      <span class="eyebrow">Convite</span>
-      <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${esc(who)} quer comparar com você</span></span></h1>
-      <p class="lede">${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Faça o teste e descubra quanto vocês pensam parecido, eixo por eixo.</p>
+      <span class="eyebrow">Desafio filosófico</span>
+      <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${esc(who)} te desafiou</span></span></h1>
+      <p class="lede">${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Responda 44 afirmações (uns 6 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.</p>
       <div class="cta-row">
-        <a class="btn accent" href="#/teste" data-fresh="1">Fazer o teste e comparar ${icon.arrow}</a>
-        ${mineCode&&E.decode(mineCode)?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(rawName)}">Usar meu último resultado</a>`:""}
+        <a class="btn accent" href="#/teste" data-fresh="1">${hasMine?"Fazer o teste de novo e comparar":"Aceitar o desafio"} ${icon.arrow}</a>
+        ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">Comparar com meu resultado</a>`:""}
       </div>
+      <p class="invite-peek"><a href="#/r/${code}/ver">Ver o resultado completo de ${esc(named||"quem te convidou")}</a></p>
     </div>
     ${duo(p,{title:`Perfil de ${p.n}`})}
-  </section>`,"Convite");
+  </section>`,named?`${named} te desafiou`:"Desafio filosófico");
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
 }
 function renderCompare(codeA,codeB,rawA,rawB){
@@ -524,7 +570,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const topA=new Set(ra.ranking.slice(0,10).map(x=>x.p.id));
   const shared=rb.ranking.slice(0,10).filter(x=>topA.has(x.p.id)).slice(0,4).map(x=>x.p);
   const verdict=c.pct===null?"Um dos perfis ficou sem direção, então não dá para medir compatibilidade.":c.pct>=80?"Almas filosóficas gêmeas.":c.pct>=60?"Bastante em comum, com boas brigas pela frente.":c.pct>=40?"Concordam em algumas coisas e discordam com vontade em outras.":"Pensam quase ao contrário. Rende uma ótima conversa.";
-  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?"perfil sem direção":`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
+  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?"perfil sem direção":`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
   const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?`Os dois tendem a <b>${esc(lean(ax,x.A).replace(", forte",""))}</b>.`:`${esc(nameA)}: <b>${esc(lean(ax,x.A))}</b>. ${esc(nameB)}: <b>${esc(lean(ax,x.B))}</b>.`}</span></li>`};
   mount(`
   <section class="wrap section" style="padding-top:clamp(24px,5vh,56px)">
@@ -558,23 +604,26 @@ function renderCompare(codeA,codeB,rawA,rawB){
       </div>
     </div>
     <div class="res-actions" style="justify-content:center;margin-top:28px">
-      <button class="btn accent" id="cmpCopy" type="button">${icon.link} Copiar esta comparação</button>
-      <a class="btn ghost" href="#/teste" data-fresh="1">Fazer o teste de novo</a>
+      ${store.get("last")===codeB?`<a class="btn accent" href="#/r/${codeB}">Ver meu resultado completo ${icon.arrow}</a>
+      <button class="btn ghost" id="cmpChallenge" type="button">${icon.link} Desafiar outra pessoa</button>`:""}
+      <button class="btn ${store.get("last")===codeB?"ghost":"accent"}" id="cmpCopy" type="button">${icon.link} Copiar esta comparação</button>
+      ${store.get("last")===codeB?"":`<a class="btn ghost" href="#/teste" data-fresh="1">Fazer o teste</a>`}
     </div>
   </section>`,c.pct===null?"Comparação":`${c.pct}% compatíveis`);
   document.getElementById("cmpCopy").addEventListener("click",copyLink);
+  const cc=document.getElementById("cmpChallenge");if(cc)cc.addEventListener("click",()=>challenge(rb));
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
   store.del("vs");
 }
 
 /* ---------- Brazil ---------- */
 // Brazilian thinkers ranked against the user with the engine's own rule (audited as "brazil").
-function brazilHTML(r){
+function brazilHTML(r,title="No Brasil, quem pensa como você"){
   if(!r.brazil.length)return "";
   const [first,...rest]=r.brazil,b=first.p;
   return `<div class="panel brazil">
     <span class="br-flag" aria-hidden="true"></span>
-    <h2>No Brasil, quem pensa como você</h2>
+    <h2>${esc(title)}</h2>
     <p class="sub">Entre ${r.brazil.length} pensadores brasileiros, pela mesma conta do seu resultado.</p>
     <a class="br-main" href="#/p/${b.id}">${portrait(b,{cls:"br-pic"})}<span><span class="nm">${esc(b.n)}</span><span class="sc">${esc(b.s)}${first.pct!==null?` · ${first.pct}% com você`:""}</span>${b.bio?`<span class="br-bio">${esc(b.bio)}</span>`:""}</span></a>
     <ul class="match-list">${rest.slice(0,3).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul>
@@ -1032,58 +1081,93 @@ async function shareCard(r,usePic=true){
   await document.fonts.ready;
   const W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;
   const x=c.getContext("2d"),p=r.top.p;
-  const bg="#0F0E0C",ink="#F1EADC",muted="#918877",accent="#F06A43",line="rgba(241,234,220,.14)";
+  const bg="#0F0E0C",ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
+  const near=r.ranking.slice(1,4),br=r.brazil[0]?r.brazil[0].p:null,opp=r.opposite?r.opposite.p:null;
+  const pics=usePic?await Promise.all([p,...near.map(n=>n.p)].map(t=>t.img?loadImage(t.img):Promise.resolve(null))):[];
+  const [pic,...nearPics]=pics;
+  // Background: deep ink with a warm glow behind the portrait.
   x.fillStyle=bg;x.fillRect(0,0,W,H);
-  const g=x.createRadialGradient(W/2,760,40,W/2,760,700);g.addColorStop(0,"rgba(240,106,67,.22)");g.addColorStop(1,"rgba(240,106,67,0)");
+  const g=x.createRadialGradient(W/2,560,60,W/2,560,820);g.addColorStop(0,"rgba(240,106,67,.30)");g.addColorStop(1,"rgba(240,106,67,0)");
   x.fillStyle=g;x.fillRect(0,0,W,H);
-  x.textAlign="center";x.fillStyle=ink;x.font="400 54px 'Instrument Serif'";x.fillText("Filosofômetro",W/2,150);
-  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("M E U   P A R   F I L O S Ó F I C O",W/2,250);
-  // Portrait in an arch, with the sigil as a badge over its corner. Without the image, the sigil takes the center.
-  const pic=usePic?await loadImage(p.img):null;
-  let cx=W/2,cy=760,S=3.4;
+  x.textAlign="center";
+  x.fillStyle=ink;x.font="400 50px 'Instrument Serif'";x.fillText("Filosofômetro",W/2,108);
+  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced("MEU PAR FILOSÓFICO"),W/2,160);
+  // Portrait arch with the sigil badge over its corner.
+  const ax=300,ay=200,aw=480,ah=590,rad=aw/2;
+  const arch=()=>{x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-26);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-26,ay+ah);x.lineTo(ax+26,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-26);x.closePath()};
+  x.save();arch();x.clip();
   if(pic){
-    const ax=170,ay=300,aw=560,ah=740,rad=aw/2;
-    x.save();
-    x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-24);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-24,ay+ah);x.lineTo(ax+24,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-24);x.closePath();x.clip();
     const sc=Math.max(aw/pic.width,ah/pic.height),dw=pic.width*sc,dh=pic.height*sc;
-    x.filter="grayscale(1) sepia(.22) contrast(1.08) brightness(.97)";
-    x.drawImage(pic,ax+(aw-dw)/2,ay+(ah-dh)*.2,dw,dh);x.filter="none";
-    const tint=x.createLinearGradient(0,ay+ah*.45,0,ay+ah);tint.addColorStop(0,"rgba(240,106,67,0)");tint.addColorStop(1,"rgba(240,106,67,.42)");
+    x.filter="grayscale(1) sepia(.22) contrast(1.08) brightness(.97)";x.drawImage(pic,ax+(aw-dw)/2,ay+(ah-dh)*.2,dw,dh);x.filter="none";
+    const tint=x.createLinearGradient(0,ay+ah*.45,0,ay+ah);tint.addColorStop(0,"rgba(240,106,67,0)");tint.addColorStop(1,"rgba(240,106,67,.45)");
     x.globalCompositeOperation="multiply";x.fillStyle=tint;x.fillRect(ax,ay,aw,ah);x.globalCompositeOperation="source-over";
-    x.restore();
-    cx=800;cy=960;S=2.15;
-    x.beginPath();x.arc(cx,cy,R*S+26,0,Math.PI*2);x.fillStyle="rgba(21,19,15,.9)";x.fill();x.strokeStyle=line;x.lineWidth=2;x.stroke();
+  }else{x.fillStyle="#1D1A16";x.fillRect(ax,ay,aw,ah);x.fillStyle=muted;x.font="400 160px 'Instrument Serif'";x.fillText(initials(p.n),W/2,ay+ah/2+50)}
+  x.restore();
+  x.strokeStyle=line;x.lineWidth=2;arch();x.stroke();
+  // Badge sits on the arch's lower right, clear of the percentage below it.
+  const cx=ax+aw+10,cy=ay+ah-165,S=1.4;
+  x.beginPath();x.arc(cx,cy,R*S+22,0,Math.PI*2);x.fillStyle="rgba(21,19,15,.92)";x.fill();x.strokeStyle=line;x.stroke();
+  [.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
+  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=3.5;x.stroke();x.setLineDash([])};
+  poly(p.v,null,"rgba(241,234,220,.8)",[8,9]);
+  poly(r.scores,"rgba(240,106,67,.22)",accent);
+  // Headline: percent, name, line and years.
+  let y=ay+ah+150;
+  x.fillStyle=accent;x.font="400 176px 'Instrument Serif'";x.fillText(r.top.pct+"%",W/2,y);
+  x.fillStyle=ink;x.font="400 98px 'Instrument Serif'";y=wrapText(x,p.n,W/2,y+106,960,96);
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(`${p.s} · ${lifeText(p)}`.toUpperCase(),W/2,y+60);
+  y+=60;
+  // Quote, only if it fits above the lower blocks.
+  x.font="italic 400 42px 'Instrument Serif'";
+  const quoteLines=lineCount(x,"“"+p.q+"”",880);
+  if(y+50+quoteLines*50<1300){x.fillStyle=ink;y=wrapText(x,"“"+p.q+"”",W/2,y+74,880,50);}
+  // Strongest traits as pills.
+  const traits=AXES.map((a,i)=>({lbl:r.scores[i]<0?a.l:a.r,s:Math.abs(r.scores[i])})).filter(t=>t.s>=.25).sort((a,b)=>b.s-a.s).slice(0,3).map(t=>t.lbl);
+  if(traits.length){
+    x.font="600 28px 'Inter Tight'";
+    const pw=traits.map(t=>x.measureText(t).width+48),total=pw.reduce((a,b)=>a+b,0)+(traits.length-1)*14;
+    let px=W/2-total/2;const py=Math.max(y+56,1250);
+    traits.forEach((t,i)=>{pill(x,px,py,pw[i],54,"rgba(240,106,67,.18)");x.fillStyle=accent;x.textAlign="center";x.fillText(t,px+pw[i]/2,py+37);px+=pw[i]+14});
   }
-  x.strokeStyle=line;x.lineWidth=2;
-  [.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.stroke()});
-  AXES.forEach((_,i)=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(angle(i))*R*S,cy+Math.sin(angle(i))*R*S);x.stroke()});
-  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=4;x.stroke();x.setLineDash([])};
-  poly(p.v,null,"rgba(241,234,220,.75)",[10,12]);
-  poly(r.scores,"rgba(240,106,67,.18)",accent);
-  // Legend
-  x.font="500 28px 'Inter Tight'";x.textAlign="left";
-  const ly=pic?1235:1170;
-  x.fillStyle=accent;x.fillRect(W/2-250,ly-12,44,5);x.fillStyle=muted;x.fillText("Você",W/2-194,ly);
-  x.setLineDash([10,10]);x.strokeStyle="rgba(241,234,220,.75)";x.lineWidth=4;x.beginPath();x.moveTo(W/2-40,ly-10);x.lineTo(W/2+6,ly-10);x.stroke();x.setLineDash([]);
-  x.fillText(p.n.length>18?p.n.split(" ").slice(-1)[0]:p.n,W/2+20,ly);x.textAlign="center";
-  x.fillStyle=accent;x.font="400 190px 'Instrument Serif'";x.fillText(r.top.pct+"%",W/2,pic?1430:1390);
-  x.fillStyle=ink;x.font="400 104px 'Instrument Serif'";
-  const y2=wrapText(x,p.n,W/2,pic?1540:1510,960,102);
-  x.fillStyle=muted;x.font="500 32px 'Inter Tight'";x.fillText(p.s.toUpperCase(),W/2,y2+72);
-  x.fillStyle=ink;x.font="italic 400 46px 'Instrument Serif'";wrapText(x,"“"+p.q+"”",W/2,y2+150,880,56);
-  x.fillStyle=muted;x.font="500 30px 'Inter Tight'";x.fillText("Meu oposto: "+r.opposite.p.n,W/2,1800);
-  x.fillStyle=accent;x.font="600 30px 'Inter Tight'";x.fillText("Qual filósofo pensa como você?  "+location.host,W/2,1856);
-  // A portrait served without CORS taints the canvas; redraw without it rather than fail.
+  // Also think like: three runner-ups with portraits.
+  x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign="center";x.fillText(spaced("TAMBÉM PENSO COMO"),W/2,1420);
+  near.forEach((n,i)=>{
+    const nx=W/2+(i-1)*300,ny=1510;
+    circlePic(x,nearPics[i],n.p,nx,ny,62,line);
+    x.fillStyle=ink;x.font="400 38px 'Instrument Serif'";x.fillText(shortName(n.p.n),nx,ny+108);
+    x.fillStyle=accent;x.font="600 26px 'Inter Tight'";x.fillText(`${n.pct}%`,nx,ny+144);
+  });
+  // Brazilian match and opposite.
+  x.fillStyle=muted;x.font="500 28px 'Inter Tight'";
+  const lineBr=[br?`No Brasil: ${br.n}`:"",opp?`Oposto: ${opp.n}`:""].filter(Boolean).join("   ·   ");
+  x.fillText(lineBr,W/2,1730);
+  // Call to action band.
+  pill(x,90,1768,W-180,120,accent);
+  x.fillStyle="#140B07";x.font="600 30px 'Inter Tight'";x.fillText("Qual filósofo pensa como você?",W/2,1816);
+  x.font="700 38px 'Inter Tight'";x.fillText(location.host||"filosofometro.vercel.app",W/2,1862);
+  // A portrait served without CORS taints the canvas; redraw without images rather than fail.
   let blob;
   try{blob=await new Promise((res,rej)=>{try{c.toBlob(b=>b?res(b):rej(new Error("empty")),"image/png")}catch(e){rej(e)}})}
-  catch(e){if(pic)return shareCard(r,false);toast("Não foi possível gerar a imagem");return}
-  const file=new File([blob],"agora.png",{type:"image/png"});
+  catch(e){if(usePic)return shareCard(r,false);toast("Não foi possível gerar a imagem");return}
+  const file=new File([blob],`filosofometro-${p.id}.png`,{type:"image/png"});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],text:`Fiz o Filosofômetro: ${r.top.pct}% ${p.n}. Qual filósofo pensa como você?`,url:location.href});return}catch(e){if(e.name==="AbortError")return}
+    try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(e){if(e.name==="AbortError")return}
   }
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`filosofometro-${p.id}.png`;a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-  toast("Imagem salva");
+  toast("Imagem salva. Poste no story e cole o link do convite!");
+}
+// Canvas helpers for the story card.
+const spaced=s=>s.split("").join(" ");
+const initials=n=>n.split(" ").filter(w=>/^[A-ZÀ-Ý]/.test(w)).slice(0,2).map(w=>w[0]).join("");
+const shortName=n=>{const w=n.split(" ");return w.length>2?w.slice(-1)[0]:n};
+function pill(x,px,py,w,h,fill){x.beginPath();x.roundRect(px,py,w,h,h/2);x.fillStyle=fill;x.fill()}
+function lineCount(x,t,w){let n=1,line="";for(const wd of t.split(" ")){const tt=line?line+" "+wd:wd;if(x.measureText(tt).width>w&&line){n++;line=wd}else line=tt}return n}
+function circlePic(x,img,p,cx,cy,r,stroke){
+  x.save();x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.clip();
+  if(img){const s=Math.max(2*r/img.width,2*r/img.height),dw=img.width*s,dh=img.height*s;x.filter="grayscale(1) sepia(.2) contrast(1.06)";x.drawImage(img,cx-dw/2,cy-r-(dh-2*r)*.15,dw,dh);x.filter="none"}
+  else{x.fillStyle="#1D1A16";x.fillRect(cx-r,cy-r,2*r,2*r);x.fillStyle="#9C9283";x.font="400 52px 'Instrument Serif'";x.textAlign="center";x.fillText(initials(p.n),cx,cy+18)}
+  x.restore();x.beginPath();x.arc(cx,cy,r+3,0,Math.PI*2);x.strokeStyle=stroke;x.lineWidth=3;x.stroke();
 }
 // Loads a cross-origin image usable on canvas; resolves null on error or after 4 s.
 function loadImage(src){
