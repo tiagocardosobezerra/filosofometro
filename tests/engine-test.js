@@ -71,7 +71,10 @@ ok(QS_ALL.every(q => typeof q[3] === "string" && q[3].length > 10 && typeof q[4]
 ok(PH.every(p => p.v.length === AXES.length && p.v.every(x => x >= -1 && x <= 1 && Math.abs(x * 10 - Math.round(x * 10)) < 1e-9)), "every thinker has 11 positions in [-1,1], in steps of 0.1");
 ok(new Set(PH.map(p => p.n)).size === PH.length && new Set(PH.map(p => p.id)).size === PH.length, "names and ids are unique");
 ok(PH.every(p => /^[a-z0-9-]+$/.test(p.id)), "ids are plain ASCII, so the id tie-break never depends on locale");
-ok(PH.every(p => p.n && p.s && p.q && p.b && p.era && p.img && p.wiki), "every thinker has school, era, quote, book, portrait and source");
+// A thinker with no freely licensed image has img "" and gets a portrait drawn from their sigil.
+const imgOk = p => p.img === "" || /^https:\/\/(upload|thumb)\.wikimedia\.org\//.test(p.img);
+ok(PH.every(p => p.n && p.s && p.q && p.b && p.era && imgOk(p) && p.wiki), "every thinker has school, era, quote, book, a Wikimedia portrait (or a drawn one) and source");
+info(`portraits drawn from the sigil (no free image): ${[...PH, ...DATA.BR].filter(p => !p.img).map(p => p.n).join(", ") || "none"}`);
 let minPair = [9, ""];
 for (let i = 0; i < PH.length; i++) for (let j = i + 1; j < PH.length; j++) {
   const d = PH[i].v.reduce((t, x, k) => t + Math.abs(x - PH[j].v[k]), 0) / AXES.length;
@@ -263,7 +266,7 @@ info(`Brazilians whose engine-computed top 5 includes a stated kin: ${kinHits}/$
 ok(kinHits / BRD.length >= 0.8, "Brazilian positions agree with their stated intellectual kin (≥ 80%)");
 {
   const r = E.evaluate(noisy(PH[12].v));
-  ok(r.brazil.length === E.BRAZIL.length && r.brazil.every((x, i) => x.rank === i + 1) && r.ranking.length === PH.length, "every result has a full Brazilian ranking, and the main ranking keeps exactly the 93 thinkers");
+  ok(r.brazil.length === E.BRAZIL.length && r.brazil.every((x, i) => x.rank === i + 1) && r.ranking.length === PH.length, `every result has a full Brazilian ranking, and the main ranking keeps exactly the ${PH.length} thinkers`);
   const j = clone(E.auditJSON(r)); j.brazil[0].percent += 1;
   ok(Verify.checkAudit(DATA, j, current).some(c => !c.ok), "tampering is caught: Brazilian ranking percent");
 }
@@ -373,6 +376,47 @@ AXES.forEach((a, ax) => {
     ok(got.size >= 12, `pole ${sign < 0 ? a.l : a.r}: ${got.size} distinct matches for users strongly on it (12+)`);
   });
 });
+
+section("Sem viés");
+{
+  const flip = a => a.map(x => 4 - x);
+  const latentAnswers = (lat, n) => QS_ALL.slice(0, n).map(([, ax, d]) => { const x = lat[ax] * d * 1.2 + (rnd() - 0.5) * 1.2; return x > 1.2 ? 0 : x > 0.4 ? 1 : x > -0.4 ? 2 : x > -1.2 ? 3 : 4; });
+  // 1. The engine has no preferred side: flipping every answer negates every axis, at every level.
+  let mirrorBad = 0;
+  E.LEVELS.forEach(l => { for (let k = 0; k < 300; k++) { const a = QS_ALL.slice(0, l.n).map(() => Math.floor(rnd() * 5)); const s = E.axisScores(a).scores, m = E.axisScores(flip(a)).scores; if (s.some((x, i) => Math.abs(x + m[i]) > 1e-12)) mirrorBad++; } });
+  ok(mirrorBad === 0, "mirror: flipping every answer negates every axis exactly (900 answer sets, 3 levels)");
+  // 2. Mirroring the catalog too gives the same ranking: no pole is favoured by the formula itself.
+  const Em = Engine.create({ ...DATA, PH: PH.map(p => ({ ...p, v: p.v.map(x => -x) })), BR: (DATA.BR || []).map(p => ({ ...p, v: p.v.map(x => -x) })) });
+  let rankBad = 0;
+  for (let k = 0; k < 300; k++) { const a = noisy(randomPh().v), r = E.evaluate(a).ranking, m = Em.evaluate(flip(a)).ranking; if (r.some((x, i) => x.id !== m[i].id || Math.abs(x.distance - m[i].distance) > 1e-12)) rankBad++; }
+  ok(rankBad === 0, "mirror: with the whole catalog mirrored, mirrored answers give the identical ranking and distances");
+  // 3. Every era wins in proportion to its share of the catalog.
+  const eras = [...new Set(PH.map(p => p.era))], won = {}, M = 6000;
+  for (let k = 0; k < M; k++) { const e = top(latentAnswers(AXES.map(() => rnd() * 2 - 1), 44)).era; won[e] = (won[e] || 0) + 1; }
+  const ratio = eras.map(e => ({ e, r: (won[e] || 0) / M / (PH.filter(p => p.era === e).length / PH.length) }));
+  info(`era share of results ÷ share of catalog: ${ratio.map(x => `${x.e} ×${x.r.toFixed(2)}`).join(", ")}`);
+  ok(ratio.every(x => x.r > 0.6 && x.r < 1.5), "no era is favoured: each wins between 0.6× and 1.5× its share of the catalog");
+  // 4. People strongly on a pole usually get a match on the same side, for all 22 poles.
+  const hit = AXES.map(() => [[0, 0], [0, 0]]);
+  for (let k = 0; k < 8000; k++) {
+    const r = E.evaluate(latentAnswers(AXES.map(() => rnd() * 2 - 1), 44)); if (r.directionless) continue;
+    r.scores.forEach((s, ax) => { if (Math.abs(s) < 0.5) return; const side = s < 0 ? 0 : 1, v = r.top.p.v[ax]; hit[ax][side][1]++; if (Math.abs(v) >= 0.1 && (v < 0 ? 0 : 1) === side) hit[ax][side][0]++; });
+  }
+  const poleRates = AXES.flatMap((a, ax) => [[a.l, hit[ax][0]], [a.r, hit[ax][1]]].map(([n, [h, t]]) => ({ n, rate: h / t })));
+  const weakest = poleRates.slice().sort((x, y) => x.rate - y.rate).slice(0, 4);
+  info(`same-side match for people strongly on a pole, weakest: ${weakest.map(x => `${x.n} ${(x.rate * 100).toFixed(0)}%`).join(", ")}`);
+  ok(poleRates.every(x => x.rate >= 0.65), "every one of the 22 poles: 65% or more of the people strongly on it get a match on the same side");
+  // 5. Longer levels refine the position without pushing it anywhere: the mean shift is near zero on every axis.
+  const shift = AXES.map(() => 0), L = 2000;
+  for (let k = 0; k < L; k++) { const lat = AXES.map(() => rnd() * 2 - 1), a = latentAnswers(lat, 132); const s3 = E.axisScores(a).scores, s1 = E.axisScores(a.slice(0, 44)).scores; s3.forEach((x, i) => shift[i] += (x - s1[i]) / L); }
+  info(`mean axis shift from 44 to 132 statements: max ${Math.max(...shift.map(Math.abs)).toFixed(3)}`);
+  ok(shift.every(x => Math.abs(x) < 0.03), "levels are consistent: going from 44 to 132 statements shifts no axis on average (< 0.03)");
+  // 6. Every Brazilian thinker can be the Brazilian match.
+  const brMiss = E.BRAZIL.filter(b => E.evaluate(ideal(b.v)).brazil[0].p.id !== b.id).map(b => b.n);
+  ok(brMiss.length === 0, `every Brazilian thinker wins the Brazilian ranking for their own profile ${brMiss.join(", ")}`);
+  const brSeen = new Set(); for (let k = 0; k < 4000; k++) brSeen.add(E.evaluate(latentAnswers(AXES.map(() => rnd() * 2 - 1), 44)).brazil[0].p.id);
+  ok(brSeen.size === E.BRAZIL.length, `every Brazilian thinker comes up as the Brazilian match for users spread over all positions (${brSeen.size}/${E.BRAZIL.length})`);
+}
 
 section("Aviso de confiabilidade");
 ok([0, 1, 2, 3, 4].every(c => E.evaluate(QS.map(() => c)).note?.code === "repeat"), "note fires when one option is used for everything");

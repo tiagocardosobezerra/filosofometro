@@ -81,15 +81,16 @@ function thinkerCite(p,ax){
   for(const q of QS){if(q[1]!==ax)continue;for(const ex of [q[3],q[4]]){const n=ex.slice(0,ex.indexOf(": "));if(thinkerByName(n)===p)return ex.slice(ex.indexOf(": ")+2)}}
   return null;
 }
-function tipHTML(ax,{user=null,r=null,p=null}){
+function tipHTML(ax,{user=null,r=null,p=null,you="Você"}){
   const a=AXES[ax];
   let h=`<b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} ↔ ${esc(a.r)}</span>`;
-  if(user)h+=`<span class="tip-row"><i class="tip-dot you"></i>Você: ${num2(user[ax])} · ${esc(lean(a,user[ax]))}</span>`;
+  if(user)h+=`<span class="tip-row"><i class="tip-dot you"></i>${esc(you)}: ${num2(user[ax])} · ${esc(lean(a,user[ax]))}</span>`;
   if(p)h+=`<span class="tip-row"><i class="tip-dot them"></i>${esc(p.n)}: ${num2(p.v[ax])} · ${esc(lean(a,p.v[ax]))}</span>`;
   if(r)h+=`<span class="tip-why"><b>Por quê:</b> ${esc(whyUser(r,ax))}</span>`;
   else if(p){const c=thinkerCite(p,ax);if(c)h+=`<span class="tip-why"><b>${esc(p.n)}:</b> ${esc(c)}</span>`;}
   return h;
 }
+// ctx is the {user, r, p} shown in the tooltip, or a function returning it when the sigil changes over time.
 function wireTips(root,ctx){
   const tip=document.getElementById("tip");
   const hide=()=>{tip.classList.remove("show")};
@@ -101,7 +102,7 @@ function wireTips(root,ctx){
     tip.style.left=Math.max(m,left)+"px";tip.style.top=Math.max(m,top)+"px";
   };
   root.querySelectorAll(".sg-hit").forEach(el=>{
-    const showAt=(x,y)=>{tip.innerHTML=tipHTML(+el.dataset.ax,ctx);tip.classList.add("show");place(x,y)};
+    const showAt=(x,y)=>{tip.innerHTML=tipHTML(+el.dataset.ax,typeof ctx==="function"?ctx():ctx);tip.classList.add("show");place(x,y)};
     el.addEventListener("pointerenter",e=>showAt(e.clientX,e.clientY));
     el.addEventListener("pointermove",e=>place(e.clientX,e.clientY));
     el.addEventListener("pointerleave",hide);
@@ -173,12 +174,12 @@ function renderHome(){
       </div>
       <div class="facts"><span><b>3</b> níveis: ${E.LEVELS.map(l=>l.n).join(", ")} afirmações</span><span><b>11</b> eixos</span><span><b>${PH.length+BR.length}</b> pensadores</span><span>Sem cadastro</span></div>
     </div>
-    <div class="hero-art" aria-hidden="true">
+    <div class="hero-art">
       <div class="duo hero-duo">
-        <figure class="portrait" id="heroPic"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"></figure>
+        <figure class="portrait" id="heroPic" aria-hidden="true"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"></figure>
         <div class="sigil-badge" id="heroSigil"></div>
       </div>
-      <div class="hero-caption fade-swap" id="heroCap"><div class="who"></div><div class="what"></div></div>
+      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint">Passe o mouse (ou toque) na mandala para ver cada eixo.</p></div>
     </div>
   </section>
   <div class="marquee" aria-hidden="true"><div class="track">${names}${names}</div></div>
@@ -196,7 +197,7 @@ function renderHome(){
     </div>
     <div class="steps">
       <div class="step"><span class="num">i.</span><h3>Você responde</h3><p>Escolha o nível e concorde ou discorde das afirmações. Elas vêm misturadas, e metade de cada eixo puxa para cada lado.</p></div>
-      <div class="step"><span class="num">ii.</span><h3>Mapeamos seu formato</h3><p>Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de 93 pensadores.</p></div>
+      <div class="step"><span class="num">ii.</span><h3>Mapeamos seu formato</h3><p>Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de ${PH.length} pensadores.</p></div>
       <div class="step"><span class="num">iii.</span><h3>Você audita</h3><p>Veja passo a passo por que deu quem deu, compare com qualquer pensador e baixe os dados.</p></div>
     </div>
   </section>
@@ -216,10 +217,16 @@ function heroAnimation(){
   const imgs=[...document.querySelectorAll("#heroPic img")];
   const preload=p=>{const i=new Image();i.crossOrigin="anonymous";i.referrerPolicy="no-referrer";i.src=p.img};
   imgs[0].src=deck[0].img;imgs[0].classList.add("on");preload(deck[1]);
-  const setCap=p=>{cap.querySelector(".who").textContent=p.n;cap.querySelector(".what").textContent=p.s};
-  host.innerHTML=sigil(cur,{cls:"sg-user",decorative:true});setCap(deck[0]);
+  const setCap=p=>{const w=cap.querySelector(".who");w.textContent=p.n;w.href="#/p/"+p.id;cap.querySelector(".what").textContent=p.s};
+  host.innerHTML=sigil(cur,{cls:"sg-user",tips:true,title:`Perfil de ${deck[0].n} nos 11 eixos`});setCap(deck[0]);
+  // The tooltip always describes the thinker on screen, and the cycle pauses while someone reads it.
+  wireTips(host,()=>({p:deck[idx]}));
+  const tip=document.getElementById("tip");
+  const reading=()=>tip.classList.contains("show")||host.matches(":hover")||host.contains(document.activeElement);
   if(reduceMotion)return;
   const tick=()=>{
+    if(reading())return;
+    host.querySelector("svg").setAttribute("aria-label",`Perfil de ${deck[(idx+1)%deck.length].n} nos 11 eixos`);
     const from=cur.slice(),to=deck[(idx+1)%deck.length].v,t0=performance.now();
     idx=(idx+1)%deck.length;
     const back=imgs[1-front];back.src=deck[idx].img;back.classList.add("on");imgs[front].classList.remove("on");front=1-front;
@@ -263,8 +270,8 @@ function citation(ex){
 // What a simulated retest shows for each level (tests/levels in the method page): accuracy grows with statements.
 const LEVEL_INFO={
   1:{tag:"Para começar",precision:"Boa",retest:"55%",desc:"O suficiente para conhecer seu par e se divertir."},
-  2:{tag:"Recomendado",precision:"Alta",retest:"82%",desc:"Resultado bem mais estável. Inclui as 44 do Rápido."},
-  3:{tag:"Para quem quer ir fundo",precision:"Muito alta",retest:"92%",desc:"O retrato mais fiel. Inclui as 88 do Completo."},
+  2:{tag:"Recomendado",precision:"Alta",retest:"83%",desc:"Resultado bem mais estável. Inclui as 44 do Rápido."},
+  3:{tag:"Para quem quer ir fundo",precision:"Muito alta",retest:"94%",desc:"O retrato mais fiel. Inclui as 88 do Completo."},
 };
 const levelBy=id=>E.LEVELS.find(l=>l.id===id);
 const nextLevel=n=>E.LEVELS.find(l=>l.n>n)||null;
@@ -525,8 +532,10 @@ function renderResult(code,mode){
 // Portraits are Wikimedia Commons images linked from the catalog; a monogram shows if one fails to load.
 function portrait(p,{cls="",eager=false}={}){
   const initials=p.n.split(" ").filter(w=>/^[A-ZÀ-Ý]/.test(w)).slice(0,2).map(w=>w[0]).join("");
-  if(!p.img)return `<figure class="portrait noimg ${cls}" role="img" aria-label="${esc(p.n)} (sem retrato livre disponível)"><span class="mono-fallback" aria-hidden="true">${esc(initials)}</span></figure>`;
-  return `<figure class="portrait ${cls}"><img src="${esc(p.img)}" alt="Retrato de ${esc(p.n)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')"><span class="mono-fallback" aria-hidden="true">${esc(initials)}</span></figure>`;
+  // Without a freely licensed photo, the portrait is drawn from the thought itself: the thinker's own sigil behind the initials.
+  const fallback=`<span class="mono-fallback" aria-hidden="true">${sigil(p.v,{cls:"sg-solo",decorative:true})}<b>${esc(initials)}</b></span>`;
+  if(!p.img)return `<figure class="portrait noimg ${cls}" role="img" aria-label="${esc(p.n)}: retrato desenhado pelo perfil nos 11 eixos (sem foto de licença livre)">${fallback}</figure>`;
+  return `<figure class="portrait ${cls}"><img src="${esc(p.img)}" alt="Retrato de ${esc(p.n)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')">${fallback}</figure>`;
 }
 
 /* ---------- Compare with a friend ---------- */
@@ -601,6 +610,7 @@ function renderInvite(code,rawName){
     </div>
     ${duo(p,{title:`Perfil de ${p.n}`})}
   </section>`,named?`${named} te desafiou`:"Desafio filosófico");
+  wireTips(app,{p});
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
 }
 function renderCompare(codeA,codeB,rawA,rawB){
@@ -622,7 +632,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
     <p class="lede" style="margin-top:6px">${esc(verdict)}</p>
     <div class="cmp-grid">
       ${card(nameA,ra)}
-      <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,title:`${nameB} e ${nameA} nos 11 eixos`})}
+      <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:`${nameB} e ${nameA} nos 11 eixos`})}
         <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div></div>
       ${card(nameB,rb)}
     </div>
@@ -653,6 +663,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
       ${store.get("last")===codeB?"":`<a class="btn ghost" href="#/teste" data-fresh="1">Fazer o teste</a>`}
     </div>
   </section>`,c.pct===null?"Comparação":`${c.pct}% compatíveis`);
+  wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
   document.getElementById("cmpCopy").addEventListener("click",copyLink);
   const cc=document.getElementById("cmpChallenge");if(cc)cc.addEventListener("click",()=>challenge(rb));
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
@@ -685,7 +696,7 @@ function kinHTML(p){
   return `<div class="panel brazil"><span class="br-flag" aria-hidden="true"></span><h2>No Brasil, na mesma linha</h2><p class="sub">Os pensadores brasileiros com o formato de pensamento mais parecido com o de ${esc(p.n)}.</p>
     <ul class="match-list">${near.map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${x.pct}%</span></a></li>`).join("")}</ul></div>`;
 }
-const credit=p=>`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">Imagem: Wikimedia Commons, via Wikipédia ↗</a>`;
+const credit=p=>p.img?`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">Imagem: Wikimedia Commons, via Wikipédia ↗</a>`:`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">Retrato desenhado pelo perfil (sem foto livre) · Wikipédia ↗</a>`;
 // Portrait and sigil together: the face of the thinker and the shape of the thought.
 // On a result the user is orange and the thinker dashed; on a thinker's page the thinker is orange.
 function duo(p,{user=null,title="",thinkerFirst=false}={}){
@@ -796,7 +807,7 @@ function timelineHTML(r){
   const eraMarks=ERAS.map(e=>{const s=`<span class="tl-era" style="left:${left*100}%;width:${e.w*100}%">${esc(e.name)}</span>`;left+=e.w;return s}).join("");
   return `<div class="panel tl-panel">
     <h2>Sua linhagem no tempo</h2>
-    <p class="sub">Os 93 pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.</p>
+    <p class="sub">Os ${PH.length} pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.</p>
     <div class="tl-scroll"><div class="tl" style="--rows:${rows.length}">
       <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">Você está aqui</span>`:""}</a>`).join("")}</div>
       <div class="tl-line"></div>
@@ -1025,7 +1036,14 @@ distância bruta = média de |sua posição − posição do pensador|, sem norm
         <li>que mudar duas respostas em um passo mantém o mesmo par no top 3 em mais de 95% dos casos;</li>
         <li>que todos os 11 eixos influenciam o resultado.</li>
       </ul>
-      <p>Uma segunda auditoria prova que todos os ${PH.length} pensadores, e portanto todas as ${new Set(PH.map(p=>p.s)).size} correntes, podem ser o resultado: pelo perfil exato de cada um, por uma busca que parte de respostas aleatórias e por simulação com 60 mil pessoas.</p>
+      <p>Uma segunda auditoria prova que todos os ${PH.length} pensadores, e portanto todas as ${new Set(PH.map(p=>p.s)).size} correntes, podem ser o resultado: pelo perfil exato de cada um, por uma busca que parte de respostas aleatórias e por simulação com 60 mil pessoas. O mesmo vale para os ${E.BRAZIL.length} pensadores do ranking brasileiro.</p>
+      <h3>Sem viés de lado, de época ou de nível</h3>
+      <ul>
+        <li><b>Espelho:</b> inverter todas as respostas inverte exatamente todos os eixos. E se o catálogo inteiro também for espelhado, o ranking sai idêntico, com as mesmas distâncias. A fórmula não prefere nenhum polo.</li>
+        <li><b>Épocas:</b> cada época vence numa proporção próxima do seu peso no catálogo. Antigos, medievais, modernos, contemporâneos e orientais têm a mesma chance por pensador.</li>
+        <li><b>Polos:</b> em cada um dos 22 polos, pelo menos 65% das pessoas fortemente nele recebem um par do mesmo lado. Quando um polo ficou abaixo disso, o problema era falta de pensadores ali, e o catálogo ganhou nomes como Lucrécio, Yang Zhu, La Mettrie, Fourier, Wilde, Marcuse, Oakeshott, Kirk, Sidgwick, Godwin e Frege.</li>
+        <li><b>Níveis:</b> passar de 44 para 132 afirmações refina a posição sem empurrá-la para nenhum lado: o deslocamento médio é praticamente zero em todos os eixos.</li>
+      </ul>
       <h2>8. Verifique você mesmo</h2>
       <p>Nada aqui depende de confiança. O verificador refaz qualquer resultado com uma segunda implementação, num arquivo separado (<code>verify.js</code>) que não compartilha código com o motor, e compara cada número do arquivo de auditoria.</p>
       <p>As duas impressões digitais usam ${esc(E.HASH_RULE)}. A do código cobre o motor inteiro, com as quebras de linha normalizadas. A do catálogo cobre exatamente o objeto <code>fingerprintInput</code> incluído no catálogo para download, com eixos, afirmações, nomes, ids e posições.</p>

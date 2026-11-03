@@ -96,7 +96,9 @@ main{min-height:calc(100vh - 64px)}
 .hero-art>div:first-child{aspect-ratio:1}
 .hero-art svg{width:100%;height:100%;overflow:visible}
 .hero-caption{text-align:center}
-.hero-caption .who{font-family:var(--serif);font-size:clamp(26px,2.6vw,34px);line-height:1}
+.hero-caption .who{display:inline-block;font-family:var(--serif);font-size:clamp(26px,2.6vw,34px);line-height:1;color:inherit;text-decoration:none}
+.hero-caption .who:hover{color:var(--accent)}
+.hero-caption .hero-hint{margin:10px 0 0;font-size:12px}
 .hero-caption .what{font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
 .fade-swap{transition:opacity .45s var(--ease),transform .45s var(--ease)}
 .fade-swap.out{opacity:0;transform:translateY(6px)}
@@ -343,7 +345,13 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 .portrait:hover img{filter:grayscale(.15) contrast(1.03);transform:scale(1.035)}
 .portrait .mono-fallback{display:none}
 .portrait.noimg img{display:none}
-.portrait.noimg .mono-fallback{display:grid;place-items:center;position:absolute;inset:0;font-family:var(--serif);font-size:clamp(28px,8vw,96px);color:var(--muted)}
+/* No free photo: the thinker's sigil, large and tinted, behind serif initials */
+.portrait.noimg{container-type:inline-size;background:radial-gradient(120% 90% at 50% 30%,color-mix(in srgb,var(--accent) 14%,var(--bg2)),var(--bg2))}
+.portrait.noimg .mono-fallback{display:grid;place-items:center;position:absolute;inset:0}
+.mono-fallback svg{position:absolute;left:50%;top:44%;width:118%;height:auto;transform:translate(-50%,-50%) rotate(-8deg);opacity:.5}
+.mono-fallback .sg-ring,.mono-fallback .sg-spoke{stroke:color-mix(in srgb,var(--ink) 18%,transparent)}
+.mono-fallback .sg-solo{fill:color-mix(in srgb,var(--accent) 22%,transparent);stroke:var(--accent);stroke-width:1.6}
+.mono-fallback b{position:relative;font-family:var(--serif);font-weight:400;font-size:34cqw;line-height:1;color:var(--ink);letter-spacing:-.02em;margin-top:-6%}
 #heroPic img{opacity:0}
 #heroPic img.on{opacity:1}
 

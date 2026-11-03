@@ -58,11 +58,13 @@ function robustness(p, n = 400) {
 }
 
 // 3. Region size: people spread evenly over every possible position on the 11 axes.
-const N = 60000, basin = Object.fromEntries(PH.map(p => [p.id, 0]));
+// The Brazilian ranking is tracked in the same pass.
+const N = 60000, basin = Object.fromEntries(PH.map(p => [p.id, 0])), brBasin = Object.fromEntries(E.BRAZIL.map(p => [p.id, 0]));
 for (let k = 0; k < N; k++) {
   const v = AXES.map(() => rnd() * 2 - 1);
   const a = QS.map(([, ax, d]) => { const x = v[ax] * d * 2 + (rnd() - 0.5); return nearest(x); });
-  basin[winner(a)]++;
+  const r = E.evaluate(a);
+  basin[r.top.id]++; brBasin[r.brazil[0].p.id]++;
 }
 
 const rows = [];
@@ -77,6 +79,13 @@ for (const p of PH) {
   process.stdout.write(".");
 }
 console.log();
+
+// 4. Brazilian ranking: the same checks over the Brazilian pool.
+const brRows = E.BRAZIL.map(p => {
+  const r = E.evaluate(ideal(p.v)).brazil;
+  return { p, idealWins: r[0].p.id === p.id, idealMargin: r[1].distance - r.find(x => x.p.id === p.id).distance, share: brBasin[p.id] / N };
+});
+const allBr = brRows.every(r => r.idealWins && r.share > 0);
 
 const schools = {};
 rows.forEach(r => { (schools[r.p.s] = schools[r.p.s] || []).push(r); });
@@ -95,13 +104,16 @@ md += `## Por pensador\n\n| Pensador | Corrente | Perfil exato | Folga | Busca |
 for (const r of rows) {
   md += `| ${r.p.n} | ${r.p.s} | ${r.idealWins ? "vence" : "**não vence**"} | ${r.idealMargin.toFixed(3)} | ${r.s.found ? `achado em ${r.s.steps} passos` : "**não achado**"} | ${pct(r.rob.win)} / ${pct(r.rob.top3)} | ${pct(r.share)} |\n`;
 }
+md += `\n## Ranking brasileiro\n\n${brRows.filter(r => r.idealWins).length}/${brRows.length} pensadores brasileiros vencem o ranking brasileiro no próprio perfil, e ${brRows.filter(r => r.share > 0).length}/${brRows.length} aparecem como par brasileiro na simulação.\n\n| Pensador | Corrente | Perfil exato | Folga | Região |\n|---|---|---|--:|--:|\n`;
+for (const r of brRows) md += `| ${r.p.n} | ${r.p.s} | ${r.idealWins ? "vence" : "**não vence**"} | ${r.idealMargin.toFixed(3)} | ${pct(r.share)} |\n`;
 md += `\n**Folga:** quanto o pensador ganha do segundo colocado no próprio perfil (distância média). Quanto maior, mais nítido.\n\n`;
 md += `**Região:** fatia das pessoas simuladas que recebem esse pensador como resultado.\n`;
 fs.writeFileSync(path.join(__dirname, "reachability-report.md"), md);
 
 console.log(`ideal ${rows.filter(r => r.idealWins).length}/${PH.length} · search ${rows.filter(r => r.s.found).length}/${PH.length} · present in region ${rows.filter(r => r.share > 0).length}/${PH.length}`);
+console.log(`Brazil: ideal ${brRows.filter(r => r.idealWins).length}/${brRows.length} · present in region ${brRows.filter(r => r.share > 0).length}/${brRows.length}`);
 console.log(`smallest regions: ${sorted.slice(0, 6).map(r => `${r.p.n} ${pct(r.share)}`).join(", ")}`);
 console.log(`largest regions: ${sorted.slice(-4).map(r => `${r.p.n} ${pct(r.share)}`).join(", ")}`);
 console.log(`least robust: ${rows.slice().sort((a, b) => a.rob.win - b.rob.win).slice(0, 6).map(r => `${r.p.n} ${pct(r.rob.win)}/${pct(r.rob.top3)}`).join(", ")}`);
 console.log(`smallest margins: ${rows.slice().sort((a, b) => a.idealMargin - b.idealMargin).slice(0, 5).map(r => `${r.p.n} ${r.idealMargin.toFixed(3)}`).join(", ")}`);
-process.exit(allIdeal && allSearch ? 0 : 1);
+process.exit(allIdeal && allSearch && allBr ? 0 : 1);

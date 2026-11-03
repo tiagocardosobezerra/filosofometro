@@ -1,6 +1,6 @@
 # Filosofômetro: qual filósofo pensa como você?
 
-Teste filosófico com 44 afirmações, 11 eixos e 93 pensadores, mais 27 pensadores brasileiros num ranking próprio. Mostra o seu par, os mais parecidos, o seu oposto, quem pensa como você no Brasil, uma linha do tempo e a comparação com amigos pelo link. Site estático, sem build e sem backend.
+Teste filosófico em três níveis (44, 88 ou 132 afirmações), 11 eixos e 104 pensadores, mais 27 pensadores brasileiros num ranking próprio. Mostra o seu par, os mais parecidos, o seu oposto, quem pensa como você no Brasil, uma linha do tempo e a comparação com amigos pelo link. Site estático, sem build e sem backend.
 
 **No ar:** https://filosofometro.vercel.app · **Criado por** [Tiago Cardoso Bezerra](https://github.com/tiagocardosobezerra)
 
@@ -28,7 +28,7 @@ npx serve@14.2.4 -l 5173 .
 node tests/engine-test.js
 ```
 
-Rode sempre que mudar `data.js` ou `engine.js`. A bateria confere o cálculo contra uma implementação independente, a consistência da trilha de auditoria, se cada pensador é alcançável, a estabilidade, a distribuição dos resultados e os links.
+Rode sempre que mudar `data.js` ou `engine.js`. A bateria confere a ausência de viés (espelho, épocas, polos, níveis), o cálculo contra uma implementação independente, a consistência da trilha de auditoria, se cada pensador é alcançável, a estabilidade, a distribuição dos resultados e os links.
 
 ### Auditoria de alcance
 
@@ -36,7 +36,7 @@ Rode sempre que mudar `data.js` ou `engine.js`. A bateria confere o cálculo con
 node tests/reachability.js
 ```
 
-Prova que cada pensador, e portanto cada corrente, pode ser o resultado de um conjunto real de respostas. Faz isso de três formas: pelo perfil exato do pensador, por uma busca que parte de respostas aleatórias e muda uma resposta por vez, e por simulação com 60 mil pessoas espalhadas por todas as posições. Gera `tests/reachability-report.md` com a tabela por pensador.
+Prova que cada pensador, e portanto cada corrente, pode ser o resultado de um conjunto real de respostas, no ranking principal e no brasileiro. Faz isso de três formas: pelo perfil exato do pensador, por uma busca que parte de respostas aleatórias e muda uma resposta por vez, e por simulação com 60 mil pessoas espalhadas por todas as posições. Gera `tests/reachability-report.md` com a tabela por pensador.
 
 ## Como o motor calcula
 
@@ -56,6 +56,8 @@ Duas impressões digitais aparecem em cada auditoria. A do **catálogo** é FNV-
 ## Retratos
 
 Os retratos vêm da Wikimedia Commons, linkados direto do servidor da Wikimedia (`img` em `data.js`), com crédito e link para a página da Wikipédia (`wiki`). As licenças variam por imagem: retratos antigos são de domínio público, e fotos de pessoas contemporâneas costumam ser CC BY ou CC BY-SA. Antes de um uso comercial, confira a licença de cada arquivo na página dele na Commons.
+
+Quem não tem foto de licença livre na Commons (Yang Zhu, Oswaldo Porchat, Carlos Nelson Coutinho, Roberto Schwarz e Benedito Nunes) fica com `img: ""` e ganha um retrato desenhado pelo próprio perfil: a mandala dos 11 eixos atrás das iniciais. O mesmo desenho aparece se uma imagem falhar ao carregar.
 
 ## Limites conhecidos
 
