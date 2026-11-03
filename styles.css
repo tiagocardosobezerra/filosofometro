@@ -888,3 +888,15 @@ footer{padding-bottom:env(safe-area-inset-bottom)}
 .view>.section:last-child{padding-bottom:clamp(40px,6vh,72px)}
 .bt-art .bt-pic{height:calc(100% - 26px)}
 .bt-who{bottom:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Comparison page */
+.cmp-axes{display:grid;gap:4px}
+.cmp-ax{display:grid;grid-template-columns:140px 1fr;gap:18px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.cmp-ax:first-of-type{border-top:0}
+.cmp-ax .ag-axis{font-family:var(--serif);font-size:22px}
+.cmp-ax .axis-row{margin:0}
+.split-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.split-list li{padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--ink) 4%,transparent);display:grid;gap:4px;font-size:14px;color:var(--ink2)}
+.split-list p{margin:0 0 6px;font-size:21px;line-height:1.2;color:var(--ink)}
+.split-list b{color:var(--ink);font-weight:600}
+.cmp-foot{margin:28px auto 0;text-align:center;font-size:13px;color:var(--muted)}
+@media (max-width:600px){.cmp-ax{grid-template-columns:1fr;gap:6px}}

@@ -803,6 +803,13 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const close=rows.slice().sort((x,y)=>x.diff-y.diff).slice(0,3),far=rows.slice().sort((x,y)=>y.diff-x.diff).slice(0,3);
   const topA=new Set(ra.ranking.slice(0,10).map(x=>x.p.id));
   const shared=rb.ranking.slice(0,10).filter(x=>topA.has(x.p.id)).slice(0,4).map(x=>x.p);
+  // The thinker closest to the point halfway between both profiles: who could mediate the conversation.
+  const mid=ra.scores.map((x,i)=>(x+rb.scores[i])/2);
+  const mediator=PH.map(p=>({p,d:p.v.reduce((t,v,i)=>t+Math.abs(v-mid[i]),0)})).sort((x,y)=>x.d-y.d)[0].p;
+  // Statements both answered where they landed furthest apart: the best openers for a conversation.
+  const split=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.y!=null).map(q=>({...q,gap:Math.abs(SCALE[q.x].value-SCALE[q.y].value)})).filter(q=>q.gap>=2).sort((p,q)=>q.gap-p.gap||p.i-q.i).slice(0,3);
+  const same=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.x===q.y&&q.x!==2).length;
+  const answered=a.filter((x,i)=>x!=null&&b[i]!=null).length;
   const verdict=c.pct===null?"Um dos perfis ficou sem direção, então não dá para medir compatibilidade.":c.pct>=80?"Almas filosóficas gêmeas.":c.pct>=60?"Bastante em comum, com boas brigas pela frente.":c.pct>=40?"Concordam em algumas coisas e discordam com vontade em outras.":"Pensam quase ao contrário. Rende uma ótima conversa.";
   const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?"perfil sem direção":`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
   const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?`Os dois tendem a <b>${esc(lean(ax,x.A).replace(", forte",""))}</b>.`:`${esc(nameA)}: <b>${esc(lean(ax,x.A))}</b>. ${esc(nameB)}: <b>${esc(lean(ax,x.B))}</b>.`}</span></li>`};
@@ -826,15 +833,37 @@ function renderCompare(codeA,codeB,rawA,rawB){
         <ul class="ag-list">${far.map(x=>item(x,"far")).join("")}</ul>
       </div>
       <div style="display:grid;gap:20px;align-content:start">
+        <div class="panel mediator">
+          <h2>Quem fica no meio</h2>
+          <p class="sub">O pensador mais perto do ponto entre vocês dois. Um bom juiz para a próxima discussão.</p>
+          <a class="opp" href="#/p/${mediator.id}" style="text-decoration:none">${portrait(mediator,{cls:"opp-pic"})}<span><span class="nm">${esc(mediator.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(mediator.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(mediator.q)}”</span></span></a>
+        </div>
         <div class="panel">
           <h2>Pensadores em comum</h2>
           <p class="sub">Aparecem entre os 10 mais parecidos com os dois.</p>
           ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.</p>`}
         </div>
-        <div class="panel">
-          <h2>Como calculamos</h2>
-          <p class="sub" style="margin:0">A mesma regra do resultado: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos (${num(c.distance,4)}) e a compatibilidade é ${esc(E.PERCENT_RULE)}.</p>
-        </div>
+      </div>
+    </div>
+
+    <h2 class="chapter"><span>1</span>Eixo por eixo</h2>
+    <div class="panel cmp-axes">
+      <p class="sub">Laranja: ${esc(nameB)}. Marcador: ${esc(nameA)}. Do eixo onde vocês mais se parecem ao que mais separa.</p>
+      ${rows.slice().sort((x,y)=>x.diff-y.diff).map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(AXES[x.ax].name))}</span>${axisRow(AXES[x.ax],x.B,x.A,nameB,nameA)}</div>`).join("")}
+    </div>
+
+    <h2 class="chapter"><span>2</span>Para conversar</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Onde vocês mais se dividiram</h2>
+        <p class="sub">${answered?`Das ${answered} afirmações que os dois responderam, deram a mesma resposta em ${same}.`:""} Estas foram as que mais separaram vocês.</p>
+        ${split.length?`<ul class="split-list">${split.map(q=>`<li><p class="serif">“${esc(QS[q.i][0])}”</p><span><b>${esc(nameA)}:</b> ${esc(SCALE[q.x].label)}</span><span><b>${esc(nameB)}:</b> ${esc(SCALE[q.y].label)}</span></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">Nenhuma afirmação separou vocês por mais de um passo. Raro.</p>`}
+      </div>
+      <div class="panel">
+        <h2>Para ler</h2>
+        <p class="sub">Um livro para cada um entender o outro, e um para ler juntos.</p>
+        <ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,`Para ler juntos · ${esc(mediator.n)}`)}</ol>
+        ${affNote()}
       </div>
     </div>
     <div class="res-actions" style="justify-content:center;margin-top:28px">
@@ -843,6 +872,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
       <button class="btn ${store.get("last")===codeB?"ghost":"accent"}" id="cmpCopy" type="button">${icon.link} Copiar esta comparação</button>
       ${store.get("last")===codeB?"":`<a class="btn ghost" href="#/teste" data-fresh="1">Fazer o teste</a>`}
     </div>
+    <p class="cmp-foot">Mesma regra do resultado: distância média de ${num(c.distance,3)} nos 11 eixos. <a href="#/metodo">Como calculamos</a></p>
   </section>`,c.pct===null?"Comparação":`${c.pct}% compatíveis`);
   wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
   document.getElementById("cmpCopy").addEventListener("click",async()=>{
@@ -872,9 +902,17 @@ function brazilHTML(r,title="No Brasil, quem pensa como você"){
 // Three books per thinker: the starter book from the catalog plus two from support.js, each an Amazon search.
 // Covers come from Open Library (covers.js); a missing or broken one falls back to the colored spine.
 function readingHTML(p){
-  const books=[p.b,...(SUP.READING[p.id]||[])],cov=(window.AgoraCovers||{})[p.id]||[];
+  const books=[p.b,...(SUP.READING[p.id]||[])];
+  return `<ol class="reads">${books.map((t,i)=>bookItem(p,i,t,`${i?"":"Comece por este · "}Ver na Amazon`)).join("")}</ol>${affNote()}`;
+}
+// One book row: cover (or the colored spine), title, a short line under it and the Amazon link.
+function bookItem(p,i,title,line){
+  const cov=((window.AgoraCovers||{})[p.id]||[])[i];
+  return `<li><a href="${esc(SUP.bookURL(title,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov?`<img src="https://covers.openlibrary.org/b/id/${cov}-M.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(title)}</span><span class="muted">${line}</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`;
+}
+function affNote(){
   const note=[SUP.SUPPORT.amazonTag?"Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você.":"",HAS_PIX?'Prefere ajudar direto? <a href="#/apoie">Faça um Pix</a>.':""].filter(Boolean).join(" ");
-  return `<ol class="reads">${books.map((t,i)=>`<li><a href="${esc(SUP.bookURL(t,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov[i]?`<img src="https://covers.openlibrary.org/b/id/${cov[i]}-M.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(t)}</span><span class="muted">${i?"":"Comece por este · "}Ver na Amazon</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`).join("")}</ol>${note?`<p class="aff-note">${note}</p>`:""}`;
+  return note?`<p class="aff-note">${note}</p>`:"";
 }
 function kinHTML(p){
   if(p.era==="Brasil"){
