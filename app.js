@@ -609,6 +609,7 @@ distância bruta = média de |sua posição − posição do pensador|, sem norm
         <button class="btn ghost sm" id="dlCatalog" type="button">Baixar catálogo (JSON)</button>
         <a class="btn ghost sm" href="engine.js" target="_blank" rel="noopener">Ver código do motor</a>
         <a class="btn ghost sm" href="verify.js" target="_blank" rel="noopener">Ver código do verificador</a>
+        <a class="btn ghost sm" href="https://github.com/tiagocardosobezerra/filosofometro" target="_blank" rel="noopener">Código completo e testes no GitHub</a>
       </div>
       <h2>9. Limites honestos</h2>
       <p>As posições dos pensadores são uma leitura acadêmica resumida, revisada mas discutível: filósofos reais não cabem em 11 números. As frases de autores modernos são paráfrases curtas. Use o resultado como porta de entrada para ler, não como diagnóstico.</p>
