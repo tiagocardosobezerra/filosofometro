@@ -50,25 +50,25 @@
   ],
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "filosofometro.vercel.app"
         }
       ],
-      "destination": "https://filosofometro.com.br/:path*",
+      "destination": "https://filosofometro.com.br/$1",
       "permanent": true
     },
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "www.filosofometro.com.br"
         }
       ],
-      "destination": "https://filosofometro.com.br/:path*",
+      "destination": "https://filosofometro.com.br/$1",
       "permanent": true
     }
   ]
