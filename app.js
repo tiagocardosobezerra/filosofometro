@@ -64,7 +64,7 @@ function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",de
 
 /* ---------- Sigil explanations ---------- */
 const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
-const lean=(a,x)=>Math.abs(x)<.13?"equilíbrio":`${x<0?a.l:a.r}${Math.abs(x)>=.6?", forte":""}`;
+const lean=(a,x)=>Math.abs(x)<.13?"Equilíbrio":`${x<0?a.l:a.r}${Math.abs(x)>=.6?", forte":""}`;
 const num2=x=>(x>=0?"+":"−")+Math.abs(x).toFixed(2).replace(".",",");
 // Why the user sits where they do on one axis: the answers that pulled hardest in that direction.
 function whyUser(r,ax){
