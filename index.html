@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Filosofômetro — Qual filósofo pensa como você?</title>
+<meta name="description" content="Teste filosófico gratuito: 44 afirmações, 11 eixos, 93 pensadores. Descubra seu par filosófico, sua corrente e seu oposto, com o cálculo inteiro aberto para auditoria.">
+<meta name="theme-color" content="#F2EDE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F0E0C" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Filosofômetro — Qual filósofo pensa como você?">
+<meta property="og:description" content="44 afirmações, 11 eixos, 93 pensadores. Seu par filosófico, sua corrente e seu oposto.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2316130F'/%3E%3Cpath d='M16 6 25 25H7z' fill='none' stroke='%23F06A43' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // Apply the saved theme before first paint to avoid a flash.
+  try{const t=localStorage.getItem("agora.theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}
+</script>
+</head>
+<body>
+<a class="skip" href="#app">Pular para o conteúdo</a>
+<header class="bar" id="bar">
+  <div class="wrap">
+    <a class="brand" href="#/" aria-label="Filosofômetro, página inicial">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 28 27H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="16" cy="19" r="3.2" fill="var(--accent)"/></svg>
+      Filosofômetro
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#/pensadores" data-nav="pensadores">Pensadores</a>
+      <a href="#/metodo" data-nav="metodo" class="hide-sm">Método</a>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Alternar tema claro e escuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+<main id="app" tabindex="-1"></main>
+<footer>
+  <div class="wrap">
+    <span>Filosofômetro · teste filosófico com motor auditável</span>
+    <span><a href="#/metodo">Como calculamos</a> · <a href="#/pensadores">Todos os pensadores</a></span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><div class="wrap" style="padding:40px 0">O Filosofômetro precisa de JavaScript para funcionar.</div></noscript>
+<script src="data.js"></script>
+<script src="engine.js"></script>
+<script src="verify.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
