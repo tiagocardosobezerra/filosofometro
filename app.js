@@ -83,7 +83,7 @@ function thinkerCite(p,ax){
 }
 function tipHTML(ax,{user=null,r=null,p=null,you="Você"}){
   const a=AXES[ax];
-  let h=`<b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} ↔ ${esc(a.r)}</span>`;
+  let h=`<button class="tip-x" type="button" aria-label="Fechar explicação">×</button><b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} ↔ ${esc(a.r)}</span>`;
   if(user)h+=`<span class="tip-row"><i class="tip-dot you"></i>${esc(you)}: ${num2(user[ax])} · ${esc(lean(a,user[ax]))}</span>`;
   if(p)h+=`<span class="tip-row"><i class="tip-dot them"></i>${esc(p.n)}: ${num2(p.v[ax])} · ${esc(lean(a,p.v[ax]))}</span>`;
   if(r)h+=`<span class="tip-why"><b>Por quê:</b> ${esc(whyUser(r,ax))}</span>`;
@@ -93,27 +93,40 @@ function tipHTML(ax,{user=null,r=null,p=null,you="Você"}){
 // ctx is the {user, r, p} shown in the tooltip, or a function returning it when the sigil changes over time.
 function wireTips(root,ctx){
   const tip=document.getElementById("tip");
-  const hide=()=>{tip.classList.remove("show")};
+  const hits=[...root.querySelectorAll(".sg-hit")];
+  const hide=()=>{tip.classList.remove("show","sheet");hits.forEach(h=>h.classList.remove("on"))};
   const place=(x,y)=>{
+    if(tip.classList.contains("sheet"))return;
     const w=tip.offsetWidth,h=tip.offsetHeight,m=12;
     let left=x+16,top=y+16;
     if(left+w>innerWidth-m)left=x-w-16;
     if(top+h>innerHeight-m)top=y-h-16;
     tip.style.left=Math.max(m,left)+"px";tip.style.top=Math.max(m,top)+"px";
   };
-  root.querySelectorAll(".sg-hit").forEach(el=>{
-    const showAt=(x,y)=>{tip.innerHTML=tipHTML(+el.dataset.ax,typeof ctx==="function"?ctx():ctx);tip.classList.add("show");place(x,y)};
+  let lastTouch=0;
+  hits.forEach(el=>{
+    const fill=()=>{document.body.classList.add("tips-seen");tip.innerHTML=tipHTML(+el.dataset.ax,typeof ctx==="function"?ctx():ctx);hits.forEach(h=>h.classList.toggle("on",h===el))};
+    const showAt=(x,y)=>{fill();tip.classList.remove("sheet");tip.classList.add("show");place(x,y)};
+    // On touch screens the explanation opens as a card at the bottom of the screen, readable with one hand.
+    const sheet=()=>{fill();tip.classList.add("show","sheet");tip.style.left=tip.style.top=""};
     el.addEventListener("pointerenter",e=>{if(e.pointerType==="mouse")showAt(e.clientX,e.clientY)});
-    el.addEventListener("pointermove",e=>place(e.clientX,e.clientY));
-    el.addEventListener("pointerleave",hide);
-    el.addEventListener("focus",()=>{const b=el.getBoundingClientRect();showAt(b.left+b.width/2,b.top+b.height/2)});
-    el.addEventListener("blur",hide);
-    // On touch screens a tap shows the explanation; tapping elsewhere hides it.
-    el.addEventListener("click",e=>{const b=el.getBoundingClientRect();showAt(e.clientX||b.left,e.clientY||b.top)});
+    el.addEventListener("pointermove",e=>{if(e.pointerType==="mouse")place(e.clientX,e.clientY)});
+    el.addEventListener("pointerleave",e=>{if(e.pointerType==="mouse")hide()});
+    el.addEventListener("pointerup",e=>{if(e.pointerType!=="mouse"){lastTouch=Date.now();sheet()}});
+    el.addEventListener("focus",()=>{if(Date.now()-lastTouch<800)return;const b=el.getBoundingClientRect();showAt(b.left+b.width/2,b.top+b.height/2)});
+    el.addEventListener("blur",()=>{if(!tip.classList.contains("sheet"))hide()});
+    // Fallback for browsers that send only a click; skipped right after a touch already handled it.
+    el.addEventListener("click",e=>{if(Date.now()-lastTouch<800)return;if(matchMedia("(hover:none)").matches)sheet();else{const b=el.getBoundingClientRect();showAt(e.clientX||b.left,e.clientY||b.top)}});
+    el.addEventListener("keydown",e=>{if(e.key==="Escape"){hide();el.blur()}});
   });
-  const onDoc=e=>{if(!e.target.closest||!e.target.closest(".sg-hit"))hide()};
+  const onDoc=e=>{if(!e.target.closest||!e.target.closest(".sg-hit,#tip"))hide()};
+  const onScroll=()=>{if(tip.classList.contains("sheet")&&Math.abs(scrollY-scrollAt)>60)hide()};
+  let scrollAt=scrollY;
+  tip.onclick=e=>{if(e.target.closest(".tip-x"))hide()};
   document.addEventListener("pointerdown",onDoc);
-  onLeave(()=>{document.removeEventListener("pointerdown",onDoc);hide()});
+  addEventListener("scroll",onScroll,{passive:true});
+  const obs=new MutationObserver(()=>{scrollAt=scrollY});obs.observe(tip,{attributes:true,attributeFilter:["class"]});
+  onLeave(()=>{document.removeEventListener("pointerdown",onDoc);removeEventListener("scroll",onScroll);obs.disconnect();hide()});
 }
 
 /* ---------- Routing ---------- */
@@ -129,7 +142,7 @@ function route(){
   document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(name==="p"&&a.dataset.nav==="pensadores")));
   // Header call to action: the last result if there is one, otherwise the quiz. Hidden while taking the quiz.
   const cta=document.getElementById("navCta"),lastCode=store.get("last");
-  if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.textContent=hasLast?"Meu resultado":"Fazer o teste";cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
+  if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.innerHTML=hasLast?`<span class="cta-lg">Meu resultado</span><span class="cta-sm">Resultado</span>`:`<span class="cta-lg">Fazer o teste</span><span class="cta-sm">Teste</span>`;cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
   if(a11yNav(name))return;
   if(name==="teste")renderQuiz(parts[1]);
   else if(name==="r")renderResult(parts[1],parts[2]);
@@ -391,7 +404,7 @@ function renderQuiz(arg){
   mount(`
   <section class="wrap quiz" aria-labelledby="qText">
     <div class="quiz-top">
-      <span class="axis-tag" id="axisTag"></span>
+      <span class="qa-top"><span class="qa-mini" aria-hidden="true">${sigil(AXES.map(()=>0),{cls:"sg-user",decorative:true})}</span><span class="axis-tag" id="axisTag"></span></span>
       <span class="lv-chip">${esc(lv.name)}</span>
       <a class="link-btn" href="#/">Sair <span class="sr">do teste (seu progresso fica salvo)</span></a>
     </div>
@@ -425,13 +438,13 @@ function renderQuiz(arg){
   const btns=[...app.querySelectorAll(".choice")];
   const anim=document.getElementById("qAnim");
   // Live sigil: the position on each axis from the statements answered so far (unanswered axes sit in the middle).
-  const qaPath=app.querySelector("#qaSigil .sg-user"),qaDots=[...app.querySelectorAll("#qaSigil .sg-dot")];
+  const qaMini=app.querySelector(".qa-mini .sg-user"),qaPath=app.querySelector("#qaSigil .sg-user"),qaDots=[...app.querySelectorAll("#qaSigil .sg-dot")];
   const qaLbls=[...app.querySelectorAll("#qaSigil .sg-lbl")],qaSpokes=[...app.querySelectorAll("#qaSigil .sg-spoke")];
   function paintAside(ax){
     const sum=AXES.map(()=>0),n=AXES.map(()=>0);
     answers.forEach((a,i)=>{if(a===null)return;const q=QS[i];sum[q[1]]+=SCALE[a].value*q[2];n[q[1]]++});
     const v=sum.map((x,i)=>n[i]?x/(2*n[i]):0);
-    qaPath.setAttribute("d",path(v));
+    qaPath.setAttribute("d",path(v));qaMini.setAttribute("d",path(v));
     pts(v).forEach(([x,y],i)=>{qaDots[i].setAttribute("cx",x.toFixed(1));qaDots[i].setAttribute("cy",y.toFixed(1))});
     qaLbls.forEach((t,i)=>t.classList.toggle("on",i===ax));qaSpokes.forEach((t,i)=>t.classList.toggle("on",i===ax));
     const done=answers.filter(a=>a!==null).length;
@@ -609,6 +622,7 @@ function renderResult(code,mode){
     wireInvite(r);
   }
   wireTips(app,{user:userV,r,p});
+  wireTimeline();
   wireAudit(r);
 }
 
@@ -795,7 +809,7 @@ function duo(p,{user=null,title="",thinkerFirst=false}={}){
   const mainName=user&&!thinkerFirst?"Você":p.n,otherName=thinkerFirst?"Você":p.n;
   return `<div class="duo">
     ${portrait(p,{eager:true})}
-    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||`Perfil de ${p.n}`})}</div>
+    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||`Perfil de ${p.n}`})}<span class="badge-hint" aria-hidden="true"><span class="on-hover">Passe o mouse nos eixos</span><span class="on-touch">Toque nos eixos</span></span></div>
     ${user?`<div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(mainName)}</span><span><i class="dash"></i>${esc(otherName)}</span></div>`:""}
     ${credit(p)}
   </div>`;
@@ -899,7 +913,7 @@ function timelineHTML(r){
   return `<div class="panel tl-panel">
     <h2>Sua linhagem no tempo</h2>
     <p class="sub">Os ${PH.length} pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.</p>
-    <div class="tl-scroll"><div class="tl" style="--rows:${rows.length}">
+    <div class="tl-scroll" tabindex="0" aria-label="Linha do tempo, role para os lados"><div class="tl" style="--rows:${rows.length}">
       <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}${l.x<9?" edge-l":l.x>91?" edge-r":""}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">Você está aqui</span>`:""}</a>`).join("")}</div>
       <div class="tl-line"></div>
       <div class="tl-dots">${dots.map(d=>`<a class="tl-dot" href="#/p/${d.p.id}" style="left:${d.x}%;--row:${d.row}" title="${esc(d.p.n)} (${esc(lifeText(d.p))})" aria-label="${esc(d.p.n)}, ${esc(lifeText(d.p))}"></a>`).join("")}</div>
@@ -1349,4 +1363,22 @@ addEventListener("scroll",()=>bar.classList.toggle("scrolled",scrollY>8),{passiv
 addEventListener("mousedown",()=>document.body.classList.remove("kbd-mode"));
 
 route();
+
+// Timeline dots on touch screens: there is no hover to show a name, so the first tap opens a card
+// with who it is and a link; the link (or a second tap on the same dot) opens the thinker.
+function wireTimeline(){
+  // On narrow screens the timeline scrolls sideways: start it centred on the match, not on Ancient Greece.
+  const sc=app.querySelector(".tl-scroll"),me=sc&&sc.querySelector(".tl-label.top");
+  if(sc&&me&&sc.scrollWidth>sc.clientWidth){const b=me.getBoundingClientRect(),c=sc.getBoundingClientRect();sc.scrollLeft+=b.left+b.width/2-(c.left+c.width/2);sc.classList.add("swipe")}
+  if(!matchMedia("(hover:none)").matches)return;
+  const tip=document.getElementById("tip");let armed=null;
+  app.querySelectorAll(".tl-dot").forEach(d=>d.addEventListener("click",e=>{
+    if(armed===d)return;
+    e.preventDefault();armed=d;
+    const p=byId[d.getAttribute("href").split("/").pop()];if(!p)return;
+    tip.innerHTML=`<button class="tip-x" type="button" aria-label="Fechar">×</button><b class="tip-t">${esc(p.n)}</b><span class="tip-poles">${esc(p.s)} · ${esc(p.era)}</span><span>${esc(lifeText(p))}${p.place?` · ${esc(p.place)}`:""}</span><a class="btn accent sm tip-go" href="#/p/${p.id}">Conhecer ${esc(p.n)} ${icon.arrow}</a>`;
+    tip.style.left=tip.style.top="";tip.classList.add("show","sheet");
+  }));
+  tip.ontransitionend=()=>{if(!tip.classList.contains("show"))armed=null};
+}
 })();
