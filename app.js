@@ -6,6 +6,8 @@ const app=document.getElementById("app");
 const reduceMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const TOUCH=matchMedia("(hover:none)").matches;
 const BR=AgoraData.BR||[];
+const SUP=window.AgoraSupport||{SUPPORT:{},READING:{},bookURL:()=>"#"};
+const HAS_PIX=!!(SUP.SUPPORT.pixKey||"").trim();
 const byId=Object.fromEntries([...PH,...BR].map(p=>[p.id,p]));
 
 // The order statements are shown in comes from the engine, so the audit can report it.
@@ -150,6 +152,7 @@ function route(){
   else if(name==="pensadores")renderCatalog();
   else if(name==="p")renderThinker(parts[1]);
   else if(name==="metodo")renderMethod();
+  else if(name==="apoie")renderSupport();
   else if(name==="verificar")renderVerify(parts[1]);
   else if(name==="vs")renderInvite(parts[1],parts[2]);
   else if(name==="comparar")renderCompare(parts[1],parts[2],parts[3],parts[4]);
@@ -599,8 +602,8 @@ function renderResult(code,mode){
       </div>`:""}
       <div class="panel">
         <h2>Comece por aqui</h2>
-        <p class="sub">Uma porta de entrada para ler ${esc(p.n)}.</p>
-        <div class="book" style="margin-top:6px"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span><span class="t">${esc(p.b)}</span><span class="muted" style="display:block;margin-top:6px">de ${esc(p.n)}</span></span></div>
+        <p class="sub">Três portas de entrada para ler ${esc(p.n)}.</p>
+        ${readingHTML(p)}
       </div>
     </div>
 
@@ -807,6 +810,12 @@ function brazilHTML(r,title="No Brasil, quem pensa como você"){
 }
 // For a thinker's page: the closest Brazilians to an international thinker, or the
 // international kin of a Brazilian one.
+// Three books per thinker: the starter book from the catalog plus two from support.js, each an Amazon search.
+function readingHTML(p){
+  const books=[p.b,...(SUP.READING[p.id]||[])];
+  const note=[SUP.SUPPORT.amazonTag?"Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você.":"",HAS_PIX?'Prefere ajudar direto? <a href="#/apoie">Faça um Pix</a>.':""].filter(Boolean).join(" ");
+  return `<ol class="reads">${books.map((t,i)=>`<li><a href="${esc(SUP.bookURL(t,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span><span class="t">${esc(t)}</span><span class="muted">${i?"":"Comece por este · "}Ver na Amazon</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`).join("")}</ol>${note?`<p class="aff-note">${note}</p>`:""}`;
+}
 function kinHTML(p){
   if(p.era==="Brasil"){
     const kin=(p.akin||[]).map(id=>byId[id]).filter(Boolean);
@@ -1091,7 +1100,7 @@ function renderThinker(id){
       <div style="display:grid;gap:20px;align-content:start">
         ${aboutHTML(p,{title:"Quem foi"})}
         ${kinHTML(p)}
-        <div class="panel"><h2>Para ler</h2><div class="book" style="margin-top:16px"><span class="cover" aria-hidden="true">${esc(p.n)}</span><span class="t">${esc(p.b)}</span></div></div>
+        <div class="panel"><h2>Para ler</h2><p class="sub">Comece pelo primeiro.</p>${readingHTML(p)}</div>
         <div class="panel"><h2>Parentes próximos</h2><p class="sub">Pensadores com o formato mais parecido.</p>
           <ul class="match-list">${twins.map(({x})=>`<li><a href="#/p/${x.id}">${portrait(x,{cls:"avatar"})}<span><span class="nm">${esc(x.n)}</span><span class="sc">${esc(x.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul></div>
       </div>
@@ -1255,6 +1264,44 @@ function renderNotFound(msg="Esta página não existe."){
   mount(`<section class="wrap section"><span class="eyebrow">Ops</span><h1 class="h2">${esc(msg)}</h1><div class="cta-row" style="margin-top:32px"><a class="btn accent" href="#/">Ir para o início ${icon.arrow}</a></div></section>`,"Não encontrado");
 }
 
+/* ---------- Support ---------- */
+// Pix donations: QR code and "copia e cola" built from SUPPORT in support.js. The QR library loads only here.
+function renderSupport(){
+  if(!HAS_PIX)return renderNotFound("A página de apoio ainda não está ativa.");
+  const code=SUP.pixPayload();
+  mount(`
+  <section class="wrap section support" style="padding-top:clamp(32px,6vh,64px)">
+    <span class="eyebrow">Apoie</span>
+    <h1 class="h2" style="font-size:clamp(48px,7.5vw,104px)">Mantenha o <em class="it accent">Filosofômetro</em> no ar</h1>
+    <p class="lede">O teste é gratuito, sem anúncios e sem cadastro. Se ele te fez pensar, qualquer valor ajuda a pagar a hospedagem e a trazer novos pensadores.</p>
+    <div class="grid2" style="margin-top:32px">
+      <div class="panel pix">
+        <h2>Pix</h2><p class="sub">Aponte a câmera do app do banco, ou copie o código.</p>
+        <div class="pix-qr" id="pixQr" role="img" aria-label="QR Code do Pix"></div>
+        <div class="cta-row"><button class="btn accent" type="button" id="pixCopy">Copiar Pix copia e cola</button></div>
+        <p class="muted pix-key">Chave: <span class="mono">${esc(SUP.SUPPORT.pixKey)}</span>${SUP.SUPPORT.pixName?` · ${esc(SUP.SUPPORT.pixName)}`:""}</p>
+      </div>
+      <div class="panel">
+        <h2>Outra forma de ajudar</h2>
+        <p class="sub">Cada pensador tem três livros indicados.${SUP.SUPPORT.amazonTag?" Comprando por esses links, a Amazon repassa uma pequena comissão, sem custo a mais para você.":""}</p>
+        <div class="cta-row"><a class="btn ghost" href="#/pensadores">Ver os pensadores ${icon.arrow}</a></div>
+      </div>
+    </div>
+  </section>`,"Apoie");
+  document.getElementById("pixCopy").onclick=async()=>{
+    try{await navigator.clipboard.writeText(code);toast("Código Pix copiado. Cole no app do banco.",3200)}catch(e){prompt("Copie o código Pix:",code)}
+  };
+  const draw=()=>{
+    const host=document.getElementById("pixQr");if(!host||!window.qrcode)return;
+    const qr=qrcode(0,"M");qr.addData(code);qr.make();
+    const n=qr.getModuleCount();let d="";
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(qr.isDark(r,c))d+=`M${c+4} ${r+4}h1v1h-1z`;
+    host.innerHTML=`<svg viewBox="0 0 ${n+8} ${n+8}" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#111"/></svg>`;
+  };
+  if(window.qrcode)draw();
+  else{const s=document.createElement("script");s.src="vendor/qrcode.js";s.onload=draw;document.head.appendChild(s)}
+}
+
 /* ---------- Share ---------- */
 function toast(t,ms=2200){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),ms)}
 async function copyLink(){
@@ -1398,6 +1445,9 @@ function wireTimeline(){
   }));
   tip.ontransitionend=()=>{if(!tip.classList.contains("show"))armed=null};
 }
+
+// Footer link to the Pix page, only once a key is set in support.js.
+if(HAS_PIX)document.getElementById("supportLink")?.classList.remove("hidden");
 
 /* ---------- Installable app ---------- */
 // Offline support on the published site only (a service worker on localhost would cache the files being edited).

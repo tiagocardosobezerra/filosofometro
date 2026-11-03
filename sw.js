@@ -2,8 +2,8 @@
 // Site files: network first, so a new version always wins when online; the cached copy is the offline fallback.
 // Portraits and fonts from other hosts: served from cache when present, refreshed in the background.
 // Link previews (/api, /s, /c) are never cached: they must always come from the server.
-const CACHE = "filosofometro-v1";
-const SHELL = ["/", "/index.html", "/styles.css", "/data.js", "/engine.js", "/verify.js", "/app.js", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/favicon-32.png"];
+const CACHE = "filosofometro-v2";
+const SHELL = ["/", "/index.html", "/styles.css", "/data.js", "/engine.js", "/verify.js", "/support.js", "/app.js", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/favicon-32.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

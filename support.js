@@ -1,0 +1,165 @@
+// Ways to support the project: Pix donations and reading lists with Amazon affiliate links.
+// Kept apart from data.js so the engine catalog (and its fingerprint) never changes because of it.
+// Fill SUPPORT with your own data. An empty pixKey hides the Pix page; an empty amazonTag keeps plain links.
+(function(root){
+const SUPPORT={
+  pixKey:"",      // chave Pix: e-mail, celular (+55...), CPF/CNPJ ou chave aleatória
+  pixName:"",     // nome de quem recebe, até 25 letras, sem acento
+  pixCity:"",     // cidade de quem recebe, até 15 letras, sem acento
+  amazonTag:"",   // ID de associado da Amazon, por exemplo "filosofometro-20"
+};
+
+// Two more works per thinker. Together with the book in data.js (field b) every thinker has three.
+const READING={
+  "pitagoras":["Os Filósofos Pré-Socráticos (Kirk, Raven e Schofield)","Vida de Pitágoras (Porfírio)"],
+  "parmenides":["Os Filósofos Pré-Socráticos (Kirk, Raven e Schofield)","Parmênides (Platão)"],
+  "heraclito":["Os Filósofos Pré-Socráticos (Kirk, Raven e Schofield)","Os Pré-Socráticos (Os Pensadores)"],
+  "democrito":["Os Filósofos Pré-Socráticos (Kirk, Raven e Schofield)","Os Pré-Socráticos (Os Pensadores)"],
+  "protagoras":["Teeteto (Platão)","Os Sofistas (W. K. C. Guthrie)"],
+  "socrates":["Fédon (Platão)","Memoráveis (Xenofonte)"],
+  "platao":["O Banquete","Fédon"],
+  "aristoteles":["Política","Metafísica"],
+  "diogenes":["Os Cínicos (Goulet-Cazé e Branham)","A Coragem da Verdade (Michel Foucault)"],
+  "aristipo":["Contra-História da Filosofia: As Sabedorias Antigas (Michel Onfray)","A Arte de Ter Prazer (Michel Onfray)"],
+  "pirro":["Contra os Professores (Sexto Empírico)","Vida Comum e Ceticismo (Oswaldo Porchat)"],
+  "epicuro":["Máximas Principais","Da Natureza das Coisas (Lucrécio)"],
+  "seneca":["Cartas a Lucílio","Sobre a Ira"],
+  "epicteto":["Diatribes","A Arte de Viver (Sharon Lebell)"],
+  "marco-aurelio":["A Cidadela Interior (Pierre Hadot)","Como Pensar como um Imperador Romano (Donald Robertson)"],
+  "plotino":["Plotino ou a Simplicidade do Olhar (Pierre Hadot)","O que é a Filosofia Antiga? (Pierre Hadot)"],
+  "santo-agostinho":["A Cidade de Deus","O Livre-Arbítrio"],
+  "averrois":["A Incoerência da Incoerência","Averróis e o Averroísmo (Ernest Renan)"],
+  "maimonides":["Os Oito Capítulos","Mishné Torá"],
+  "tomas-de-aquino":["Suma contra os Gentios","O Ente e a Essência"],
+  "guilherme-de-ockham":["Lógica dos Termos","Brevilóquio sobre o Principado Tirânico"],
+  "joao-calvino":["A Verdadeira Vida Cristã","Breve Instrução Cristã"],
+  "maquiavel":["Discursos sobre a Primeira Década de Tito Lívio","A Arte da Guerra"],
+  "montaigne":["Diário de Viagem","Como Viver: Uma Biografia de Montaigne (Sarah Bakewell)"],
+  "descartes":["Meditações Metafísicas","As Paixões da Alma"],
+  "pascal":["As Provinciais","Do Espírito Geométrico"],
+  "spinoza":["Tratado Teológico-Político","Tratado da Reforma do Entendimento"],
+  "leibniz":["Discurso de Metafísica","Ensaios de Teodiceia"],
+  "thomas-hobbes":["Do Cidadão","Behemoth"],
+  "john-locke":["Ensaio sobre o Entendimento Humano","Carta sobre a Tolerância"],
+  "george-berkeley":["Três Diálogos entre Hylas e Philonous","Ensaio para uma Nova Teoria da Visão"],
+  "david-hume":["Tratado da Natureza Humana","Diálogos sobre a Religião Natural"],
+  "voltaire":["Tratado sobre a Tolerância","Dicionário Filosófico"],
+  "rousseau":["Emílio, ou Da Educação","Discurso sobre a Origem da Desigualdade"],
+  "adam-smith":["Teoria dos Sentimentos Morais","Como Adam Smith Pode Mudar Sua Vida (Russ Roberts)"],
+  "edmund-burke":["Uma Investigação Filosófica sobre a Origem de Nossas Ideias do Sublime e do Belo","O Grande Debate (Yuval Levin)"],
+  "joseph-de-maistre":["As Noites de São Petersburgo","Ensaio sobre o Princípio Gerador das Constituições Políticas"],
+  "kant":["Crítica da Razão Pura","À Paz Perpétua"],
+  "mary-wollstonecraft":["Reivindicação dos Direitos dos Homens","Pensamentos sobre a Educação das Filhas"],
+  "jeremy-bentham":["O Panóptico","Um Fragmento sobre o Governo"],
+  "hegel":["Princípios da Filosofia do Direito","Filosofia da História"],
+  "schopenhauer":["O Mundo como Vontade e Representação","A Arte de Ter Razão"],
+  "auguste-comte":["Curso de Filosofia Positiva","Catecismo Positivista"],
+  "john-stuart-mill":["Utilitarismo","A Sujeição das Mulheres"],
+  "henry-david-thoreau":["A Desobediência Civil","Caminhando"],
+  "kierkegaard":["O Conceito de Angústia","Ou-Ou: Um Fragmento de Vida"],
+  "max-stirner":["O Falso Princípio da Nossa Educação","A Ideologia Alemã (Marx e Engels)"],
+  "proudhon":["Filosofia da Miséria","Do Princípio Federativo"],
+  "mikhail-bakunin":["Estatismo e Anarquia","O Princípio do Estado"],
+  "karl-marx":["O Capital","Manuscritos Econômico-Filosóficos"],
+  "nietzsche":["Além do Bem e do Mal","Genealogia da Moral"],
+  "william-james":["As Variedades da Experiência Religiosa","A Vontade de Crer"],
+  "g-k-chesterton":["O Homem Eterno","Hereges"],
+  "edmund-husserl":["Meditações Cartesianas","A Crise das Ciências Europeias e a Fenomenologia Transcendental"],
+  "bertrand-russell":["História da Filosofia Ocidental","Por que Não Sou Cristão"],
+  "wittgenstein":["Investigações Filosóficas","Da Certeza"],
+  "antonio-gramsci":["Cartas do Cárcere","Os Intelectuais e a Organização da Cultura"],
+  "heidegger":["Introdução à Metafísica","A Questão da Técnica"],
+  "jean-paul-sartre":["O Ser e o Nada","A Náusea"],
+  "simone-de-beauvoir":["Por uma Moral da Ambiguidade","Memórias de uma Moça Bem-Comportada"],
+  "albert-camus":["O Estrangeiro","O Homem Revoltado"],
+  "simone-weil":["O Enraizamento","A Condição Operária"],
+  "hannah-arendt":["A Condição Humana","Origens do Totalitarismo"],
+  "theodor-adorno":["Dialética do Esclarecimento","Educação e Emancipação"],
+  "karl-popper":["A Lógica da Pesquisa Científica","Conjecturas e Refutações"],
+  "friedrich-hayek":["Os Fundamentos da Liberdade","A Arrogância Fatal"],
+  "ayn-rand":["A Revolta de Atlas","A Nascente"],
+  "hans-georg-gadamer":["O Problema da Consciência Histórica","Elogio da Teoria"],
+  "claude-levi-strauss":["O Pensamento Selvagem","Antropologia Estrutural"],
+  "frantz-fanon":["Pele Negra, Máscaras Brancas","Em Defesa da Revolução Africana"],
+  "michel-foucault":["História da Loucura","História da Sexualidade 1: A Vontade de Saber"],
+  "jacques-derrida":["A Escritura e a Diferença","Espectros de Marx"],
+  "gilles-deleuze":["O Anti-Édipo","Diferença e Repetição"],
+  "john-rawls":["O Liberalismo Político","Justiça como Equidade: Uma Reformulação"],
+  "robert-nozick":["A Vida Examinada","A Natureza da Racionalidade"],
+  "murray-rothbard":["Anatomia do Estado","Por uma Nova Liberdade"],
+  "roger-scruton":["Tolos, Fraudes e Militantes","Beleza"],
+  "michel-onfray":["Tratado de Ateologia","A Escultura de Si"],
+  "alasdair-macintyre":["Justiça de Quem? Qual Racionalidade?","Animais Racionais Dependentes"],
+  "jurgen-habermas":["Mudança Estrutural da Esfera Pública","Conhecimento e Interesse"],
+  "arne-naess":["The Ecology of Wisdom (em inglês)","Ecologia Profunda (Bill Devall e George Sessions)"],
+  "paulo-freire":["Pedagogia da Autonomia","Pedagogia da Esperança"],
+  "mario-ferreira-dos-santos":["Invasão Vertical dos Bárbaros","Filosofia e Cosmovisão"],
+  "marilena-chaui":["O que é Ideologia","Cultura e Democracia"],
+  "peter-singer":["Libertação Animal","Quanto Custa Salvar uma Vida?"],
+  "judith-butler":["Corpos que Importam","Quadros de Guerra"],
+  "slavoj-zizek":["Bem-Vindo ao Deserto do Real!","Vivendo no Fim dos Tempos"],
+  "byung-chul-han":["Sociedade da Transparência","No Enxame"],
+  "buda":["Sutta Nipata","O que o Buda Ensinou (Walpola Rahula)"],
+  "dogen":["Instruções a um Cozinheiro Zen","Mente Zen, Mente de Principiante (Shunryu Suzuki)"],
+  "confucio":["O Grande Aprendizado","A Doutrina do Meio"],
+  "lao-tse":["Zhuangzi","Liezi"],
+  "shankara":["Vivekachudamani: A Joia Suprema do Discernimento","Comentário aos Brahma Sutras"],
+  "lucrecio":["A Virada: o Nascimento do Mundo Moderno (Stephen Greenblatt)","Carta sobre a Felicidade (Epicuro)"],
+  "yang-zhu":["Mêncio","Zhuangzi"],
+  "la-mettrie":["Discurso sobre a Felicidade","O Homem-Planta"],
+  "charles-fourier":["O Novo Mundo Amoroso","Do Socialismo Utópico ao Socialismo Científico (Engels)"],
+  "oscar-wilde":["O Retrato de Dorian Gray","Intenções"],
+  "herbert-marcuse":["O Homem Unidimensional","Razão e Revolução"],
+  "michael-oakeshott":["Sobre a História e Outros Ensaios","A Política da Fé e a Política do Ceticismo"],
+  "russell-kirk":["A Política da Prudência","Edmund Burke: Redescobrindo um Gênio"],
+  "henry-sidgwick":["Outlines of the History of Ethics (em inglês)","The Elements of Politics (em inglês)"],
+  "william-godwin":["Caleb Williams","The Enquirer (em inglês)"],
+  "gottlob-frege":["Lógica e Filosofia da Linguagem","Investigações Lógicas"],
+  "oswaldo-porchat":["Vida comum e ceticismo","Ciência e dialética em Aristóteles"],
+  "ailton-krenak":["A vida não é útil","Futuro ancestral"],
+  "lelia-gonzalez":["Primavera para as rosas negras","Lugar de negro (com Carlos Hasenbalg)"],
+  "vilem-flusser":["O mundo codificado","Língua e realidade"],
+  "monja-coen":["Nem anjos nem demônios","Aprenda a viver o agora"],
+  "leonardo-boff":["Saber cuidar","A águia e a galinha"],
+  "antonio-vieira":["História do futuro","Cartas"],
+  "tobias-barreto":["Estudos de direito","Menores e loucos"],
+  "farias-brito":["A base física do espírito","Finalidade do mundo"],
+  "miguel-reale":["Lições preliminares de direito","Filosofia do direito"],
+  "gilberto-freyre":["Sobrados e mucambos","Ordem e progresso"],
+  "viveiros-de-castro":["Metafísicas canibais","Há mundo por vir? (com Déborah Danowski)"],
+  "oswald-de-andrade":["Manifesto antropófago e outros textos","Serafim Ponte Grande"],
+  "carlos-nelson-coutinho":["Gramsci: um estudo sobre seu pensamento político","Cultura e sociedade no Brasil"],
+  "roberto-schwarz":["Um mestre na periferia do capitalismo","Que horas são?"],
+  "jose-guilherme-merquior":["O argumento liberal","Rousseau e Weber"],
+  "newton-da-costa":["Sistemas formais inconsistentes","Lógica indutiva e probabilidade"],
+  "anisio-teixeira":["Pequena introdução à filosofia da educação","Educação para a democracia"],
+  "benedito-nunes":["O dorso do tigre","Introdução à filosofia da arte"],
+  "lima-vaz":["Escritos de filosofia I: problemas de fronteira","Escritos de filosofia II: ética e cultura"],
+  "gustavo-corcao":["Lições de abismo","O desconcerto do mundo"],
+  "abdias-do-nascimento":["O genocídio do negro brasileiro","Sortilégio"],
+  "nise-da-silveira":["O mundo das imagens","Cartas a Spinoza"],
+  "jose-oiticica":["Ação direta","Sonetos"],
+};
+
+// Amazon search link for a title. Parenthesis notes like "(Platão)" become part of the search,
+// and the thinker's name is added when the title does not name another author.
+function bookURL(title,author){
+  const q=/\(/.test(title)?title.replace(/[()]/g,""):`${title} ${author}`;
+  const tag=SUPPORT.amazonTag?`&tag=${encodeURIComponent(SUPPORT.amazonTag)}`:"";
+  return `https://www.amazon.com.br/s?k=${encodeURIComponent(q)}&i=stripbooks${tag}`;
+}
+
+// Pix "copia e cola" code (BR Code, EMV format) for a static key without a fixed amount.
+function pixPayload({pixKey,pixName,pixCity}=SUPPORT){
+  const clean=(s,n)=>s.normalize("NFD").replace(/[^A-Za-z0-9 ]/g,"").toUpperCase().slice(0,n);
+  const f=(id,v)=>id+String(v.length).padStart(2,"0")+v;
+  const body=f("00","01")+f("26",f("00","br.gov.bcb.pix")+f("01",pixKey.trim()))+f("52","0000")+f("53","986")+f("58","BR")+
+    f("59",clean(pixName,25))+f("60",clean(pixCity,15))+f("62",f("05","***"))+"6304";
+  let crc=0xFFFF;
+  for(const ch of body){crc^=ch.charCodeAt(0)<<8;for(let i=0;i<8;i++)crc=crc&0x8000?((crc<<1)^0x1021)&0xFFFF:(crc<<1)&0xFFFF}
+  return body+crc.toString(16).toUpperCase().padStart(4,"0");
+}
+
+const API={SUPPORT,READING,bookURL,pixPayload};
+if(typeof module!=="undefined")module.exports=API;else root.AgoraSupport=API;
+})(this);

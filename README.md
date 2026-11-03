@@ -13,6 +13,8 @@ Teste filosófico em três níveis (44, 88 ou 132 afirmações), 11 eixos e 104 
 | `data.js` | Catálogo: eixos, afirmações e posições dos pensadores. Só dados |
 | `engine.js` | Motor de cálculo. Funções puras, sem DOM, com trilha de auditoria |
 | `verify.js` | Segunda implementação do método, sem código em comum com o motor. Usada pela página `#/verificar` e pelos testes |
+| `support.js` | Apoio: chave Pix, ID de associado da Amazon e mais dois livros por pensador. Fora do catálogo, não muda a impressão digital |
+| `vendor/qrcode.js` | Gerador de QR Code (Kazuhiko Arase, MIT), carregado só na página de apoio |
 | `app.js` | Interface e rotas. Não calcula nada: só mostra o que o motor devolve |
 | `tests/engine-test.js` | Bateria de testes do motor e do catálogo |
 
@@ -56,6 +58,13 @@ O app roteia pelo hash (`#/vs/...`), que nunca chega ao servidor. Por isso os li
 ## App instalável
 
 `manifest.webmanifest` e `sw.js` tornam o site instalável ("Instalar o app" no rodapé, ou Adicionar à Tela de Início no iPhone) e utilizável offline depois da primeira visita. O service worker busca os arquivos do site sempre na rede primeiro, então uma nova versão aparece assim que publicada; retratos e fontes ficam em cache. Ele só é registrado no site publicado, nunca em `localhost`. Os ícones de `icons/` saem de `node tests/make-icons.js`.
+
+## Apoio
+
+Preencha `SUPPORT` no topo de `support.js`:
+
+- `pixKey`, `pixName` e `pixCity` ativam a página `#/apoie` (QR Code e Pix copia e cola, montados no próprio navegador) e o link "Apoie o projeto" no rodapé. Com `pixKey` vazio, nada disso aparece.
+- `amazonTag` é o ID de associado da Amazon. Cada pensador mostra três livros, e cada um leva a uma busca na Amazon Brasil com esse ID. Com o ID preenchido, aparece o aviso de associado exigido pela Amazon.
 
 ## Publicar na Vercel
 

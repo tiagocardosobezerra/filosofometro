@@ -459,5 +459,17 @@ section("Prévias de link (api/)");
   ok(cmp.title.includes(`${E.comparePeople(E.decode(code), E.decode(other)).pct}%`) && cmp.hash === `#/comparar/${code}/${other}/Ana/Bia`, "comparison preview uses the engine's compatibility and points to the comparison");
 }
 
+section("Apoio (support.js)");
+{
+  const S = require(path.join(ROOT, "support.js"));
+  const people = [...PH, ...(DATA.BR || [])];
+  ok(people.every(p => p.b && (S.READING[p.id] || []).length === 2 && new Set([p.b, ...S.READING[p.id]]).size === 3), "every thinker has three different books");
+  ok(Object.keys(S.READING).every(id => people.some(p => p.id === id)), "reading list has no unknown thinker ids");
+  ok(S.bookURL("Fédon (Platão)", "Sócrates").startsWith("https://www.amazon.com.br/s?k=F%C3%A9don%20Plat%C3%A3o"), "book links search Amazon Brasil by title and author");
+  const pix = S.pixPayload({ pixKey: "teste@exemplo.com", pixName: "Tiago Cardoso", pixCity: "São Paulo" });
+  ok(pix === "00020126390014br.gov.bcb.pix0117teste@exemplo.com5204000053039865802BR5913TIAGO CARDOSO6009SAO PAULO62070503***630406BD", "Pix copia e cola follows the BR Code format with a valid CRC");
+  ok(!/[–—]/.test(Object.values(S.READING).flat().join(" ")), "book titles have no long dashes");
+}
+
 console.log(`\n${passes} passed, ${fails} failed`);
 process.exit(fails ? 1 : 0);
