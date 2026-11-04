@@ -7,9 +7,10 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const DATA = require(path.join(ROOT, "data.js"));
 const S = require(path.join(ROOT, "support.js"));
+const ALT = require(path.join(__dirname, "cover-titles.js"));
 
 // Wrong matches found on review: studies or replies about the book instead of the book itself.
-const OVERRIDE = { "kant/0": 0, "proudhon/1": 0, "heidegger/0": 0, "jean-paul-sartre/2": 0, "john-stuart-mill/1": 0, "yang-zhu/2": 0, "byung-chul-han/0": 0, "epicteto/0": 0 };
+const OVERRIDE = { "kant/0": 0, "proudhon/1": 0, "heidegger/0": 0, "jean-paul-sartre/2": 0, "john-stuart-mill/1": 0, "yang-zhu/2": 0, "byung-chul-han/0": 0, "epicteto/0": 0, "parmenides/2": 0, "david-hume/0": 0, "jean-paul-sartre/1": 0, "karl-popper/1": 0, "gilles-deleuze/1": 0, "antonio-vieira/0": 0, "pascal/2": 0, "jurgen-habermas/1": 0, "herbert-marcuse/1": 0, "proudhon/2": 0, "dogen/1": 0 };
 
 const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
 const STOP = new Set(["a", "o", "as", "os", "de", "da", "do", "das", "dos", "e", "em", "the", "of", "and", "sobre", "um", "uma", "para", "por", "com"]);
@@ -64,7 +65,16 @@ async function cover(title, author) {
     out[p.id] = [];
     for (const [i, b] of books.entries()) {
       const key = `${p.id}/${i}`;
-      const r = key in OVERRIDE ? { id: OVERRIDE[key], got: "manual" } : !all && old[p.id] && old[p.id][i] ? { id: old[p.id][i], got: "já encontrada", author: true } : await cover(b, p.n);
+      const alt = ALT[key], had = old[p.id] && old[p.id][i];
+      let r;
+      // A manual 0 marks a wrong match for the Portuguese title; the original title may still find the right book.
+      if (key in OVERRIDE && (OVERRIDE[key] || !alt)) r = { id: OVERRIDE[key], got: "manual" };
+      else if (!all && had) r = { id: had, got: "já encontrada", author: true };
+      else {
+        // The Portuguese title was already searched in an earlier run unless --all; then try the original title.
+        r = all || !old[p.id] ? await cover(b, p.n) : { id: 0, got: "" };
+        if (!r.id && alt) { r = await cover(...alt.split("|")); if (r.id) r.got += " (título original)"; }
+      }
       out[p.id].push(r.id);
       rows.push(`| ${key} | ${b} | ${r.id || "**sem capa**"} | ${r.got}${r.id && !r.author && r.got !== "manual" ? " (autor não confere)" : ""} |`);
       process.stdout.write(r.id ? "." : "x");
