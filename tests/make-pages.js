@@ -269,13 +269,13 @@ const APP_PAGE = {
     ogDesc: "44 to 132 statements, 11 axes, 128 thinkers. Your philosophical match, your tradition and your opposite.",
     skip: "Skip to content", home: "Filosofômetro, home", nav: "Main", thinkers: "Thinkers", method: "Method", take: "Take the test", takeSm: "Test",
     theme: "Toggle light and dark theme", lang: "Language: English", credit: "Made by", tail: "free test, auditable engine", how: "How we calculate", all: "All thinkers",
-    install: "Install the app", noscript: "Filosofômetro needs JavaScript to work.", support: "Support the project" },
+    install: "Install the app", app: "Free philosophy test: 11 axes, 128 thinkers and an auditable engine.", noscript: "Filosofômetro needs JavaScript to work.", support: "Support the project" },
   es: { title: "Filosofômetro: ¿qué filósofo piensa como tú?",
     desc: "Test filosófico gratuito: de 44 a 132 afirmaciones, 11 ejes, 128 pensadores. Descubre tu par filosófico, tu corriente y tu opuesto, con todo el cálculo abierto para auditoría.",
     ogDesc: "De 44 a 132 afirmaciones, 11 ejes, 128 pensadores. Tu par filosófico, tu corriente y tu opuesto.",
     skip: "Saltar al contenido", home: "Filosofômetro, inicio", nav: "Principal", thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test",
     theme: "Cambiar entre tema claro y oscuro", lang: "Idioma: español", credit: "Creado por", tail: "test gratuito, motor auditable", how: "Cómo calculamos", all: "Todos los pensadores",
-    install: "Instalar la app", noscript: "Filosofômetro necesita JavaScript para funcionar.", support: "Apoya el proyecto" },
+    install: "Instalar la app", app: "Test filosófico gratuito: 11 ejes, 128 pensadores y un motor auditable.", noscript: "Filosofômetro necesita JavaScript para funcionar.", support: "Apoya el proyecto" },
 };
 function appPage(lang) {
   const A = APP_PAGE[lang], T = LANGS[lang];
@@ -305,8 +305,13 @@ function appPage(lang) {
   swap(">O Filosofômetro precisa de JavaScript para funcionar.<", `>${A.noscript}<`);
   swap('<meta name="apple-mobile-web-app-title" content="Filosofômetro">', '<meta name="apple-mobile-web-app-title" content="Filosofômetro">');
   swap("<!--lang-pack-->", `<script src="/i18n/${lang}.js"></script>`);
+  swap('<link rel="manifest" href="/manifest.webmanifest">', `<link rel="manifest" href="/${lang}/manifest.webmanifest">`);
   fs.mkdirSync(path.join(ROOT, lang), { recursive: true });
   fs.writeFileSync(path.join(ROOT, lang, "index.html"), s);
+  // The installable app in this language: same icons and colors, its own name and start page.
+  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "manifest.webmanifest"), "utf8"));
+  Object.assign(manifest, { id: `/${lang}/`, name: A.title, description: A.app, lang: T.html, start_url: `/${lang}/?source=app`, scope: `/${lang}/` });
+  fs.writeFileSync(path.join(ROOT, lang, "manifest.webmanifest"), JSON.stringify(manifest, null, 2) + "\n");
 }
 
 const urls = [`${SITE}/`, `${SITE}/en/`, `${SITE}/es/`];

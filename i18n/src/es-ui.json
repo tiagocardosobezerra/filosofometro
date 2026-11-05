@@ -114,7 +114,6 @@
  "No Brasil, quem pensa como você": "En Iberoamérica, quién piensa como tú",
  "Seu oposto": "Tu opuesto",
  "você": "tú",
- "Suas respostas se equilibraram e seu perfil ficou sem direção. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador cujas posições ficam mais perto das suas.": "Tus respuestas se equilibraron y tu perfil quedó sin dirección. Sin dirección no se puede medir la compatibilidad, así que no mostramos porcentajes ni opuesto. Este es el pensador cuyas posiciones quedan más cerca de las tuyas.",
  "Este é o resultado de outra pessoa.": "Este es el resultado de otra persona.",
  "Fazer o teste e comparar": "Hacer el test y comparar",
  "{0}% de compatibilidade com ": "{0}% de compatibilidad con ",
@@ -446,5 +445,19 @@
  "Posição nos 11 eixos": "Posición en los 11 ejes",
  "Normalização do seu perfil": "Normalización de tu perfil",
  "Ranking: ordem, distâncias, desempates e percentuais": "Ranking: orden, distancias, desempates y porcentajes",
- "Ranking brasileiro": "Ranking iberoamericano"
+ "Ranking brasileiro": "Ranking iberoamericano",
+ "Código Pix copiado. Cole no app do banco.": "Código Pix copiado. Pégalo en la app de tu banco.",
+ "Seu par e seus eixos mais fortes em poucos minutos. Dá para aprofundar depois.": "Tu par y tus ejes más fuertes en pocos minutos. Puedes profundizar después.",
+ "Suas respostas ficaram no meio, sem puxar para um lado. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador mais perto de você. Aprofundar o teste mostra para onde você pende.": "Tus respuestas quedaron en el medio, sin inclinarse a un lado. Sin dirección no se puede medir la compatibilidad, así que no mostramos porcentajes ni opuesto. Este es el pensador más cercano a ti. Profundizar el test muestra hacia dónde te inclinas.",
+ "Aprofundar para desempatar": "Profundizar para desempatar",
+ "Escolher o nível": "Elegir el nivel",
+ "MEU PAR MAIS PRÓXIMO": "MI PAR MÁS CERCANO",
+ "Gerando imagem…": "Generando imagen…",
+ "Imagem do story": "Imagen para historia",
+ "Poste no story e cole o link do convite no adesivo de link.": "Publícala en tu historia y pega el enlace de la invitación en un sticker de enlace.",
+ "Baixar imagem": "Descargar imagen",
+ "Copiar imagem": "Copiar imagen",
+ "Copiar link do convite": "Copiar enlace de la invitación",
+ "Imagem copiada": "Imagen copiada",
+ "Não foi possível copiar a imagem": "No se pudo copiar la imagen"
 }

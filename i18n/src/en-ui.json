@@ -114,7 +114,6 @@
  "No Brasil, quem pensa como você": "In the English-speaking world, who thinks like you",
  "Seu oposto": "Your opposite",
  "você": "you",
- "Suas respostas se equilibraram e seu perfil ficou sem direção. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador cujas posições ficam mais perto das suas.": "Your answers balanced out and your profile ended up with no direction. Without direction we can't measure compatibility, so we don't show percentages or an opposite. This is the thinker whose positions are closest to yours.",
  "Este é o resultado de outra pessoa.": "This is someone else's result.",
  "Fazer o teste e comparar": "Take the quiz and compare",
  "{0}% de compatibilidade com ": "{0}% compatibility with ",
@@ -446,5 +445,19 @@
  "Posição nos 11 eixos": "Position on the 11 axes",
  "Normalização do seu perfil": "Normalization of your profile",
  "Ranking: ordem, distâncias, desempates e percentuais": "Ranking: order, distances, tiebreaks and percentages",
- "Ranking brasileiro": "English-speaking ranking"
+ "Ranking brasileiro": "English-speaking ranking",
+ "Código Pix copiado. Cole no app do banco.": "Pix code copied. Paste it in your bank app.",
+ "Seu par e seus eixos mais fortes em poucos minutos. Dá para aprofundar depois.": "Your match and your strongest axes in a few minutes. You can go deeper later.",
+ "Suas respostas ficaram no meio, sem puxar para um lado. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador mais perto de você. Aprofundar o teste mostra para onde você pende.": "Your answers stayed in the middle, without leaning to one side. Without a direction we cannot measure compatibility, so we show no percentages or opposite. This is the thinker closest to you. Going deeper shows where you lean.",
+ "Aprofundar para desempatar": "Go deeper to break the tie",
+ "Escolher o nível": "Choose the level",
+ "MEU PAR MAIS PRÓXIMO": "MY CLOSEST MATCH",
+ "Gerando imagem…": "Making the image…",
+ "Imagem do story": "Story image",
+ "Poste no story e cole o link do convite no adesivo de link.": "Post it to your story and paste the invite link in a link sticker.",
+ "Baixar imagem": "Download image",
+ "Copiar imagem": "Copy image",
+ "Copiar link do convite": "Copy invite link",
+ "Imagem copiada": "Image copied",
+ "Não foi possível copiar a imagem": "Could not copy the image"
 }

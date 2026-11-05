@@ -1,0 +1,35 @@
+{
+  "name": "Filosofômetro: ¿qué filósofo piensa como tú?",
+  "short_name": "Filosofômetro",
+  "description": "Test filosófico gratuito: 11 ejes, 128 pensadores y un motor auditable.",
+  "lang": "es",
+  "start_url": "/es/?source=app",
+  "scope": "/es/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0F0E0C",
+  "theme_color": "#0F0E0C",
+  "categories": [
+    "education",
+    "entertainment"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "/es/"
+}

@@ -68,7 +68,8 @@ function verifyLabels() {
   return [...new Set([...src.matchAll(/add\([^,]+,"([^"]+)"/g)].map(m => m[1]))];
 }
 
-const { keys, loose } = scan(fs.readFileSync(path.join(ROOT, "app.js"), "utf8"));
+// Template literals normalize CRLF to LF, so a file saved with Windows line endings gives the same keys.
+const { keys, loose } = scan(fs.readFileSync(path.join(ROOT, "app.js"), "utf8").replace(/\r\n/g, "\n"));
 const all = [...new Set([...keys, ...engineKeys(), ...verifyLabels()])];
 if (process.argv.includes("--json")) { console.log(JSON.stringify(all, null, 1)); return; }
 console.log(`${keys.length} L\`\` keys in app.js, ${all.length} with engine and verifier strings`);

@@ -1,0 +1,35 @@
+{
+  "name": "Filosofômetro: which philosopher thinks like you?",
+  "short_name": "Filosofômetro",
+  "description": "Free philosophy test: 11 axes, 128 thinkers and an auditable engine.",
+  "lang": "en",
+  "start_url": "/en/?source=app",
+  "scope": "/en/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0F0E0C",
+  "theme_color": "#0F0E0C",
+  "categories": [
+    "education",
+    "entertainment"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "/en/"
+}
