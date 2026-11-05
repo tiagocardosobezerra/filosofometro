@@ -1315,7 +1315,7 @@ eps = ${P.eps}
 ${L`distância bruta = média de |sua posição − posição do pensador|, sem normalizar`}</div>
       <p>${L`O id é comparado pelos códigos dos caracteres, sem depender do idioma do navegador. Assim, as mesmas respostas dão sempre o mesmo ranking, em qualquer computador. A auditoria marca cada empate e mostra a distância bruta usada para desfazê-lo.`}</p>
       <h3>${L`Pensadores brasileiros`}</h3>
-      <p>${L`O resultado também mostra quem, no Brasil, pensa como você. São ${E.BRAZIL.length} pensadores brasileiros: um catálogo próprio de ${BR.length}, mais os ${PH.filter(p=>p.br).length} brasileiros do catálogo principal. Eles são comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos ${PH.length} pensadores.`}</p>
+      <p>${PH.some(p=>p.br)?L`O resultado também mostra quem, no Brasil, pensa como você. São ${E.BRAZIL.length} pensadores brasileiros: um catálogo próprio de ${BR.length}, mais os ${PH.filter(p=>p.br).length} brasileiros do catálogo principal. Eles são comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos ${PH.length} pensadores.`:L`O resultado também mostra quem, no Brasil, pensa como você: ${E.BRAZIL.length} pensadores brasileiros, comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos ${PH.length} pensadores.`}</p>
       <h3>${L`Comparar com outra pessoa`}</h3>
       <p>${L`Duas pessoas são comparadas exatamente como uma pessoa e um pensador: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos e a compatibilidade usa a mesma curva. A conta é simétrica, e uma pessoa comparada consigo mesma dá 100%.`}</p>
       <h2>${L`6. Aviso de confiabilidade`}</h2>
@@ -1681,7 +1681,14 @@ function storyModal(c,blob,file,text,url){
 // Canvas helpers for the story card.
 const spaced=s=>s.split("").join(" ");
 const initials=n=>n.split(" ").filter(w=>/^[A-ZÀ-Ý]/.test(w)).slice(0,2).map(w=>w[0]).join("");
-const shortName=n=>{const w=n.split(" ");return w.length>2?w.slice(-1)[0]:n};
+// Short names for tight spots (story card, home tiles). The last word works for most names; these do not:
+// compound surnames, particles and the way each person is actually known in their own language.
+const SHORT={"mario-ferreira-dos-santos":"Mário Ferreira","la-mettrie":"La Mettrie","viveiros-de-castro":"Viveiros de Castro","lima-vaz":"Lima Vaz",
+  "abdias-do-nascimento":"Abdias","nise-da-silveira":"Nise da Silveira","newton-da-costa":"Newton da Costa","oswald-de-andrade":"Oswald de Andrade","antonio-vieira":"Padre Vieira",
+  "w-e-b-du-bois":"Du Bois","martin-luther-king-jr":"Luther King","bartolome-de-las-casas":"Las Casas","sor-juana-ines-de-la-cruz":"Sor Juana",
+  "jose-ortega-y-gasset":"Ortega y Gasset","nicolas-gomez-davila":"Gómez Dávila","jose-enrique-rodo":"Rodó"};
+const SHORT_BY_NAME=Object.fromEntries([...PH,...BR].filter(p=>SHORT[p.id]).map(p=>[p.n,SHORT[p.id]]));
+const shortName=n=>{if(SHORT_BY_NAME[n])return SHORT_BY_NAME[n];const w=n.split(" ").filter(x=>x!=="Jr.");return w.length>2?w.slice(-1)[0]:w.join(" ")};
 function lineCount(x,t,w){let n=1,line="";for(const wd of t.split(" ")){const tt=line?line+" "+wd:wd;if(x.measureText(tt).width>w&&line){n++;line=wd}else line=tt}return n}
 function circlePic(x,img,p,cx,cy,r,stroke){
   x.save();x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.clip();

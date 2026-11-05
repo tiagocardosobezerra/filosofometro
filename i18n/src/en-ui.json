@@ -496,5 +496,6 @@
  "Comparamos nosso jeito de pensar no Filosofômetro. Faz o teste e compara com a gente:": "We compared how we think on Filosofômetro. Take the test and compare with us:",
  "Deu {0}% de compatibilidade filosófica no Filosofômetro. Faz o teste e vê quanto você pensa como a gente:": "We got {0}% philosophical compatibility on Filosofômetro. Take the test and see how much you think like us:",
  "Só {0} de {1} pensadores pensam como eu nesses 3 eixos": "Only {0} of {1} thinkers think like me on these 3 axes",
- "Nenhum dos {0} pensadores pensa como eu nesses 3 eixos": "None of the {0} thinkers thinks like me on these 3 axes"
+ "Nenhum dos {0} pensadores pensa como eu nesses 3 eixos": "None of the {0} thinkers thinks like me on these 3 axes",
+ "O resultado também mostra quem, no Brasil, pensa como você: {0} pensadores brasileiros, comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos {1} pensadores.": "The result also shows who in the English-speaking world thinks like you: {0} thinkers from that world, compared with the same math in a separate ranking, so the main ranking keeps the same {1} thinkers."
 }
