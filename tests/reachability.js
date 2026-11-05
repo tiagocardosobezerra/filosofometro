@@ -85,7 +85,27 @@ const brRows = E.BRAZIL.map(p => {
   const r = E.evaluate(ideal(p.v)).brazil;
   return { p, idealWins: r[0].p.id === p.id, idealMargin: r[1].distance - r.find(x => x.p.id === p.id).distance, share: brBasin[p.id] / N };
 });
-const allBr = brRows.every(r => r.idealWins && r.share > 0);
+// 5. Regional lists of the other languages: the English and Spanish pools replace the Brazilian one.
+// Ids and positions never change, so the main ranking is the same; only the regional pool is checked.
+const I18N = require(path.join(__dirname, "..", "i18n.js"));
+const regional = ["en", "es"].map(lang => {
+  const El = Engine.create(I18N.localize(DATA, null, require(path.join(__dirname, "..", "i18n", `${lang}.js`))).DATA);
+  const seen = Object.fromEntries(El.BRAZIL.map(p => [p.id, 0]));
+  let s2 = 7;
+  const r2 = () => ((s2 = (s2 * 1103515245 + 12345) % 2147483648) / 2147483648);
+  for (let k = 0; k < N; k++) {
+    const v = AXES.map(() => r2() * 2 - 1);
+    const a = QS.map(([, ax, d]) => nearest(v[ax] * d * 2 + (r2() - 0.5)));
+    seen[El.evaluate(a).brazil[0].p.id]++;
+  }
+  const rws = El.BRAZIL.map(p => {
+    const r = El.evaluate(ideal(p.v)).brazil;
+    return { p, idealWins: r[0].p.id === p.id, idealMargin: r[1].distance - r.find(x => x.p.id === p.id).distance, share: seen[p.id] / N };
+  });
+  return { lang, rows: rws };
+});
+const allRegional = regional.every(g => g.rows.every(r => r.idealWins && r.share > 0));
+const allBr = brRows.every(r => r.idealWins && r.share > 0) && allRegional;
 
 const schools = {};
 rows.forEach(r => { (schools[r.p.s] = schools[r.p.s] || []).push(r); });
@@ -106,12 +126,17 @@ for (const r of rows) {
 }
 md += `\n## Ranking brasileiro\n\n${brRows.filter(r => r.idealWins).length}/${brRows.length} pensadores brasileiros vencem o ranking brasileiro no próprio perfil, e ${brRows.filter(r => r.share > 0).length}/${brRows.length} aparecem como par brasileiro na simulação.\n\n| Pensador | Corrente | Perfil exato | Folga | Região |\n|---|---|---|--:|--:|\n`;
 for (const r of brRows) md += `| ${r.p.n} | ${r.p.s} | ${r.idealWins ? "vence" : "**não vence**"} | ${r.idealMargin.toFixed(3)} | ${pct(r.share)} |\n`;
+for (const g of regional) {
+  md += `\n## Lista regional (${g.lang})\n\n${g.rows.filter(r => r.idealWins).length}/${g.rows.length} vencem no próprio perfil, ${g.rows.filter(r => r.share > 0).length}/${g.rows.length} aparecem na simulação.\n\n| Pensador | Corrente | Perfil exato | Folga | Região |\n|---|---|---|--:|--:|\n`;
+  for (const r of g.rows) md += `| ${r.p.n} | ${r.p.s} | ${r.idealWins ? "vence" : "**não vence**"} | ${r.idealMargin.toFixed(3)} | ${pct(r.share)} |\n`;
+}
 md += `\n**Folga:** quanto o pensador ganha do segundo colocado no próprio perfil (distância média). Quanto maior, mais nítido.\n\n`;
 md += `**Região:** fatia das pessoas simuladas que recebem esse pensador como resultado.\n`;
 fs.writeFileSync(path.join(__dirname, "reachability-report.md"), md);
 
 console.log(`ideal ${rows.filter(r => r.idealWins).length}/${PH.length} · search ${rows.filter(r => r.s.found).length}/${PH.length} · present in region ${rows.filter(r => r.share > 0).length}/${PH.length}`);
 console.log(`Brazil: ideal ${brRows.filter(r => r.idealWins).length}/${brRows.length} · present in region ${brRows.filter(r => r.share > 0).length}/${brRows.length}`);
+for (const g of regional) console.log(`${g.lang} regional: ideal ${g.rows.filter(r => r.idealWins).length}/${g.rows.length} · present in region ${g.rows.filter(r => r.share > 0).length}/${g.rows.length} · largest ${g.rows.slice().sort((a, b) => b.share - a.share).slice(0, 2).map(r => `${r.p.n} ${pct(r.share)}`).join(", ")}`);
 console.log(`smallest regions: ${sorted.slice(0, 6).map(r => `${r.p.n} ${pct(r.share)}`).join(", ")}`);
 console.log(`largest regions: ${sorted.slice(-4).map(r => `${r.p.n} ${pct(r.share)}`).join(", ")}`);
 console.log(`least robust: ${rows.slice().sort((a, b) => a.rob.win - b.rob.win).slice(0, 6).map(r => `${r.p.n} ${pct(r.rob.win)}/${pct(r.rob.top3)}`).join(", ")}`);

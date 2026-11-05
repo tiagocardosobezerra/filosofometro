@@ -153,6 +153,68 @@ Motor v1.2.0 · catálogo `503c9e4e` · 104 pensadores · 101 correntes
 | Mário Ferreira dos Santos | Filosofia concreta | vence | 0.086 | 3.8% |
 | Marilena Chauí | Espinosismo político | vence | 0.123 | 2.0% |
 
+## Lista regional (en)
+
+24/24 vencem no próprio perfil, 24/24 aparecem na simulação.
+
+| Pensador | Corrente | Perfil exato | Folga | Região |
+|---|---|---|--:|--:|
+| Mary Astell | Early feminist (Anglican) | vence | 0.079 | 10.3% |
+| Thomas Paine | Radical republican | vence | 0.106 | 0.6% |
+| Ralph Waldo Emerson | Transcendentalist | vence | 0.309 | 8.4% |
+| Frederick Douglass | Abolitionist | vence | 0.088 | 2.8% |
+| John Dewey | Pragmatist | vence | 0.068 | 2.2% |
+| Jane Addams | Social pragmatist | vence | 0.061 | 1.6% |
+| W. E. B. Du Bois | Pan-Africanist | vence | 0.054 | 0.8% |
+| Emma Goldman | Anarchist | vence | 0.159 | 4.9% |
+| B. R. Ambedkar | Anti-caste reformer | vence | 0.052 | 0.8% |
+| C. S. Lewis | Christian apologist | vence | 0.040 | 3.6% |
+| C. L. R. James | Caribbean Marxist | vence | 0.087 | 1.6% |
+| Isaiah Berlin | Liberal pluralist | vence | 0.181 | 3.2% |
+| Alan Watts | Zen popularizer | vence | 0.326 | 7.3% |
+| Iris Murdoch | Moral Platonist | vence | 0.205 | 3.4% |
+| Elizabeth Anscombe | Catholic analytic philosopher | vence | 0.085 | 9.2% |
+| Mary Midgley | Philosophical naturalist | vence | 0.104 | 2.1% |
+| Martin Luther King Jr. | Christian nonviolence | vence | 0.214 | 5.4% |
+| Noam Chomsky | Libertarian socialist | vence | 0.164 | 7.2% |
+| Thomas Sowell | Free-market conservative | vence | 0.251 | 12.7% |
+| Charles Taylor | Communitarian | vence | 0.306 | 1.8% |
+| Daniel Dennett | Naturalist philosopher of mind | vence | 0.035 | 2.9% |
+| Martha Nussbaum | Capabilities approach | vence | 0.099 | 2.6% |
+| bell hooks | Black feminist | vence | 0.045 | 1.3% |
+| Kwame Anthony Appiah | Cosmopolitan liberal | vence | 0.050 | 3.1% |
+
+## Lista regional (es)
+
+24/24 vencem no próprio perfil, 24/24 aparecem na simulação.
+
+| Pensador | Corrente | Perfil exato | Folga | Região |
+|---|---|---|--:|--:|
+| Bartolomé de las Casas | Escolástica humanista | vence | 0.096 | 2.3% |
+| Francisco Suárez | Escolástica barroca | vence | 0.099 | 3.2% |
+| Sor Juana Inés de la Cruz | Humanismo barroco | vence | 0.173 | 6.9% |
+| Andrés Bello | Republicanismo ilustrado | vence | 0.143 | 6.6% |
+| Domingo F. Sarmiento | Liberalismo civilizador | vence | 0.159 | 7.6% |
+| José Martí | Americanismo emancipador | vence | 0.077 | 0.7% |
+| José Enrique Rodó | Arielismo | vence | 0.200 | 1.4% |
+| Concepción Arenal | Reformismo social | vence | 0.066 | 1.0% |
+| Miguel de Unamuno | Existencialismo trágico | vence | 0.179 | 3.6% |
+| José Ortega y Gasset | Raciovitalismo | vence | 0.160 | 3.2% |
+| María Zambrano | Razón poética | vence | 0.132 | 1.9% |
+| Xavier Zubiri | Filosofía de la realidad | vence | 0.011 | 3.6% |
+| Adela Cortina | Ética discursiva | vence | 0.129 | 4.5% |
+| José Vasconcelos | Monismo estético | vence | 0.178 | 5.2% |
+| José Carlos Mariátegui | Marxismo indoamericano | vence | 0.123 | 3.2% |
+| Octavio Paz | Humanismo liberal | vence | 0.027 | 3.0% |
+| Enrique Dussel | Filosofía de la liberación | vence | 0.119 | 1.2% |
+| Rodolfo Kusch | Pensamiento popular americano | vence | 0.227 | 8.0% |
+| Mario Bunge | Realismo científico | vence | 0.186 | 7.3% |
+| Gloria Anzaldúa | Feminismo chicano | vence | 0.182 | 4.8% |
+| Nicolás Gómez Dávila | Pensamiento reaccionario | vence | 0.110 | 5.6% |
+| Gustavo Gutiérrez | Teología de la liberación | vence | 0.105 | 1.4% |
+| Gabriela Mistral | Humanismo cristiano | vence | 0.070 | 0.6% |
+| Jorge Luis Borges | Escepticismo idealista | vence | 0.337 | 13.2% |
+
 **Folga:** quanto o pensador ganha do segundo colocado no próprio perfil (distância média). Quanto maior, mais nítido.
 
 **Região:** fatia das pessoas simuladas que recebem esse pensador como resultado.

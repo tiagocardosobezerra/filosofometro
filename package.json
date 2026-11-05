@@ -3,9 +3,14 @@
   "private": true,
   "description": "Qual filósofo pensa como você? Static site plus two small functions for link previews.",
   "scripts": {
-    "test": "node tests/engine-test.js"
+    "test": "node tests/engine-test.js",
+    "test:reach": "node tests/reachability.js",
+    "test:calibration": "node tests/calibration.js",
+    "test:all": "node tests/engine-test.js && node tests/reachability.js && node tests/calibration.js"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@resvg/resvg-js": "2.6.2"
   }
