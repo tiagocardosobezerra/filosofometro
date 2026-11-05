@@ -70,6 +70,12 @@ function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",de
 /* ---------- Sigil explanations ---------- */
 const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 const lean=(a,x)=>Math.abs(x)<.13?"Equilíbrio":`${x<0?a.l:a.r}${Math.abs(x)>=.6?", forte":""}`;
+// How two people differ on one axis. On the same side it is a difference of strength, not of direction.
+function diffText(a,n1,v1,n2,v2){
+  if(Math.sign(v1)===Math.sign(v2)&&Math.abs(v1)>=.13&&Math.abs(v2)>=.13)
+    return `Os dois tendem a <b>${esc(v1<0?a.l:a.r)}</b>, mas ${esc(Math.abs(v1)>Math.abs(v2)?n1:n2)} com mais força.`;
+  return `${esc(n1)}: <b>${esc(lean(a,v1))}</b>. ${esc(n2)}: <b>${esc(lean(a,v2))}</b>.`;
+}
 const num2=x=>(x>=0?"+":"−")+Math.abs(x).toFixed(2).replace(".",",");
 // Why the user sits where they do on one axis: the answers that pulled hardest in that direction.
 function whyUser(r,ax){
@@ -91,7 +97,7 @@ function thinkerCite(p,ax){
 }
 function tipHTML(ax,{user=null,r=null,p=null,you="Você"}){
   const a=AXES[ax];
-  let h=`<button class="tip-x" type="button" aria-label="Fechar explicação">×</button><b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} ↔ ${esc(a.r)}</span>`;
+  let h=`<button class="tip-x" type="button" aria-label="Fechar explicação">×</button><b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} no centro ↔ ${esc(a.r)} na borda</span>`;
   if(user)h+=`<span class="tip-row"><i class="tip-dot you"></i>${esc(you)}: ${num2(user[ax])} · ${esc(lean(a,user[ax]))}</span>`;
   if(p)h+=`<span class="tip-row"><i class="tip-dot them"></i>${esc(p.n)}: ${num2(p.v[ax])} · ${esc(lean(a,p.v[ax]))}</span>`;
   if(r)h+=`<span class="tip-why"><b>Por quê:</b> ${esc(whyUser(r,ax))}</span>`;
@@ -222,7 +228,7 @@ function renderHome(){
         <figure class="portrait" id="heroPic" aria-hidden="true"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"></figure>
         <div class="sigil-badge" id="heroSigil"></div>
       </div>
-      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> na mandala para ver cada eixo.</p></div>
+      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint">A mandala desenha o pensamento em 11 eixos. <span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> para ver cada um.</p></div>
     </div>
   </section>
   <div class="marquee" aria-hidden="true"><div class="track">${names}${names}</div></div>
@@ -625,7 +631,7 @@ function renderResult(code,mode){
       <h1 class="res-name">${flat?"":`<span class="sr">${top.pct}% de compatibilidade com </span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
       ${r.level?`<div class="lvl-line"><span class="lv-chip">Nível ${esc(r.level.name)}</span><span>${r.level.n} afirmações · precisão ${esc(LEVEL_INFO[r.level.id].precision.toLowerCase())}</span>${!visitor&&nextLevel(r.level.n)?`<a class="lvl-up" href="#/teste/aprofundar">Aprofundar com mais ${nextLevel(r.level.n).n-r.level.n} ${icon.arrow}</a>`:""}</div>`:""}
-      ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map((t,i)=>`<span class="trait" style="--i:${i}">${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
+      ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map((t,i)=>`<span class="trait" style="--i:${i}"><small>${esc(t.a.name)}</small>${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
       ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
       <div class="res-actions">
         ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
@@ -644,7 +650,7 @@ function renderResult(code,mode){
     <div class="grid2">
       <div class="panel">
         <h2>${T.axes}</h2>
-        <p class="sub">Laranja: ${T.you}. Tracejado: ${esc(p.n)}. Os gráficos mostram as posições brutas; a comparação usa o formato normalizado (passo 2 da auditoria).</p>
+        <p class="sub">Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${T.you}. Tracejado na mandala e traço nas barras: ${esc(p.n)}. A porcentagem compara o formato das duas mandalas.</p>
         <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver o que ele mede e por que ficou ali.</p>
         ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],T.you,p.n)).join("")}
       </div>
@@ -820,7 +826,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const answered=a.filter((x,i)=>x!=null&&b[i]!=null).length;
   const verdict=c.pct===null?"Um dos perfis ficou sem direção, então não dá para medir compatibilidade.":c.pct>=80?"Almas filosóficas gêmeas.":c.pct>=60?"Bastante em comum, com boas brigas pela frente.":c.pct>=40?"Concordam em algumas coisas e discordam com vontade em outras.":"Pensam quase ao contrário. Rende uma ótima conversa.";
   const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?"perfil sem direção":`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
-  const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?`Os dois tendem a <b>${esc(lean(ax,x.A).replace(", forte",""))}</b>.`:`${esc(nameA)}: <b>${esc(lean(ax,x.A))}</b>. ${esc(nameB)}: <b>${esc(lean(ax,x.B))}</b>.`}</span></li>`};
+  const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?`Os dois tendem a <b>${esc(lean(ax,x.A).replace(", forte",""))}</b>.`:diffText(ax,nameA,x.A,nameB,x.B)}</span></li>`};
   mount(`
   <section class="wrap section" style="padding-top:clamp(24px,5vh,56px)">
     <span class="eyebrow">Comparação</span>
@@ -837,7 +843,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
         <h2>Onde vocês se encontram</h2>
         <p class="sub">Os eixos com o formato de pensamento mais parecido entre vocês.</p>
         <ul class="ag-list">${close.map(x=>item(x,"close")).join("")}</ul>
-        <h3 class="about-h ag-no">Onde vocês divergem</h3>
+        <h3 class="about-h ag-no">Onde vocês mais se afastam</h3>
         <ul class="ag-list">${far.map(x=>item(x,"far")).join("")}</ul>
       </div>
       <div style="display:grid;gap:20px;align-content:start">
@@ -856,8 +862,8 @@ function renderCompare(codeA,codeB,rawA,rawB){
 
     <h2 class="chapter"><span>1</span>Eixo por eixo</h2>
     <div class="panel cmp-axes">
-      <p class="sub">Laranja: ${esc(nameB)}. Marcador: ${esc(nameA)}. Do eixo onde vocês mais se parecem ao que mais separa.</p>
-      ${rows.slice().sort((x,y)=>x.diff-y.diff).map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(AXES[x.ax].name))}</span>${axisRow(AXES[x.ax],x.B,x.A,nameB,nameA)}</div>`).join("")}
+      <p class="sub">Bolinha laranja: ${esc(nameB)}. Traço: ${esc(nameA)}. Do eixo onde vocês mais se parecem ao que mais separa.</p>
+      ${rows.slice().sort((x,y)=>x.diff-y.diff).map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(AXES[x.ax].name))}</span>${axisRow(AXES[x.ax],x.B,x.A,nameB,nameA,{named:false})}</div>`).join("")}
     </div>
 
     <h2 class="chapter"><span>2</span>Para conversar</h2>
@@ -948,12 +954,12 @@ function duo(p,{user=null,title="",thinkerFirst=false}={}){
 }
 
 // One axis bar: "main" is the orange dot, "other" the dark tick. Labels name both for screen readers.
-function axisRow(a,main,other,mainLabel,otherLabel){
+function axisRow(a,main,other,mainLabel,otherLabel,{named=true}={}){
   const left=Math.min(50,(main+1)*50),width=Math.abs(main)*50;
   const lean=Math.abs(main)<.13?"Equilíbrio":main<0?a.l:a.r;
   const label=`${a.name}: ${mainLabel} ${fmt(main)}${other===undefined?"":`, ${otherLabel} ${fmt(other)}`}`;
   return `<div class="axis-row">
-    <div class="poles"><span>${Math.abs(main)>=.13&&main<0?`<b>${esc(a.l)}</b>`:esc(a.l)}</span><span class="val">${esc(lean)} · ${fmt(main)}</span><span>${Math.abs(main)>=.13&&main>0?`<b>${esc(a.r)}</b>`:esc(a.r)}</span></div>
+    <div class="poles"><span>${Math.abs(main)>=.13&&main<0?`<b>${esc(a.l)}</b>`:esc(a.l)}</span><span class="val">${named?`<b class="ax-n">${esc(a.name)}</b> · `:""}${Math.abs(main)<.13?"equilíbrio · ":""}${fmt(main)}</span><span>${Math.abs(main)>=.13&&main>0?`<b>${esc(a.r)}</b>`:esc(a.r)}</span></div>
     <div class="track" role="img" aria-label="${esc(label)}"><span class="center"></span><span class="fill" style="left:${left}%;width:${width}%;transform-origin:${main<0?"right":"left"}"></span>${other===undefined?"":`<span class="them" style="left:${(other+1)*50}%"></span>`}<span class="you" style="left:${(main+1)*50}%"></span></div>
   </div>`;
 }
@@ -983,14 +989,14 @@ function agreementHTML(r,x){
   const item=(c,kind)=>{const a=AXES[c.ax];
     const text=kind==="close"
       ?(Math.sign(c.you)===Math.sign(c.them)&&Math.abs(c.you)>=.13?`Os dois tendem a <b>${esc(lean(a,c.you).replace(", forte",""))}</b>.`:`Os dois ficam perto do equilíbrio entre ${esc(a.l)} e ${esc(a.r)}.`)
-      :`Você: <b>${esc(lean(a,c.you))}</b>. ${esc(x.p.n)}: <b>${esc(lean(a,c.them))}</b>.`;
+      :diffText(a,"você",c.you,x.p.n,c.them).replace(/^você:/,"Você:");
     return `<li><span class="ag-axis">${esc(cap(a.name))}</span><span>${text}</span></li>`;};
   return `<div class="panel agree">
     <h2>Você e ${esc(x.p.n)}</h2>
     <p class="sub">Os eixos onde seus formatos de pensamento mais se encontram e mais se afastam.</p>
     <h3 class="about-h ag-yes">Onde vocês concordam</h3>
     <ul class="ag-list">${close.map(c=>item(c,"close")).join("")}</ul>
-    <h3 class="about-h ag-no">Onde vocês divergem</h3>
+    <h3 class="about-h ag-no">Onde vocês mais se afastam</h3>
     <ul class="ag-list">${far.map(c=>item(c,"far")).join("")}</ul>
   </div>`;
 }
@@ -1200,7 +1206,7 @@ function renderThinker(id){
   </section>
   <section class="wrap" style="padding-bottom:64px">
     <div class="grid2">
-      <div class="panel"><h2>Posições</h2><p class="sub">Laranja: ${esc(p.n)}.${lastR?" Tracejado: você.":""} Posições do catálogo, de −1 a +1.</p>
+      <div class="panel"><h2>Posições</h2><p class="sub">Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${esc(p.n)}.${lastR?" Tracejado na mandala e traço nas barras: você.":""}</p>
         <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:`Perfil de ${p.n} nos 11 eixos`})}</div><p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver a posição de ${esc(p.n)}.</p>
         ${AXES.map((a,i)=>axisRow(a,p.v[i],lastR?lastR.scores[i]:undefined,p.n,"você")).join("")}</div>
       <div style="display:grid;gap:20px;align-content:start">
