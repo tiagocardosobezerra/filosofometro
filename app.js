@@ -647,6 +647,7 @@ function renderResult(code,mode){
     ${duo(p,{user:userV,title:L`Perfil de ${T.you} comparado ao de ${p.n}`})}
   </section>
   <section class="wrap" style="padding-bottom:24px">
+    ${visitor?"":selfHTML(r)}
     <h2 class="chapter"><span>1</span>${visitor?L`Quem é o par desta pessoa`:L`Quem é o seu par`}</h2>
     ${p.bio||!flat?`<div class="grid2">${aboutHTML(p)}${agreementHTML(r,top)}</div>`:""}
 
@@ -722,6 +723,45 @@ function renderResult(code,mode){
   wireTips(app,{user:userV,r,p});
   wireTimeline();
   wireAudit(r);
+}
+
+/* ---------- The person's own reading ---------- */
+// What each pole says about someone, in plain words: [left pole, right pole] for every axis, in AXES order.
+const POLE_TEXT=[
+  [L`Você confia mais no raciocínio do que no que os sentidos mostram.`,L`Você acredita no que pode ser visto, testado e vivido.`],
+  [L`Você sente que muito do que acontece já estava escrito, pela natureza ou pelas circunstâncias.`,L`Você se vê como dono das suas escolhas, e responsável por elas.`],
+  [L`Para você, a vida tem um sentido que existe antes de nós, e cabe a cada um descobri-lo.`,L`Para você, o sentido da vida não vem pronto: cada pessoa inventa o seu.`],
+  [L`Você julga um ato pelo princípio por trás dele, não só pelo resultado.`,L`Você julga um ato pelos efeitos que ele produz no mundo.`],
+  [L`Você defende o espaço de cada pessoa acima das exigências do grupo.`,L`Você acredita que ninguém se realiza sozinho: o grupo vem antes.`],
+  [L`Para você, uma vida boa tem alegria, conforto e prazer, sem culpa.`,L`Para você, a vida boa é a de quem se torna uma pessoa melhor, mesmo quando custa.`],
+  [L`Você acredita que tudo, até a mente, nasce do mundo físico.`,L`Você acredita que existe algo além da matéria: alma, mente ou sagrado.`],
+  [L`Você acredita que existem verdades firmes, e que dá para alcançá-las.`,L`Você desconfia das certezas e prefere manter as perguntas abertas.`],
+  [L`Você valoriza o que resistiu ao tempo e muda com cuidado.`,L`Você acha que o mundo precisa ser transformado, não só preservado.`],
+  [L`Diante da dor, você busca paz em aceitar o que não depende de você.`,L`Diante da injustiça, você prefere lutar a se conformar.`],
+  [L`Você acredita que a ordem precisa de hierarquia e de alguém que decida.`,L`Você desconfia de quem manda e quer cada pessoa decidindo por si.`],
+];
+// The traits that define the person, how many thinkers share all of them, and the axis they are still torn on.
+function selfReading(r){
+  const v=r.scores;
+  const strong=AXES.map((a,i)=>({a,i,x:v[i]})).filter(s=>Math.abs(s.x)>=.25).sort((s,u)=>Math.abs(u.x)-Math.abs(s.x)).slice(0,3);
+  const kin=strong.length?PH.filter(p=>strong.every(s=>Math.sign(p.v[s.i])===Math.sign(s.x)&&Math.abs(p.v[s.i])>=.2)):[];
+  const torn=AXES.map((a,i)=>({a,i,x:v[i]})).sort((s,u)=>Math.abs(s.x)-Math.abs(u.x))[0];
+  return {strong,kin,torn};
+}
+function selfHTML(r){
+  const {strong,kin,torn}=selfReading(r);
+  if(!strong.length)return "";
+  const rare=kin.length<=Math.round(PH.length*.08);
+  const names=kin.slice(0,3).map(p=>`<a href="#/p/${p.id}">${esc(p.n)}</a>`).join(", ");
+  return `<div class="panel self">
+    <span class="eyebrow">${L`Seu retrato`}</span>
+    <h2 class="self-title">${strong.map(s=>`<span>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join(`<i aria-hidden="true">·</i>`)}</h2>
+    <ul class="self-list">${strong.map(s=>`<li><b>${esc(cap(s.a.name))}</b><span>${esc(POLE_TEXT[s.i][s.x<0?0:1])}</span></li>`).join("")}</ul>
+    <div class="self-facts">
+      <p class="self-rare${rare?" on":""}">${rare?`<b>${L`Combinação rara.`}</b> `:""}${kin.length?(rare?L`Só ${kin.length} de ${PH.length} pensadores reúnem esses ${strong.length} traços:`:L`${kin.length} de ${PH.length} pensadores reúnem esses ${strong.length} traços:`)+` ${names}${kin.length>3?L` e mais ${kin.length-3}`:""}.`:L`Nenhum dos ${PH.length} pensadores reúne esses ${strong.length} traços. Seu jeito de pensar não tem precedente no catálogo.`}</p>
+      <p>${L`Onde você ainda está em aberto: <b>${esc(torn.a.name)}</b>, entre ${esc(torn.a.l)} e ${esc(torn.a.r)}.`}</p>
+    </div>
+  </div>`;
 }
 
 /* ---------- Portraits ---------- */
@@ -839,6 +879,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
     <span class="eyebrow">${L`Comparação`}</span>
     <h1 class="res-name" style="font-size:clamp(44px,min(8vw,11vh),120px)"><span class="line"><span>${c.pct===null?L`Sem direção`:L`${c.pct}% compatíveis`}</span></span></h1>
     <p class="lede" style="margin-top:6px">${esc(verdict)}</p>
+    <div class="res-actions" style="margin-top:18px"><button class="btn accent" id="cmpStory" type="button">${icon.share} ${L`Compartilhar no story`}</button></div>
     <div class="cmp-grid">
       ${card(nameA,ra)}
       <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:L`${nameB} e ${nameA} nos 11 eixos`})}
@@ -896,6 +937,10 @@ function renderCompare(codeA,codeB,rawA,rawB){
     <p class="cmp-foot">${L`Mesma regra do resultado: distância média de ${num(c.distance,3)} nos 11 eixos.`} <a href="#/metodo">${L`Como calculamos`}</a></p>
   </section>`,c.pct===null?L`Comparação`:L`${c.pct}% compatíveis`);
   wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
+  document.getElementById("cmpStory").addEventListener("click",async e=>{
+    const b=e.currentTarget;if(b.disabled)return;const keep=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`;
+    try{await compareCard(c,nameA,nameB,close,far,verdict,compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB)))}finally{b.disabled=false;b.innerHTML=keep}
+  });
   document.getElementById("cmpCopy").addEventListener("click",async()=>{
     const url=compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB));
     try{await navigator.clipboard.writeText(url);toast(L`Link copiado`)}catch(e){prompt(L`Copie o link:`,url)}
@@ -1448,7 +1493,10 @@ async function shareCard(r,usePic=true){
   // Portrait arch with the sigil badge over its corner.
   // A name that wraps to two lines takes the room from the portrait, so the axis rulers still fit.
   x.font="400 86px 'Instrument Serif'";const nameLines=lineCount(x,p.n,960);
-  const aw=380,ax=(W-aw)/2,ay=336,ah=nameLines>1?300:350,rad=aw/2;
+  // A rare combination of traits earns one more line under the rulers; the portrait gives up the room.
+  const sr=selfReading(r),rare=!flat&&sr.strong.length===3&&sr.kin.length<=Math.round(PH.length*.08);
+  const rareText=rare?(sr.kin.length?L`Só ${sr.kin.length} de ${PH.length} pensadores pensam como eu nesses 3 eixos`:L`Nenhum dos ${PH.length} pensadores pensa como eu nesses 3 eixos`):"";
+  const aw=380,ax=(W-aw)/2,ay=336,ah=(nameLines>1?300:350)-(rare?66:0),rad=aw/2;
   const arch=()=>{x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-26);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-26,ay+ah);x.lineTo(ax+26,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-26);x.closePath()};
   x.save();arch();x.clip();
   if(pic){
@@ -1497,8 +1545,9 @@ async function shareCard(r,usePic=true){
     x.beginPath();x.arc(pos(me),by,12,0,Math.PI*2);x.fillStyle=accent;x.fill();
   });
   x.textAlign="center";
+  if(rare){x.fillStyle=accent;x.font="italic 400 40px 'Instrument Serif'";x.fillText(rareText,W/2,ry+84+2*74+80)}
   // Also think like: three runner-ups with portraits.
-  const nl=ry+84+2*74+70;
+  const nl=ry+84+2*74+70+(rare?66:0);
   x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced(L`TAMBÉM PENSO COMO`),W/2,nl);
   near.forEach((n,i)=>{
     const nx=W/2+(i-1)*300,ny=nl+60;
@@ -1510,7 +1559,7 @@ async function shareCard(r,usePic=true){
   const sy=Math.min(nl+60+112+84,1570);
   x.fillStyle=ink;x.font="italic 400 56px 'Instrument Serif'";x.fillText(L`Qual filósofo pensa como você?`,W/2,sy);
   x.font="600 36px 'Inter Tight'";
-  const host="filosofometro",tld=".com.br",hw=x.measureText(host).width,tw=x.measureText(tld).width;
+  const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
   x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,sy+58);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,sy+58);x.textAlign="center";
   // A portrait served without CORS taints the canvas; redraw without images rather than fail.
   let blob;
@@ -1521,7 +1570,65 @@ async function shareCard(r,usePic=true){
     try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(e){if(e.name==="AbortError")return}
   }
   // No native share sheet (most desktops): show the picture with the ways to take it.
-  storyModal(r,c,blob,file);
+  storyModal(c,blob,file,challengeText(r),inviteURL(r));
+}
+// The comparison as a story: both names, both mandalas on one wheel, the score, the verdict, and where
+// the two agree and will argue, so friends who see it want to measure their own pair.
+async function compareCard(cmp,nameA,nameB,close,far,verdict,url){
+  track("/evento/story-comparacao");
+  await document.fonts.ready;
+  const W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;
+  const x=c.getContext("2d");
+  const bg="#0F0E0C",ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
+  x.fillStyle=bg;x.fillRect(0,0,W,H);
+  const g=x.createRadialGradient(W/2,780,60,W/2,780,820);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");
+  x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.textAlign="center";
+  // Everything that matters stays between 270 and 1650, outside what Instagram covers.
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(L`COMPATIBILIDADE FILOSÓFICA`),W/2,308);
+  x.fillStyle=ink;x.font="400 84px 'Instrument Serif'";
+  const pair=`${nameB} & ${nameA}`;
+  if(x.measureText(pair).width>960)x.font="400 64px 'Instrument Serif'";
+  x.fillText(pair,W/2,410);
+  // One wheel, two shapes: B in accent, A dashed.
+  const cx=W/2,cy=760,S=2.5;
+  x.beginPath();x.arc(cx,cy,R*S+26,0,Math.PI*2);x.fillStyle="rgba(21,19,15,.9)";x.fill();x.strokeStyle=line;x.lineWidth=2;x.stroke();
+  [.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
+  AXES.forEach((_,i)=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(angle(i))*R*S,cy+Math.sin(angle(i))*R*S);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
+  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=5;x.lineJoin="round";x.stroke();x.setLineDash([])};
+  poly(cmp.a.scores,null,"rgba(241,234,220,.85)",[14,12]);
+  poly(cmp.b.scores,"rgba(240,106,67,.24)",accent);
+  // Legend: who is which shape.
+  x.font="500 30px 'Inter Tight'";
+  const wB=x.measureText(nameB).width,wA=x.measureText(nameA).width,legW=44+14+wB+48+44+14+wA;let lx=W/2-legW/2;const ly=1080;
+  x.fillStyle=accent;x.fillRect(lx,ly-12,44,6);x.textAlign="left";x.fillStyle=ink;x.fillText(nameB,lx+58,ly);lx+=58+wB+48;
+  x.setLineDash([10,8]);x.beginPath();x.moveTo(lx,ly-9);x.lineTo(lx+44,ly-9);x.strokeStyle=ink;x.lineWidth=5;x.stroke();x.setLineDash([]);
+  x.fillText(nameA,lx+58,ly);x.textAlign="center";
+  // Score and verdict.
+  x.fillStyle=accent;
+  if(cmp.pct===null){x.font="italic 400 100px 'Instrument Serif'";x.fillText(L`Sem direção`,W/2,1230)}
+  else{x.font="400 150px 'Instrument Serif'";x.fillText(`${cmp.pct}%`,W/2,1240)}
+  x.fillStyle=ink;x.font="italic 400 44px 'Instrument Serif'";const vy=wrapText(x,verdict,W/2,1310,900,52);
+  // Where they meet and where they will argue: two columns of axis names.
+  const col=(title,rows,cxx,y0,pick)=>{x.fillStyle=muted;x.font="600 22px 'Inter Tight'";x.fillText(spaced(title),cxx,y0);
+    rows.slice(0,2).forEach((rw,k)=>{x.fillStyle=ink;x.font="400 44px 'Instrument Serif'";x.fillText(pick(rw),cxx,y0+58+k*52)})};
+  const ty=Math.max(vy+80,1410);
+  col(L`CONCORDAMOS EM`,close,W/2-240,ty,rw=>cap(AXES[rw.ax].name));
+  col(L`VAMOS DISCUTIR`,far,W/2+240,ty,rw=>cap(AXES[rw.ax].name));
+  x.fillStyle=line;x.fillRect(W/2-1,ty-24,2,140);
+  // Sign-off.
+  x.fillStyle=ink;x.font="italic 400 52px 'Instrument Serif'";x.fillText(L`Quanto você pensa como seus amigos?`,W/2,1592);
+  x.font="600 34px 'Inter Tight'";
+  const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
+  x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,1644);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1644);x.textAlign="center";
+  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/png"));
+  if(!blob){toast(L`Não foi possível gerar a imagem`);return}
+  const file=new File([blob],"filosofometro-comparacao.png",{type:"image/png"});
+  const text=cmp.pct===null?L`Comparamos nosso jeito de pensar no Filosofômetro. Faz o teste e compara com a gente:`:L`Deu ${cmp.pct}% de compatibilidade filosófica no Filosofômetro. Faz o teste e vê quanto você pensa como a gente:`;
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],text,url});return}catch(e){if(e.name==="AbortError")return}
+  }
+  storyModal(c,blob,file,text,url);
 }
 // Button state while the picture is drawn, so a slow first run (fonts, portraits) never looks like a dead click.
 async function shareFlow(r){
@@ -1550,7 +1657,7 @@ function stickyShare(){
   io.observe(acts);if(fin)io.observe(fin);
   onLeave(()=>{io.disconnect();bar.remove()});
 }
-function storyModal(r,c,blob,file){
+function storyModal(c,blob,file,text,url){
   const prev=document.activeElement,d=document.createElement("div");
   d.className="story-modal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label",L`Imagem do story`);
   const canCopy=!!(navigator.clipboard&&window.ClipboardItem);
@@ -1566,7 +1673,7 @@ function storyModal(r,c,blob,file){
     if(a.dataset.a==="x")close();
     else if(a.dataset.a==="dl"){const l=document.createElement("a");l.href=URL.createObjectURL(blob);l.download=file.name;l.click();setTimeout(()=>URL.revokeObjectURL(l.href),2000);toast(L`Imagem salva. Poste no story e cole o link do convite!`)}
     else if(a.dataset.a==="img"){try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);toast(L`Imagem copiada`)}catch(err){toast(L`Não foi possível copiar a imagem`)}}
-    else if(a.dataset.a==="link"){try{await navigator.clipboard.writeText(`${challengeText(r)} ${inviteURL(r)}`);toast(L`Convite copiado. Agora é só mandar!`)}catch(err){prompt(L`Copie o convite:`,inviteURL(r))}}
+    else if(a.dataset.a==="link"){try{await navigator.clipboard.writeText(`${text} ${url}`);toast(L`Convite copiado. Agora é só mandar!`)}catch(err){prompt(L`Copie o convite:`,url)}}
   });
   document.body.appendChild(d);
   d.querySelector("button").focus();

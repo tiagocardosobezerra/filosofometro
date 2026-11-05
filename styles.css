@@ -967,3 +967,16 @@ html:not([lang="pt-BR"]) .br-flag{background:linear-gradient(90deg,var(--accent)
   .res-sticky .btn svg{width:16px;height:16px;flex:0 0 16px}
   .res-hero .duo{margin-bottom:34px}
 }
+
+/* "Seu retrato": the person's own reading, right after the result hero. */
+.panel.self{margin:8px 0 8px;padding:clamp(22px,4vw,40px);background:radial-gradient(120% 140% at 0% 0%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 60%),var(--card)}
+.self-title{font-family:var(--serif);font-weight:400;font-size:clamp(38px,6vw,72px);line-height:1;letter-spacing:-.02em;margin:14px 0 22px;display:flex;flex-wrap:wrap;gap:.1em .35em;align-items:baseline}
+.self-title i{font-style:normal;color:var(--accent)}
+.self-list{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.self-list li{display:grid;gap:6px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.self-list b{font:600 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.self-list span{font-size:17px;line-height:1.45;color:var(--ink)}
+.self-facts{display:grid;gap:8px;margin-top:20px;font-size:16px;color:var(--ink2)}
+.self-facts p{margin:0}
+.self-facts b{color:var(--ink)}
+.self-rare.on b{color:var(--accent)}
