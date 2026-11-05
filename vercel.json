@@ -15,13 +15,48 @@
     {
       "source": "/c/:a/:b/:na/:nb",
       "destination": "/api/share?a=:a&b=:b&na=:na&nb=:nb"
+    },
+    {
+      "source": "/en/s/:code",
+      "destination": "/api/share?code=:code&lang=en"
+    },
+    {
+      "source": "/en/s/:code/:name",
+      "destination": "/api/share?code=:code&name=:name&lang=en"
+    },
+    {
+      "source": "/en/c/:a/:b",
+      "destination": "/api/share?a=:a&b=:b&lang=en"
+    },
+    {
+      "source": "/en/c/:a/:b/:na/:nb",
+      "destination": "/api/share?a=:a&b=:b&na=:na&nb=:nb&lang=en"
+    },
+    {
+      "source": "/es/s/:code",
+      "destination": "/api/share?code=:code&lang=es"
+    },
+    {
+      "source": "/es/s/:code/:name",
+      "destination": "/api/share?code=:code&name=:name&lang=es"
+    },
+    {
+      "source": "/es/c/:a/:b",
+      "destination": "/api/share?a=:a&b=:b&lang=es"
+    },
+    {
+      "source": "/es/c/:a/:b/:na/:nb",
+      "destination": "/api/share?a=:a&b=:b&na=:na&nb=:nb&lang=es"
     }
   ],
   "functions": {
     "api/og.js": {
-      "includeFiles": "fonts/**",
+      "includeFiles": "{fonts/**,i18n.js,i18n/*.js}",
       "memory": 1024,
       "maxDuration": 15
+    },
+    "api/share.js": {
+      "includeFiles": "{i18n.js,i18n/*.js}"
     }
   },
   "headers": [

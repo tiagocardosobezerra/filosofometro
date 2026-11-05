@@ -1,0 +1,990 @@
+{
+ "pitagoras": {
+  "n": "Pythagoras",
+  "s": "Pythagorean",
+  "q": "All is number.",
+  "b": "On the Pythagorean Life (Iamblichus)",
+  "reading": [
+   "The Presocratic Philosophers (Kirk, Raven and Schofield)",
+   "Life of Pythagoras (Porphyry)"
+  ],
+  "place": "Croton, Magna Graecia (southern Italy)",
+  "bio": "Born on the island of Samos, Pythagoras founded a community in Croton that mixed philosophy, mathematics and a religious way of life. His followers believed that numbers reveal the order of the universe and that the soul passes from one body to another. Almost nothing he wrote survives, but his influence reached Plato and modern science.",
+  "ideas": [
+   "Reality has a mathematical structure and can be understood through numbers",
+   "The soul is immortal and is reborn in other bodies, including animals",
+   "Philosophy is a way of life that purifies the soul through discipline and study"
+  ],
+  "line": "A Pythagorean follows the school founded by Pythagoras, which joined mathematics, music and spirituality. He is the founder and model of this tradition of seeking harmony.",
+  "wiki": "https://en.wikipedia.org/wiki/Pythagoras"
+ },
+ "parmenides": {
+  "n": "Parmenides",
+  "s": "Eleatic",
+  "q": "What is, is; and what is not, is not.",
+  "b": "On Nature",
+  "reading": [
+   "The Presocratic Philosophers (Kirk, Raven and Schofield)",
+   "Parmenides (Plato)"
+  ],
+  "place": "Elea, Magna Graecia (southern Italy)",
+  "bio": "Parmenides wrote a philosophical poem in which a goddess reveals the path of truth. For him, being is one, eternal and unmoving, and the change we see is an illusion of the senses. He was the first to argue rigorously about what reality is, and almost all later Greek philosophy tried to answer him.",
+  "ideas": [
+   "What is, is, and what is not, is not: nothing can come from nothing",
+   "True reality is single, eternal and unchanging",
+   "The senses deceive, and only reason can reach the truth"
+  ],
+  "line": "Eleatic comes from Elea, the city where this school was born, which denied change and multiplicity. Parmenides is its founder, and his student Zeno created paradoxes to defend him.",
+  "wiki": "https://en.wikipedia.org/wiki/Parmenides"
+ },
+ "heraclito": {
+  "n": "Heraclitus",
+  "s": "Presocratic",
+  "q": "No man ever steps in the same river twice.",
+  "b": "Fragments",
+  "reading": [
+   "The Presocratic Philosophers (Kirk, Raven and Schofield)",
+   "The Art and Thought of Heraclitus (Charles Kahn)"
+  ],
+  "place": "Ephesus, Ionia (modern Turkey)",
+  "bio": "Heraclitus was an aristocrat of Ephesus famous for his enigmatic style, which earned him the nickname The Obscure. He taught that everything is in constant change and that the conflict between opposites keeps the world in balance. His short, provocative fragments inspired everyone from the Stoics to Hegel and Nietzsche.",
+  "ideas": [
+   "Everything flows: reality is in permanent transformation",
+   "Opposites are united, and the tension between them creates the order of the world",
+   "There is a universal reason, the logos, that governs all things"
+  ],
+  "line": "The Presocratics are the first Greek philosophers, before Socrates, who tried to explain nature without relying only on myths. Heraclitus is one of the most original of the group.",
+  "wiki": "https://en.wikipedia.org/wiki/Heraclitus"
+ },
+ "democrito": {
+  "n": "Democritus",
+  "s": "Atomist",
+  "q": "Nothing exists except atoms and empty space.",
+  "b": "Fragments",
+  "reading": [
+   "The Presocratic Philosophers (Kirk, Raven and Schofield)",
+   "The Atomists: Leucippus and Democritus (C. C. W. Taylor)"
+  ],
+  "place": "Abdera, Thrace (northern Greece)",
+  "bio": "Democritus, together with his teacher Leucippus, proposed that everything is made of tiny, indivisible particles, the atoms, moving in the void. He wrote on physics, ethics and many other subjects, and was remembered as the laughing philosopher. His materialist view intuitively anticipated central ideas of modern science.",
+  "ideas": [
+   "Everything that exists is made of indivisible atoms moving in the void",
+   "Qualities like color and taste depend on us, not on things in themselves",
+   "The good life is made of serenity and moderate joy, not excess"
+  ],
+  "line": "An atomist explains the world through the combination of atoms and void, with no divine intervention. Democritus is the greatest name of this school, alongside his teacher Leucippus.",
+  "wiki": "https://en.wikipedia.org/wiki/Democritus"
+ },
+ "protagoras": {
+  "n": "Protagoras",
+  "s": "Sophist",
+  "q": "Man is the measure of all things.",
+  "b": "Protagoras (Plato)",
+  "reading": [
+   "Theaetetus (Plato)",
+   "The Sophists (W. K. C. Guthrie)"
+  ],
+  "place": "Abdera and Athens, Greece",
+  "bio": "Protagoras was the most celebrated of the sophists, teachers who charged fees to teach rhetoric and the art of winning debates. A friend of Pericles, he became known for the idea that the human being is the measure of all things. Plato criticized him harshly, but he was a pioneer in thinking about truth and values from human experience.",
+  "ideas": [
+   "The human being is the measure of all things: truth depends on who perceives it",
+   "About the gods it is impossible to know whether they exist or not",
+   "On any subject there are arguments on both sides, and both can be defended"
+  ],
+  "line": "Sophists were traveling teachers who taught oratory and politics, often doubting absolute truths. Protagoras is the most famous and the most respected of them.",
+  "wiki": "https://en.wikipedia.org/wiki/Protagoras"
+ },
+ "socrates": {
+  "n": "Socrates",
+  "s": "Socratic",
+  "q": "I know that I know nothing.",
+  "b": "Apology (Plato)",
+  "reading": [
+   "Phaedo (Plato)",
+   "Memorabilia (Xenophon)"
+  ],
+  "place": "Athens, Greece",
+  "bio": "Socrates never wrote anything: he spent his days in the streets of Athens asking questions that showed people they did not know what they thought they knew. Accused of corrupting the young and disrespecting the gods, he was condemned to drink hemlock. We know his ideas through Plato and Xenophon, and he became the symbol of the philosopher.",
+  "ideas": [
+   "Recognizing your own ignorance is the beginning of wisdom",
+   "An unexamined life is not worth living",
+   "No one does wrong on purpose: whoever acts badly acts out of ignorance"
+  ],
+  "line": "Socratic describes someone who follows Socrates' method of inquiring through dialogue and questions, seeking definitions and care of the soul. He is the origin of this approach.",
+  "wiki": "https://en.wikipedia.org/wiki/Socrates"
+ },
+ "platao": {
+  "n": "Plato",
+  "s": "Idealist",
+  "q": "Cities will have no rest from evil until philosophers rule.",
+  "b": "The Republic",
+  "reading": [
+   "The Symposium",
+   "Phaedo"
+  ],
+  "place": "Athens, Greece",
+  "bio": "A student of Socrates, Plato founded the Academy in Athens, one of the first institutions of higher learning in the West. He wrote dialogues on justice, love, knowledge and politics that are still read around the world. His theory of Forms shaped philosophy and theology for more than two thousand years.",
+  "ideas": [
+   "Beyond the sensible world lies the world of Forms, eternal and perfect",
+   "To know is to recall truths the soul contemplated before birth",
+   "The just city must be ruled by philosophers, who know the Good"
+  ],
+  "line": "Idealist, here, means someone who considers ideas or forms more real than the material things we see. Plato is the founder of this view with his theory of Forms.",
+  "wiki": "https://en.wikipedia.org/wiki/Plato"
+ },
+ "aristoteles": {
+  "n": "Aristotle",
+  "s": "Aristotelian",
+  "q": "Man is by nature a political animal.",
+  "b": "Nicomachean Ethics",
+  "reading": [
+   "Politics",
+   "Metaphysics"
+  ],
+  "place": "Athens, Greece",
+  "bio": "A student of Plato for twenty years and later the tutor of Alexander the Great, Aristotle founded his own school, the Lyceum. He wrote on logic, biology, physics, ethics, politics and poetry, organizing nearly all the knowledge of his time. His work dominated Western and Islamic science and philosophy until the early modern era.",
+  "ideas": [
+   "Happiness is the end of human life and is reached by practicing the virtues",
+   "Virtue is the mean between extremes, like courage between fear and recklessness",
+   "Human beings are political animals, who only flourish living in community"
+  ],
+  "line": "An Aristotelian follows Aristotle, valuing observation of the world, logic and the ethics of virtue. He is the founder of this tradition, later taken up by Arab thinkers and the Scholastics.",
+  "wiki": "https://en.wikipedia.org/wiki/Aristotle"
+ },
+ "diogenes": {
+  "n": "Diogenes",
+  "s": "Cynic",
+  "q": "I am a citizen of the world.",
+  "b": "Lives of the Eminent Philosophers (Diogenes Laertius)",
+  "reading": [
+   "The Cynics (Goulet-Cazé and Branham)",
+   "The Courage of Truth (Michel Foucault)"
+  ],
+  "place": "Sinope, Athens and Corinth, Greece",
+  "bio": "Diogenes of Sinope lived in Athens as a beggar, sleeping in a large clay jar and scorning wealth and convention. The story goes that he asked Alexander the Great only to step out of his sun. With provocative acts, he showed that happiness depends on very little and that many social rules are artificial.",
+  "ideas": [
+   "Happiness lies in living with the minimum, in accordance with nature",
+   "Social conventions, wealth and fame are illusions that enslave",
+   "The sage is a citizen of the world and owes loyalty to no single city"
+  ],
+  "line": "Cynic comes from the Greek word for dog: the Cynics lived simply and without shame before convention. Diogenes is the most famous and radical representative of this school.",
+  "wiki": "https://en.wikipedia.org/wiki/Diogenes"
+ },
+ "aristipo": {
+  "n": "Aristippus",
+  "s": "Cyrenaic",
+  "q": "I possess, but I am not possessed.",
+  "b": "Lives of the Eminent Philosophers (Diogenes Laertius)",
+  "reading": [
+   "The Epistemology of the Cyrenaic School (Voula Tsouna)",
+   "The Hedonist Manifesto (Michel Onfray)"
+  ],
+  "place": "Cyrene, Libya, and Athens, Greece",
+  "bio": "Aristippus was a student of Socrates, but drew conclusions very different from Plato's. A native of Cyrene in North Africa, he held that the pleasure of the present moment is the greatest good. He lived comfortably at the courts of tyrants, always trying to enjoy life without being ruled by it.",
+  "ideas": [
+   "Pleasure is the highest good, and pain is the evil to be avoided",
+   "Present, bodily pleasure is worth more than promises about the future",
+   "We should enjoy pleasures without becoming their slaves"
+  ],
+  "line": "Cyrenaic comes from Cyrene, Aristippus' hometown, and names the school that saw immediate pleasure as the goal of life. Aristippus is considered its founder.",
+  "wiki": "https://en.wikipedia.org/wiki/Aristippus"
+ },
+ "pirro": {
+  "n": "Pyrrho",
+  "s": "Skeptic",
+  "q": "Nothing is more this than that.",
+  "b": "Outlines of Pyrrhonism (Sextus Empiricus)",
+  "reading": [
+   "Against the Professors (Sextus Empiricus)",
+   "The Skeptic Way (Benson Mates)"
+  ],
+  "place": "Elis, Greece",
+  "bio": "Pyrrho accompanied Alexander the Great on his expedition to India, where he is said to have met local sages. Back in Greece, he taught that we cannot know how things really are and that, for this reason, we should suspend judgment. He left no writings, but he gave his name to Pyrrhonian skepticism, which influenced Montaigne and Hume.",
+  "ideas": [
+   "We cannot know with certainty how things are in themselves",
+   "Faced with opposing opinions, the best course is to suspend judgment",
+   "By suspending judgment, we reach tranquility of the soul"
+  ],
+  "line": "A skeptic doubts that secure knowledge is possible and prefers not to assert anything as definitive. Pyrrho is considered the father of this radical skepticism.",
+  "wiki": "https://en.wikipedia.org/wiki/Pyrrho"
+ },
+ "epicuro": {
+  "n": "Epicurus",
+  "s": "Epicurean",
+  "q": "Death is nothing to us.",
+  "b": "Letter to Menoeceus",
+  "reading": [
+   "Principal Doctrines",
+   "On the Nature of Things (Lucretius)"
+  ],
+  "place": "Samos and Athens, Greece",
+  "bio": "Epicurus founded the Garden in Athens, a community open even to women and slaves. He taught that the goal of life is pleasure, understood as the absence of pain in the body and disturbance in the soul. Far from the image of parties and excess, he advocated a simple life with friends, free from fear of the gods or of death.",
+  "ideas": [
+   "Happiness is the absence of pain in the body and disturbance in the soul",
+   "Death is nothing to us, since when it arrives we no longer exist",
+   "Simple pleasures and friendship are worth more than luxury and power"
+  ],
+  "line": "An Epicurean follows Epicurus in pursuing a calm, moderate pleasure, based on an atomist view of the world. He is the founder and great reference of the school.",
+  "wiki": "https://en.wikipedia.org/wiki/Epicurus"
+ },
+ "seneca": {
+  "n": "Seneca",
+  "s": "Stoic",
+  "q": "It is not that we have a short time to live, but that we waste much of it.",
+  "b": "On the Shortness of Life",
+  "reading": [
+   "Letters to Lucilius",
+   "On Anger"
+  ],
+  "place": "Rome, Roman Empire",
+  "bio": "Born in Córdoba, in Hispania, Seneca was a writer, senator and adviser to Emperor Nero, who eventually ordered his death. In letters and essays, he spoke in practical terms about anger, grief, time and death. He is one of the most widely read Stoic authors today, precisely because he deals with everyday problems.",
+  "ideas": [
+   "Life is not short: we are the ones who waste much of our time",
+   "We should prepare for adversity by imagining it before it happens",
+   "Wealth is not an evil, as long as the sage does not depend on it"
+  ],
+  "line": "A Stoic seeks to live according to reason and nature, accepting what is not up to us. Seneca represents Roman Stoicism turned toward practical life.",
+  "wiki": "https://en.wikipedia.org/wiki/Seneca_the_Younger"
+ },
+ "epicteto": {
+  "n": "Epictetus",
+  "s": "Stoic",
+  "q": "It is not things that disturb us, but our opinions about them.",
+  "b": "Enchiridion",
+  "reading": [
+   "Discourses",
+   "The Art of Living (Sharon Lebell)"
+  ],
+  "place": "Rome and Nicopolis, Greece",
+  "bio": "Epictetus was born a slave in Phrygia and taken to Rome, where he studied philosophy and later won his freedom. Expelled from Rome, he founded a school in Nicopolis. He wrote nothing, but his student Arrian recorded his teachings, which focus on the difference between what is and is not up to us.",
+  "ideas": [
+   "Some things are up to us and others are not, and wisdom is knowing how to tell them apart",
+   "It is not events that disturb us, but the judgments we make about them",
+   "True freedom is inner, and no master can take it away"
+  ],
+  "line": "A Stoic seeks serenity by living according to reason and accepting fate. Epictetus is the most direct and practical Stoic, focused on controlling our own judgments.",
+  "wiki": "https://en.wikipedia.org/wiki/Epictetus"
+ },
+ "marco-aurelio": {
+  "n": "Marcus Aurelius",
+  "s": "Stoic",
+  "q": "You have power over your mind, not over events.",
+  "b": "Meditations",
+  "reading": [
+   "The Obstacle Is the Way (Ryan Holiday)",
+   "How to Think Like a Roman Emperor (Donald Robertson)"
+  ],
+  "place": "Rome and the frontiers of the Roman Empire",
+  "bio": "Marcus Aurelius was emperor of Rome and spent much of his reign on military campaigns at the frontiers. In his spare hours, he wrote reflections to himself in Greek, which became known as the Meditations. The text shows a powerful man trying to be just, humble and serene, and it became a classic of practical wisdom.",
+  "ideas": [
+   "We should accept with serenity what happens, for it is part of the order of the universe",
+   "All human beings are part of one rational community",
+   "Life is short, and each day should be lived with virtue and a sense of duty"
+  ],
+  "line": "A Stoic seeks virtue and inner peace by accepting what he cannot control. Marcus Aurelius shows Stoicism practiced by the man with the greatest power in the world.",
+  "wiki": "https://en.wikipedia.org/wiki/Marcus_Aurelius"
+ },
+ "plotino": {
+  "n": "Plotinus",
+  "s": "Neoplatonist",
+  "q": "Never stop sculpting your own statue.",
+  "b": "Enneads",
+  "reading": [
+   "Plotinus or the Simplicity of Vision (Pierre Hadot)",
+   "What Is Ancient Philosophy? (Pierre Hadot)"
+  ],
+  "place": "Alexandria, Egypt, and Rome",
+  "bio": "Plotinus studied in Alexandria and later taught philosophy in Rome, where he gathered a circle of students. His disciple Porphyry organized his writings into the Enneads. Plotinus reinterpreted Plato in a mystical vision in which everything proceeds from a supreme principle, the One, and he deeply influenced Christian, Jewish and Islamic thought.",
+  "ideas": [
+   "Everything that exists emanates from a supreme and perfect principle, the One",
+   "Reality is hierarchical: from the One comes Intellect, and from it, Soul",
+   "The soul can return to the One through contemplation and purification"
+  ],
+  "line": "A Neoplatonist renews Plato with a spiritual vision in which everything is born from a single source and returns to it. Plotinus is the founder of this current.",
+  "wiki": "https://en.wikipedia.org/wiki/Plotinus"
+ },
+ "santo-agostinho": {
+  "n": "Saint Augustine",
+  "s": "Christian Neoplatonist",
+  "q": "Our heart is restless until it rests in You.",
+  "b": "Confessions",
+  "reading": [
+   "The City of God",
+   "On Free Choice of the Will"
+  ],
+  "place": "Hippo, North Africa",
+  "bio": "Augustine was born in Thagaste, in present-day Algeria, and had a turbulent youth before converting to Christianity. He became bishop of Hippo and wrote decisive works such as the Confessions and The City of God. By joining Christian faith to Platonic philosophy, he became the most influential thinker of the early Middle Ages.",
+  "ideas": [
+   "Evil is not a substance, but the absence or privation of good",
+   "Truth is within us and is illuminated by God",
+   "Divine grace is necessary for human beings to be able to do good"
+  ],
+  "line": "A Christian Neoplatonist uses the ideas of Plotinus and Plato to explain the Christian faith. Augustine is the great example, seeing God as the source of being and truth.",
+  "wiki": "https://en.wikipedia.org/wiki/Augustine_of_Hippo"
+ },
+ "averrois": {
+  "n": "Averroes",
+  "s": "Aristotelian (falsafa)",
+  "q": "Truth does not contradict truth.",
+  "b": "The Decisive Treatise",
+  "reading": [
+   "On the Substance of the Orb",
+   "Averroes: His Life, Works and Influence (Majid Fakhry)"
+  ],
+  "place": "Córdoba, al-Andalus (modern Spain)",
+  "bio": "Ibn Rushd, known in the West as Averroes, was a judge, physician and philosopher in Muslim Córdoba. He wrote commentaries on Aristotle so thorough that Europeans simply called him The Commentator. He argued that philosophy and religion do not contradict each other, and his ideas stirred up the medieval Christian universities.",
+  "ideas": [
+   "Philosophy and religion seek the same truth and cannot contradict each other",
+   "Those who are capable have a duty to study philosophy and use reason",
+   "Aristotle's work is the highest point of human knowledge"
+  ],
+  "line": "Falsafa is the Arabic name for Greek-inspired philosophy in the Islamic world, and Aristotelian means one who follows Aristotle. Averroes is the greatest Aristotelian of this tradition.",
+  "wiki": "https://en.wikipedia.org/wiki/Averroes"
+ },
+ "maimonides": {
+  "n": "Maimonides",
+  "s": "Jewish philosophy",
+  "q": "Of God, we know only what He is not.",
+  "b": "The Guide for the Perplexed",
+  "reading": [
+   "Maimonides (Abraham Joshua Heschel)",
+   "Mishneh Torah"
+  ],
+  "place": "Córdoba, Spain, and Cairo, Egypt",
+  "bio": "Moses Maimonides was born in Córdoba, but fled with his family from religious persecution and settled in Cairo, where he was court physician and leader of the Jewish community. He organized Jewish law and wrote the Guide for the Perplexed for those who felt torn between faith and reason. He is the greatest Jewish philosopher of the Middle Ages.",
+  "ideas": [
+   "Faith and reason can be harmonized, and the Bible can also be read allegorically",
+   "Of God we can only say what He is not, since He surpasses our concepts",
+   "Studying and observing the law perfects both the individual and society"
+  ],
+  "line": "Jewish philosophy is the reflection that joins biblical and rabbinic tradition with Greek philosophy. Maimonides is its central figure, reconciling the Torah with Aristotle.",
+  "wiki": "https://en.wikipedia.org/wiki/Maimonides"
+ },
+ "tomas-de-aquino": {
+  "n": "Thomas Aquinas",
+  "s": "Scholastic",
+  "q": "Grace does not destroy nature, but perfects it.",
+  "b": "Summa Theologica",
+  "reading": [
+   "Summa Contra Gentiles",
+   "On Being and Essence"
+  ],
+  "place": "Paris, France, and Naples, Italy",
+  "bio": "Thomas Aquinas was an Italian Dominican friar who taught at the University of Paris. In the Summa Theologica, he united Aristotle's philosophy with Christian faith in a broad, organized system. Canonized and declared a Doctor of the Church, he remains the main philosophical reference of Catholicism today.",
+  "ideas": [
+   "Reason and faith do not oppose each other, since both come from God",
+   "It is possible to demonstrate the existence of God through five rational ways",
+   "There is a natural law, accessible to reason, that guides moral good"
+  ],
+  "line": "A Scholastic is a thinker of the medieval universities who used logic and debate to reconcile faith and reason. Thomas Aquinas is the high point of Scholasticism.",
+  "wiki": "https://en.wikipedia.org/wiki/Thomas_Aquinas"
+ },
+ "guilherme-de-ockham": {
+  "n": "William of Ockham",
+  "s": "Nominalist",
+  "q": "Entities must not be multiplied beyond necessity.",
+  "b": "Summa Logicae",
+  "reading": [
+   "Ockham's Theory of Terms (Summa Logicae, Part I)",
+   "A Short Discourse on Tyrannical Government (William of Ockham)"
+  ],
+  "place": "Oxford, England, and Munich, Germany",
+  "bio": "William of Ockham was an English Franciscan friar who studied at Oxford. He got into conflicts with the pope over the poverty of the Church and ended up taking refuge in Munich, under the emperor's protection. He is remembered for Ockham's razor, the principle that says not to multiply explanations without need.",
+  "ideas": [
+   "We should not assume more entities than necessary to explain something",
+   "Only individual things exist, and universals are merely names and concepts",
+   "The pope's power has limits and must not override civil power"
+  ],
+  "line": "A nominalist holds that general concepts, like humanity, are only names, and that only individuals exist. Ockham is the greatest defender of this thesis in the Middle Ages.",
+  "wiki": "https://en.wikipedia.org/wiki/William_of_Ockham"
+ },
+ "joao-calvino": {
+  "n": "John Calvin",
+  "s": "Reformer",
+  "q": "The human heart is a perpetual factory of idols.",
+  "b": "Institutes of the Christian Religion",
+  "reading": [
+   "The Golden Booklet of the True Christian Life",
+   "Instruction in Faith"
+  ],
+  "place": "Geneva, Switzerland",
+  "bio": "Jean Calvin was born in France, studied law and joined the Protestant Reformation, having to flee the country. In Geneva, he organized a church and a city according to strict biblical principles. His Institutes became the foundation of Reformed Protestantism, which spread through Switzerland, the Netherlands, Scotland and North America.",
+  "ideas": [
+   "God is sovereign over everything, and only his grace saves human beings",
+   "God chose from eternity who will be saved, known as predestination",
+   "The Bible is the highest authority in matters of faith, above tradition"
+  ],
+  "line": "Reformer refers to the leaders of the 16th-century Protestant Reformation, who broke with Rome. Calvin is one of the main ones, founder of the Reformed or Calvinist tradition.",
+  "wiki": "https://en.wikipedia.org/wiki/John_Calvin"
+ },
+ "maquiavel": {
+  "n": "Machiavelli",
+  "s": "Political realist",
+  "q": "It is better to be feared than loved, if you cannot be both.",
+  "b": "The Prince",
+  "reading": [
+   "Discourses on Livy",
+   "The Art of War"
+  ],
+  "place": "Florence, Italy",
+  "bio": "Niccolò Machiavelli was a diplomat and official of the Florentine republic. Removed from power when the Medici returned, he wrote The Prince, a manual on how to win and keep power. For describing politics as it is, and not as it should be, he was called cynical, but also the founder of modern political science.",
+  "ideas": [
+   "Politics has its own rules, separate from religious and private morality",
+   "The ideal ruler is both feared and loved, but if he cannot be both, it is better to be feared",
+   "Fortune governs half of events, and the leader's virtue decides the rest"
+  ],
+  "line": "A political realist analyzes power as it actually works, without moral idealization. Machiavelli is the great founder of this way of thinking about politics.",
+  "wiki": "https://en.wikipedia.org/wiki/Niccol%C3%B2_Machiavelli"
+ },
+ "montaigne": {
+  "n": "Montaigne",
+  "s": "Humanist skeptic",
+  "q": "What do I know?",
+  "b": "Essays",
+  "reading": [
+   "Journal of Montaigne's Travels in Italy",
+   "How to Live: Or a Life of Montaigne (Sarah Bakewell)"
+  ],
+  "place": "Bordeaux, France",
+  "bio": "Michel de Montaigne was a French nobleman who, after years in public life, withdrew to his tower to read and write. He created a new genre, the essay, in which he examined himself and human customs with frankness and humor. He lived through the wars of religion and defended tolerance and doubt in the face of certainties.",
+  "ideas": [
+   "Our knowledge is limited and uncertain, and we should doubt our certainties",
+   "Customs vary among peoples, and what we call barbarian is just the different",
+   "Knowing yourself is the path to living well and with moderation"
+  ],
+  "line": "A humanist skeptic joins the doubt of the ancient skeptics with the Renaissance interest in the human being. Montaigne applies the suspension of judgment to the observation of himself and of customs.",
+  "wiki": "https://en.wikipedia.org/wiki/Michel_de_Montaigne"
+ },
+ "descartes": {
+  "n": "Descartes",
+  "s": "Rationalist",
+  "q": "I think, therefore I am.",
+  "b": "Discourse on Method",
+  "reading": [
+   "Meditations on First Philosophy",
+   "The Passions of the Soul"
+  ],
+  "place": "France and the Netherlands",
+  "bio": "René Descartes was a French philosopher, mathematician and scientist, creator of analytic geometry. He lived much of his life in the Netherlands and died in Stockholm, at the invitation of Queen Christina. He decided to doubt everything in order to find a secure foundation for knowledge, and is therefore considered the father of modern philosophy.",
+  "ideas": [
+   "We should doubt everything that can be doubted to find something certain",
+   "I think, therefore I am: the existence of thought is the first certainty",
+   "Mind and body are distinct substances, one thinking and the other extended"
+  ],
+  "line": "A rationalist believes that reason, not the senses, is the main source of secure knowledge. Descartes inaugurates modern rationalism with his method.",
+  "wiki": "https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes"
+ },
+ "pascal": {
+  "n": "Pascal",
+  "s": "Fideist",
+  "q": "The heart has its reasons, which reason knows nothing of.",
+  "b": "Pensées",
+  "reading": [
+   "The Provincial Letters",
+   "On the Geometrical Spirit and the Art of Persuasion"
+  ],
+  "place": "Paris, France",
+  "bio": "Blaise Pascal was a precocious genius: he invented a mechanical calculator and contributed to probability theory and physics. After an intense religious experience, he devoted himself to defending Christianity. His Pensées, published after his death, show human greatness and wretchedness and the limits of reason.",
+  "ideas": [
+   "The heart knows truths that reason alone cannot reach",
+   "Betting on the existence of God is the wisest choice in the face of uncertainty",
+   "The human being is as frail as a reed, but a reed that thinks"
+  ],
+  "line": "A fideist holds that faith, not reason, is the main path to religious truths. Pascal maintains that reason has limits and only faith reaches God.",
+  "wiki": "https://en.wikipedia.org/wiki/Blaise_Pascal"
+ },
+ "spinoza": {
+  "n": "Spinoza",
+  "s": "Rationalist",
+  "q": "Not to laugh, not to lament, but to understand.",
+  "b": "Ethics",
+  "reading": [
+   "Theological-Political Treatise",
+   "Treatise on the Emendation of the Intellect"
+  ],
+  "place": "Amsterdam and The Hague, Netherlands",
+  "bio": "Baruch Spinoza was born into a Portuguese Jewish family in Amsterdam and was expelled from the community for his ideas. He lived modestly, grinding lenses, while writing the Ethics, organized like a geometry book. He defended freedom of thought and a view in which God and nature are the same thing.",
+  "ideas": [
+   "God and nature are a single infinite substance",
+   "Everything happens by necessity, and freedom lies in understanding the causes",
+   "Freedom of thought and expression is essential to a healthy state"
+  ],
+  "line": "A rationalist trusts reason to reach fundamental truths. Spinoza takes this to the extreme, deducing all of reality as if it were geometry.",
+  "wiki": "https://en.wikipedia.org/wiki/Baruch_Spinoza"
+ },
+ "leibniz": {
+  "n": "Leibniz",
+  "s": "Optimistic rationalist",
+  "q": "This is the best of all possible worlds.",
+  "b": "Monadology",
+  "reading": [
+   "Discourse on Metaphysics",
+   "Theodicy"
+  ],
+  "place": "Hanover, Germany",
+  "bio": "Gottfried Wilhelm Leibniz was a philosopher, mathematician, diplomat and librarian in the service of the court of Hanover. He invented infinitesimal calculus at the same time as Newton and imagined calculating machines. For him, the universe is made of simple units, the monads, and God chose to create the best of all possible worlds.",
+  "ideas": [
+   "The real world is the best of all possible worlds",
+   "Reality is made of monads, simple and spiritual units",
+   "Nothing happens without a sufficient reason that explains why it is so"
+  ],
+  "line": "An optimistic rationalist trusts reason to explain everything and believes the world is good. Leibniz is the example, with his thesis of the best of all possible worlds.",
+  "wiki": "https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz"
+ },
+ "thomas-hobbes": {
+  "n": "Thomas Hobbes",
+  "s": "Contractarian",
+  "q": "The life of man is solitary, poor, nasty, brutish, and short.",
+  "b": "Leviathan",
+  "reading": [
+   "On the Citizen",
+   "Behemoth"
+  ],
+  "place": "England and Paris, France",
+  "bio": "Thomas Hobbes lived through the English Civil War and spent years in exile in Paris. In Leviathan, he argued that without a strong government, human life would be a war of all against all. His theory of the social contract, based on fear and the search for security, founded modern political philosophy.",
+  "ideas": [
+   "Without a state, human life would be solitary, poor, brutal and short",
+   "People make a contract and hand power to a sovereign in exchange for security",
+   "The sovereign needs strong, indivisible power to prevent civil war"
+  ],
+  "line": "A contractarian explains the state as the result of an agreement among people. Hobbes is the first great modern contractarian and defends a strong sovereign.",
+  "wiki": "https://en.wikipedia.org/wiki/Thomas_Hobbes"
+ },
+ "john-locke": {
+  "n": "John Locke",
+  "s": "Classical liberal",
+  "q": "Where there is no law, there is no freedom.",
+  "b": "Second Treatise of Government",
+  "reading": [
+   "An Essay Concerning Human Understanding",
+   "A Letter Concerning Toleration"
+  ],
+  "place": "England",
+  "bio": "John Locke was an English physician and philosopher, involved in the political disputes that led to the Glorious Revolution of 1688. He argued that everyone has natural rights to life, liberty and property, and that government exists to protect them. His ideas inspired American independence and liberal democracies.",
+  "ideas": [
+   "Everyone is born with natural rights to life, liberty and property",
+   "Government depends on the consent of the people, who may rebel against tyranny",
+   "The mind is born as a blank slate and learns through experience"
+  ],
+  "line": "A classical liberal defends individual rights, limited government and religious toleration. Locke is considered the father of political liberalism.",
+  "wiki": "https://en.wikipedia.org/wiki/John_Locke"
+ },
+ "george-berkeley": {
+  "n": "George Berkeley",
+  "s": "Empiricist idealist",
+  "q": "To be is to be perceived.",
+  "b": "A Treatise Concerning the Principles of Human Knowledge",
+  "reading": [
+   "Three Dialogues between Hylas and Philonous",
+   "An Essay Towards a New Theory of Vision"
+  ],
+  "place": "Dublin and Cloyne, Ireland",
+  "bio": "George Berkeley was an Irish philosopher and Anglican bishop of Cloyne. While still young, he proposed a surprising thesis: material objects do not exist outside the mind, because to be is to be perceived. He also tried to found a college in Bermuda and spent a few years in North America.",
+  "ideas": [
+   "To be is to be perceived: things exist only while they are perceived",
+   "There is no matter that exists independently of any mind",
+   "God perceives everything continuously and guarantees the stability of the world"
+  ],
+  "line": "An empiricist idealist starts from the experience of the senses, like the empiricists, but concludes that only minds and ideas exist. Berkeley is the main name of this position.",
+  "wiki": "https://en.wikipedia.org/wiki/George_Berkeley"
+ },
+ "david-hume": {
+  "n": "David Hume",
+  "s": "Empiricist",
+  "q": "Reason is, and ought only to be, the slave of the passions.",
+  "b": "An Enquiry Concerning Human Understanding",
+  "reading": [
+   "A Treatise of Human Nature",
+   "Dialogues Concerning Natural Religion"
+  ],
+  "place": "Edinburgh, Scotland",
+  "bio": "A Scottish philosopher and historian, Hume was one of the sharpest minds of the Enlightenment. He took empiricism to its ultimate consequences and showed that many everyday certainties, like the idea of cause and effect, come from habit and not from pure reason. His skepticism woke Kant and still shapes debates about science, morality and religion.",
+  "ideas": [
+   "All ideas are copies of impressions that arrived through the senses",
+   "We do not see causation: we expect the future to repeat the past out of sheer habit",
+   "Reason alone moves no one; it is passions and feelings that decide"
+  ],
+  "line": "Empiricism says that all knowledge comes from experience, not from innate ideas. Hume is the most radical empiricist: he used this principle to show the limits of what reason can prove.",
+  "wiki": "https://en.wikipedia.org/wiki/David_Hume"
+ },
+ "voltaire": {
+  "n": "Voltaire",
+  "s": "Enlightenment thinker",
+  "q": "We must cultivate our garden.",
+  "b": "Candide",
+  "reading": [
+   "Treatise on Tolerance",
+   "Philosophical Dictionary"
+  ],
+  "place": "Paris and Ferney, France",
+  "bio": "Voltaire, pen name of François-Marie Arouet, was a tireless writer, playwright and polemicist. He used irony as a weapon against religious fanaticism, censorship and the abuses of the Church and monarchy, even being jailed and exiled. His tales, like Candide, and his campaigns for victims of injustice made him the face of the French Enlightenment.",
+  "ideas": [
+   "Religious tolerance is a condition for a civilized and peaceful society",
+   "Fanaticism and superstition are the greatest enemies of human reason",
+   "Naive optimism does not solve the world's evil; it is better to work and act"
+  ],
+  "line": "The Enlightenment was the 18th-century movement that trusted reason, science and free debate to fight blind tradition. Voltaire was its most famous and combative popularizer.",
+  "wiki": "https://en.wikipedia.org/wiki/Voltaire"
+ },
+ "rousseau": {
+  "n": "Rousseau",
+  "s": "Romantic contractarian",
+  "q": "Man is born free, and everywhere he is in chains.",
+  "b": "The Social Contract",
+  "reading": [
+   "Émile, or On Education",
+   "Discourse on Inequality"
+  ],
+  "place": "Geneva, Switzerland, and Paris, France",
+  "bio": "Born in Geneva, Rousseau was a philosopher, writer and even composer, a restless and controversial figure. He argued that human beings are born good and are corrupted by society, property and inequality. His ideas on popular sovereignty inspired the French Revolution, and his valuing of feeling paved the way for Romanticism.",
+  "ideas": [
+   "Human beings are good by nature; it is unequal society that corrupts them",
+   "A legitimate government arises from a pact and expresses the general will of the people",
+   "Education should respect the child's nature, not stifle it"
+  ],
+  "line": "Contractarians explain the state as the result of an agreement among people; Romantics value feeling and nature. Rousseau joins both: a social pact in service of natural goodness.",
+  "wiki": "https://en.wikipedia.org/wiki/Jean-Jacques_Rousseau"
+ },
+ "adam-smith": {
+  "n": "Adam Smith",
+  "s": "Economic liberalism",
+  "q": "It is not from the benevolence of the butcher that we expect our dinner.",
+  "b": "The Wealth of Nations",
+  "reading": [
+   "The Theory of Moral Sentiments",
+   "The Invisible Hand"
+  ],
+  "place": "Glasgow and Edinburgh, Scotland",
+  "bio": "A professor of moral philosophy in Glasgow, Adam Smith is remembered as the father of modern economics. In The Wealth of Nations, he explained how the division of labor and free exchange generate prosperity. Before that, he wrote about sympathy as the basis of morality, showing that his economic thought had ethical roots.",
+  "ideas": [
+   "When each person pursues their own interest, the market tends to generate wealth for all",
+   "The division of labor multiplies a society's productivity",
+   "Morality arises from sympathy: we put ourselves in another's place to judge"
+  ],
+  "line": "Economic liberalism defends free markets, property and little state interference in the economy. Adam Smith is its classical founder, with the idea that free exchange organizes society.",
+  "wiki": "https://en.wikipedia.org/wiki/Adam_Smith"
+ },
+ "edmund-burke": {
+  "n": "Edmund Burke",
+  "s": "Conservative",
+  "q": "Society is a partnership between the dead, the living, and those yet to be born.",
+  "b": "Reflections on the Revolution in France",
+  "reading": [
+   "A Philosophical Enquiry into the Origin of Our Ideas of the Sublime and Beautiful",
+   "The Great Debate (Yuval Levin)"
+  ],
+  "place": "Dublin, Ireland, and London, England",
+  "bio": "Born in Dublin, Burke was a politician and writer in the British Parliament for decades. He supported the cause of the American colonists, but attacked the French Revolution fiercely, predicting it would end in terror and tyranny. For this he is seen as the father of modern conservatism, which distrusts abrupt change guided only by theories.",
+  "ideas": [
+   "Old institutions hold wisdom accumulated over many generations",
+   "Reforms should be gradual; revolutions in the name of abstract theories destroy",
+   "Society unites those who have died, those who live, and those yet to be born"
+  ],
+  "line": "Conservatism values tradition, prudence and continuity, preferring to reform rather than break. Burke is its main reference, defending historical inheritance against revolution.",
+  "wiki": "https://en.wikipedia.org/wiki/Edmund_Burke"
+ },
+ "joseph-de-maistre": {
+  "n": "Joseph de Maistre",
+  "s": "Reactionary",
+  "q": "Every nation gets the government it deserves.",
+  "b": "Considerations on France",
+  "reading": [
+   "The Crooked Timber of Humanity (Isaiah Berlin)",
+   "The Roots of Romanticism (Isaiah Berlin)"
+  ],
+  "place": "Chambéry, Savoy, and Saint Petersburg, Russia",
+  "bio": "A diplomat and writer from Savoy, Maistre spent years in Saint Petersburg as ambassador of the king of Sardinia. He was the fiercest critic of the French Revolution and the Enlightenment, which he saw as a revolt against God. He defended the pope and the king as the foundations of social order and influenced European counterrevolutionary thought.",
+  "ideas": [
+   "The French Revolution was a divine punishment for the sins of the age",
+   "Strong authority, of king and pope, is needed to maintain order",
+   "Written constitutions count for little; the true foundation of a people is tradition"
+  ],
+  "line": "A reactionary not only preserves but wants to return to an order before a rupture. Maistre wanted to restore the world before the Revolution, with throne and altar at the center.",
+  "wiki": "https://en.wikipedia.org/wiki/Joseph_de_Maistre"
+ },
+ "kant": {
+  "n": "Kant",
+  "s": "Transcendental idealism",
+  "q": "Dare to know.",
+  "b": "Groundwork of the Metaphysics of Morals",
+  "reading": [
+   "Critique of Pure Reason",
+   "Perpetual Peace"
+  ],
+  "place": "Königsberg, Prussia",
+  "bio": "Immanuel Kant spent practically his whole life in Königsberg, famous for his methodical routine. Even so, he revolutionized philosophy by proposing that the mind organizes experience, uniting rationalism and empiricism. He also created an ethics based on duty and the dignity of each person, which still underlies the idea of human rights.",
+  "ideas": [
+   "We know things only as they appear to us, never as they are in themselves",
+   "Act only according to rules you would accept as valid for everyone",
+   "Persons are ends in themselves and can never be treated merely as means"
+  ],
+  "line": "Transcendental idealism is the thesis that the world we know is shaped by the structures of the mind itself, such as space and time. Kant created this view to explain how secure knowledge is possible.",
+  "wiki": "https://en.wikipedia.org/wiki/Immanuel_Kant"
+ },
+ "mary-wollstonecraft": {
+  "n": "Mary Wollstonecraft",
+  "s": "Liberal feminism",
+  "q": "I do not wish women to have power over men, but over themselves.",
+  "b": "A Vindication of the Rights of Woman",
+  "reading": [
+   "A Vindication of the Rights of Men",
+   "Letters Written in Sweden, Norway, and Denmark"
+  ],
+  "place": "London, England",
+  "bio": "An English writer of modest origins, Mary Wollstonecraft supported herself as a teacher, translator and author. In 1792 she published A Vindication of the Rights of Woman, arguing that women only seemed inferior for lack of education. She died young, days after giving birth to her daughter, the future author of Frankenstein, Mary Shelley.",
+  "ideas": [
+   "Supposed female inferiority comes from lack of education, not from nature",
+   "Women and men have the same reason and deserve the same rights",
+   "Marriage should be a friendship between equals, not a form of submission"
+  ],
+  "line": "Liberal feminism seeks equal rights, education and opportunities for women through reason and law. Wollstonecraft is its pioneer, applying Enlightenment ideals to women.",
+  "wiki": "https://en.wikipedia.org/wiki/Mary_Wollstonecraft"
+ },
+ "jeremy-bentham": {
+  "n": "Jeremy Bentham",
+  "s": "Utilitarian",
+  "q": "The greatest happiness of the greatest number.",
+  "b": "An Introduction to the Principles of Morals and Legislation",
+  "reading": [
+   "The Panopticon Writings",
+   "A Fragment on Government"
+  ],
+  "place": "London, England",
+  "bio": "A jurist and English reformer, Bentham wanted to transform laws and institutions based on a calculation of pleasure and pain. He defended ideas far ahead of his time, such as wider voting rights, an end to cruel punishments and consideration for animals. He asked that his body be preserved, and it is still on display at University College London.",
+  "ideas": [
+   "The right is what produces the greatest happiness for the greatest number of people",
+   "Pleasure and pain are the only real guides to human behavior",
+   "The suffering of animals counts too, since they can feel pain"
+  ],
+  "line": "Utilitarianism judges actions and laws by their consequences: the best is what produces the most well-being overall, adding up the happiness of everyone affected. Bentham was the systematic founder of this current.",
+  "wiki": "https://en.wikipedia.org/wiki/Jeremy_Bentham"
+ },
+ "hegel": {
+  "n": "Hegel",
+  "s": "German idealist",
+  "q": "What is rational is real, and what is real is rational.",
+  "b": "Phenomenology of Spirit",
+  "reading": [
+   "Elements of the Philosophy of Right",
+   "Lectures on the Philosophy of History"
+  ],
+  "place": "Jena and Berlin, Germany",
+  "bio": "Georg Wilhelm Friedrich Hegel was a professor in Jena, Heidelberg and Berlin, where he became the most influential philosopher in Germany. He built an enormous system in which history, art, religion and the state are stages in the development of Spirit. His dialectic inspired admirers and critics alike, from Marx to the existentialists.",
+  "ideas": [
+   "Reality develops through conflicts and overcomings, in a dialectical movement",
+   "History is the path by which human freedom is realized",
+   "We recognize ourselves as subjects through the recognition of others"
+  ],
+  "line": "German idealism was the post-Kant current that saw reason or spirit as the basis of all reality. Hegel is its culmination, with a system that embraces nature, history and culture.",
+  "wiki": "https://en.wikipedia.org/wiki/Georg_Wilhelm_Friedrich_Hegel"
+ },
+ "schopenhauer": {
+  "n": "Schopenhauer",
+  "s": "Pessimist",
+  "q": "Man can do what he wills, but he cannot will what he wills.",
+  "b": "Aphorisms on the Wisdom of Life",
+  "reading": [
+   "The World as Will and Representation",
+   "The Art of Being Right"
+  ],
+  "place": "Frankfurt, Germany",
+  "bio": "Arthur Schopenhauer was a German philosopher of difficult temperament, an avowed rival of Hegel. He taught that behind the world lies a blind and insatiable Will, the source of constant desire and suffering. One of the first Westerners to study Buddhism and Hinduism, he influenced Nietzsche, Freud, Wagner and many writers.",
+  "ideas": [
+   "Behind everything lies a blind Will that is never satisfied",
+   "Life swings between the pain of unfulfilled desire and boredom",
+   "Compassion for the suffering of others is the true basis of morality"
+  ],
+  "line": "Philosophical pessimism is the view that existence brings more pain than joy and that the world has no good purpose. Schopenhauer is its great representative, proposing renunciation of desire as the way out.",
+  "wiki": "https://en.wikipedia.org/wiki/Arthur_Schopenhauer"
+ },
+ "auguste-comte": {
+  "n": "Auguste Comte",
+  "s": "Positivist",
+  "q": "Love as a principle, order as the basis, progress as the goal.",
+  "b": "Discourse on the Positive Spirit",
+  "reading": [
+   "Course of Positive Philosophy",
+   "Catechism of Positive Religion"
+  ],
+  "place": "Paris, France",
+  "bio": "Auguste Comte was a French thinker who founded positivism and gave sociology its name. He believed humanity passes through stages and would arrive at an era guided by science. His ideas left a deep mark on Brazil: the motto Order and Progress on the flag comes directly from him, and a Positivist Church still exists there today.",
+  "ideas": [
+   "Humanity evolves from a religious stage to the metaphysical and, finally, the scientific",
+   "Only knowledge based on observation and verifiable laws is reliable",
+   "Society can be studied scientifically, as physics studies nature"
+  ],
+  "line": "Positivism holds that only science, grounded in observable facts, produces valid knowledge, and that it should guide society. Comte is the creator and main name of this doctrine.",
+  "wiki": "https://en.wikipedia.org/wiki/Auguste_Comte"
+ },
+ "john-stuart-mill": {
+  "n": "John Stuart Mill",
+  "s": "Liberal utilitarian",
+  "q": "Over himself, the individual is sovereign.",
+  "b": "On Liberty",
+  "reading": [
+   "Utilitarianism",
+   "The Subjection of Women"
+  ],
+  "place": "London, England",
+  "bio": "Educated with extreme intensity by his father, John Stuart Mill was learning Greek at the age of three. He became the most influential liberal philosopher of the 19th century, defending individual liberty, democracy and equality between the sexes. He served as a member of Parliament and wrote, with Harriet Taylor, pioneering texts on women's rights.",
+  "ideas": [
+   "The state may limit someone only to prevent harm to others",
+   "Freedom of thought and discussion helps truth to emerge",
+   "There are higher pleasures, like those of the intellect, that are worth more than others"
+  ],
+  "line": "Liberal utilitarianism combines the pursuit of the greatest well-being with a firm defense of individual liberties. Mill refined Bentham's utilitarianism and tied it to political liberalism.",
+  "wiki": "https://en.wikipedia.org/wiki/John_Stuart_Mill"
+ },
+ "henry-david-thoreau": {
+  "n": "Henry David Thoreau",
+  "s": "Transcendentalist",
+  "q": "I went to the woods because I wished to live deliberately.",
+  "b": "Walden",
+  "reading": [
+   "Civil Disobedience",
+   "Walking"
+  ],
+  "place": "Concord, Massachusetts, USA",
+  "bio": "An American writer and naturalist, Thoreau spent two years in a cabin by Walden Pond to live simply. He refused to pay a tax he saw as supporting slavery and the war against Mexico, and spent a night in jail. His essay on civil disobedience inspired Gandhi, Martin Luther King and environmentalists.",
+  "ideas": [
+   "Living simply frees us from consumption and reveals what really matters",
+   "Nature is a source of wisdom, health and spiritual renewal",
+   "It is legitimate to peacefully disobey a government that commits injustice"
+  ],
+  "line": "Transcendentalism was an American movement that valued intuition, nature and individual autonomy over institutions. Thoreau put it into practice, living by Walden Pond.",
+  "wiki": "https://en.wikipedia.org/wiki/Henry_David_Thoreau"
+ },
+ "kierkegaard": {
+  "n": "Kierkegaard",
+  "s": "Christian existentialist",
+  "q": "Life can only be understood backwards, but it must be lived forwards.",
+  "b": "Fear and Trembling",
+  "reading": [
+   "The Concept of Anxiety",
+   "Either/Or: A Fragment of Life"
+  ],
+  "place": "Copenhagen, Denmark",
+  "bio": "Søren Kierkegaard was a Danish thinker who wrote under several pseudonyms and criticized his country's official Church. For him, faith is not a set of doctrines but a personal and anguished choice before God. He is considered the father of existentialism for placing the concrete individual at the center of philosophy.",
+  "ideas": [
+   "The truth that matters is subjective, the one by which one lives and dies",
+   "Anxiety arises from awareness of freedom and of possibilities",
+   "Faith is a personal leap that goes beyond reason and demands risk"
+  ],
+  "line": "Christian existentialism focuses on individual existence, choice and anxiety, understood within a personal relationship with God. Kierkegaard is its founder and main reference.",
+  "wiki": "https://en.wikipedia.org/wiki/S%C3%B8ren_Kierkegaard"
+ },
+ "max-stirner": {
+  "n": "Max Stirner",
+  "s": "Egoist",
+  "q": "Nothing is above me.",
+  "b": "The Ego and Its Own",
+  "reading": [
+   "The False Principle of Our Education",
+   "The German Ideology (Marx and Engels)"
+  ],
+  "place": "Berlin, Prussia",
+  "bio": "Max Stirner, pen name of Johann Kaspar Schmidt, was a teacher in Berlin and frequented the circle of the Young Hegelians. In The Ego and Its Own, he attacked God, the state, morality and even humanity as ideas that enslave the individual. He died poor and almost forgotten, but was rediscovered by anarchists and existentialists.",
+  "ideas": [
+   "God, state, morality and humanity are ghosts that dominate the individual",
+   "Each person should take themselves as their own cause, serving no outside ideals",
+   "Instead of the state, he proposes a free union of egoists who join out of interest"
+  ],
+  "line": "Stirner's egoism is the thesis that the unique individual is the only real value, free from duties imposed by abstract ideas. He is the creator of this radical position, close to individualist anarchism.",
+  "wiki": "https://en.wikipedia.org/wiki/Max_Stirner"
+ },
+ "proudhon": {
+  "n": "Proudhon",
+  "s": "Mutualist anarchist",
+  "q": "Property is theft.",
+  "b": "What Is Property?",
+  "reading": [
+   "System of Economical Contradictions (Philosophy of Poverty)",
+   "The Principle of Federation"
+  ],
+  "place": "Besançon and Paris, France",
+  "bio": "Pierre-Joseph Proudhon was a self-taught printer and the first thinker to call himself an anarchist. He became famous for declaring that property is theft, criticizing those who live on rent without working. He served as a deputy, ended up jailed for his writings, and influenced the French labor movement and syndicalism.",
+  "ideas": [
+   "Property that yields income without work is a form of exploitation",
+   "Society can organize itself without government, through free agreements",
+   "Power should be decentralized into federations of autonomous communities"
+  ],
+  "line": "Mutualist anarchism proposes a stateless society based on fair exchange, cooperation and mutual credit among workers. Proudhon is its founder and the first self-declared anarchist.",
+  "wiki": "https://en.wikipedia.org/wiki/Pierre-Joseph_Proudhon"
+ },
+ "mikhail-bakunin": {
+  "n": "Mikhail Bakunin",
+  "s": "Anarchist",
+  "q": "The passion for destruction is also a creative passion.",
+  "b": "God and the State",
+  "reading": [
+   "Statism and Anarchy",
+   "Bakunin on Anarchy (Sam Dolgoff)"
+  ],
+  "place": "Russia, Switzerland and other European countries",
+  "bio": "A Russian revolutionary of noble family, Bakunin took part in uprisings across Europe, spent years in prison and was exiled to Siberia, from where he escaped. In the First International, he broke with Marx over the idea of using the state to reach socialism. He became the main reference of collectivist anarchism.",
+  "ideas": [
+   "The state, even if run by workers, always creates a new oppressive elite",
+   "Liberty without equality is privilege; equality without liberty is slavery",
+   "Revolution must come from the organized masses, from the bottom up"
+  ],
+  "line": "Anarchism defends the abolition of the state and of all imposed authority, replacing them with free associations among equals. Bakunin is its great revolutionary and collectivist name.",
+  "wiki": "https://en.wikipedia.org/wiki/Mikhail_Bakunin"
+ },
+ "karl-marx": {
+  "n": "Karl Marx",
+  "s": "Historical materialist",
+  "q": "The philosophers have only interpreted the world; the point is to change it.",
+  "b": "The Communist Manifesto",
+  "reading": [
+   "Capital",
+   "Economic and Philosophic Manuscripts of 1844"
+  ],
+  "place": "London, England",
+  "bio": "Born in Trier, Germany, Karl Marx spent much of his life in exile in London, often in poverty. With Friedrich Engels, he wrote the Communist Manifesto and devoted decades to Capital, a critical analysis of capitalism. His ideas shaped labor movements, revolutions and the social sciences worldwide.",
+  "ideas": [
+   "History is driven by the struggle between social classes",
+   "Material and economic conditions shape ideas, laws and culture",
+   "Capitalist profit comes from the unpaid labor of workers"
+  ],
+  "line": "Historical materialism explains society from how humans produce their material life and the class relations that arise from it. Marx created it as the basis of his critique of capitalism.",
+  "wiki": "https://en.wikipedia.org/wiki/Karl_Marx"
+ },
+ "nietzsche": {
+  "n": "Nietzsche",
+  "s": "Perspectivist",
+  "q": "Become who you are.",
+  "b": "Thus Spoke Zarathustra",
+  "reading": [
+   "Beyond Good and Evil",
+   "On the Genealogy of Morality"
+  ],
+  "place": "Basel, Switzerland, and Germany",
+  "bio": "Friedrich Nietzsche became a professor in Basel at 24, but fragile health made him live as a wanderer across Europe. He announced the death of God and questioned the moral values inherited from Christianity. Writing in brilliant aphorisms, he influenced the philosophy, literature and psychology of the 20th century.",
+  "ideas": [
+   "With the death of God, traditional values lose their foundation",
+   "There are no pure facts, only interpretations made from perspectives",
+   "Each person must create their own values and overcome themselves"
+  ],
+  "line": "Perspectivism is the idea that all knowledge is an interpretation made from some point of view, with no neutral view from nowhere. Nietzsche is its main author.",
+  "wiki": "https://en.wikipedia.org/wiki/Friedrich_Nietzsche"
+ },
+ "william-james": {
+  "n": "William James",
+  "s": "Pragmatist",
+  "q": "Faith in a fact can help create the fact.",
+  "b": "Pragmatism",
+  "reading": [
+   "The Varieties of Religious Experience",
+   "The Will to Believe"
+  ],
+  "place": "Cambridge, Massachusetts, USA",
+  "bio": "Trained as a physician, William James was a professor at Harvard and one of the founders of modern psychology. He helped create pragmatism, which evaluates ideas by the practical effects they produce in life. He also wrote on religious experience and the will to believe, always in a clear and accessible style.",
+  "ideas": [
+   "An idea is true to the extent that it works and makes a practical difference",
+   "Consciousness is a continuous stream, not a sum of isolated pieces",
+   "Facing vital choices without definitive proof, we have the right to believe"
+  ],
+  "line": "Pragmatism is an American current that measures ideas by their practical consequences, not by an abstract correspondence with reality. William James was its greatest popularizer.",
+  "wiki": "https://en.wikipedia.org/wiki/William_James"
+ }
+}

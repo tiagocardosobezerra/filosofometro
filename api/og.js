@@ -3,7 +3,7 @@ const P = require("./_preview.js");
 
 module.exports = async (req, res) => {
   const q = req.query || {};
-  const info = q.a ? P.compareInfo(q.a, q.b, q.na, q.nb) : P.inviteInfo(q.code, q.name);
+  const info = q.a ? P.compareInfo(q.a, q.b, q.na, q.nb, q.lang) : P.inviteInfo(q.code, q.name, q.lang);
   if (!info) { res.statusCode = 400; res.setHeader("Content-Type", "text/plain; charset=utf-8"); res.end("Link inválido"); return; }
   const svg = info.kind === "compare" ? await P.compareSVG(info) : await P.inviteSVG(info);
   const png = P.rasterize(svg);

@@ -1,0 +1,914 @@
+[
+ {
+  "id": "mary-astell",
+  "n": "Mary Astell",
+  "s": "Early feminist (Anglican)",
+  "era": "English-speaking world",
+  "v": [
+   -0.8,
+   0.5,
+   -0.8,
+   -0.6,
+   0.4,
+   0.8,
+   0.9,
+   -0.6,
+   -0.4,
+   0.2,
+   -0.6
+  ],
+  "q": "If all men are born free, how is it that all women are born slaves?",
+  "b": "A Serious Proposal to the Ladies",
+  "reading": [
+   "Some Reflections upon Marriage",
+   "The Celebrated Mary Astell: An Early English Feminist (Ruth Perry)"
+  ],
+  "img": "",
+  "wiki": "https://en.wikipedia.org/wiki/Mary_Astell",
+  "born": 1666,
+  "died": 1731,
+  "approx": false,
+  "place": "Newcastle upon Tyne (England)",
+  "bio": "Daughter of a coal merchant, Mary Astell moved to London as a young woman and made her living as a writer at a time when almost no woman could. A devout Anglican and a political Tory, she used the reasoning of Descartes to argue that women have minds as capable as men's. She proposed a college where women could study and pray, and she sharply criticized marriages that turned wives into servants.",
+  "ideas": [
+   "Women have the same power of reason as men and deserve a real education",
+   "A marriage without friendship and respect is a kind of tyranny",
+   "Faith and reason work together, and every soul is equal before God"
+  ],
+  "line": "Early feminism defended the dignity and education of women long before the vote was on the table. Astell is one of its first English voices, and an unusual one: a conservative Christian who argued from reason."
+ },
+ {
+  "id": "thomas-paine",
+  "n": "Thomas Paine",
+  "s": "Radical republican",
+  "era": "English-speaking world",
+  "v": [
+   0,
+   0.8,
+   0.2,
+   0,
+   0.3,
+   0.4,
+   0.1,
+   -0.3,
+   1,
+   0.9,
+   0.7
+  ],
+  "q": "These are the times that try men's souls.",
+  "b": "Common Sense",
+  "reading": [
+   "Rights of Man",
+   "The Age of Reason"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Laurent_Dabos_%E2%80%93_Thomas_Paine_%E2%80%93_Google_Art_Project.jpg/500px-Laurent_Dabos_%E2%80%93_Thomas_Paine_%E2%80%93_Google_Art_Project.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Thomas_Paine",
+  "born": 1737,
+  "died": 1809,
+  "approx": false,
+  "place": "Thetford (England)",
+  "bio": "A former corset maker and tax collector, Thomas Paine arrived in America in 1774 and soon wrote Common Sense, the pamphlet that convinced many colonists to break with Britain. He later defended the French Revolution in Rights of Man and attacked organized religion in The Age of Reason. He died poor and nearly forgotten, but his plain, fiery prose shaped the democratic revolutions of his age.",
+  "ideas": [
+   "Government gets its only legitimate power from the people it governs",
+   "Hereditary kings and aristocracies are an insult to human equality",
+   "Society should give every citizen a fair start, funded by those who own land"
+  ],
+  "line": "Radical republicanism wants government without kings or privileges, based on equal natural rights. Paine is its great popular writer, the man who turned revolutionary ideas into language anyone could read."
+ },
+ {
+  "id": "ralph-waldo-emerson",
+  "n": "Ralph Waldo Emerson",
+  "s": "Transcendentalist",
+  "era": "English-speaking world",
+  "v": [
+   -0.3,
+   0.8,
+   0.2,
+   -0.4,
+   -0.8,
+   0.6,
+   0.9,
+   0.2,
+   0.6,
+   0.3,
+   0.8
+  ],
+  "q": "Trust thyself: every heart vibrates to that iron string.",
+  "b": "Nature",
+  "reading": [
+   "Essays: First Series",
+   "Emerson: The Mind on Fire (Robert D. Richardson)"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Ralph_Waldo_Emerson_by_Josiah_Johnson_Hawes_1857.jpg/500px-Ralph_Waldo_Emerson_by_Josiah_Johnson_Hawes_1857.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Ralph_Waldo_Emerson",
+  "born": 1803,
+  "died": 1882,
+  "approx": false,
+  "place": "Boston, Massachusetts (USA)",
+  "bio": "Emerson trained as a Unitarian minister but left the pulpit to become an essayist and lecturer, traveling across a young America. From his home in Concord he led the Transcendentalist circle and mentored Thoreau. His essays on nature and self-reliance urged Americans to stop imitating Europe, trust their own intuition and find the divine in everyday life.",
+  "ideas": [
+   "Each person should trust their own inner voice over custom and authority",
+   "Nature is a living symbol of the spirit that runs through all things",
+   "Every generation must think for itself instead of living on old books"
+  ],
+  "line": "Transcendentalism holds that truth is reached through intuition and the soul's contact with nature, beyond what the senses and churches teach. Emerson is its founder and its most influential voice."
+ },
+ {
+  "id": "frederick-douglass",
+  "n": "Frederick Douglass",
+  "s": "Abolitionist",
+  "era": "English-speaking world",
+  "v": [
+   0.6,
+   0.9,
+   0.3,
+   -0.2,
+   0.4,
+   0.6,
+   0.3,
+   -0.4,
+   0.8,
+   1,
+   0.6
+  ],
+  "q": "If there is no struggle, there is no progress.",
+  "b": "Narrative of the Life of Frederick Douglass, an American Slave",
+  "reading": [
+   "My Bondage and My Freedom",
+   "Frederick Douglass: Prophet of Freedom (David W. Blight)"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Frederick_Douglass_%28circa_1879%29_%28cropped%29.jpg/500px-Frederick_Douglass_%28circa_1879%29_%28cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Frederick_Douglass",
+  "born": 1818,
+  "died": 1895,
+  "approx": true,
+  "place": "Talbot County, Maryland (USA)",
+  "bio": "Born into slavery in Maryland, Douglass secretly taught himself to read and escaped to the North at about twenty. He became the most famous abolitionist speaker of his time, published his own newspaper and advised President Lincoln. After the Civil War he kept fighting for Black citizens and for women's suffrage, insisting that America live up to the promises of its own founding.",
+  "ideas": [
+   "Liberty is a natural right of every human being, and slavery is a crime against it",
+   "Reading and education are the road from bondage to freedom",
+   "Rights are never simply given; the oppressed must demand and win them"
+  ],
+  "line": "Abolitionism was the movement to end slavery, joining moral argument, faith and political action. Douglass is its most powerful voice, a man who spoke about slavery from his own experience of it."
+ },
+ {
+  "id": "john-dewey",
+  "n": "John Dewey",
+  "s": "Pragmatist",
+  "era": "English-speaking world",
+  "v": [
+   1,
+   0.6,
+   0.6,
+   0.7,
+   0.7,
+   0.3,
+   -0.4,
+   0.6,
+   0.7,
+   0.6,
+   0.5
+  ],
+  "q": "Since growth is the characteristic of life, education is all one with growing; it has no end beyond itself.",
+  "b": "Democracy and Education",
+  "reading": [
+   "Experience and Nature",
+   "The Public and Its Problems"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/John_Dewey_cph.3a51565.jpg/500px-John_Dewey_cph.3a51565.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/John_Dewey",
+  "born": 1859,
+  "died": 1952,
+  "approx": false,
+  "place": "Burlington, Vermont (USA)",
+  "bio": "A professor at Chicago and then Columbia for most of a long life, Dewey became the best known American philosopher of the early twentieth century. He founded an experimental school, wrote on logic, art and religion, and took part in countless public causes. For him, thinking is a tool for solving real problems, and democracy is a way of living together, not just a way of voting.",
+  "ideas": [
+   "Ideas are tools, tested by how well they solve real problems",
+   "Children learn best by doing, experimenting and working together",
+   "Democracy is a shared way of life that must be renewed in every generation"
+  ],
+  "line": "Pragmatism judges ideas by their practical consequences rather than by abstract certainty. Dewey turned it toward education and politics, making it a philosophy of democratic experiment."
+ },
+ {
+  "id": "jane-addams",
+  "n": "Jane Addams",
+  "s": "Social pragmatist",
+  "era": "English-speaking world",
+  "v": [
+   0.9,
+   0.5,
+   0.4,
+   0.6,
+   0.9,
+   0.6,
+   -0.1,
+   0.4,
+   0.6,
+   0.6,
+   0.2
+  ],
+  "q": "Action indeed is the sole medium of expression for ethics.",
+  "b": "Twenty Years at Hull-House",
+  "reading": [
+   "Democracy and Social Ethics",
+   "Newer Ideals of Peace"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Jane_Addams_-_Bain_News_Service.jpg/500px-Jane_Addams_-_Bain_News_Service.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Jane_Addams",
+  "born": 1860,
+  "died": 1935,
+  "approx": false,
+  "place": "Cedarville, Illinois (USA)",
+  "bio": "In 1889 Jane Addams opened Hull House, a settlement house in a poor immigrant neighborhood of Chicago, where she lived and worked for the rest of her life. From that experience she wrote about democracy, ethics and peace, and influenced her friend John Dewey. A committed pacifist, she opposed the First World War and in 1931 became the first American woman to win the Nobel Peace Prize.",
+  "ideas": [
+   "Ethics is proved in action, by living among and alongside other people",
+   "A democracy is only real when it reaches the poorest neighborhoods",
+   "Peace is built through daily cooperation, not just by stopping wars"
+  ],
+  "line": "Social pragmatism applies the pragmatist method to community life: ideas are tested in the neighborhood, not only in the classroom. Addams is its pioneer and its living example."
+ },
+ {
+  "id": "w-e-b-du-bois",
+  "n": "W. E. B. Du Bois",
+  "s": "Pan-Africanist",
+  "era": "English-speaking world",
+  "v": [
+   0.7,
+   0.5,
+   0.4,
+   0.4,
+   0.9,
+   0.5,
+   -0.3,
+   0.1,
+   0.9,
+   1,
+   0.1
+  ],
+  "q": "The problem of the twentieth century is the problem of the color-line.",
+  "b": "The Souls of Black Folk",
+  "reading": [
+   "Black Reconstruction in America",
+   "Dusk of Dawn"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/W.E.B._Du_Bois_by_James_E._Purdy%2C_1907_%283x4%29.jpg/500px-W.E.B._Du_Bois_by_James_E._Purdy%2C_1907_%283x4%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/W._E._B._Du_Bois",
+  "born": 1868,
+  "died": 1963,
+  "approx": false,
+  "place": "Great Barrington, Massachusetts (USA)",
+  "bio": "The first Black American to earn a doctorate from Harvard, Du Bois was a sociologist, historian, novelist and editor. He helped found the NAACP, edited its magazine The Crisis for decades, organized Pan-African congresses and studied Black life with scientific rigor. Late in life he embraced socialism, moved to Ghana and died there on the eve of the March on Washington.",
+  "ideas": [
+   "Black Americans live with a double consciousness, seeing themselves through others' eyes",
+   "Racism is a system that needs to be studied, named and fought",
+   "People of African descent around the world share a common cause"
+  ],
+  "line": "Pan-Africanism is the idea that peoples of African descent share a history and a future and should unite against colonialism and racism. Du Bois is one of its founders and its greatest scholar."
+ },
+ {
+  "id": "emma-goldman",
+  "n": "Emma Goldman",
+  "s": "Anarchist",
+  "era": "English-speaking world",
+  "v": [
+   0.6,
+   0.8,
+   0.7,
+   0.4,
+   0.2,
+   -0.5,
+   -0.8,
+   0.1,
+   1,
+   1,
+   1
+  ],
+  "q": "Anarchism stands for the liberation of the human mind from the dominion of religion; the liberation of the human body from the dominion of property.",
+  "b": "Anarchism and Other Essays",
+  "reading": [
+   "Living My Life",
+   "My Disillusionment in Russia"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emma_Goldman_seated.jpg/500px-Emma_Goldman_seated.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Emma_Goldman",
+  "born": 1869,
+  "died": 1940,
+  "approx": false,
+  "place": "Kaunas (Lithuania)",
+  "bio": "Born in the Russian Empire, Emma Goldman emigrated to the United States at sixteen and became a factory worker, then a famous anarchist speaker and editor. She campaigned for free speech, birth control and the rights of workers and women, and was jailed several times. Deported to Russia in 1919, she was quickly disillusioned with the Bolsheviks and spent her last years in exile.",
+  "ideas": [
+   "No government, church or property owner has the right to rule over free people",
+   "Women's freedom includes love, sexuality and the choice to have children",
+   "A revolution that builds a new tyranny has betrayed itself"
+  ],
+  "line": "Anarchism seeks a society without the state, built on free cooperation. Goldman gave it a personal and feminist edge, defending the freedom to live and love as much as the freedom to organize."
+ },
+ {
+  "id": "b-r-ambedkar",
+  "n": "B. R. Ambedkar",
+  "s": "Anti-caste reformer",
+  "era": "English-speaking world",
+  "v": [
+   0.7,
+   0.7,
+   0.4,
+   0.5,
+   0.6,
+   0.6,
+   0,
+   0.4,
+   1,
+   1,
+   0.3
+  ],
+  "q": "Caste is not a physical object like a wall of bricks; it is a notion, a state of the mind.",
+  "b": "Annihilation of Caste",
+  "reading": [
+   "The Buddha and His Dhamma",
+   "Who Were the Shudras?"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Dr._Bhimrao_Ambedkar.jpg/500px-Dr._Bhimrao_Ambedkar.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/B._R._Ambedkar",
+  "born": 1891,
+  "died": 1956,
+  "approx": false,
+  "place": "Mhow (India)",
+  "bio": "Born into a caste treated as untouchable, Ambedkar studied at Columbia, where he was a student of John Dewey, and at the London School of Economics. Back in India he became a lawyer, scholar and leader of the oppressed castes, and chaired the committee that drafted the Indian Constitution. Shortly before his death he converted to Buddhism with hundreds of thousands of followers.",
+  "ideas": [
+   "Caste is a system of graded inequality that must be destroyed, not reformed",
+   "Political democracy cannot survive without social and economic democracy",
+   "Religion should be judged by reason and by how it treats the least powerful"
+  ],
+  "line": "The anti-caste movement fights the hereditary hierarchy that has ranked people in South Asia by birth. Ambedkar is its towering figure, joining philosophy, law and mass politics."
+ },
+ {
+  "id": "c-s-lewis",
+  "n": "C. S. Lewis",
+  "s": "Christian apologist",
+  "era": "English-speaking world",
+  "v": [
+   -0.3,
+   0.7,
+   -0.9,
+   -0.7,
+   0.4,
+   0.7,
+   0.9,
+   -0.6,
+   -0.7,
+   0.1,
+   -0.2
+  ],
+  "q": "I believe in Christianity as I believe that the sun has risen: not only because I see it, but because by it I see everything else.",
+  "b": "Mere Christianity",
+  "reading": [
+   "The Abolition of Man",
+   "The Problem of Pain"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/CS_Lewis_photo_on_dust_jacket.jpg/500px-CS_Lewis_photo_on_dust_jacket.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/C._S._Lewis",
+  "born": 1898,
+  "died": 1963,
+  "approx": false,
+  "place": "Belfast (Northern Ireland, UK)",
+  "bio": "A scholar of medieval literature at Oxford and later Cambridge, Lewis lost his childhood faith and found it again in his thirties, partly through talks with his friend J. R. R. Tolkien. His wartime radio talks on Christianity became Mere Christianity, and his Narnia books reached millions of children. He wrote with unusual clarity about pain, love, grief and the moral law.",
+  "ideas": [
+   "There is a moral law that all cultures recognize and none invented",
+   "Our desire for joy points to something beyond this world",
+   "Reducing values to feelings would abolish what makes us human"
+  ],
+  "line": "Christian apologetics is the reasoned defense of the faith for a skeptical audience. Lewis is its most popular modern practitioner, arguing from common experience rather than from theology."
+ },
+ {
+  "id": "c-l-r-james",
+  "n": "C. L. R. James",
+  "s": "Caribbean Marxist",
+  "era": "English-speaking world",
+  "v": [
+   0.7,
+   0.5,
+   0.4,
+   0.5,
+   0.9,
+   0.3,
+   -0.8,
+   0,
+   1,
+   1,
+   0.5
+  ],
+  "q": "What do they know of cricket who only cricket know?",
+  "b": "The Black Jacobins",
+  "reading": [
+   "Beyond a Boundary",
+   "Mariners, Renegades and Castaways"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/CLR_James_Cropped.png/500px-CLR_James_Cropped.png",
+  "wiki": "https://en.wikipedia.org/wiki/C._L._R._James",
+  "born": 1901,
+  "died": 1989,
+  "approx": false,
+  "place": "Chaguanas (Trinidad and Tobago)",
+  "bio": "A schoolteacher and cricket writer from Trinidad, James moved to England in 1932 and became a leading voice for Caribbean and African independence. His history of the Haitian Revolution, The Black Jacobins, showed enslaved people as makers of their own history. A dissident Marxist, he trusted ordinary workers to organize themselves more than any party, and he wrote about sport as a mirror of society.",
+  "ideas": [
+   "The oppressed make their own history; they are not just its victims",
+   "Workers can govern themselves without a ruling party above them",
+   "Culture, even cricket, reveals the deepest conflicts of a society"
+  ],
+  "line": "Caribbean Marxism links the critique of capitalism to the struggle against colonialism and slavery. James is its great historian and a defender of self-organization from below."
+ },
+ {
+  "id": "isaiah-berlin",
+  "n": "Isaiah Berlin",
+  "s": "Liberal pluralist",
+  "era": "English-speaking world",
+  "v": [
+   0.6,
+   0.6,
+   0.4,
+   0.2,
+   -0.3,
+   0.1,
+   -0.2,
+   0.7,
+   -0.1,
+   0.2,
+   0.6
+  ],
+  "q": "Freedom for the pike is death for the minnows.",
+  "b": "The Hedgehog and the Fox",
+  "reading": [
+   "Four Essays on Liberty",
+   "The Crooked Timber of Humanity"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/IsaiahBerlin1983.jpg/500px-IsaiahBerlin1983.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Isaiah_Berlin",
+  "born": 1909,
+  "died": 1997,
+  "approx": false,
+  "place": "Riga (Latvia)",
+  "bio": "Born in Riga, Berlin saw the Russian Revolution as a child before his family settled in England. He spent his career at Oxford, where he was a dazzling lecturer and conversationalist, and wrote as a historian of ideas about Tolstoy, the Romantics and the enemies of freedom. His lecture on two concepts of liberty became one of the most read texts of political philosophy.",
+  "ideas": [
+   "Negative liberty, being left alone, differs from positive liberty, being one's own master",
+   "Real values like freedom and equality can clash, and no formula settles every conflict",
+   "Utopias that promise a single final answer tend to justify cruelty"
+  ],
+  "line": "Liberal pluralism holds that human goods are many and sometimes incompatible, so a free society must allow choice and compromise. Berlin is its classic defender."
+ },
+ {
+  "id": "alan-watts",
+  "n": "Alan Watts",
+  "s": "Zen popularizer",
+  "era": "English-speaking world",
+  "v": [
+   0.7,
+   0,
+   0.4,
+   0.1,
+   0.2,
+   0,
+   0.7,
+   0.7,
+   0.5,
+   -0.8,
+   0.7
+  ],
+  "q": "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
+  "b": "The Wisdom of Insecurity",
+  "reading": [
+   "The Way of Zen",
+   "The Book: On the Taboo Against Knowing Who You Are"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/2/28/Alan_Watts_UVM_15_June_1958_Hon._D.D_%28cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Alan_Watts",
+  "born": 1915,
+  "died": 1973,
+  "approx": false,
+  "place": "Chislehurst (England)",
+  "bio": "Fascinated by Buddhism as a teenager in England, Watts moved to the United States, served briefly as an Episcopal priest and then settled in California. Through books and radio talks he became the best known interpreter of Zen and Taoism for Western audiences. Witty and unconventional, he became a guide for the counterculture of the 1960s, and his recorded lectures still circulate widely.",
+  "ideas": [
+   "The separate ego is an illusion; we are expressions of the whole universe",
+   "Clinging to security makes us anxious; accepting change sets us free",
+   "Life is more like music or dance than a journey toward a goal"
+  ],
+  "line": "Zen popularization brought Buddhist and Taoist ideas to a broad Western public, often mixed with psychology. Watts is its most charismatic voice, more a teacher of attitudes than a builder of systems."
+ },
+ {
+  "id": "iris-murdoch",
+  "n": "Iris Murdoch",
+  "s": "Moral Platonist",
+  "era": "English-speaking world",
+  "v": [
+   -0.4,
+   0,
+   -0.6,
+   -0.6,
+   0.2,
+   0.9,
+   0.7,
+   0.2,
+   -0.2,
+   -0.2,
+   0
+  ],
+  "q": "Love is the extremely difficult realisation that something other than oneself is real.",
+  "b": "The Sovereignty of Good",
+  "reading": [
+   "Metaphysics as a Guide to Morals",
+   "Iris Murdoch: A Life (Peter J. Conradi)"
+  ],
+  "img": "",
+  "wiki": "https://en.wikipedia.org/wiki/Iris_Murdoch",
+  "born": 1919,
+  "died": 1999,
+  "approx": false,
+  "place": "Dublin (Ireland)",
+  "bio": "Born in Dublin and raised in London, Iris Murdoch taught philosophy at Oxford and wrote twenty six novels, winning the Booker Prize for The Sea, the Sea. Against the fashion of her time, she defended an almost Platonic idea of the Good. For her, moral life happens less in big choices than in the quiet effort to see other people justly and lovingly.",
+  "ideas": [
+   "Morality is mostly about attention: learning to see others as they really are",
+   "The Good is real and draws us out of our selfish fantasies",
+   "Art and love both teach us to look beyond ourselves"
+  ],
+  "line": "Moral Platonism treats the Good as something real that we discover, not something we invent. Murdoch revived this view in the twentieth century against existentialism and analytic skepticism."
+ },
+ {
+  "id": "elizabeth-anscombe",
+  "n": "Elizabeth Anscombe",
+  "s": "Catholic analytic philosopher",
+  "era": "English-speaking world",
+  "v": [
+   0.2,
+   0.4,
+   -0.9,
+   -1,
+   0.5,
+   0.8,
+   0.8,
+   -0.6,
+   -0.7,
+   -0.3,
+   -0.5
+  ],
+  "q": "Moral philosophy should be laid aside until we have an adequate philosophy of psychology.",
+  "b": "Intention",
+  "reading": [
+   "Ethics, Religion and Politics",
+   "Human Life, Action and Ethics"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Elisabeth_Anscombe.jpg/500px-Elisabeth_Anscombe.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/G._E._M._Anscombe",
+  "born": 1919,
+  "died": 2001,
+  "approx": false,
+  "place": "Limerick (Ireland)",
+  "bio": "A student and close friend of Wittgenstein, Anscombe translated his work and later held his old chair at Cambridge. A convert to Catholicism, she publicly opposed Oxford giving an honorary degree to President Truman because of the atomic bombs. Her 1958 essay Modern Moral Philosophy attacked consequentialism and opened the way for the revival of virtue ethics.",
+  "ideas": [
+   "Some acts, like killing the innocent, are wrong whatever the consequences",
+   "Ethics needs a clear account of intention, action and human nature",
+   "Talk of moral obligation makes little sense without the idea of a lawgiver"
+  ],
+  "line": "Catholic analytic philosophy uses the precise tools of modern logic and language analysis to defend classical and Christian positions. Anscombe is its most formidable figure and a founder of contemporary virtue ethics."
+ },
+ {
+  "id": "mary-midgley",
+  "n": "Mary Midgley",
+  "s": "Philosophical naturalist",
+  "era": "English-speaking world",
+  "v": [
+   0.6,
+   0.3,
+   -0.2,
+   0.2,
+   0.7,
+   0.6,
+   -0.2,
+   0.4,
+   0,
+   0.2,
+   0
+  ],
+  "q": "Philosophy is like plumbing: nobody notices it until something goes wrong.",
+  "b": "Beast and Man",
+  "reading": [
+   "Wickedness",
+   "The Owl of Minerva"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Mary_Midgley.JPG",
+  "wiki": "https://en.wikipedia.org/wiki/Mary_Midgley",
+  "born": 1919,
+  "died": 2018,
+  "approx": false,
+  "place": "London (England)",
+  "bio": "Mary Midgley studied at Oxford with Iris Murdoch and Philippa Foot, then raised a family and published her first book only at fifty nine. She wrote about human nature, animals, evil and the environment, always in plain language. She was famous for her sharp critiques of scientism and of the selfish gene picture of humanity, and kept writing until she died at ninety nine.",
+  "ideas": [
+   "Human beings are animals, and our nature shapes our morality",
+   "Science is precious but cannot answer every question about meaning and value",
+   "Philosophy should repair the hidden ideas that make our thinking go wrong"
+  ],
+  "line": "Philosophical naturalism here means understanding humans as part of nature without reducing them to machines or genes. Midgley defended this middle path against both religious dualism and hard scientism."
+ },
+ {
+  "id": "martin-luther-king-jr",
+  "n": "Martin Luther King Jr.",
+  "s": "Christian nonviolence",
+  "era": "English-speaking world",
+  "v": [
+   -0.2,
+   0.7,
+   -0.7,
+   -0.6,
+   0.9,
+   0.9,
+   0.8,
+   -0.5,
+   0.7,
+   0.8,
+   0.2
+  ],
+  "q": "Injustice anywhere is a threat to justice everywhere.",
+  "b": "Why We Can't Wait",
+  "reading": [
+   "Strength to Love",
+   "Where Do We Go from Here: Chaos or Community?"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Martin_Luther_King_press_conference_01269u_%28cropped%29.jpg/500px-Martin_Luther_King_press_conference_01269u_%28cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.",
+  "born": 1929,
+  "died": 1968,
+  "approx": false,
+  "place": "Atlanta, Georgia (USA)",
+  "bio": "A Baptist minister with a doctorate in theology from Boston University, King became the leader of the American civil rights movement after the Montgomery bus boycott of 1955. Drawing on Jesus, Gandhi and Thoreau, he led marches, wrote the Letter from Birmingham Jail and gave the I Have a Dream speech. He won the Nobel Peace Prize in 1964 and was assassinated in Memphis four years later.",
+  "ideas": [
+   "An unjust law is no law at all, and we have a duty to disobey it openly",
+   "Nonviolent resistance can defeat injustice without destroying the opponent",
+   "Love, not hatred, is the force that builds the beloved community"
+  ],
+  "line": "Christian nonviolence fights injustice through love, civil disobedience and the willingness to suffer rather than strike back. King made it the method of a mass movement that changed American law."
+ },
+ {
+  "id": "noam-chomsky",
+  "n": "Noam Chomsky",
+  "s": "Libertarian socialist",
+  "era": "English-speaking world",
+  "v": [
+   -0.7,
+   0.4,
+   0.1,
+   0.5,
+   0.6,
+   0.2,
+   -0.6,
+   -0.2,
+   0.8,
+   0.9,
+   1
+  ],
+  "q": "If we don't believe in freedom of expression for people we despise, we don't believe in it at all.",
+  "b": "Manufacturing Consent (with Edward S. Herman)",
+  "reading": [
+   "Syntactic Structures",
+   "On Anarchism"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Noam_Chomsky_portrait_2017_retouched.jpg/500px-Noam_Chomsky_portrait_2017_retouched.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Noam_Chomsky",
+  "born": 1928,
+  "died": null,
+  "approx": false,
+  "place": "Philadelphia, Pennsylvania (USA)",
+  "bio": "A linguist at MIT, Chomsky revolutionized the study of language with the idea that humans are born with a universal grammar. In parallel he became one of the most cited and most controversial political critics in the world, attacking the Vietnam War, US foreign policy and corporate media. He describes himself as an anarchist in the tradition of libertarian socialism.",
+  "ideas": [
+   "The capacity for language is innate, part of our biological nature",
+   "Mass media in democracies filter news in ways that serve the powerful",
+   "Every authority must justify itself, and most cannot"
+  ],
+  "line": "Libertarian socialism combines the anarchist distrust of the state with the socialist critique of capitalism. Chomsky is its best known living defender, and a rationalist about the mind."
+ },
+ {
+  "id": "thomas-sowell",
+  "n": "Thomas Sowell",
+  "s": "Free-market conservative",
+  "era": "English-speaking world",
+  "v": [
+   0.9,
+   0.5,
+   -0.1,
+   0.6,
+   -0.5,
+   0.2,
+   -0.5,
+   0.3,
+   -0.6,
+   -0.4,
+   0.6
+  ],
+  "q": "There are no solutions; there are only trade-offs.",
+  "b": "A Conflict of Visions",
+  "reading": [
+   "Basic Economics",
+   "Knowledge and Decisions"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Thomas_Sowell_Portrait_%283x4_cropped%29.jpg/500px-Thomas_Sowell_Portrait_%283x4_cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Thomas_Sowell",
+  "born": 1930,
+  "died": null,
+  "approx": false,
+  "place": "Gastonia, North Carolina (USA)",
+  "bio": "Raised in Harlem, Sowell left school at seventeen, served in the Marines and went on to study economics at Harvard, Columbia and Chicago. A Marxist in his youth, he became a leading free-market economist at the Hoover Institution. In dozens of books he argues that good intentions are not enough, and that policies must be judged by their actual results, especially for the poor and minorities.",
+  "ideas": [
+   "Every social choice is a trade-off; there are no costless solutions",
+   "Knowledge is scattered across millions of people, so markets beat central planners",
+   "Policies should be judged by their results, not by the intentions behind them"
+  ],
+  "line": "Free-market conservatism joins faith in markets with skepticism about grand plans to remake human nature. Sowell is its sharpest empirical voice, grounding his case in data and history."
+ },
+ {
+  "id": "charles-taylor",
+  "n": "Charles Taylor",
+  "s": "Communitarian",
+  "era": "English-speaking world",
+  "v": [
+   0.1,
+   0.5,
+   0,
+   -0.3,
+   0.8,
+   0.6,
+   0.5,
+   0.4,
+   -0.2,
+   0.1,
+   0
+  ],
+  "q": "We live in a secular age, in which belief in God has become one option among others.",
+  "b": "Sources of the Self",
+  "reading": [
+   "A Secular Age",
+   "The Ethics of Authenticity"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Charles_Taylor_in_2019_%284x5_cropped%29.jpg/500px-Charles_Taylor_in_2019_%284x5_cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Charles_Taylor_(philosopher)",
+  "born": 1931,
+  "died": null,
+  "approx": false,
+  "place": "Montreal, Quebec (Canada)",
+  "bio": "Raised in a bilingual family in Montreal, Taylor studied at Oxford with Isaiah Berlin and taught for decades at McGill. He also ran for Parliament several times as a social democrat. A practicing Catholic, he has written monumental histories of the modern self and of secularism, and has defended the recognition of cultural identities such as that of Quebec.",
+  "ideas": [
+   "We become ourselves only through language and community, never alone",
+   "Modern identity grew from a long history of moral sources we often forget",
+   "Authenticity is a real ideal, but it needs horizons of meaning beyond the self"
+  ],
+  "line": "Communitarianism criticizes liberal individualism for forgetting that people are shaped by communities and traditions. Taylor is its most historically minded thinker, close to MacIntyre but more open to modernity."
+ },
+ {
+  "id": "daniel-dennett",
+  "n": "Daniel Dennett",
+  "s": "Naturalist philosopher of mind",
+  "era": "English-speaking world",
+  "v": [
+   0.8,
+   0.3,
+   0.6,
+   0.6,
+   0.1,
+   -0.1,
+   -1,
+   0.3,
+   0.7,
+   0.3,
+   0.4
+  ],
+  "q": "There is no such thing as philosophy-free science; there is only science whose philosophical baggage is taken on board without examination.",
+  "b": "Darwin's Dangerous Idea",
+  "reading": [
+   "Consciousness Explained",
+   "Freedom Evolves"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Daniel_Dennett_2.jpg/500px-Daniel_Dennett_2.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Daniel_Dennett",
+  "born": 1942,
+  "died": 2024,
+  "approx": false,
+  "place": "Boston, Massachusetts (USA)",
+  "bio": "A student of Gilbert Ryle at Oxford, Dennett spent most of his career at Tufts University, working closely with scientists. He argued that minds, meaning and even free will can be explained by evolution and the brain, without any ghost in the machine. A lively writer and debater, he also became one of the best known faces of the new atheism.",
+  "ideas": [
+   "Consciousness is what the brain does, not a hidden inner theater",
+   "Natural selection explains design in nature without any designer",
+   "Free will is real in the sense that matters, even in a physical world"
+  ],
+  "line": "Naturalism in philosophy of mind tries to explain thought and consciousness with the tools of science. Dennett is its boldest and most readable champion, close to Darwin and far from any dualism."
+ },
+ {
+  "id": "martha-nussbaum",
+  "n": "Martha Nussbaum",
+  "s": "Capabilities approach",
+  "era": "English-speaking world",
+  "v": [
+   0.5,
+   0.6,
+   -0.2,
+   0.2,
+   0.5,
+   0.6,
+   -0.3,
+   0.3,
+   0.5,
+   0.6,
+   0.4
+  ],
+  "q": "To be a good human being is to have a kind of openness to the world, an ability to trust uncertain things beyond your own control.",
+  "b": "The Fragility of Goodness",
+  "reading": [
+   "Creating Capabilities",
+   "Upheavals of Thought"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Martha_Nussbaum_2010_%28cropped%29.jpg/500px-Martha_Nussbaum_2010_%28cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Martha_Nussbaum",
+  "born": 1947,
+  "died": null,
+  "approx": false,
+  "place": "New York City, New York (USA)",
+  "bio": "A classicist by training, Nussbaum taught at Harvard and Brown before settling at the University of Chicago. She draws on Aristotle, the Stoics and Greek tragedy to show that a good life depends on luck, emotions and other people. With the economist Amartya Sen she developed the capabilities approach, which asks what each person is actually able to do and to be.",
+  "ideas": [
+   "Justice means securing for everyone the real capabilities for a dignified life",
+   "Emotions are intelligent judgments about what matters, not blind forces",
+   "A good life is fragile, exposed to luck and dependent on others"
+  ],
+  "line": "The capabilities approach measures justice by what people can actually do and be, not just by income or formal rights. Nussbaum gave it a neo-Aristotelian philosophical foundation."
+ },
+ {
+  "id": "bell-hooks",
+  "n": "bell hooks",
+  "s": "Black feminist",
+  "era": "English-speaking world",
+  "v": [
+   0.8,
+   0.6,
+   0.6,
+   0.2,
+   0.8,
+   0.5,
+   0.2,
+   0.4,
+   0.9,
+   0.9,
+   0.6
+  ],
+  "q": "Feminism is a movement to end sexism, sexist exploitation, and oppression.",
+  "b": "All About Love",
+  "reading": [
+   "Feminism Is for Everybody",
+   "Teaching to Transgress"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/3/37/Bell_hooks%2C_October_2014.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Bell_hooks",
+  "born": 1952,
+  "died": 2021,
+  "approx": false,
+  "place": "Hopkinsville, Kentucky (USA)",
+  "bio": "Born Gloria Jean Watkins in segregated Kentucky, she took her great grandmother's name and wrote it in lowercase to keep attention on her ideas. She taught at Yale, Oberlin and City College of New York and wrote more than thirty books on race, gender, class, teaching and love. Influenced by Paulo Freire and by Buddhism, she saw love as a practice that could heal communities.",
+  "ideas": [
+   "Race, gender and class work together and must be fought together",
+   "Love is not a feeling but a practice of care, respect and responsibility",
+   "Teaching should be a practice of freedom, not passive transfer of facts"
+  ],
+  "line": "Black feminism insists that the experience of Black women reveals how racism, sexism and class oppression intertwine. hooks is one of its most accessible voices, joining critique with an ethic of love."
+ },
+ {
+  "id": "kwame-anthony-appiah",
+  "n": "Kwame Anthony Appiah",
+  "s": "Cosmopolitan liberal",
+  "era": "English-speaking world",
+  "v": [
+   0.6,
+   0.5,
+   0.5,
+   0.3,
+   -0.1,
+   0.4,
+   -0.4,
+   0.5,
+   0.3,
+   0.3,
+   0.5
+  ],
+  "q": "Cosmopolitanism means universal concern for every human being together with respect for legitimate difference.",
+  "b": "Cosmopolitanism: Ethics in a World of Strangers",
+  "reading": [
+   "The Lies That Bind",
+   "The Honor Code"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Kwame_Anthony_Appiah_no_Fronteiras_do_Pensamento_Porto_Alegre_2013_%289517494881%29.jpg/500px-Kwame_Anthony_Appiah_no_Fronteiras_do_Pensamento_Porto_Alegre_2013_%289517494881%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Kwame_Anthony_Appiah",
+  "born": 1954,
+  "died": null,
+  "approx": false,
+  "place": "London (England)",
+  "bio": "Son of a Ghanaian lawyer and politician and an English writer, Appiah grew up in Kumasi, Ghana, and studied at Cambridge. He has taught at Princeton and New York University and writes the Ethicist column in The New York Times. His work on identity, race and honor argues that we can belong to many groups at once while caring about all of humanity.",
+  "ideas": [
+   "We owe concern to all human beings, not only to our own nation or group",
+   "Identities like race and nation are real in their effects but loosely made",
+   "Moral revolutions often happen when honor and shame change their targets"
+  ],
+  "line": "Cosmopolitan liberalism defends both individual freedom and a moral concern that crosses borders. Appiah is its leading contemporary voice, shaped by his life between Africa and the West."
+ }
+]

@@ -16,6 +16,10 @@
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:url" content="https://filosofometro.com.br/">
 <link rel="canonical" href="https://filosofometro.com.br/">
+<link rel="alternate" hreflang="pt-BR" href="https://filosofometro.com.br/">
+<link rel="alternate" hreflang="en" href="https://filosofometro.com.br/en/">
+<link rel="alternate" hreflang="es" href="https://filosofometro.com.br/es/">
+<link rel="alternate" hreflang="x-default" href="https://filosofometro.com.br/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://filosofometro.com.br/og.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -28,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/styles.css">
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)}</script>
 <script defer src="/_vercel/insights/script.js" data-disable-auto-track="1"></script>
 <script>
@@ -48,6 +52,7 @@
       <a href="#/pensadores" data-nav="pensadores">Pensadores</a>
       <a href="#/metodo" data-nav="metodo" class="hide-sm">Método</a>
       <a href="#/teste" class="nav-cta" id="navCta"><span class="cta-lg">Fazer o teste</span><span class="cta-sm">Teste</span></a>
+      <div class="lang" id="langBox"><button class="icon-btn lang-btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Idioma: português">PT</button><div class="lang-menu" id="langMenu" hidden><a href="/" hreflang="pt-BR" lang="pt-BR" data-lang="pt">Português</a><a href="/en/" hreflang="en" lang="en" data-lang="en">English</a><a href="/es/" hreflang="es" lang="es" data-lang="es">Español</a></div></div>
       <button class="icon-btn" id="themeBtn" type="button" aria-label="Alternar tema claro e escuro">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
       </button>
@@ -64,11 +69,13 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="tip" id="tip" role="tooltip" aria-live="polite"></div>
 <noscript><div class="wrap" style="padding:40px 0">O Filosofômetro precisa de JavaScript para funcionar.</div></noscript>
-<script src="data.js"></script>
-<script src="engine.js"></script>
-<script src="verify.js"></script>
-<script src="support.js"></script>
-<script src="covers.js"></script>
-<script src="app.js"></script>
+<script src="/data.js"></script>
+<script src="/engine.js"></script>
+<script src="/verify.js"></script>
+<script src="/support.js"></script>
+<script src="/covers.js"></script>
+<!--lang-pack-->
+<script src="/i18n.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

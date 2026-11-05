@@ -5,43 +5,69 @@ const fs = require("fs");
 const path = require("path");
 const DATA = require("../data.js");
 const Engine = require("../engine.js");
-const E = Engine.create(DATA);
+const I18N = require("../i18n.js");
+const E = Engine.create(I18N.localize(DATA, null, null).DATA);
+// One engine per language, created on first use: names, schools and the regional list are translated.
+const PACKS = { en: () => require("../i18n/en.js"), es: () => require("../i18n/es.js") };
+const ENGINES = { pt: E };
+const engineFor = lang => ENGINES[lang] || (ENGINES[lang] = Engine.create(I18N.localize(DATA, null, PACKS[lang]()).DATA));
+const LANGS = ["pt", "en", "es"];
+const langOf = l => (LANGS.includes(l) ? l : "pt");
+// Every sentence the previews say, per language.
+const TXT = {
+  pt: { html: "pt-BR", someone: "Alguém", bc: "a.C.", to: "a", dared: w => `${w} te desafiou no ${SITE}`, got: (w, pct, n) => `${w} deu ${pct}% ${n}. E você?`,
+    descFlat: "Qual filósofo pensa como você? Faça o teste e compare, eixo por eixo.", desc: (n, s) => `Par filosófico: ${n} (${s}). Faça o teste e descubra quanto vocês pensam parecido.`,
+    two: "Duas pessoas", and: "e", friend: " e um amigo", in: "no", compat: "compatíveis", cmpDesc: "Onde pensam igual, onde divergem e quais filósofos têm em comum. Faça o teste e compare também.",
+    open: "Abrir o", daredCaps: w => `${w} TE DESAFIOU`, mine: "MEU PAR FILOSÓFICO", balanced: "Perfil equilibrado", q1: "Qual filósofo pensa como ", you: "você?",
+    comparison: "COMPARAÇÃO", noDir: "Sem direção", p1: "Pessoa 1", p2: "Pessoa 2", tagline: n => `11 eixos · ${n} pensadores · teste gratuito`, q0: "Qual filósofo", q2: "pensa como " },
+  en: { html: "en", someone: "Someone", bc: "BC", to: "to", dared: w => `${w} challenged you on ${SITE}`, got: (w, pct, n) => `${w} got ${pct}% ${n}. What about you?`,
+    descFlat: "Which philosopher thinks like you? Take the test and compare, axis by axis.", desc: (n, s) => `Philosophical match: ${n} (${s}). Take the test and see how alike you think.`,
+    two: "Two people", and: "and", friend: " and a friend", in: "on", compat: "compatible", cmpDesc: "Where they agree, where they split and which philosophers they share. Take the test and compare too.",
+    open: "Open", daredCaps: w => `${w} CHALLENGED YOU`, mine: "MY PHILOSOPHICAL MATCH", balanced: "Balanced profile", q1: "Which philosopher thinks like ", you: "you?",
+    comparison: "COMPARISON", noDir: "No direction", p1: "Person 1", p2: "Person 2", tagline: n => `11 axes · ${n} thinkers · free test`, q0: "Which philosopher", q2: "thinks like " },
+  es: { html: "es", someone: "Alguien", bc: "a. C.", to: "a", dared: w => `${w} te desafió en ${SITE}`, got: (w, pct, n) => `${w} sacó ${pct}% ${n}. ¿Y tú?`,
+    descFlat: "¿Qué filósofo piensa como tú? Haz el test y compara, eje por eje.", desc: (n, s) => `Par filosófico: ${n} (${s}). Haz el test y descubre cuánto se parecen.`,
+    two: "Dos personas", and: "y", friend: " y un amigo", in: "en", compat: "compatibles", cmpDesc: "Dónde piensan igual, dónde difieren y qué filósofos comparten. Haz el test y compara tú también.",
+    open: "Abrir", daredCaps: w => `${w} TE DESAFIÓ`, mine: "MI PAR FILOSÓFICO", balanced: "Perfil equilibrado", q1: "¿Qué filósofo piensa como ", you: "tú?",
+    comparison: "COMPARACIÓN", noDir: "Sin dirección", p1: "Persona 1", p2: "Persona 2", tagline: n => `11 ejes · ${n} pensadores · test gratuito`, q0: "¿Qué filósofo", q2: "piensa como " },
+};
 
 const SITE = "Filosofômetro";
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 // Same rule as the app: letters, digits, space, dot, apostrophe and hyphen, at most 24 characters.
 const cleanName = s => { try { s = decodeURIComponent(s || ""); } catch (e) { s = ""; } return s.replace(/[^\p{L}\p{N} .'-]/gu, "").trim().slice(0, 24); };
 const decode = c => (typeof c === "string" ? E.decode(c) : null);
-const lifeText = p => (p.born < 0 ? `${p.approx ? "c. " : ""}${-p.born} a.C.` : `${p.approx ? "c. " : ""}${p.born}`) + (p.died === null ? "" : p.died < 0 ? ` a ${-p.died} a.C.` : ` a ${p.died}`);
+const lifeText = (p, T = TXT.pt) => (p.born < 0 ? `${p.approx ? "c. " : ""}${-p.born} ${T.bc}` : `${p.approx ? "c. " : ""}${p.born}`) + (p.died === null ? "" : p.died < 0 ? ` ${T.to} ${-p.died} ${T.bc}` : ` ${T.to} ${p.died}`);
 
 /* ---------- What each link says ---------- */
-function inviteInfo(code, rawName) {
+function inviteInfo(code, rawName, rawLang) {
   const a = decode(code);
   if (!a) return null;
-  const r = E.evaluate(a), name = cleanName(rawName), p = r.top.p;
-  const who = name || "Alguém";
-  const title = r.directionless ? `${who} te desafiou no ${SITE}` : `${who} deu ${r.top.pct}% ${p.n}. E você?`;
-  const description = r.directionless
-    ? "Qual filósofo pensa como você? Faça o teste e compare, eixo por eixo."
-    : `Par filosófico: ${p.n} (${p.s}). Faça o teste e descubra quanto vocês pensam parecido.`;
+  const lang = langOf(rawLang), T = TXT[lang];
+  const r = engineFor(lang).evaluate(a), name = cleanName(rawName), p = r.top.p;
+  const who = name || T.someone;
+  const title = r.directionless ? T.dared(who) : T.got(who, r.top.pct, p.n);
+  const description = r.directionless ? T.descFlat : T.desc(p.n, p.s);
   const hash = `#/vs/${code}${name ? `/${encodeURIComponent(name)}` : ""}`;
-  return { kind: "invite", r, name, title, description, hash };
+  return { kind: "invite", lang, T, r, name, title, description, hash };
 }
-function compareInfo(codeA, codeB, rawA, rawB) {
+function compareInfo(codeA, codeB, rawA, rawB, rawLang) {
   const a = decode(codeA), b = decode(codeB);
   if (!a || !b) return null;
-  const c = E.comparePeople(a, b), nA = cleanName(rawA), nB = cleanName(rawB);
-  const pair = `${nA || "Duas pessoas"}${nB ? ` e ${nB}` : nA ? " e um amigo" : ""}`;
-  const title = c.pct === null ? `${pair} no ${SITE}` : `${pair}: ${c.pct}% compatíveis`;
-  const description = "Onde pensam igual, onde divergem e quais filósofos têm em comum. Faça o teste e compare também.";
+  const lang = langOf(rawLang), T = TXT[lang];
+  const c = engineFor(lang).comparePeople(a, b), nA = cleanName(rawA), nB = cleanName(rawB);
+  const pair = `${nA || T.two}${nB ? ` ${T.and} ${nB}` : nA ? T.friend : ""}`;
+  const title = c.pct === null ? `${pair} ${T.in} ${SITE}` : `${pair}: ${c.pct}% ${T.compat}`;
+  const description = T.cmpDesc;
   const hash = `#/comparar/${codeA}/${codeB}${nA || nB ? `/${encodeURIComponent(nA)}/${encodeURIComponent(nB)}` : ""}`;
-  return { kind: "compare", c, nA, nB, title, description, hash };
+  return { kind: "compare", lang, T, c, nA, nB, title, description, hash };
 }
 
 /* ---------- The share page: metadata for crawlers, an instant redirect for people ---------- */
 function sharePage(info, origin, imageQuery) {
-  const target = `${origin}/${info.hash}`, image = `${origin}/api/og?${imageQuery}`;
-  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+  const prefix = info.lang === "pt" ? "" : `/${info.lang}`;
+  const target = `${origin}${prefix}/${info.hash}`, image = `${origin}/api/og?${imageQuery}`;
+  return `<!doctype html><html lang="${info.T.html}"><head><meta charset="utf-8">
 <title>${esc(info.title)}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="${esc(info.description)}">
@@ -61,7 +87,7 @@ function sharePage(info, origin, imageQuery) {
 <meta http-equiv="refresh" content="0;url=${esc(target)}">
 <script>location.replace(${JSON.stringify(target)})</script>
 </head><body style="background:#0F0E0C;color:#F1EADC;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0">
-<a href="${esc(target)}" style="color:#F06A43">Abrir o ${SITE}</a></body></html>`;
+<a href="${esc(target)}" style="color:#F06A43">${info.T.open} ${SITE}</a></body></html>`;
 }
 
 /* ---------- The image: 1200 × 630 SVG, rasterized with resvg ---------- */
@@ -118,30 +144,30 @@ const frame = body => `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" heig
 const brand = (x, y) => `<path d="M${x + 14} ${y - 22}L${x + 28} ${y + 4}L${x} ${y + 4}Z" fill="none" stroke="${C.ink}" stroke-width="2" stroke-linejoin="round"/><circle cx="${x + 14}" cy="${y - 4}" r="3.6" fill="${C.accent}"/><text x="${x + 42}" y="${y + 2}" font-family="${serif}" font-size="34" fill="${C.ink}">${SITE}</text>`;
 
 async function inviteSVG(info) {
-  const { r, name } = info, p = r.top.p, img = await portraitData(p);
+  const { r, name, T } = info, p = r.top.p, img = await portraitData(p);
   const X = 500, colW = 630;
   let b = archSVG(70, 70, 330, 490, img, p) + sigilSVG(390, 470, 0.82, r.scores, p.v);
   b += brand(X, 120);
-  b += `<text x="${X}" y="196" font-family="${sans}" font-size="22" letter-spacing="4" fill="${C.muted}">${esc((name ? `${name} TE DESAFIOU` : "MEU PAR FILOSÓFICO").toUpperCase())}</text>`;
+  b += `<text x="${X}" y="196" font-family="${sans}" font-size="22" letter-spacing="4" fill="${C.muted}">${esc((name ? T.daredCaps(name) : T.mine).toUpperCase())}</text>`;
   if (r.directionless) {
-    b += `<text x="${X}" y="330" font-family="${serif}" font-size="96" fill="${C.ink}">Perfil equilibrado</text>`;
+    b += `<text x="${X}" y="330" font-family="${serif}" font-size="96" fill="${C.ink}">${T.balanced}</text>`;
   } else {
     b += `<text x="${X}" y="318" font-family="${serif}" font-size="140" fill="${C.accent}">${r.top.pct}%</text>`;
     b += `<text x="${X}" y="420" font-family="${serif}" font-size="${fitSize(p.n, 104, colW, 0.44)}" fill="${C.ink}">${esc(p.n)}</text>`;
-    b += `<text x="${X}" y="468" font-family="${sans}" font-size="22" letter-spacing="2" fill="${C.muted}">${esc(`${p.s} · ${lifeText(p)}`.toUpperCase())}</text>`;
+    b += `<text x="${X}" y="468" font-family="${sans}" font-size="22" letter-spacing="2" fill="${C.muted}">${esc(`${p.s} · ${lifeText(p, T)}`.toUpperCase())}</text>`;
   }
-  b += `<text x="${X}" y="540" font-family="${serif}" font-style="italic" font-size="40" fill="${C.ink}">Qual filósofo pensa como <tspan fill="${C.accent}">você?</tspan></text>`;
+  b += `<text x="${X}" y="540" font-family="${serif}" font-style="italic" font-size="40" fill="${C.ink}">${esc(T.q1)}<tspan fill="${C.accent}">${esc(T.you)}</tspan></text>`;
   return frame(b);
 }
 async function compareSVG(info) {
-  const { c, nA, nB } = info, a = c.a, b = c.b;
+  const { c, nA, nB, T } = info, a = c.a, b = c.b;
   let g = sigilSVG(300, 315, 2.05, b.scores, a.scores);
   g += brand(600, 120);
-  g += `<text x="600" y="196" font-family="${sans}" font-size="22" letter-spacing="4" fill="${C.muted}">COMPARAÇÃO</text>`;
-  g += `<text x="600" y="330" font-family="${serif}" font-size="${c.pct === null ? 90 : 150}" fill="${C.accent}">${c.pct === null ? "Sem direção" : `${c.pct}%`}</text>`;
-  g += `<text x="600" y="392" font-family="${serif}" font-size="48" fill="${C.ink}">compatíveis</text>`;
+  g += `<text x="600" y="196" font-family="${sans}" font-size="22" letter-spacing="4" fill="${C.muted}">${T.comparison}</text>`;
+  g += `<text x="600" y="330" font-family="${serif}" font-size="${c.pct === null ? 90 : 150}" fill="${C.accent}">${c.pct === null ? T.noDir : `${c.pct}%`}</text>`;
+  g += `<text x="600" y="392" font-family="${serif}" font-size="48" fill="${C.ink}">${T.compat}</text>`;
   const who = (n, r, y, dashed) => `<line x1="600" y1="${y - 9}" x2="640" y2="${y - 9}" stroke="${dashed ? C.ink : C.accent}" stroke-width="4" ${dashed ? 'stroke-dasharray="7 6"' : ""}/><text x="656" y="${y}" font-family="${sans}" font-size="26" fill="${C.ink}">${esc(n)}<tspan fill="${C.muted}"> · ${esc(r.top.p.n)}</tspan></text>`;
-  g += who(nB || "Pessoa 2", b, 462, false) + who(nA || "Pessoa 1", a, 508, true);
+  g += who(nB || T.p2, b, 462, false) + who(nA || T.p1, a, 508, true);
   return frame(g);
 }
 
@@ -154,13 +180,14 @@ function rasterize(svg) {
 }
 
 // The site-wide preview (og.png at the root), generated once by tests/make-og.js.
-async function homeSVG() {
+async function homeSVG(lang = "pt") {
+  const T = TXT[langOf(lang)];
   const ids = ["platao", "simone-de-beauvoir", "nietzsche"], ps = ids.map(id => DATA.PH.find(p => p.id === id)).filter(Boolean);
   const imgs = await Promise.all(ps.map(portraitData));
   let b = brand(70, 120);
-  b += `<text x="70" y="270" font-family="${serif}" font-size="104" fill="${C.ink}">Qual filósofo</text>`;
-  b += `<text x="70" y="370" font-family="${serif}" font-size="104" fill="${C.ink}">pensa como <tspan font-style="italic" fill="${C.accent}">você?</tspan></text>`;
-  b += `<text x="70" y="450" font-family="${sans}" font-size="26" fill="${C.muted}">11 eixos · ${DATA.PH.length + DATA.BR.length} pensadores · teste gratuito</text>`;
+  b += `<text x="70" y="270" font-family="${serif}" font-size="104" fill="${C.ink}">${esc(T.q0)}</text>`;
+  b += `<text x="70" y="370" font-family="${serif}" font-size="104" fill="${C.ink}">${esc(T.q2)}<tspan font-style="italic" fill="${C.accent}">${esc(T.you)}</tspan></text>`;
+  b += `<text x="70" y="450" font-family="${sans}" font-size="26" fill="${C.muted}">${T.tagline(DATA.PH.length + DATA.BR.length)}</text>`;
   // Three arches, each with its own clip path, overlapping slightly.
   ps.forEach((p, i) => { b += archSVG(760 + i * 120, 120 + (i % 2) * 60, 210, 330, imgs[i], p).replace(/id="arch"/, `id="arch${i}"`).replace(/url\(#arch\)/, `url(#arch${i})`); });
   return frame(b);

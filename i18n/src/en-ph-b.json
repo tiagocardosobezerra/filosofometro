@@ -1,0 +1,990 @@
+{
+ "g-k-chesterton": {
+  "n": "G. K. Chesterton",
+  "s": "Christian traditionalist",
+  "q": "Tradition is the democracy of the dead.",
+  "b": "Orthodoxy",
+  "reading": [
+   "The Everlasting Man",
+   "Heretics"
+  ],
+  "place": "London, England",
+  "bio": "Gilbert Keith Chesterton was an English journalist, novelist, and essayist, famous for his humor and his paradoxes. He created the detective Father Brown and defended Christianity in books such as Orthodoxy, converting to Catholicism in 1922. He criticized both capitalism and socialism and influenced writers such as C. S. Lewis.",
+  "ideas": [
+   "Tradition gives a voice to past generations, not only to the living",
+   "Before tearing down an institution, you must understand why it exists",
+   "Property should be widely distributed among families"
+  ],
+  "line": "A Christian traditionalist defends the heritage of Christian faith and customs as a guide against the excesses of modernity. Chesterton made that defense with humor, paradox, and common sense.",
+  "wiki": "https://en.wikipedia.org/wiki/G._K._Chesterton"
+ },
+ "edmund-husserl": {
+  "n": "Edmund Husserl",
+  "s": "Phenomenologist",
+  "q": "Back to the things themselves.",
+  "b": "Logical Investigations",
+  "reading": [
+   "Cartesian Meditations",
+   "The Crisis of European Sciences and Transcendental Phenomenology"
+  ],
+  "place": "Göttingen and Freiburg, Germany",
+  "bio": "Edmund Husserl began as a mathematician but turned to philosophy in search of a rigorous foundation for knowledge. He founded phenomenology, which describes how things appear to consciousness. Of Jewish origin, he was sidelined by the Nazis late in life, but he trained students such as Heidegger and Edith Stein.",
+  "ideas": [
+   "Philosophy should describe experience as it appears, without presuppositions",
+   "All consciousness is always consciousness of something",
+   "The everyday life-world is the forgotten foundation of the sciences"
+  ],
+  "line": "Phenomenology studies phenomena, that is, things as they appear to consciousness, describing that experience with rigor. Husserl is the founder of this method.",
+  "wiki": "https://en.wikipedia.org/wiki/Edmund_Husserl"
+ },
+ "bertrand-russell": {
+  "n": "Bertrand Russell",
+  "s": "Analytic philosophy",
+  "q": "Fools are full of certainty; the wise are full of doubt.",
+  "b": "The Problems of Philosophy",
+  "reading": [
+   "A History of Western Philosophy",
+   "Why I Am Not a Christian"
+  ],
+  "place": "Cambridge and London, England",
+  "bio": "Bertrand Russell was a British logician, mathematician, and philosopher, as well as a tireless activist. With Whitehead, he tried to ground mathematics in logic and helped create analytic philosophy. He was jailed for his pacifism, campaigned against nuclear weapons, and won the Nobel Prize in Literature in 1950.",
+  "ideas": [
+   "Logical analysis of language clarifies and dissolves philosophical problems",
+   "Mathematics can be derived from principles of logic",
+   "We should believe in proportion to the evidence, keeping a reasonable doubt"
+  ],
+  "line": "Analytic philosophy seeks clarity through logic and careful analysis of language and concepts, one problem at a time. Russell was one of its founders.",
+  "wiki": "https://en.wikipedia.org/wiki/Bertrand_Russell"
+ },
+ "wittgenstein": {
+  "n": "Wittgenstein",
+  "s": "Philosophy of language",
+  "q": "The limits of my language mean the limits of my world.",
+  "b": "Tractatus Logico-Philosophicus",
+  "reading": [
+   "Philosophical Investigations",
+   "On Certainty"
+  ],
+  "place": "Vienna, Austria, and Cambridge, England",
+  "bio": "Ludwig Wittgenstein was born into one of the richest families in Vienna and studied with Russell at Cambridge. With the Tractatus, he believed he had solved the problems of philosophy and went off to teach primary school in rural Austria. Years later he returned to Cambridge and changed his mind, showing that the meaning of words lies in their use.",
+  "ideas": [
+   "Many philosophical problems arise from confusions in the use of language",
+   "The meaning of a word is its use within a language game",
+   "Language is tied to forms of life shared by a community"
+  ],
+  "line": "The philosophy of language investigates how words acquire meaning and how language connects to the world and to thought. Wittgenstein transformed this field twice, with very different views.",
+  "wiki": "https://en.wikipedia.org/wiki/Ludwig_Wittgenstein"
+ },
+ "antonio-gramsci": {
+  "n": "Antonio Gramsci",
+  "s": "Gramscian Marxism",
+  "q": "Pessimism of the intellect, optimism of the will.",
+  "b": "Prison Notebooks",
+  "reading": [
+   "Letters from Prison",
+   "Selections from Cultural Writings"
+  ],
+  "place": "Turin and Rome, Italy",
+  "bio": "Born in Sardinia, Antonio Gramsci was a journalist and one of the founders of the Italian Communist Party. Jailed by Mussolini's regime in 1926, he wrote the Prison Notebooks in prison, with reflections on culture and power. He died in 1937, shortly after finishing his sentence, and his ideas left a mark on the social sciences.",
+  "ideas": [
+   "Ruling groups hold power through cultural consent as well, which is hegemony",
+   "Schools, the press, and religion help form a society's common sense",
+   "Social transformation requires a long cultural struggle, not just the seizure of power"
+  ],
+  "line": "Gramscian Marxism is a reading of Marx that puts culture, ideas, and hegemony at the center of power, not just the economy. Gramsci is its creator.",
+  "wiki": "https://en.wikipedia.org/wiki/Antonio_Gramsci"
+ },
+ "heidegger": {
+  "n": "Heidegger",
+  "s": "Existential ontology",
+  "q": "Language is the house of being.",
+  "b": "Being and Time",
+  "reading": [
+   "Introduction to Metaphysics",
+   "The Question Concerning Technology"
+  ],
+  "place": "Freiburg, Germany",
+  "bio": "Martin Heidegger was a student of Husserl and published Being and Time in 1927, one of the most influential works of the twentieth century. He investigated the meaning of being starting from human existence, marked by time and finitude. His embrace of Nazism while rector at Freiburg remains a source of fierce controversy.",
+  "ideas": [
+   "Western philosophy has forgotten the question of the meaning of being",
+   "Facing our own death makes a more authentic existence possible",
+   "Modern technology turns everything, nature included, into mere resource"
+  ],
+  "line": "Ontology studies being; the existential version starts from concrete human existence, in time and in the world, to think about being. Heidegger developed this approach in Being and Time.",
+  "wiki": "https://en.wikipedia.org/wiki/Martin_Heidegger"
+ },
+ "jean-paul-sartre": {
+  "n": "Jean-Paul Sartre",
+  "s": "Existentialist",
+  "q": "Man is condemned to be free.",
+  "b": "Existentialism Is a Humanism",
+  "reading": [
+   "Being and Nothingness",
+   "Nausea"
+  ],
+  "place": "Paris, France",
+  "bio": "Jean-Paul Sartre was a philosopher, novelist, and playwright, a central figure of postwar intellectual life in Paris. He argued that we are completely free and responsible for what we make of ourselves. Politically engaged, he declined the Nobel Prize in Literature in 1964 and was the partner of Simone de Beauvoir.",
+  "ideas": [
+   "Existence precedes essence: we are not born with a defined nature",
+   "We are free and responsible for all our choices",
+   "Fleeing freedom by pretending we have no choice is acting in bad faith"
+  ],
+  "line": "Existentialism holds that human beings exist first and only then define themselves through their acts, with no essence given in advance. Sartre is the best-known name of this current.",
+  "wiki": "https://en.wikipedia.org/wiki/Jean-Paul_Sartre"
+ },
+ "simone-de-beauvoir": {
+  "n": "Simone de Beauvoir",
+  "s": "Feminist existentialist",
+  "q": "One is not born, but rather becomes, a woman.",
+  "b": "The Second Sex",
+  "reading": [
+   "The Ethics of Ambiguity",
+   "Memoirs of a Dutiful Daughter"
+  ],
+  "place": "Paris, France",
+  "bio": "Simone de Beauvoir was a French philosopher, novelist, and teacher. In The Second Sex, from 1949, she analyzed how society turns woman into the Other, always defined in relation to man. The book became a foundation of modern feminism, and her intellectual partnership with Sartre marked the twentieth century.",
+  "ideas": [
+   "Being a woman is not a biological destiny but a social and historical construction",
+   "Society treats woman as the Other, defined from the standpoint of man",
+   "Economic independence is an essential step toward women's emancipation"
+  ],
+  "line": "Feminist existentialism applies existentialist ideas of freedom and choice to the situation of women. Beauvoir showed how society limits that freedom from childhood.",
+  "wiki": "https://en.wikipedia.org/wiki/Simone_de_Beauvoir"
+ },
+ "albert-camus": {
+  "n": "Albert Camus",
+  "s": "Absurdist",
+  "q": "One must imagine Sisyphus happy.",
+  "b": "The Myth of Sisyphus",
+  "reading": [
+   "The Stranger",
+   "The Rebel"
+  ],
+  "place": "Algiers, Algeria, and Paris, France",
+  "bio": "Born in Algeria to a poor family, Albert Camus was a journalist and novelist and took part in the French Resistance. In The Stranger and The Myth of Sisyphus, he explored the clash between our search for meaning and a silent world. He won the Nobel Prize in Literature in 1957 and died in a car accident at 46.",
+  "ideas": [
+   "The absurd arises from the clash between our thirst for meaning and the silence of the world",
+   "The answer to the absurd is neither suicide nor escape, but lucid revolt",
+   "No cause justifies killing innocents in the name of an ideal future"
+  ],
+  "line": "Absurdism sees life as a conflict between the human search for meaning and a universe that does not answer. Camus is its leading representative and proposes living fully in spite of it.",
+  "wiki": "https://en.wikipedia.org/wiki/Albert_Camus"
+ },
+ "simone-weil": {
+  "n": "Simone Weil",
+  "s": "Christian mystic",
+  "q": "Attention is the rarest and purest form of generosity.",
+  "b": "Gravity and Grace",
+  "reading": [
+   "The Need for Roots",
+   "Oppression and Liberty"
+  ],
+  "place": "Paris, France, and England",
+  "bio": "Simone Weil was a French philosopher who worked in factories to learn about working-class life and fought in the Spanish Civil War. After mystical experiences, she drew close to Christianity without ever being baptized. She died young in England, and her notebooks, collected after her death, revealed an original and intense thinker.",
+  "ideas": [
+   "Pure attention to others is the highest form of love and of prayer",
+   "Human beings need roots in a community, a land, and a culture",
+   "Force reduces people to things, both those who suffer it and those who wield it"
+  ],
+  "line": "Christian mysticism seeks direct encounter with God through contemplation, attention, and surrender. Simone Weil lived this path joined to a strong social commitment.",
+  "wiki": "https://en.wikipedia.org/wiki/Simone_Weil"
+ },
+ "hannah-arendt": {
+  "n": "Hannah Arendt",
+  "s": "Political philosophy",
+  "q": "Evil can be banal: all it takes is to stop thinking.",
+  "b": "Eichmann in Jerusalem",
+  "reading": [
+   "The Human Condition",
+   "The Origins of Totalitarianism"
+  ],
+  "place": "Germany and New York, USA",
+  "bio": "A German Jewish philosopher who fled the Nazis and took refuge in the United States, where she became one of the great political thinkers of the twentieth century. She studied totalitarianism, freedom, and human action. Following the trial of Adolf Eichmann, she showed that enormous crimes can be committed by ordinary people who simply stop thinking.",
+  "ideas": [
+   "Evil can be banal: it comes from unthinking obedience, not only from monsters",
+   "Politics is acting and speaking together with others in a free public space",
+   "Totalitarian regimes destroy plurality and isolate people through terror"
+  ],
+  "line": "Political philosophy thinks about power, freedom, and life in common. Arendt avoided labels, but she made collective action and public space the center of her reflection on what makes us human.",
+  "wiki": "https://en.wikipedia.org/wiki/Hannah_Arendt"
+ },
+ "theodor-adorno": {
+  "n": "Theodor Adorno",
+  "s": "Frankfurt School",
+  "q": "There is no right life in the wrong one.",
+  "b": "Minima Moralia",
+  "reading": [
+   "Dialectic of Enlightenment",
+   "Critical Models: Interventions and Catchwords"
+  ],
+  "place": "Frankfurt, Germany",
+  "bio": "A German philosopher, sociologist, and musician, he was one of the central figures of the Frankfurt School. Exiled during the Nazi era, he returned to Germany to criticize modern society, mass culture, and reason turned into an instrument of domination. He wrote on music, art, and ethics in a dense, provocative style, always suspicious of promises of progress.",
+  "ideas": [
+   "The culture industry turns art into a commodity and leaves the public passive",
+   "Enlightenment reason, without self-criticism, can become a tool of domination",
+   "In an unjust society, it is impossible to live a fully right life"
+  ],
+  "line": "The Frankfurt School brought together Marxist thinkers who criticized capitalist society, culture, and modern reason. Adorno was one of its founding figures, alongside Max Horkheimer.",
+  "wiki": "https://en.wikipedia.org/wiki/Theodor_W._Adorno"
+ },
+ "karl-popper": {
+  "n": "Karl Popper",
+  "s": "Critical rationalism",
+  "q": "We advance only by learning from our mistakes.",
+  "b": "The Open Society and Its Enemies",
+  "reading": [
+   "The Logic of Scientific Discovery",
+   "Conjectures and Refutations"
+  ],
+  "place": "Vienna, Austria, and London, England",
+  "bio": "An Austrian philosopher who settled in England, he changed the way we understand science. For him, a scientific theory cannot be proved true, but it can be tested and overturned by experience. He carried this critical attitude into politics, defending the open society against regimes that claim to own historical truth.",
+  "ideas": [
+   "A theory is scientific only if it can, in principle, be refuted by tests",
+   "Knowledge advances by trial and error, eliminating false hypotheses",
+   "Open societies allow mistakes to be corrected and rulers replaced without violence"
+  ],
+  "line": "Critical rationalism holds that no idea is above criticism and that we learn by submitting everything to tests. Popper created this approach and applied it to science and politics.",
+  "wiki": "https://en.wikipedia.org/wiki/Karl_Popper"
+ },
+ "friedrich-hayek": {
+  "n": "Friedrich Hayek",
+  "s": "Austrian liberalism",
+  "q": "No one knows enough to plan an entire economy.",
+  "b": "The Road to Serfdom",
+  "reading": [
+   "The Constitution of Liberty",
+   "The Fatal Conceit"
+  ],
+  "place": "Vienna, London, and Chicago",
+  "bio": "An Austrian economist and philosopher, winner of the Nobel Prize in Economics in 1974. He sharply criticized central economic planning, arguing that the knowledge needed is scattered among millions of people. His defense of the market and the rule of law influenced liberal governments and political debate throughout the twentieth century.",
+  "ideas": [
+   "No central planner gathers the knowledge dispersed among people",
+   "Market prices work as signals that coordinate millions of decisions",
+   "Much social order arises spontaneously, without anyone designing it"
+  ],
+  "line": "Austrian liberalism, tied to the Austrian School of economics, defends the free market and individual liberty against state planning. Hayek is its leading name in political philosophy.",
+  "wiki": "https://en.wikipedia.org/wiki/Friedrich_Hayek"
+ },
+ "ayn-rand": {
+  "n": "Ayn Rand",
+  "s": "Objectivist",
+  "q": "Existence exists.",
+  "b": "The Virtue of Selfishness",
+  "reading": [
+   "Atlas Shrugged",
+   "The Fountainhead"
+  ],
+  "place": "Saint Petersburg, Russia, and New York, USA",
+  "bio": "A novelist and philosopher born in Russia who emigrated to the United States after the 1917 Revolution. She became famous with novels such as Atlas Shrugged, in which individualist heroes face collectivist societies. She created her own philosophical system defending reason, self-interest, and unfettered capitalism, and she remains controversial today.",
+  "ideas": [
+   "Reality exists independently of the mind, and only reason can know it",
+   "Pursuing one's own rational self-interest is a virtue, not a vice",
+   "Free-market capitalism is the only system that respects individual rights"
+  ],
+  "line": "Objectivism is the name Rand gave to her own philosophy: objective reality, reason as a guide, ethical egoism, and capitalism. She is the founder and chief reference of this current.",
+  "wiki": "https://en.wikipedia.org/wiki/Ayn_Rand"
+ },
+ "hans-georg-gadamer": {
+  "n": "Hans-Georg Gadamer",
+  "s": "Hermeneutics",
+  "q": "Being that can be understood is language.",
+  "b": "Truth and Method",
+  "reading": [
+   "The Problem of Historical Consciousness",
+   "Praise of Theory"
+  ],
+  "place": "Heidelberg, Germany",
+  "bio": "A German philosopher and student of Heidegger who lived past one hundred and renewed the art of interpretation. In Truth and Method, he showed that understanding a text, a work of art, or a person is always a dialogue. We never start from zero: we bring our tradition and our prejudices, and understanding arises from the meeting of horizons.",
+  "ideas": [
+   "All understanding starts from prejudgments inherited from tradition",
+   "To understand is to fuse our horizon with the horizon of the text or the other",
+   "Language is the medium in which the world opens up to us"
+  ],
+  "line": "Hermeneutics is reflection on interpretation and understanding. Gadamer turned it into a general philosophy: for him, interpreting is not a technique but the human way of being in the world.",
+  "wiki": "https://en.wikipedia.org/wiki/Hans-Georg_Gadamer"
+ },
+ "claude-levi-strauss": {
+  "n": "Claude Lévi-Strauss",
+  "s": "Structuralist",
+  "q": "The world began without man and will end without him.",
+  "b": "Tristes Tropiques",
+  "reading": [
+   "The Savage Mind",
+   "Structural Anthropology"
+  ],
+  "place": "Paris, France, and São Paulo, Brazil",
+  "bio": "A French anthropologist and philosopher who taught at the newly founded University of São Paulo in the 1930s and studied Indigenous peoples of Brazil. He founded structural anthropology, searching for the hidden rules behind myths, kinship, and customs. His book Tristes Tropiques blends travel narrative with reflection on the place of human beings in the world.",
+  "ideas": [
+   "Different cultures follow deep, shared mental structures",
+   "Myths and kinship rules work as systems, much like a language",
+   "The thought of so-called primitive peoples is as logical as scientific thought"
+  ],
+  "line": "Structuralism looks for invisible structures, such as rules and oppositions, that organize language, culture, and society. Lévi-Strauss took this method from linguistics into anthropology and made it famous.",
+  "wiki": "https://en.wikipedia.org/wiki/Claude_L%C3%A9vi-Strauss"
+ },
+ "frantz-fanon": {
+  "n": "Frantz Fanon",
+  "s": "Postcolonial",
+  "q": "Each generation must discover its mission, fulfill it or betray it.",
+  "b": "The Wretched of the Earth",
+  "reading": [
+   "Black Skin, White Masks",
+   "Toward the African Revolution"
+  ],
+  "place": "Martinique and Algeria",
+  "bio": "A psychiatrist and philosopher born in Martinique, then a French colony, who joined the struggle for Algerian independence. He analyzed how colonialism and racism wound the minds of the colonized and shape their identity. He died young, at 36, but his books inspired liberation and anti-racist movements around the world.",
+  "ideas": [
+   "Colonial racism makes the colonized internalize an inferior image of themselves",
+   "Decolonization requires transforming social structures, not just changing rulers",
+   "Every oppressed people must create its own culture and its own path"
+  ],
+  "line": "Postcolonial thought studies the lasting effects of colonialism on politics, culture, and the mind. Fanon is one of its most influential precursors.",
+  "wiki": "https://en.wikipedia.org/wiki/Frantz_Fanon"
+ },
+ "michel-foucault": {
+  "n": "Michel Foucault",
+  "s": "Post-structuralist",
+  "q": "Where there is power, there is resistance.",
+  "b": "Discipline and Punish",
+  "reading": [
+   "Madness and Civilization",
+   "The History of Sexuality, Volume 1: An Introduction"
+  ],
+  "place": "Paris, France",
+  "bio": "A French philosopher and historian who investigated how power operates in daily life, in prisons, hospitals, schools, and in the very idea of normality. He showed that categories such as madness, crime, and sexuality have a history and were shaped by knowledge and institutions. He visited Brazil several times and is one of the most cited authors in the humanities.",
+  "ideas": [
+   "Power is not only in the State: it circulates in institutions and everyday relations",
+   "Knowledge and power are produced together, defining who is normal and who is deviant",
+   "The disciplinary society watches and trains bodies to make them docile and useful"
+  ],
+  "line": "Post-structuralism inherited structuralism's focus on language and systems but rejected fixed, universal structures. Foucault, though he refused labels, is linked to this line for historicizing truths and powers.",
+  "wiki": "https://en.wikipedia.org/wiki/Michel_Foucault"
+ },
+ "jacques-derrida": {
+  "n": "Jacques Derrida",
+  "s": "Deconstructionist",
+  "q": "There is nothing outside the text.",
+  "b": "Of Grammatology",
+  "reading": [
+   "Writing and Difference",
+   "Specters of Marx"
+  ],
+  "place": "Algeria and Paris, France",
+  "bio": "A French philosopher born in Algeria, creator of deconstruction, a way of reading texts that reveals tensions and contradictions hidden within them. He questioned the idea that words have fixed meanings and that there is a pure presence of truth outside language. He influenced philosophy, literature, law, and architecture.",
+  "ideas": [
+   "The meaning of words is never fixed: it is always deferred and at play",
+   "The Western tradition privileged speech and presence, devaluing writing",
+   "Oppositions such as nature and culture hide hierarchies that can be undone"
+  ],
+  "line": "Deconstruction is the form of reading created by Derrida: it takes apart the pairs of opposites that hold a text together to show that no meaning is fully stable or closed.",
+  "wiki": "https://en.wikipedia.org/wiki/Jacques_Derrida"
+ },
+ "gilles-deleuze": {
+  "n": "Gilles Deleuze",
+  "s": "Philosophy of difference",
+  "q": "To create is to resist.",
+  "b": "A Thousand Plateaus",
+  "reading": [
+   "Anti-Oedipus",
+   "Difference and Repetition"
+  ],
+  "place": "Paris, France",
+  "bio": "A French philosopher who saw philosophy as the creation of new concepts. He wrote on Spinoza, Nietzsche, cinema, and painting, and with the psychoanalyst Félix Guattari produced bold works such as Anti-Oedipus and A Thousand Plateaus. He celebrated difference, becoming, and multiplicities against rigid models of identity and thought.",
+  "ideas": [
+   "Difference comes before identity: the world is made of variations and becomings",
+   "Doing philosophy is inventing concepts, not discovering eternal truths",
+   "Thought can be a rhizome, a network without a center, rather than a hierarchical tree"
+  ],
+  "line": "The philosophy of difference puts variation and multiplicity in the place of identity and essence. Deleuze is its most emblematic name, alongside his readings of Nietzsche and Spinoza.",
+  "wiki": "https://en.wikipedia.org/wiki/Gilles_Deleuze"
+ },
+ "john-rawls": {
+  "n": "John Rawls",
+  "s": "Egalitarian liberal",
+  "q": "Justice is the first virtue of social institutions.",
+  "b": "A Theory of Justice",
+  "reading": [
+   "Political Liberalism",
+   "Justice as Fairness: A Restatement"
+  ],
+  "place": "Harvard, Massachusetts, USA",
+  "bio": "An American philosopher who revived political philosophy with A Theory of Justice, from 1971. He proposed a thought experiment: choosing the rules of society without knowing what place we would occupy in it. He concluded that reasonable people would secure equal liberties and accept inequalities only when they benefit the least advantaged.",
+  "ideas": [
+   "Just principles are those we would choose behind a veil of ignorance",
+   "Everyone should have the same basic liberties, such as speech and the vote",
+   "Inequalities are just only if they benefit the least advantaged"
+  ],
+  "line": "Egalitarian liberalism joins the defense of individual liberties with the pursuit of social and economic equality. Rawls is the main reference of this line.",
+  "wiki": "https://en.wikipedia.org/wiki/John_Rawls"
+ },
+ "robert-nozick": {
+  "n": "Robert Nozick",
+  "s": "Libertarian",
+  "q": "Taxation of earnings from labor is on a par with forced labor.",
+  "b": "Anarchy, State, and Utopia",
+  "reading": [
+   "The Examined Life",
+   "The Nature of Rationality"
+  ],
+  "place": "Harvard, Massachusetts, USA",
+  "bio": "An American philosopher and Rawls's colleague at Harvard, who answered his theory of justice with Anarchy, State, and Utopia. He argued that individuals have strong rights, which the State may not violate even to redistribute wealth. He was a restless thinker who also wrote on knowledge, personal identity, and the meaning of life.",
+  "ideas": [
+   "Only a minimal State, limited to protecting against force and fraud, is just",
+   "A distribution is just if it results from legitimate exchanges and acquisitions",
+   "Persons are ends in themselves and cannot be used for the ends of others"
+  ],
+  "line": "Libertarianism defends maximum individual liberty and property, with the State reduced to the minimum. Nozick gave this position its best-known philosophical formulation.",
+  "wiki": "https://en.wikipedia.org/wiki/Robert_Nozick"
+ },
+ "murray-rothbard": {
+  "n": "Murray Rothbard",
+  "s": "Anarcho-capitalist",
+  "q": "The State is organized robbery on a grand scale.",
+  "b": "The Ethics of Liberty",
+  "reading": [
+   "Anatomy of the State",
+   "For a New Liberty"
+  ],
+  "place": "New York, USA",
+  "bio": "An American economist and philosopher, a disciple of Ludwig von Mises and heir to the Austrian School. He took liberalism to the extreme: for him, even security and justice could be provided by private companies. He was a tireless activist and one of the founding figures of the modern libertarian movement in the United States.",
+  "ideas": [
+   "The State sustains itself through compulsory taxes, which amount to a form of theft",
+   "No one should initiate aggression against another's person or property",
+   "Services such as security and courts could be offered on the free market"
+  ],
+  "line": "Anarcho-capitalism proposes abolishing the State and handing every service, including security and justice, over to the market. Rothbard is the main architect of this current.",
+  "wiki": "https://en.wikipedia.org/wiki/Murray_Rothbard"
+ },
+ "roger-scruton": {
+  "n": "Roger Scruton",
+  "s": "Contemporary conservative",
+  "q": "Destroying is quick; building and conserving is slow.",
+  "b": "How to Be a Conservative",
+  "reading": [
+   "Fools, Frauds and Firebrands",
+   "Beauty"
+  ],
+  "place": "England",
+  "bio": "An English philosopher who wrote on aesthetics, music, architecture, and politics, always defending the value of tradition. For him, the institutions, customs, and beauty we inherit are fragile and deserve care. He also acted as a cultural dissident, helping persecuted intellectuals in communist Europe in the 1980s.",
+  "ideas": [
+   "We inherit valuable institutions and customs that are easy to destroy and hard to rebuild",
+   "Beauty matters: it gives meaning and consolation to human life",
+   "Love of home and of the local community is the basis of good politics"
+  ],
+  "line": "Contemporary conservatism values tradition, inherited institutions, and gradual change. Scruton was one of its most articulate and cultured defenders in the late twentieth century.",
+  "wiki": "https://en.wikipedia.org/wiki/Roger_Scruton"
+ },
+ "michel-onfray": {
+  "n": "Michel Onfray",
+  "s": "Contemporary hedonist",
+  "q": "Hedonism is enjoying and helping others enjoy, without harming anyone.",
+  "b": "A Hedonist Manifesto: The Power to Exist",
+  "reading": [
+   "Atheist Manifesto",
+   "A Escultura de Si (Sculpting the Self)"
+  ],
+  "place": "Caen, Normandy, France",
+  "bio": "A popular and controversial French philosopher, author of dozens of books and founder of the Université Populaire de Caen, open to everyone. He proposes a philosophy tied to the body, pleasure, and concrete life, against what he sees as the ascetic legacy of Christianity. He rehabilitates forgotten thinkers of a materialist and hedonist tradition.",
+  "ideas": [
+   "Pleasure is a good to be cultivated, as long as it harms no one else",
+   "Philosophy should start from the body and concrete life, not from abstractions",
+   "An open atheism frees morality from religious guilt and prohibitions"
+  ],
+  "line": "Contemporary hedonism revives the old idea that pleasure is the central good of life, with ethics and care for others. Onfray is today its best-known defender.",
+  "wiki": "https://en.wikipedia.org/wiki/Michel_Onfray"
+ },
+ "alasdair-macintyre": {
+  "n": "Alasdair MacIntyre",
+  "s": "Communitarian",
+  "q": "I only know what to do if I know what story I am part of.",
+  "b": "After Virtue",
+  "reading": [
+   "Whose Justice? Which Rationality?",
+   "Dependent Rational Animals"
+  ],
+  "place": "Scotland and Notre Dame, USA",
+  "bio": "A Scottish philosopher who settled in the United States and died in 2025 at 96. In After Virtue, he diagnosed modern morality as a set of fragments with no possible agreement. He proposed recovering Aristotle's ethics of virtue, lived within communities and traditions that give meaning to our choices.",
+  "ideas": [
+   "Modern moral debate is fragmented because it has lost a shared idea of the good",
+   "Virtues are learned in practices and communities with a shared history",
+   "We understand our lives as a narrative tied to a larger tradition"
+  ],
+  "line": "Communitarianism criticizes liberal individualism and highlights the role of community and tradition in moral formation. MacIntyre is one of its central names, though he disliked the label.",
+  "wiki": "https://en.wikipedia.org/wiki/Alasdair_MacIntyre"
+ },
+ "jurgen-habermas": {
+  "n": "Jürgen Habermas",
+  "s": "Critical theory",
+  "q": "The unforced force of the better argument prevails.",
+  "b": "The Theory of Communicative Action",
+  "reading": [
+   "The Structural Transformation of the Public Sphere",
+   "Knowledge and Human Interests"
+  ],
+  "place": "Frankfurt and Starnberg, Germany",
+  "bio": "A German philosopher and sociologist, heir to the Frankfurt School, who died in March 2026 at 96. He devoted his life to thinking about how reason and dialogue can found a legitimate democracy. He was a constant public voice in postwar Germany, defending European integration and open debate among citizens.",
+  "ideas": [
+   "Legitimate norms are those that everyone affected would accept in free dialogue",
+   "The public sphere is the space where citizens debate and keep power in check",
+   "Communicative action aims at mutual understanding, not just personal success"
+  ],
+  "line": "Critical theory, born in the Frankfurt School, analyzes society to reveal domination and point toward paths of emancipation. Habermas is the leading name of its second generation.",
+  "wiki": "https://en.wikipedia.org/wiki/J%C3%BCrgen_Habermas"
+ },
+ "arne-naess": {
+  "n": "Arne Naess",
+  "s": "Deep ecology",
+  "q": "Nonhuman life has value in itself.",
+  "b": "Ecology, Community and Lifestyle",
+  "reading": [
+   "The Ecology of Wisdom",
+   "Deep Ecology: Living as if Nature Mattered (Bill Devall and George Sessions)"
+  ],
+  "place": "Oslo, Norway",
+  "bio": "A Norwegian philosopher and avid mountaineer who coined the term deep ecology in the 1970s. He argued that nature should be protected not merely because it is useful to us, but because every form of life has its own value. He spent much of his time in an isolated mountain cabin, practicing the simplicity he preached.",
+  "ideas": [
+   "Every form of life has its own value, regardless of human usefulness",
+   "The ecological crisis demands changing values and lifestyles, not just technology",
+   "Our self expands when we identify with other beings and with nature"
+  ],
+  "line": "Deep ecology sees human beings as part of nature, not its owner, and calls for radical changes of values. Naess coined the term and is the founder of this current.",
+  "wiki": "https://en.wikipedia.org/wiki/Arne_N%C3%A6ss"
+ },
+ "paulo-freire": {
+  "n": "Paulo Freire",
+  "s": "Critical pedagogy",
+  "q": "No one educates anyone else; people educate each other.",
+  "b": "Pedagogy of the Oppressed",
+  "reading": [
+   "Pedagogy of Freedom",
+   "Pedagogy of Hope"
+  ],
+  "place": "Recife and São Paulo, Brazil",
+  "bio": "An educator and philosopher from Pernambuco, patron of Brazilian education and one of the most widely read thinkers in the world in the humanities. He created an adult literacy method based on the learners' own reality. Exiled by the military dictatorship, he wrote Pedagogy of the Oppressed, which defends a dialogical, liberating education.",
+  "ideas": [
+   "Banking education only deposits content; liberating education dialogues with the student",
+   "Learning to read words is also learning to read the world critically",
+   "Teacher and student learn together, in a relationship of dialogue and respect"
+  ],
+  "line": "Critical pedagogy sees education as a political practice that can either liberate or oppress. Paulo Freire is its founder and main reference worldwide.",
+  "wiki": "https://en.wikipedia.org/wiki/Paulo_Freire"
+ },
+ "mario-ferreira-dos-santos": {
+  "n": "Mário Ferreira dos Santos",
+  "s": "Concrete philosophy",
+  "q": "Something exists, and absolute nothingness does not.",
+  "b": "Filosofia Concreta (Concrete Philosophy)",
+  "reading": [
+   "Invasão Vertical dos Bárbaros (The Vertical Invasion of the Barbarians)",
+   "Filosofia e Cosmovisão (Philosophy and Worldview)"
+  ],
+  "place": "São Paulo, Brazil",
+  "bio": "A philosopher, translator, and editor from São Paulo state, born in Tietê, author of an immense body of work published in dozens of volumes. He sought to build a rigorous philosophy, demonstrated step by step like mathematics, uniting Greek, medieval, and modern traditions. Little known in his lifetime beyond his own circle, he was rediscovered and now has readers in Brazil.",
+  "ideas": [
+   "Something exists, and absolute nothingness cannot exist: all philosophy starts from here",
+   "Philosophy can be demonstrated rigorously, as an apodictic science",
+   "Great traditions of thought can be brought together in a coherent synthesis"
+  ],
+  "line": "Concrete philosophy is the name Mário Ferreira dos Santos gave to his system: a metaphysics that starts from self-evident truths and deduces the rest with rigor. He is the creator of this line.",
+  "wiki": "https://pt.wikipedia.org/wiki/M%C3%A1rio_Ferreira_dos_Santos"
+ },
+ "marilena-chaui": {
+  "n": "Marilena Chauí",
+  "s": "Political Spinozism",
+  "q": "Democracy is the continual creation of new rights.",
+  "b": "Convite à Filosofia (Invitation to Philosophy)",
+  "reading": [
+   "O que é Ideologia (What Is Ideology?)",
+   "Cultura e Democracia (Culture and Democracy)"
+  ],
+  "place": "São Paulo, Brazil",
+  "bio": "A philosopher from São Paulo, professor emerita at the University of São Paulo and one of the world's leading experts on Spinoza's work. Her book Convite à Filosofia has shaped generations of Brazilian students. She is also an active public intellectual who writes about democracy, ideology, authoritarianism, and culture in Brazil.",
+  "ideas": [
+   "Democracy is the permanent creation of new rights by society",
+   "Ideology hides social conflicts and makes domination seem natural",
+   "Brazilian society carries authoritarian traits inherited from its history"
+  ],
+  "line": "Political Spinozism uses Spinoza's ideas about freedom, desire, and democracy to think about present-day politics. Chauí is the great Brazilian interpreter of this tradition.",
+  "wiki": "https://en.wikipedia.org/wiki/Marilena_Chaui"
+ },
+ "peter-singer": {
+  "n": "Peter Singer",
+  "s": "Contemporary utilitarian",
+  "q": "If we can prevent suffering without sacrificing anything of comparable importance, we ought to.",
+  "b": "Practical Ethics",
+  "reading": [
+   "Animal Liberation",
+   "The Life You Can Save"
+  ],
+  "place": "Melbourne, Australia, and Princeton, USA",
+  "bio": "An Australian philosopher who taught for many years at Princeton University. His book Animal Liberation, from 1975, gave a boost to the animal rights movement. He argues that we should take into account the suffering of every being capable of feeling it, and he is one of the inspirations of the effective altruism movement.",
+  "ideas": [
+   "The suffering of any sentient being counts, whether human or animal",
+   "Whoever can help prevent great suffering at little cost has a duty to help",
+   "Discriminating against beings because of their species is a prejudice similar to racism"
+  ],
+  "line": "Contemporary utilitarianism judges actions by their consequences, aiming to reduce suffering and increase the well-being of all. Singer is today its best-known representative.",
+  "wiki": "https://en.wikipedia.org/wiki/Peter_Singer"
+ },
+ "judith-butler": {
+  "n": "Judith Butler",
+  "s": "Queer theory",
+  "q": "Gender is a repeated performance.",
+  "b": "Gender Trouble",
+  "reading": [
+   "Bodies That Matter",
+   "Frames of War"
+  ],
+  "place": "Berkeley, California, USA",
+  "bio": "An American philosopher and professor at the University of California, Berkeley. In Gender Trouble, from 1990, she argued that gender is not something we are by nature, but something we do and repeat. She also writes about mourning, violence, and vulnerability, and is one of the most influential and debated thinkers today.",
+  "ideas": [
+   "Gender is built through repeated acts and is not a natural essence",
+   "Social norms define which lives are recognized and which are ignored",
+   "We are all vulnerable and depend on one another to live"
+  ],
+  "line": "Queer theory questions fixed norms of gender and sexuality, showing that they are socially constructed. Butler is one of its founders and main references.",
+  "wiki": "https://en.wikipedia.org/wiki/Judith_Butler"
+ },
+ "slavoj-zizek": {
+  "n": "Slavoj Žižek",
+  "s": "Lacanian Marxism",
+  "q": "Ideology is what seems natural to us.",
+  "b": "For They Know Not What They Do: Enjoyment as a Political Factor",
+  "reading": [
+   "Welcome to the Desert of the Real",
+   "Living in the End Times"
+  ],
+  "place": "Ljubljana, Slovenia",
+  "bio": "A Slovenian philosopher known for his provocative style and for analyzing films, jokes, and pop culture to explain complex theories. He combines the psychoanalysis of Jacques Lacan, the philosophy of Hegel, and Marxism. He became an intellectual celebrity, a frequent presence in public debates about politics and ideology.",
+  "ideas": [
+   "Ideology works even when we think we no longer believe in it",
+   "Pop culture reveals hidden desires and contradictions of society",
+   "Global capitalism must be criticized radically, not just reformed"
+  ],
+  "line": "Lacanian Marxism joins Marx's social critique with Lacan's psychoanalysis to understand how desire and ideology hold us captive. Žižek is the most famous name of this combination.",
+  "wiki": "https://en.wikipedia.org/wiki/Slavoj_%C5%BDi%C5%BEek"
+ },
+ "byung-chul-han": {
+  "n": "Byung-Chul Han",
+  "s": "Contemporary critic",
+  "q": "The achievement society produces exhausted people.",
+  "b": "The Burnout Society",
+  "reading": [
+   "The Transparency Society",
+   "In the Swarm"
+  ],
+  "place": "Seoul, South Korea, and Berlin, Germany",
+  "bio": "A philosopher born in South Korea who studied and taught in Germany. In short, widely read books such as The Burnout Society, he analyzes the exhaustion, hyperconnection, and pressure to perform of today's world. For him, we now exploit ourselves while believing we are free.",
+  "ideas": [
+   "In the achievement society, each person exploits themselves believing they are free",
+   "An excess of positivity and stimuli produces exhaustion and depression",
+   "Total transparency and hyperconnection erode intimacy and silence"
+  ],
+  "line": "Contemporary critic here means a thinker who diagnoses the ills of present-day society, such as fatigue, consumption, and digital surveillance. Han is today one of the most widely read in this role.",
+  "wiki": "https://en.wikipedia.org/wiki/Byung-Chul_Han"
+ },
+ "buda": {
+  "n": "Buddha",
+  "s": "Buddhist",
+  "q": "We are what we think.",
+  "b": "Dhammapada",
+  "reading": [
+   "Sutta Nipata",
+   "What the Buddha Taught (Walpola Rahula)"
+  ],
+  "place": "Northern India and Nepal",
+  "bio": "Siddhartha Gautama was a prince who, according to tradition, left his palace after discovering sickness, old age, and death. After years of searching and meditation, he attained awakening and began teaching a path to overcome suffering. His teachings gave rise to Buddhism, practiced today by millions of people.",
+  "ideas": [
+   "Life involves suffering, and its main cause is attachment and craving",
+   "Freedom from suffering is possible by following the Noble Eightfold Path",
+   "Nothing is permanent, not even the self, which is a constantly changing flow"
+  ],
+  "line": "Buddhism is the tradition born from the teachings of the Buddha, aimed at liberation from suffering through wisdom, ethics, and meditation. The Buddha is its founder.",
+  "wiki": "https://en.wikipedia.org/wiki/Gautama_Buddha"
+ },
+ "dogen": {
+  "n": "Dōgen",
+  "s": "Zen Buddhist",
+  "q": "To study the self is to forget the self.",
+  "b": "Shōbōgenzō",
+  "reading": [
+   "Instructions for the Zen Cook (Tenzo Kyōkun)",
+   "Zen Mind, Beginner's Mind (Shunryu Suzuki)"
+  ],
+  "place": "Kyoto and Echizen, Japan",
+  "bio": "A Japanese monk who traveled to China to deepen his studies and, on returning, founded the Sōtō school of Zen in Japan. He taught that seated meditation is not a means of reaching enlightenment but is already enlightenment in action. His work Shōbōgenzō is considered one of the most profound texts of Japanese philosophy.",
+  "ideas": [
+   "Sitting in meditation is already enlightenment, not merely a path to it",
+   "Being and time are inseparable: each moment contains all of existence",
+   "Studying oneself leads to forgetting the self and opening to all things"
+  ],
+  "line": "Zen Buddhism is a branch of Buddhism that values meditation and direct experience above doctrine. Dōgen founded the Sōtō school and is one of its greatest masters.",
+  "wiki": "https://en.wikipedia.org/wiki/D%C5%8Dgen"
+ },
+ "confucio": {
+  "n": "Confucius",
+  "s": "Confucian",
+  "q": "Do not do to others what you do not want done to yourself.",
+  "b": "Analects",
+  "reading": [
+   "The Great Learning",
+   "The Doctrine of the Mean"
+  ],
+  "place": "State of Lu, China",
+  "bio": "Kong Fuzi, known in the West as Confucius, was a Chinese teacher who lived in a time of war and disorder. He taught that social harmony depends on personal virtue, respect for ritual, and good relations between parents and children, rulers and subjects. His ideas shaped Chinese and East Asian culture for more than two thousand years.",
+  "ideas": [
+   "Society is harmonious when each person cultivates virtue and fulfills their role",
+   "Rituals and good manners educate character and strengthen social bonds",
+   "Good rulers lead by moral example, not by fear of punishment"
+  ],
+  "line": "Confucianism is the ethical and political tradition based on the teachings of Confucius, centered on virtue, family, and social order. Confucius is its founder.",
+  "wiki": "https://en.wikipedia.org/wiki/Confucius"
+ },
+ "lao-tse": {
+  "n": "Laozi",
+  "s": "Taoist",
+  "q": "A journey of a thousand miles begins with a single step.",
+  "b": "Tao Te Ching",
+  "reading": [
+   "Zhuangzi",
+   "Liezi"
+  ],
+  "place": "China",
+  "bio": "A semi-legendary figure of ancient China, traditionally considered the author of the Tao Te Ching, a short, poetic book. According to tradition, he worked as an archivist at court and left for the west riding a water buffalo. Historians debate whether he really existed, but his ideas founded Taoism and still influence Eastern thought today.",
+  "ideas": [
+   "The Tao is the natural way of all things and cannot be defined in words",
+   "Acting without forcing, wu wei, is more effective than fighting the flow",
+   "Simplicity, humility, and gentleness overcome rigidity and brute force"
+  ],
+  "line": "Taoism is the Chinese tradition that seeks to live in harmony with the Tao, the natural flow of the universe. Laozi is considered its founder, alongside Zhuangzi.",
+  "wiki": "https://en.wikipedia.org/wiki/Laozi"
+ },
+ "shankara": {
+  "n": "Shankara",
+  "s": "Advaita Vedanta",
+  "q": "Brahman is real; the world is appearance.",
+  "b": "Upadesa Sahasri (A Thousand Teachings)",
+  "reading": [
+   "Vivekachudamani: The Crest-Jewel of Discrimination",
+   "Commentary on the Brahma Sutras"
+  ],
+  "place": "Kerala and various regions of India",
+  "bio": "Adi Shankara was an Indian philosopher and monk who, according to tradition, lived just over 30 years and traveled across India debating other schools. He wrote commentaries on the Upanishads and the Bhagavad Gita and organized monasteries that still exist. He is the greatest systematizer of Advaita Vedanta, one of the most influential philosophies of Hinduism.",
+  "ideas": [
+   "Only Brahman, the absolute reality, is fully real",
+   "The deep self, the Atman, is identical to Brahman",
+   "The world of differences is an appearance caused by ignorance, called maya"
+  ],
+  "line": "Advaita Vedanta means non-dual Vedanta: the Hindu school that teaches that everything is, at bottom, a single reality. Shankara is its main systematizer and greatest reference.",
+  "wiki": "https://en.wikipedia.org/wiki/Adi_Shankara"
+ },
+ "lucrecio": {
+  "n": "Lucretius",
+  "s": "Roman Epicureanism",
+  "q": "To such evil deeds could religion drive men.",
+  "b": "On the Nature of Things",
+  "reading": [
+   "The Swerve: How the World Became Modern (Stephen Greenblatt)",
+   "Letter to Menoeceus (Epicurus)"
+  ],
+  "place": "Rome, Roman Republic",
+  "bio": "A Roman poet and philosopher, Lucretius set out the doctrine of Epicurus in a long Latin poem. In it he explains that everything is made of atoms and void, that the soul dies with the body, and that the gods do not govern the world. Almost nothing is known of his life, but the poem, rediscovered in the Renaissance, left a mark on modern science and philosophy.",
+  "ideas": [
+   "Everything that exists is made of atoms moving in the void, the soul included",
+   "Fear of the gods and of death is the greatest source of human suffering and should be dissolved",
+   "The good life is one of calm pleasure, free of bodily pain and mental disturbance"
+  ],
+  "line": "Roman Epicureanism brought to Rome Epicurus's ethics of serene pleasure and his atomist physics. Lucretius is its great popularizer, who turned the doctrine into poetry to free readers from fear.",
+  "wiki": "https://en.wikipedia.org/wiki/Lucretius"
+ },
+ "yang-zhu": {
+  "n": "Yang Zhu",
+  "s": "Yangism",
+  "q": "He would not pluck out a single hair to benefit the whole world.",
+  "b": "Liezi (Yang Zhu chapter)",
+  "reading": [
+   "Mencius",
+   "Zhuangzi"
+  ],
+  "place": "China, Warring States period",
+  "bio": "A Chinese thinker of the Warring States period, Yang Zhu became known for arguing that each person should preserve their own life and nature above all. He left no writings; his ideas have reached us through critics such as Mencius and through a chapter of the Liezi that extols the pleasures of a short life.",
+  "ideas": [
+   "Caring for oneself and preserving one's life matters more than serving the State or seeking fame",
+   "Life is short and death erases everyone equally, so we should enjoy the present",
+   "No external gain, not even the whole world, justifies sacrificing one's own body"
+  ],
+  "line": "Yangism is the Chinese current that puts self-preservation and the enjoyment of life above social duties. Yang Zhu is its founder and the favorite target of the Confucians, who saw him as selfish.",
+  "wiki": "https://en.wikipedia.org/wiki/Yang_Zhu"
+ },
+ "la-mettrie": {
+  "n": "Julien Offray de La Mettrie",
+  "s": "Enlightenment materialism",
+  "q": "The human body is a machine that winds its own springs.",
+  "b": "Man a Machine",
+  "reading": [
+   "Discourse on Happiness",
+   "Machine Man and Other Writings"
+  ],
+  "place": "Saint-Malo, France",
+  "bio": "A French physician, La Mettrie scandalized Europe by claiming that the human being is a machine and that the soul is nothing more than a function of the body. Persecuted in France and the Netherlands, he found refuge at the court of Frederick II in Berlin. He also defended an ethics of guilt-free pleasure, against the austere morality of the Stoics.",
+  "ideas": [
+   "Thought and feelings are products of the organization of the body and brain",
+   "There is no immaterial soul: the human being is an animal, only more complex than the others",
+   "Happiness lies in pleasure, and the guilt imposed by traditional morality only causes suffering"
+  ],
+  "line": "Enlightenment materialism explained the mind and morality through matter, without appeal to God or the soul. La Mettrie is its most radical representative, for reducing man to a machine and defending pleasure.",
+  "wiki": "https://en.wikipedia.org/wiki/Julien_Offray_de_La_Mettrie"
+ },
+ "charles-fourier": {
+  "n": "Charles Fourier",
+  "s": "Utopian socialism",
+  "q": "Attractions are proportional to destinies.",
+  "b": "The Theory of the Four Movements",
+  "reading": [
+   "The Utopian Vision of Charles Fourier: Selected Texts on Work, Love, and Passionate Attraction",
+   "Socialism: Utopian and Scientific (Friedrich Engels)"
+  ],
+  "place": "Besançon, France",
+  "bio": "The son of merchants, Fourier worked all his life in the trade he hated while writing about a new society. He proposed communities called phalansteries, where work would be attractive and human passions, far from being repressed, would be combined in harmony. He sharply criticized marriage and the condition of women.",
+  "ideas": [
+   "Human passions are good and should be satisfied, not repressed by morality",
+   "Work can be pleasurable if organized according to each person's inclinations",
+   "Cooperative communities, the phalansteries, should replace commercial civilization"
+  ],
+  "line": "Utopian socialism imagined just, cooperative societies to be built by example, before Marx. Fourier stands out in this line for basing his utopia on the liberation of pleasures and passions.",
+  "wiki": "https://en.wikipedia.org/wiki/Charles_Fourier"
+ },
+ "oscar-wilde": {
+  "n": "Oscar Wilde",
+  "s": "Aestheticism",
+  "q": "I can resist everything except temptation.",
+  "b": "The Soul of Man under Socialism",
+  "reading": [
+   "The Picture of Dorian Gray",
+   "Intentions"
+  ],
+  "place": "Dublin, Ireland",
+  "bio": "An Irish writer, Wilde was the most brilliant figure of the movement that defended art for art's sake. In novels, plays, and essays, he celebrated beauty, pleasure, and individual freedom against Victorian morality. Sentenced to prison for his homosexuality, he died poor in Paris, a few years after leaving jail.",
+  "ideas": [
+   "Art has no moral obligation: its value lies in beauty and the intensity it provokes",
+   "To live is to make one's own life a work of art, cultivating experiences and sensations",
+   "Socialism is worthwhile only if it frees the individual to develop their personality fully"
+  ],
+  "line": "Aestheticism places beauty and intense experience above usefulness and conventional morality. Oscar Wilde is its most famous spokesman, who made his own life and work a manifesto of this idea.",
+  "wiki": "https://en.wikipedia.org/wiki/Oscar_Wilde"
+ },
+ "herbert-marcuse": {
+  "n": "Herbert Marcuse",
+  "s": "Critical theory (Frankfurt School)",
+  "q": "Abundance would allow a civilization without repression of the instincts.",
+  "b": "Eros and Civilization",
+  "reading": [
+   "One-Dimensional Man",
+   "Reason and Revolution"
+  ],
+  "place": "Berlin, Germany",
+  "bio": "A German philosopher linked to the Frankfurt School, Marcuse fled the Nazis and built his career in the United States. Combining Marx and Freud, he argued that industrial society represses desire beyond what is necessary and creates false needs. In the 1960s he became a reference for the counterculture and student movements.",
+  "ideas": [
+   "Consumer society produces false needs that keep people conformist",
+   "A rich civilization could free Eros instead of repressing pleasure for the sake of work",
+   "Radical refusal of the system is necessary, even when change seems impossible"
+  ],
+  "line": "The critical theory of the Frankfurt School analyzes how modern society dominates people without their noticing. Marcuse is the member who bet most on the liberation of desire as a political path.",
+  "wiki": "https://en.wikipedia.org/wiki/Herbert_Marcuse"
+ },
+ "michael-oakeshott": {
+  "n": "Michael Oakeshott",
+  "s": "Skeptical conservatism",
+  "q": "To be conservative is to prefer the familiar to the unknown, the tried to the untried.",
+  "b": "Rationalism in Politics",
+  "reading": [
+   "On History and Other Essays",
+   "The Politics of Faith and the Politics of Skepticism"
+  ],
+  "place": "Chelsham, England",
+  "bio": "An English political philosopher, Oakeshott taught at Cambridge and the London School of Economics. He criticized rationalism in politics, that is, the belief that society can be redesigned by abstract plans. For him, practical knowledge comes from tradition and experience, and politics should be a conversation, not a crusade.",
+  "ideas": [
+   "Practical knowledge, learned through living together and tradition, does not fit into abstract rules",
+   "Projects to reform society by a rational plan tend to destroy what works",
+   "The State should guarantee common rules of coexistence, not impose a purpose on everyone"
+  ],
+  "line": "Skeptical conservatism defends traditions not out of belief in eternal truths, but out of distrust of grand rational plans. Oakeshott is its most refined theorist of the twentieth century.",
+  "wiki": "https://en.wikipedia.org/wiki/Michael_Oakeshott"
+ },
+ "russell-kirk": {
+  "n": "Russell Kirk",
+  "s": "Traditionalist conservatism",
+  "q": "Conservatism is the negation of ideology.",
+  "b": "The Conservative Mind",
+  "reading": [
+   "The Politics of Prudence",
+   "Edmund Burke: A Genius Reconsidered"
+  ],
+  "place": "Plymouth, Michigan, United States",
+  "bio": "An American historian and essayist, Kirk helped found modern conservatism in the United States with a 1953 book on the legacy of Edmund Burke. He lived in a small Michigan town, far from academic centers. He defended a transcendent moral order, inherited customs, and local communities.",
+  "ideas": [
+   "There is an enduring moral order, transcendent in origin, that society must respect",
+   "Inherited customs, conventions, and institutions hold wisdom accumulated over generations",
+   "Local communities and social variety are worth more than uniform projects of the central government"
+  ],
+  "line": "Traditionalist conservatism defends religion, customs, and inherited institutions as the basis of a good society. Russell Kirk gave this line its classic formulation in the United States.",
+  "wiki": "https://en.wikipedia.org/wiki/Russell_Kirk"
+ },
+ "henry-sidgwick": {
+  "n": "Henry Sidgwick",
+  "s": "Utilitarianism",
+  "q": "From the point of view of the universe, my good is no more important than anyone else's.",
+  "b": "The Methods of Ethics",
+  "reading": [
+   "Outlines of the History of Ethics",
+   "The Elements of Politics"
+  ],
+  "place": "Skipton, England",
+  "bio": "A professor at Cambridge, Sidgwick wrote the most rigorous work of classical utilitarianism, carefully comparing the moral theories of his day. He argued that basic ethical principles are known by reason and lead us to seek the greatest general happiness. He also helped open the university to women and studied psychic phenomena.",
+  "ideas": [
+   "The good to be promoted is the greatest sum of happiness, counting everyone's equally",
+   "Some moral principles are self-evident to reason, such as impartiality between persons",
+   "The conflict between self-interest and the general good is a problem that reason does not resolve"
+  ],
+  "line": "Utilitarianism judges actions by their consequences for the happiness of all. Sidgwick is its most rigorous systematizer, who sought to ground the principle of utility in rational intuitions.",
+  "wiki": "https://en.wikipedia.org/wiki/Henry_Sidgwick"
+ },
+ "william-godwin": {
+  "n": "William Godwin",
+  "s": "Utilitarian anarchism",
+  "q": "Truth and sound reasoning, well communicated, always prevail over error.",
+  "b": "Enquiry Concerning Political Justice",
+  "reading": [
+   "Caleb Williams",
+   "The Enquirer"
+  ],
+  "place": "Wisbech, England",
+  "bio": "A former dissenting minister, Godwin published a work in 1793 that made him the first great theoretical defender of anarchism. He argued that reason and impartial benevolence would make government unnecessary. He was married to Mary Wollstonecraft and was the father of Mary Shelley, author of Frankenstein.",
+  "ideas": [
+   "The right action is the one that produces the greatest good, even if it goes against family ties or promises",
+   "Government is an evil that the progress of reason will make dispensable",
+   "Human actions are determined by causes, so education and debate can change them"
+  ],
+  "line": "Utilitarian anarchism rejects the State because impartial reason, aimed at the general good, is enough to guide common life. Godwin founded this line and defended it by persuasion, not violence.",
+  "wiki": "https://en.wikipedia.org/wiki/William_Godwin"
+ },
+ "gottlob-frege": {
+  "n": "Gottlob Frege",
+  "s": "Logicism",
+  "q": "Never ask for the meaning of a word in isolation, but only in the context of a proposition.",
+  "b": "The Foundations of Arithmetic",
+  "reading": [
+   "Translations from the Philosophical Writings of Gottlob Frege",
+   "Logical Investigations"
+  ],
+  "place": "Wismar, Germany",
+  "bio": "A German mathematician, Frege spent his career at the University of Jena and created modern logic. He wanted to show that arithmetic derives from logic alone and fought the idea that numbers are ideas in the mind. Little read in his lifetime, he later became the father of analytic philosophy, influencing Russell and Wittgenstein.",
+  "ideas": [
+   "Arithmetic can be derived from purely logical laws, without support from experience",
+   "Numbers and thoughts are objective: they exist independently of the minds that think them",
+   "Sense and reference differ: two expressions can point to the same object in different ways"
+  ],
+  "line": "Logicism holds that mathematics reduces to logic and that its truths are known by reason. Frege is the founder of this line and the creator of the formal logic that made it possible.",
+  "wiki": "https://en.wikipedia.org/wiki/Gottlob_Frege"
+ }
+}

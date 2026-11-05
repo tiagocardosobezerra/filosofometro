@@ -1,0 +1,662 @@
+[
+ [
+  "Some truths can be known just by thinking, without looking at the world.",
+  "Descartes: even doubting everything I see, I know I exist simply because I am thinking.",
+  "Locke: the mind is born a blank slate; every idea comes from experience."
+ ],
+ [
+  "Everything I know, I learned through the senses and experience.",
+  "Hume: every idea is a copy of some impression that came from the senses.",
+  "Plato: learning is remembering; the soul already knew the Forms before birth."
+ ],
+ [
+  "Pure reason is a more reliable source of knowledge than the senses.",
+  "Parmenides: the senses show change, but reason proves that being is unchanging.",
+  "Hume: reason alone cannot even prove that the sun will rise tomorrow; only experience teaches that."
+ ],
+ [
+  "I distrust any idea that cannot be tested in practice.",
+  "Popper: a theory is scientific only if it can be put to the test and refuted.",
+  "Leibniz: the truths of reason, like those of mathematics, hold without needing any test."
+ ],
+ [
+  "Everything that happens was already destined to happen.",
+  "Calvin: God has already decided everything in advance, even who will be saved.",
+  "Sartre: there is no written destiny; human beings are what they choose to do."
+ ],
+ [
+  "I am solely responsible for my choices.",
+  "Sartre: we are condemned to be free; there is no nature or excuse to blame.",
+  "Marx: people make history, but under conditions they did not choose."
+ ],
+ [
+  "Our decisions are the product of genetics and environment.",
+  "Schopenhauer: a man can do what he wills, but he cannot will what he wills.",
+  "Kant: reason gives us a freedom that no natural cause explains."
+ ],
+ [
+  "I could have acted differently in almost everything I have done.",
+  "William James: free will is real; the future is not closed.",
+  "Spinoza: we think ourselves free only because we know our desires, not their causes."
+ ],
+ [
+  "Life has a purpose that we must discover.",
+  "Aristotle: everything has an end, and the human end is to live well according to reason.",
+  "Camus: the universe is silent; there is no purpose to discover, only the absurd to face."
+ ],
+ [
+  "The meaning of life is something each person invents.",
+  "Nietzsche: after the death of God, it is up to us to create our own values.",
+  "Saint Augustine: meaning comes from God; the heart is restless until it rests in him."
+ ],
+ [
+  "There is a universal and fixed human nature.",
+  "Hobbes: everywhere human beings seek power and fear death; that does not change.",
+  "Beauvoir: one is not born a woman, one becomes one; what looks like nature is social construction."
+ ],
+ [
+  "We are what we make of ourselves, not what we were born to be.",
+  "Paulo Freire: we are unfinished beings, who make ourselves through practice and history.",
+  "Plato: each soul is born with its nature, gold, silver or bronze, and must fulfill that role."
+ ],
+ [
+  "Lying is wrong, even to save someone.",
+  "Kant: lying is always wrong, even to a murderer who asks where your friend is.",
+  "John Stuart Mill: what matters are the consequences; lying to save a life is right."
+ ],
+ [
+  "An action is good if it produces more happiness than suffering.",
+  "Bentham: the measure of right and wrong is the greatest happiness of the greatest number.",
+  "Rawls: adding up happiness forgets that each person is separate and has rights of their own."
+ ],
+ [
+  "There are moral rules that must never be broken, whatever the cost.",
+  "Thomas Aquinas: some acts are evil in themselves and can never be chosen, not even for a greater good.",
+  "Machiavelli: the ruler must learn not to be good when necessity demands it."
+ ],
+ [
+  "Sacrificing one person to save five is the right choice.",
+  "Peter Singer: if we can prevent a greater evil, we must; five lives weigh more than one.",
+  "Nozick: rights are limits; sacrificing someone for the good of others is never just."
+ ],
+ [
+  "The good of the community should prevail over individual interests.",
+  "Rousseau: whoever refuses to obey the general will shall be forced to be free.",
+  "Ayn Rand: the individual does not exist to sacrifice himself for the collective."
+ ],
+ [
+  "The individual should follow his own path, even against the crowd.",
+  "Kierkegaard: the crowd is untruth; truth is lived alone.",
+  "Confucius: virtue is born from duties to family, elders and community."
+ ],
+ [
+  "My duties to family and community come before my desires.",
+  "MacIntyre: I only know who I am within the stories and communities to which I belong.",
+  "Max Stirner: no cause, whether family, State or humanity, stands above me."
+ ],
+ [
+  "Each person should live by their own values, not the group's.",
+  "John Stuart Mill: over himself, the individual is sovereign; society must not impose its way of life.",
+  "Edmund Burke: the accumulated wisdom of tradition is worth more than the reason of each person alone."
+ ],
+ [
+  "The goal of life is to live with pleasure and without pain.",
+  "Epicurus: pleasure is the beginning and end of the happy life, understood as absence of pain.",
+  "Seneca: pleasure is for animals; the proper good of a human being is virtue."
+ ],
+ [
+  "Discipline and self-control are worth more than comfort.",
+  "Diogenes: he lived in a barrel and threw away his bowl on seeing a boy drink water with his hands.",
+  "Aristippus: enjoy the pleasure of the moment; I possess pleasures, but I am not possessed by them."
+ ],
+ [
+  "Being a good person matters more for happiness than having pleasure.",
+  "Socrates: it is better to suffer injustice than to commit it.",
+  "Michel Onfray: hedonism is to enjoy and make others enjoy; the morality of sacrifice impoverishes life."
+ ],
+ [
+  "We should enjoy life's pleasures without guilt.",
+  "Montaigne: the supreme perfection is to know how to enjoy our being rightly.",
+  "Schopenhauer: pleasure is only a brief pause in pain; chasing it increases suffering."
+ ],
+ [
+  "The mind is just the brain at work.",
+  "Democritus: everything, including the soul, is made of atoms and void.",
+  "Descartes: the mind is a thinking substance, distinct from the body."
+ ],
+ [
+  "There is something in us that goes beyond the body.",
+  "Plato: the soul is immortal, and the body is its temporary prison.",
+  "Hobbes: everything that exists is body; talk of immaterial substance makes no sense."
+ ],
+ [
+  "After death, we simply cease to exist.",
+  "Epicurus: death is nothing to us; when it arrives, we are no longer there.",
+  "Pythagoras: the soul is immortal and passes from one body to another."
+ ],
+ [
+  "The deepest reality is spiritual or mental, not material.",
+  "Berkeley: to be is to be perceived; there is no matter without a mind that perceives it.",
+  "Marx: it is not consciousness that determines life; it is material life that determines consciousness."
+ ],
+ [
+  "We can attain absolute truths.",
+  "Hegel: reason can reach absolute knowledge of reality.",
+  "Protagoras: man is the measure of all things; truth changes with who is looking."
+ ],
+ [
+  "I doubt we can be certain of almost anything.",
+  "Pyrrho: for every argument there is another equally strong; the best course is to suspend judgment.",
+  "Mário Ferreira dos Santos: something exists, and absolute nothingness does not; no one can doubt this."
+ ],
+ [
+  "We should suspend judgment about what we cannot prove.",
+  "Bertrand Russell: without evidence, the reasonable course is not to believe, as with a teapot orbiting the Sun.",
+  "Saint Augustine: I believe in order to understand; faith comes before proof."
+ ],
+ [
+  "For the big questions, there are right answers that we can know.",
+  "Thomas Aquinas: reason can even prove that God exists.",
+  "Montaigne: what do I know? The big questions are beyond our reach."
+ ],
+ [
+  "Institutions that have lasted for centuries hold a wisdom we should not discard.",
+  "Chesterton: before tearing down a fence, find out why someone put it there.",
+  "Bakunin: the passion for destruction is also a creative passion."
+ ],
+ [
+  "To change the world, it is sometimes necessary to tear down what exists.",
+  "Marx: philosophers have only interpreted the world; the point is to change it.",
+  "Edmund Burke: the French Revolution destroyed in months what generations took to build."
+ ],
+ [
+  "The customs of our ancestors deserve respect, even without clear justification.",
+  "Confucius: honoring rites and ancestors is the foundation of a good society.",
+  "Voltaire: crush the infamous thing; superstitions do not deserve respect just for being old."
+ ],
+ [
+  "Inherited norms should be abandoned when they cannot be rationally justified.",
+  "Bentham: inherited laws and customs must pass the test of utility; those that fail should fall.",
+  "Hayek: many rules work through an accumulated wisdom that no one can explain alone."
+ ],
+ [
+  "Faced with what I cannot change, the best course is to accept it in peace.",
+  "Marcus Aurelius: accept what happens as part of the order of the whole.",
+  "Frantz Fanon: the oppressed are freed only by refusing the order that oppresses them."
+ ],
+ [
+  "We should rebel against suffering, even knowing we will not defeat it.",
+  "Camus: we must imagine Sisyphus happy, pushing the stone even knowing it will roll down again.",
+  "Spinoza: not to laugh, not to weep, but to understand; grasping necessity brings peace."
+ ],
+ [
+  "Serenity is worth more than struggle.",
+  "Buddha: peace comes from extinguishing desire, not from fighting the world.",
+  "Hannah Arendt: freedom lies in acting with others; whoever withdraws leaves the common world to others."
+ ],
+ [
+  "To resign yourself to injustice is to become complicit in it.",
+  "Paulo Freire: washing your hands of the conflict between oppressor and oppressed is taking the side of the oppressor.",
+  "Epictetus: do not be troubled by what does not depend on you; look after your own conduct."
+ ],
+ [
+  "Without a strong State, society would fall into chaos.",
+  "Hobbes: without a common power, life would be a war of all against all.",
+  "Proudhon: anarchy is order; it is government that produces disorder."
+ ],
+ [
+  "No authority is legitimate without each person's consent.",
+  "Murray Rothbard: the State is organized theft; no one truly consented to pay taxes.",
+  "Hegel: the State is the realization of reason, and its authority does not depend on each person's acceptance."
+ ],
+ [
+  "Obeying the law is a duty, even when I disagree with it.",
+  "Socrates: he preferred to die rather than escape prison and disobey the laws of Athens.",
+  "Thoreau: if the law requires you to be an agent of injustice toward another, break the law."
+ ],
+ [
+  "People could organize themselves well without government.",
+  "Laozi: the more laws and prohibitions there are, the poorer the people become.",
+  "Machiavelli: men are ungrateful and fickle; without a prince to restrain them, they destroy each other."
+ ],
+ [
+  "Mathematics describes truths that would exist even without any human being.",
+  "Pythagoras: numbers are the principle of all things and govern the order of the cosmos.",
+  "John Stuart Mill: even the truths of mathematics are generalizations drawn from experience."
+ ],
+ [
+  "In science, observed data matter more than any elegant theory.",
+  "Comte: the positive spirit replaces abstract speculation with the observation of facts.",
+  "Descartes: the senses deceive; only the clear and distinct ideas of reason are secure."
+ ],
+ [
+  "A child is born with some ideas, before any experience.",
+  "Leibniz: the mind is like a block of marble with veins that already sketch the figure to be carved.",
+  "Locke: there are no innate principles; neither children nor simple peoples know them."
+ ],
+ [
+  "To decide something in life, I trust what I have lived more than reasoning.",
+  "William James: an idea is worth what it does in concrete life, not its logical elegance.",
+  "Spinoza: only knowledge through reason, not vague experience, guides us safely."
+ ],
+ [
+  "If they knew all the causes, scientists could predict each of my decisions.",
+  "Democritus: everything happens by necessity, through the collision of atoms in the void.",
+  "Kierkegaard: facing a choice we feel anguish, which is the vertigo of freedom."
+ ],
+ [
+  "Even with a difficult childhood, each adult chooses who to be.",
+  "Ayn Rand: man is a being of volition, and his character is the work of his choices.",
+  "Marx: the material conditions we are born into shape our consciousness and our choices."
+ ],
+ [
+  "When something goes very right or very wrong in life, it was meant to be.",
+  "Marcus Aurelius: everything that happens has been woven from the beginning by the order of the universe.",
+  "Camus: there is no hidden plan; the world is indifferent, and what we do is up to us."
+ ],
+ [
+  "It makes sense to punish a criminal because he could have chosen not to commit the crime.",
+  "Kant: the criminal is punished because he acted freely and therefore deserves the penalty.",
+  "Spinoza: no one acts freely; punishment is justified only to protect others, not because of guilt."
+ ],
+ [
+  "There is one right way to live that holds for all human beings.",
+  "Aristotle: the good human life is the fulfillment of our rational nature, the same in all of us.",
+  "Deleuze: there is no right model of life; each person experiments with what their body can do."
+ ],
+ [
+  "A work of art means whatever each person sees in it.",
+  "Derrida: no text has a final meaning; it always opens to new readings.",
+  "Roger Scruton: beauty is real and can be recognized; it is not just a matter of personal taste."
+ ],
+ [
+  "Each person is born with a calling they must find.",
+  "Calvin: God gives each person a calling, and work is the way to serve him in it.",
+  "Sartre: no calling is waiting for us; man is what he projects himself to be."
+ ],
+ [
+  "The roles of man and woman are cultural inventions that we can remake.",
+  "Judith Butler: gender is not an essence, but something that is done and repeated.",
+  "Thomas Aquinas: man and woman have complementary natures, ordained by God."
+ ],
+ [
+  "A promise must be kept even when breaking it would bring more benefits.",
+  "Kant: one who makes a false promise cannot want everyone to do the same; this is never permitted.",
+  "Bentham: a promise is worth its utility; keeping it when it does more harm than good is a mistake."
+ ],
+ [
+  "Donating to the cause that saves the most lives is better than helping those nearby.",
+  "Peter Singer: distance does not change the duty; we must help where the good done is greatest.",
+  "Confucius: love begins with the family and extends to others in circles."
+ ],
+ [
+  "Torturing a suspect is always wrong, even to prevent an attack.",
+  "Saint Augustine: one must not do evil so that good may come of it.",
+  "Bentham: in extreme cases, one person's pain can be justified to prevent the pain of many."
+ ],
+ [
+  "What matters in an action is its results, not the intention of the one who acts.",
+  "John Stuart Mill: the motive does not change the morality of the act; whoever saves a drowning person acts rightly.",
+  "Kant: a good will shines by itself, even when it achieves nothing."
+ ],
+ [
+  "High taxes are fair when they fund services for everyone.",
+  "Marx: from each according to his abilities, to each according to his needs.",
+  "Nozick: taxing earnings from labor is the same as forced labor."
+ ],
+ [
+  "No one owes society an explanation of how they live their private life.",
+  "Montaigne: we should keep a back room all our own, where we live free.",
+  "Plato: in the ideal city, even the private life of the guardians is regulated by the common good."
+ ],
+ [
+  "A person only truly flourishes by being part of something greater than themselves.",
+  "Hegel: the individual finds concrete freedom only in the ethical life of family and State.",
+  "Nietzsche: the herd levels everything; the superior individual flourishes by separating from it."
+ ],
+ [
+  "My personal success is due more to me than to the society I live in.",
+  "Ayn Rand: what a man achieves is the fruit of his own mind and effort.",
+  "Paulo Freire: no one makes himself alone; we make ourselves in communion, mediated by the world."
+ ],
+ [
+  "A simple, austere life brings more happiness than a life of luxury.",
+  "Thoreau: a man is rich in proportion to the number of things he can afford to let alone.",
+  "Aristippus: he preferred banquets and comfort, and knew how to enjoy them without losing himself."
+ ],
+ [
+  "A bad person can be perfectly happy.",
+  "Max Stirner: what matters is my enjoyment; good and evil are ghosts that imprison me.",
+  "Socrates: the unjust man is the most miserable of men, even more so if he escapes punishment."
+ ],
+ [
+  "Good food, sex and parties are an essential part of a happy life.",
+  "Michel Onfray: the body and its pleasures are at the center of a well-lived life.",
+  "Saint Augustine: the pleasures of the flesh bind the soul; true happiness is in God."
+ ],
+ [
+  "It is worth going through suffering to become a better person.",
+  "Seneca: fire tests gold, and adversity tests strong men.",
+  "Aristippus: the good is the pleasure of the moment, and pain should always be avoided."
+ ],
+ [
+  "One day science will fully explain consciousness.",
+  "Hobbes: thinking is a movement inside the body, explainable like any other mechanism.",
+  "Descartes: the thinking mind cannot be reduced to extension and the motion of bodies."
+ ],
+ [
+  "Prayer can have real effects, even if science cannot measure them.",
+  "Saint Augustine: God listens to those who seek him, and prayer transforms the one who prays from within.",
+  "Epicurus: the gods do not concern themselves with human affairs; it is useless to ask them for anything."
+ ],
+ [
+  "Feelings like love are, deep down, chemical reactions of the body.",
+  "Michel Onfray: the body is everything; our passions and ideas are born from flesh and nerves.",
+  "Plato: love is the soul ascending from the beauty of bodies to beauty itself."
+ ],
+ [
+  "There is a sacred dimension in nature that goes beyond its physical side.",
+  "Laozi: behind all things runs the Tao, which no name can express.",
+  "Democritus: in nature there are only atoms and void; everything else is convention."
+ ],
+ [
+  "In matters of faith, doubt is a sign of honesty, not weakness.",
+  "Kierkegaard: faith is not calm certainty; it is a leap made amid uncertainty.",
+  "Calvin: faith is a firm and certain knowledge of God's goodness toward us."
+ ],
+ [
+  "Some things are true for everyone, regardless of culture.",
+  "Plato: the good and the just are eternal Forms, the same for every people.",
+  "Protagoras: each city considers just whatever seems just to it, for as long as it seems so."
+ ],
+ [
+  "Even the most solid scientific theories may one day prove wrong.",
+  "Popper: all scientific knowledge is provisional; the next refutation may bring it down.",
+  "Comte: the laws established by positive science give certainties that end the old disputes."
+ ],
+ [
+  "In most arguments, one side is right and the other is wrong.",
+  "Ayn Rand: A is A; between true and false there is no middle ground.",
+  "Montaigne: every custom and opinion has its reasons; no one holds the whole truth."
+ ],
+ [
+  "Social change should be slow and gradual, never abrupt.",
+  "Edmund Burke: reforming with prudence, keeping what works, is better than starting from scratch.",
+  "Frantz Fanon: decolonization is not done little by little; it is the total replacement of the colonial order."
+ ],
+ [
+  "School should teach young people to question what they received from their parents.",
+  "Paulo Freire: to educate is to help read the world critically, not to repeat what was received.",
+  "Confucius: the young should be dutiful at home and respectful outside, learning from the ancients."
+ ],
+ [
+  "In art, breaking with the rules of the past is worth more than mastering them.",
+  "Adorno: authentic art negates worn-out forms; art that merely pleases becomes a commodity.",
+  "Roger Scruton: beauty depends on inherited forms; art that scorns tradition loses it."
+ ],
+ [
+  "The traditional family model is still the best for raising children.",
+  "Chesterton: the family is the oldest institution and the best school of freedom there is.",
+  "Simone de Beauvoir: traditional marriage ties a woman to the home and needs to be rethought."
+ ],
+ [
+  "Faced with an incurable illness, accepting the end is wiser than fighting to the last day.",
+  "Marcus Aurelius: death is a work of nature; receiving it with serenity is the mark of the wise.",
+  "Camus: to live is to keep revolt alive, refusing resignation to the end."
+ ],
+ [
+  "At work, it is better to adapt to the conditions than to fight to change them.",
+  "Epictetus: you are an actor in a play chosen by another; it is up to you to play the part well.",
+  "Marx: the alienated worker recovers his humanity only by fighting those who exploit him."
+ ],
+ [
+  "Anger at injustice is a healthy feeling.",
+  "Frantz Fanon: the revolt of the colonized is the path to recovering their own dignity.",
+  "Seneca: anger is a brief madness; no injustice justifies giving in to it."
+ ],
+ [
+  "There is nothing noble about silently enduring suffering.",
+  "Michel Onfray: pain redeems nothing; it is an evil to be fought, not celebrated.",
+  "Saint Augustine: tribulations purify the soul and turn it toward God."
+ ],
+ [
+  "Children should obey their parents even without understanding the reasons.",
+  "Confucius: filial piety is the root of virtue; serving one's parents is the first duty.",
+  "John Stuart Mill: obedience without reasons makes docile people; individuality needs room."
+ ],
+ [
+  "Adults should be free to use drugs, as long as they harm no one.",
+  "Nozick: a minimal State cannot forbid what adults do to themselves.",
+  "Plato: the city must educate and control the desires of its citizens for the good of all."
+ ],
+ [
+  "In a crisis, it is better to trust a strong leader than long debates.",
+  "Machiavelli: in hard times, the prince must act firmly, without waiting for consensus.",
+  "Hayek: handing emergency powers to a leader is the shortest road to serfdom."
+ ],
+ [
+  "No one should need a priest, pastor or guru to reach God.",
+  "Kierkegaard: before God, each person stands alone; no church can believe in your place.",
+  "Saint Augustine: I would not believe the Gospel if the authority of the Church did not move me to it."
+ ],
+ [
+  "If a logical argument contradicts what I see, I trust the argument.",
+  "Plato: what the eyes see are shadows; only reason reaches what is real.",
+  "Epicurus: if we do not trust the senses, we will have no criterion for judging anything."
+ ],
+ [
+  "Morality is learned by living and living together, not by deducing principles.",
+  "Hume: morality is born from feeling and custom, not from demonstrations of reason.",
+  "Kant: the moral law is known a priori by reason, not drawn from experience."
+ ],
+ [
+  "All of physics could, in principle, be deduced from a few rational principles.",
+  "Descartes: he wanted to deduce all of physics from clear principles, like a tree growing from its roots.",
+  "Hume: only experience shows causes and effects; none of this is deduced in advance."
+ ],
+ [
+  "Traveling and meeting other cultures teaches more than reading great philosophers.",
+  "Montaigne: he learned more by observing the customs of other peoples than by following philosophers' systems.",
+  "Plotinus: wisdom comes from turning inward, away from the sensible world."
+ ],
+ [
+  "A person's character is set before they can choose.",
+  "Schopenhauer: character is innate and unchangeable; we only know it by seeing what we do.",
+  "Sartre: existence precedes essence; the coward makes himself a coward through his acts."
+ ],
+ [
+  "The great events of history depend on the choices of ordinary people.",
+  "Hannah Arendt: every person who acts can begin something new and unpredictable in the world.",
+  "Hegel: history follows the path of reason, and individuals are merely its instruments."
+ ],
+ [
+  "The rules of our culture think for us more than we realize.",
+  "Lévi-Strauss: unconscious structures of culture organize thought without our noticing.",
+  "Thoreau: no one needs to live as society commands; I can choose another life."
+ ],
+ [
+  "In any situation, there is still some choice left to make.",
+  "Paulo Freire: human beings are not determined, they are conditioned, and can overcome this.",
+  "Calvin: the human will, without God's grace, cannot choose the good by itself."
+ ],
+ [
+  "Nature has an order that shows us how we should live.",
+  "Marcus Aurelius: to live well is to live in accordance with nature and the reason of the universe.",
+  "Foucault: what we call natural is often a norm invented by society."
+ ],
+ [
+  "A life without religion can be as meaningful as a life with faith.",
+  "Camus: even without God, revolt and freedom are enough to give value to life.",
+  "Pascal: without God man is miserable; only in him does he find meaning and rest."
+ ],
+ [
+  "All suffering has a reason, even when we do not understand it.",
+  "Leibniz: we live in the best of all possible worlds; even evil serves a greater plan.",
+  "Simone de Beauvoir: the world brings no ready-made justifications; it is up to us to give meaning to what we live."
+ ],
+ [
+  "Moral values are human inventions, not discoveries.",
+  "Nietzsche: there are no moral facts, only moral interpretations of phenomena.",
+  "Plato: the Good exists in itself, above any human opinion."
+ ],
+ [
+  "In an unavoidable accident, a self-driving car should choose the maneuver that kills the fewest people.",
+  "Bentham: the right is always what produces the least total suffering for everyone involved.",
+  "Nozick: people are not resources to be added up; each life sets limits on what can be done."
+ ],
+ [
+  "There are things one does not do, even if no one is harmed.",
+  "Thomas Aquinas: some acts go against natural law, even if they cause no visible harm.",
+  "John Stuart Mill: society may only condemn actions that harm others."
+ ],
+ [
+  "Someone who steals medicine to save a sick child does the right thing.",
+  "Peter Singer: faced with a grave evil we can prevent, saving a life weighs more than the rule.",
+  "William of Ockham: the right is what God commands; no good human reason excuses us from the command."
+ ],
+ [
+  "We must respect a person's rights even if it harms many others.",
+  "John Rawls: each person has an inviolability that not even the welfare of all can override.",
+  "Machiavelli: whoever governs must do what the good of the State requires, even if it hurts some."
+ ],
+ [
+  "A person can be happy living completely isolated from society.",
+  "Thoreau: he lived alone in a cabin in the woods in order to live deliberately.",
+  "Aristotle: whoever lives outside the city is either a beast or a god."
+ ],
+ [
+  "A person's identity comes mainly from the people and culture they were born into.",
+  "Gadamer: we are always within a tradition that shapes us before we reflect.",
+  "Kierkegaard: becoming oneself is the task of the individual before God, not of the crowd."
+ ],
+ [
+  "Competition does more good for society than cooperation.",
+  "Hayek: competition discovers what no planner knows and ends up benefiting everyone.",
+  "Bakunin: each person's freedom is realized only in the solidarity of all."
+ ],
+ [
+  "Essential goods, like water and land, should belong to everyone.",
+  "Rousseau: the first man who fenced off a piece of land and said this is mine founded inequality.",
+  "Locke: whoever mixes his labor with the land makes it rightfully his."
+ ],
+ [
+  "A person of upright character is happy even in poverty or illness.",
+  "Epictetus: happiness depends only on what is in us, not on health or wealth.",
+  "Michel Onfray: joy passes through the body; there is no happiness in despising health and pleasures."
+ ],
+ [
+  "A life of intense experiences is worth more than a proper, quiet life.",
+  "Deleuze: desire is a productive force; repressing it in the name of morality impoverishes life.",
+  "Marcus Aurelius: live each day with rectitude, without agitation, without torpor and without pretense."
+ ],
+ [
+  "Being happy is, above all, being at peace with your own conscience.",
+  "Buddha: happiness comes from purifying the mind, not from satisfying desires.",
+  "Epicurus: virtue is worth only because it brings pleasure, as medicine is worth for health."
+ ],
+ [
+  "Spending money on pleasant experiences is a great path to happiness.",
+  "Voltaire: earthly paradise is where I am, with the luxury and pleasures of this life.",
+  "Diogenes: the less we need, the closer we are to the gods."
+ ],
+ [
+  "Everything that exists can, in principle, be measured and weighed.",
+  "Comte: the positive spirit replaces the search for hidden causes with the study of observable laws.",
+  "Simone Weil: the world is ruled by gravity, but grace is a force of another order."
+ ],
+ [
+  "A work of art can touch something in the soul that matter does not explain.",
+  "Hegel: in art, spirit manifests itself in sensible form and recognizes itself.",
+  "Marx: art, like all ideology, springs from the material conditions of each age."
+ ],
+ [
+  "A human being is an animal like any other, only more complex.",
+  "Peter Singer: no difference in nature places human beings above other animals.",
+  "Thomas Aquinas: the human being has a rational and immortal soul, which sets him apart from animals."
+ ],
+ [
+  "Miracles can truly happen, even today.",
+  "Pascal: miracles are signs God gives to those whose hearts are willing to see.",
+  "Hume: no testimony is enough to prove a miracle against the laws of nature."
+ ],
+ [
+  "People who are very sure of their own ideas are usually wrong.",
+  "Bertrand Russell: fools are full of certainty, while the wise are full of doubt.",
+  "Descartes: after methodical doubt, I arrive at clear and distinct ideas that cannot be false."
+ ],
+ [
+  "Mathematics gives us truths that will never change.",
+  "Pythagoras: numbers are the essence of things, and their relations are eternal.",
+  "Nietzsche: even logic and mathematics rest on useful fictions we invent in order to live."
+ ],
+ [
+  "Our memories and perceptions deceive us more than we realize.",
+  "Pyrrho: the senses show things one way, and nothing guarantees they are that way.",
+  "Thomas Aquinas: the senses, properly used, give us true knowledge of the world."
+ ],
+ [
+  "It is possible to know with certainty what is right and what is wrong.",
+  "Spinoza: ethics can be demonstrated with the same rigor as geometry.",
+  "Foucault: what each age calls moral truth is a product of power relations."
+ ],
+ [
+  "Each generation should decide its own rules, without being bound by those of earlier ones.",
+  "Mary Wollstonecraft: ancient custom justifies nothing; each generation must use its own reason.",
+  "Edmund Burke: society is a contract between the dead, the living and those yet to be born."
+ ],
+ [
+  "Religious rituals and traditional festivals give life a firm footing.",
+  "MacIntyre: a community's inherited practices give shape and direction to the good life.",
+  "Michel Onfray: religious rites are legacies that keep the body and desire submissive."
+ ],
+ [
+  "It is healthy for young people to reject their parents' values.",
+  "Nietzsche: the spirit must become a lion and say no to the \"thou shalt\" before creating values.",
+  "Aristotle: virtue is born of habit, learned early from family and city."
+ ],
+ [
+  "The experience of the elderly is worth more than the new ideas of the young.",
+  "Confucius: I transmit and do not invent; I trust the ancients and learn from them.",
+  "Paulo Freire: no one educates anyone; educator and student learn together, and the new also teaches."
+ ],
+ [
+  "Often, letting things take their course solves more than intervening.",
+  "Laozi: the sage acts without forcing, like water, which wins without fighting.",
+  "Sartre: standing still is also a choice, and we are responsible for it."
+ ],
+ [
+  "Faced with oppression, resisting is worth it even at the cost of one's own safety.",
+  "Thoreau: under a government that imprisons unjustly, the just man's place is in prison.",
+  "Hobbes: it is better to endure a harsh sovereign than to risk the war of all against all."
+ ],
+ [
+  "Desiring less is the best path to suffering less.",
+  "Schopenhauer: the insatiable will is the root of pain; denying it is the only true relief.",
+  "Deleuze: desire is not lack, it is a productive force; repressing it impoverishes life."
+ ],
+ [
+  "In old age, it is better to keep fighting for new projects than to accept decline.",
+  "Simone de Beauvoir: old age should not be lived with resignation; projects give it meaning.",
+  "Seneca: old age, when accepted, has its own pleasures; whoever fights it only suffers more."
+ ],
+ [
+  "Big decisions should be left to experts, not to the general population.",
+  "Comte: society should be guided by scientists and sages, not by the opinion of the masses.",
+  "Proudhon: to be governed is to be watched, inspected and directed by those with no right to do so."
+ ],
+ [
+  "School should let children choose what they want to learn.",
+  "Max Stirner: school should form free people, not subjects trained to obey.",
+  "Kant: a child must first learn discipline in order to later use freedom well."
+ ],
+ [
+  "The government should watch people if it brings more security.",
+  "Hobbes: subjects trade part of their liberty for the sovereign's protection.",
+  "Foucault: constant surveillance produces docile bodies and serves power, not people."
+ ],
+ [
+  "Rigid hierarchies hinder a society more than they help it.",
+  "Bakunin: every hierarchy breeds privilege; freedom exists only among equals.",
+  "Joseph de Maistre: every social order rests on authority; without it, only chaos and blood remain."
+ ]
+]

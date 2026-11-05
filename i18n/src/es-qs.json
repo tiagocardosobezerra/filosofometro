@@ -1,0 +1,662 @@
+[
+ [
+  "Algunas verdades pueden conocerse solo pensando, sin mirar el mundo.",
+  "Descartes: aun dudando de todo lo que veo, sé que existo solo por el hecho de estar pensando.",
+  "Locke: la mente nace como una hoja en blanco; toda idea viene de la experiencia."
+ ],
+ [
+  "Todo lo que sé lo aprendí por los sentidos y la experiencia.",
+  "Hume: toda idea es copia de alguna impresión que vino de los sentidos.",
+  "Platón: aprender es recordar; el alma ya conocía las Formas antes de nacer."
+ ],
+ [
+  "La razón pura es una fuente de conocimiento más confiable que los sentidos.",
+  "Parménides: los sentidos muestran cambio, pero la razón prueba que el ser es inmutable.",
+  "Hume: la razón sola no prueba ni siquiera que el sol saldrá mañana; solo la experiencia lo enseña."
+ ],
+ [
+  "Desconfío de cualquier idea que no pueda probarse en la práctica.",
+  "Popper: una teoría solo es científica si puede ponerse a prueba y ser refutada.",
+  "Leibniz: las verdades de la razón, como las de las matemáticas, valen sin necesidad de ninguna prueba."
+ ],
+ [
+  "Todo lo que sucede ya estaba destinado a suceder.",
+  "Calvino: Dios ya decidió todo de antemano, incluso quién se salvará.",
+  "Sartre: no hay destino escrito; el ser humano es lo que elige hacer."
+ ],
+ [
+  "Soy el único responsable de mis elecciones.",
+  "Sartre: estamos condenados a ser libres; no existe naturaleza ni excusa a la que culpar.",
+  "Marx: las personas hacen la historia, pero en condiciones que no eligieron."
+ ],
+ [
+  "Nuestras decisiones son producto de la genética y del ambiente.",
+  "Schopenhauer: el hombre puede hacer lo que quiere, pero no puede querer lo que quiere.",
+  "Kant: la razón nos da una libertad que ninguna causa natural explica."
+ ],
+ [
+  "Podría haber actuado de otra manera en casi todo lo que hice.",
+  "William James: el libre albedrío es real; el futuro no está cerrado.",
+  "Spinoza: nos creemos libres solo porque conocemos nuestros deseos, no sus causas."
+ ],
+ [
+  "La vida tiene un propósito que debemos descubrir.",
+  "Aristóteles: todo tiene una finalidad, y la del ser humano es vivir bien según la razón.",
+  "Camus: el universo es mudo; no hay propósito que descubrir, solo el absurdo que enfrentar."
+ ],
+ [
+  "El sentido de la vida es algo que cada uno inventa.",
+  "Nietzsche: tras la muerte de Dios, nos toca crear nuestros propios valores.",
+  "San Agustín: el sentido viene de Dios; el corazón vive inquieto hasta descansar en él."
+ ],
+ [
+  "Existe una naturaleza humana universal y fija.",
+  "Hobbes: en todas partes el ser humano busca poder y teme a la muerte; eso no cambia.",
+  "Beauvoir: no se nace mujer, se llega a serlo; lo que parece naturaleza es construcción social."
+ ],
+ [
+  "Somos lo que hacemos de nosotros mismos, no lo que nacimos para ser.",
+  "Paulo Freire: somos seres inacabados, que se hacen en la práctica y en la historia.",
+  "Platón: cada alma nace con su naturaleza, de oro, plata o bronce, y debe cumplir ese papel."
+ ],
+ [
+  "Mentir está mal, incluso para salvar a alguien.",
+  "Kant: mentir es siempre malo, incluso al asesino que pregunta dónde está tu amigo.",
+  "John Stuart Mill: lo que importa son las consecuencias; mentir para salvar una vida es lo correcto."
+ ],
+ [
+  "Una acción es buena si genera más felicidad que sufrimiento.",
+  "Bentham: la medida de lo correcto y lo incorrecto es la mayor felicidad para el mayor número.",
+  "Rawls: sumar felicidades olvida que cada persona es separada y tiene derechos propios."
+ ],
+ [
+  "Hay reglas morales que nunca deben romperse, cueste lo que cueste.",
+  "Tomás de Aquino: algunos actos son malos en sí mismos y nunca pueden elegirse, ni por un bien mayor.",
+  "Maquiavelo: el gobernante debe aprender a no ser bueno cuando la necesidad lo exija."
+ ],
+ [
+  "Sacrificar a una persona para salvar a cinco es la elección correcta.",
+  "Peter Singer: si podemos evitar un mal mayor, debemos hacerlo; cinco vidas pesan más que una.",
+  "Nozick: los derechos son límites; sacrificar a alguien por el bien de los demás nunca es justo."
+ ],
+ [
+  "El bien de la comunidad debe prevalecer sobre los intereses individuales.",
+  "Rousseau: quien se niegue a obedecer la voluntad general será obligado a ser libre.",
+  "Ayn Rand: el individuo no existe para sacrificarse por la colectividad."
+ ],
+ [
+  "El individuo debe seguir su camino, incluso contra la multitud.",
+  "Kierkegaard: la multitud es la mentira; la verdad se vive en soledad.",
+  "Confucio: la virtud nace de los deberes con la familia, los mayores y la comunidad."
+ ],
+ [
+  "Mis deberes con la familia y la comunidad van antes que mis deseos.",
+  "MacIntyre: solo sé quién soy dentro de las historias y comunidades a las que pertenezco.",
+  "Max Stirner: ninguna causa, sea la familia, el Estado o la humanidad, está por encima de mí."
+ ],
+ [
+  "Cada uno debe vivir según sus propios valores, no los del grupo.",
+  "John Stuart Mill: sobre sí mismo, el individuo es soberano; la sociedad no debe imponer su modo de vida.",
+  "Edmund Burke: la sabiduría acumulada de la tradición vale más que la razón de cada uno por separado."
+ ],
+ [
+  "El objetivo de la vida es vivir con placer y sin dolor.",
+  "Epicuro: el placer es el principio y el fin de la vida feliz, entendido como ausencia de dolor.",
+  "Séneca: el placer es cosa de animales; el bien propio del ser humano es la virtud."
+ ],
+ [
+  "La disciplina y el autocontrol valen más que la comodidad.",
+  "Diógenes: vivía en un barril y tiró su cuenco al ver a un niño beber agua con las manos.",
+  "Aristipo: disfruta el placer del momento; poseo los placeres, pero no soy poseído por ellos."
+ ],
+ [
+  "Ser una buena persona importa más para la felicidad que tener placer.",
+  "Sócrates: es mejor sufrir una injusticia que cometerla.",
+  "Michel Onfray: el hedonismo es gozar y hacer gozar; la moral del sacrificio empobrece la vida."
+ ],
+ [
+  "Debemos disfrutar los placeres de la vida sin culpa.",
+  "Montaigne: la perfección suprema es saber disfrutar lealmente de nuestro propio ser.",
+  "Schopenhauer: el placer es solo una breve pausa en el dolor; perseguirlo aumenta el sufrimiento."
+ ],
+ [
+  "La mente es solo el cerebro en funcionamiento.",
+  "Demócrito: todo, incluida el alma, está hecho de átomos y vacío.",
+  "Descartes: la mente es una sustancia pensante, distinta del cuerpo."
+ ],
+ [
+  "Existe algo en nosotros que va más allá del cuerpo.",
+  "Platón: el alma es inmortal, y el cuerpo es su prisión temporal.",
+  "Hobbes: todo lo que existe es cuerpo; hablar de sustancia inmaterial no tiene sentido."
+ ],
+ [
+  "Después de la muerte, simplemente dejamos de existir.",
+  "Epicuro: la muerte no es nada para nosotros; cuando llega, ya no estamos.",
+  "Pitágoras: el alma es inmortal y pasa de un cuerpo a otro."
+ ],
+ [
+  "La realidad más profunda es espiritual o mental, no material.",
+  "Berkeley: ser es ser percibido; no existe materia sin una mente que la perciba.",
+  "Marx: no es la conciencia la que determina la vida; es la vida material la que determina la conciencia."
+ ],
+ [
+  "Podemos alcanzar verdades absolutas.",
+  "Hegel: la razón puede llegar al saber absoluto sobre la realidad.",
+  "Protágoras: el hombre es la medida de todas las cosas; la verdad cambia según quien mira."
+ ],
+ [
+  "Dudo que podamos estar seguros de casi nada.",
+  "Pirrón: para cada argumento hay otro igualmente fuerte; lo mejor es suspender el juicio.",
+  "Mário Ferreira dos Santos: algo hay, y la nada absoluta no existe; de eso nadie puede dudar."
+ ],
+ [
+  "Debemos suspender el juicio sobre lo que no podemos probar.",
+  "Bertrand Russell: sin pruebas, lo razonable es no creer, como en una tetera orbitando el Sol.",
+  "San Agustín: creo para comprender; la fe viene antes que la prueba."
+ ],
+ [
+  "Para las grandes preguntas, hay respuestas correctas que podemos conocer.",
+  "Tomás de Aquino: la razón puede probar incluso que Dios existe.",
+  "Montaigne: ¿qué sé yo? Las grandes preguntas están más allá de nuestro alcance."
+ ],
+ [
+  "Las instituciones que han durado siglos guardan una sabiduría que no debemos descartar.",
+  "Chesterton: antes de derribar una cerca, averigua por qué alguien la puso allí.",
+  "Bakunin: la pasión de destruir es también una pasión creadora."
+ ],
+ [
+  "Para cambiar el mundo, a veces es necesario derribar lo que existe.",
+  "Marx: los filósofos han interpretado el mundo; lo que importa es transformarlo.",
+  "Edmund Burke: la Revolución Francesa destruyó en meses lo que a generaciones les llevó construir."
+ ],
+ [
+  "Las costumbres de nuestros antepasados merecen respeto, incluso sin una justificación clara.",
+  "Confucio: honrar los ritos y a los ancestros es el fundamento de una buena sociedad.",
+  "Voltaire: aplasten lo infame; las supersticiones no merecen respeto solo por ser antiguas."
+ ],
+ [
+  "Las normas heredadas deben abandonarse cuando no se justifican racionalmente.",
+  "Bentham: las leyes y costumbres heredadas deben pasar la prueba de la utilidad; las que no la pasan deben caer.",
+  "Hayek: muchas reglas funcionan por una sabiduría acumulada que nadie puede explicar por sí solo."
+ ],
+ [
+  "Ante lo que no puedo cambiar, lo mejor es aceptarlo en paz.",
+  "Marco Aurelio: acepta lo que sucede como parte del orden del todo.",
+  "Frantz Fanon: el oprimido solo se libera rechazando el orden que lo oprime."
+ ],
+ [
+  "Debemos rebelarnos contra el sufrimiento, aun sabiendo que no vamos a vencerlo.",
+  "Camus: hay que imaginar a Sísifo feliz, empujando la piedra aun sabiendo que volverá a rodar.",
+  "Spinoza: no reír, no llorar, sino comprender; entender la necesidad trae paz."
+ ],
+ [
+  "La serenidad vale más que la lucha.",
+  "Buda: la paz viene de apagar el deseo, no de luchar contra el mundo.",
+  "Hannah Arendt: la libertad está en actuar con los demás; quien se retira deja el mundo común en manos de otros."
+ ],
+ [
+  "Conformarse con la injusticia es volverse cómplice de ella.",
+  "Paulo Freire: lavarse las manos ante el conflicto entre opresor y oprimido es ponerse del lado del opresor.",
+  "Epicteto: no te perturbes por lo que no depende de ti; ocúpate de tu propia conducta."
+ ],
+ [
+  "Sin un Estado fuerte, la sociedad caería en el caos.",
+  "Hobbes: sin un poder común, la vida sería una guerra de todos contra todos.",
+  "Proudhon: la anarquía es el orden; es el gobierno el que produce el desorden."
+ ],
+ [
+  "Ninguna autoridad es legítima sin el consentimiento de cada persona.",
+  "Murray Rothbard: el Estado es un robo organizado; nadie consintió de verdad en pagar impuestos.",
+  "Hegel: el Estado es la realización de la razón, y su autoridad no depende de la aceptación de cada uno."
+ ],
+ [
+  "Obedecer las leyes es un deber, incluso cuando no estoy de acuerdo con ellas.",
+  "Sócrates: prefirió morir antes que huir de la prisión y desobedecer las leyes de Atenas.",
+  "Thoreau: si la ley exige que seas agente de injusticia contra otro, desobedece."
+ ],
+ [
+  "Las personas podrían organizarse bien sin gobierno.",
+  "Lao-Tse: cuantas más leyes y prohibiciones, más pobre se vuelve el pueblo.",
+  "Maquiavelo: los hombres son ingratos y volubles; sin un príncipe que los contenga, se destruyen."
+ ],
+ [
+  "Las matemáticas describen verdades que existirían incluso sin ningún ser humano.",
+  "Pitágoras: los números son el principio de todas las cosas y rigen el orden del cosmos.",
+  "John Stuart Mill: hasta las verdades de las matemáticas son generalizaciones sacadas de la experiencia."
+ ],
+ [
+  "En la ciencia, los datos observados valen más que cualquier teoría elegante.",
+  "Comte: el espíritu positivo cambia las especulaciones abstractas por la observación de los hechos.",
+  "Descartes: los sentidos engañan; solo las ideas claras y distintas de la razón son seguras."
+ ],
+ [
+  "Un niño nace con algunas ideas, antes de cualquier experiencia.",
+  "Leibniz: la mente es como un mármol con vetas que ya esbozan la figura que se va a esculpir.",
+  "Locke: no hay principios innatos; ni los niños ni los pueblos sencillos los conocen."
+ ],
+ [
+  "Para decidir algo en la vida, confío más en lo que he vivido que en razonamientos.",
+  "William James: una idea vale por lo que hace en la vida concreta, no por su elegancia lógica.",
+  "Spinoza: solo el conocimiento por la razón, y no la experiencia vaga, nos guía con seguridad."
+ ],
+ [
+  "Si conocieran todas las causas, los científicos podrían predecir cada decisión mía.",
+  "Demócrito: todo ocurre por necesidad, por el choque de los átomos en el vacío.",
+  "Kierkegaard: ante la elección sentimos angustia, que es el vértigo de la libertad."
+ ],
+ [
+  "Incluso con una infancia difícil, cada adulto elige quién va a ser.",
+  "Ayn Rand: el hombre es un ser de voluntad propia, y su carácter es obra de sus elecciones.",
+  "Marx: las condiciones materiales en que nacemos moldean nuestra conciencia y nuestras elecciones."
+ ],
+ [
+  "Cuando algo sale muy bien o muy mal en la vida, es porque tenía que ser así.",
+  "Marco Aurelio: todo lo que sucede fue tejido desde siempre por el orden del universo.",
+  "Camus: no hay plan oculto; el mundo es indiferente, y lo que hacemos depende de nosotros."
+ ],
+ [
+  "Tiene sentido castigar a un criminal porque pudo haber elegido no cometer el crimen.",
+  "Kant: el criminal es castigado porque actuó libremente y por eso merece la pena.",
+  "Spinoza: nadie actúa libremente; castigar solo se justifica para proteger a los demás, no por culpa."
+ ],
+ [
+  "Existe una forma correcta de vivir que vale para todos los seres humanos.",
+  "Aristóteles: la buena vida humana es realizar nuestra naturaleza racional, igual en todos nosotros.",
+  "Deleuze: no hay un modelo de vida correcto; cada uno experimenta lo que puede su cuerpo."
+ ],
+ [
+  "Una obra de arte significa lo que cada persona ve en ella.",
+  "Derrida: ningún texto tiene un sentido final; siempre se abre a nuevas lecturas.",
+  "Roger Scruton: la belleza es real y puede reconocerse; no es solo cuestión de gusto personal."
+ ],
+ [
+  "Cada persona nace con una vocación que debe encontrar.",
+  "Calvino: Dios da a cada uno una vocación, y el trabajo es la forma de servirle en ella.",
+  "Sartre: no hay una vocación esperándonos; el hombre es lo que proyecta ser."
+ ],
+ [
+  "Los papeles de hombre y mujer son invenciones culturales que podemos rehacer.",
+  "Judith Butler: el género no es una esencia, sino algo que se hace y se repite.",
+  "Tomás de Aquino: hombre y mujer tienen naturalezas complementarias, ordenadas por Dios."
+ ],
+ [
+  "Una promesa debe cumplirse incluso cuando romperla traería más beneficios.",
+  "Kant: quien hace una promesa falsa no puede querer que todos hagan lo mismo; eso nunca está permitido.",
+  "Bentham: una promesa vale por su utilidad; cumplirla cuando hace más mal que bien es un error."
+ ],
+ [
+  "Donar a la causa que salva más vidas es mejor que ayudar a quien está cerca.",
+  "Peter Singer: la distancia no cambia el deber; debemos ayudar donde el bien que se hace sea mayor.",
+  "Confucio: el amor comienza por la familia y se extiende a los demás en círculos."
+ ],
+ [
+  "Torturar a un sospechoso es siempre malo, incluso para evitar un atentado.",
+  "San Agustín: no se debe hacer el mal para que de él venga el bien.",
+  "Bentham: en casos extremos, el dolor de uno puede justificarse para evitar el dolor de muchos."
+ ],
+ [
+  "Lo que importa en una acción son sus resultados, no la intención de quien actúa.",
+  "John Stuart Mill: el motivo no cambia la moralidad del acto; quien salva a alguien que se ahoga actúa bien.",
+  "Kant: la buena voluntad brilla por sí misma, aun cuando no logre nada."
+ ],
+ [
+  "Los impuestos altos son justos cuando financian servicios para todos.",
+  "Marx: de cada uno según sus capacidades, a cada uno según sus necesidades.",
+  "Nozick: gravar los ingresos del trabajo equivale a imponer trabajo forzado."
+ ],
+ [
+  "Nadie debe dar explicaciones a la sociedad sobre cómo lleva su vida privada.",
+  "Montaigne: debemos reservarnos una trastienda solo nuestra, donde vivamos libres.",
+  "Platón: en la ciudad ideal, hasta la vida privada de los guardianes está regulada por el bien común."
+ ],
+ [
+  "Una persona solo se realiza de verdad siendo parte de algo más grande que ella.",
+  "Hegel: el individuo solo encuentra la libertad concreta en la vida ética de la familia y del Estado.",
+  "Nietzsche: el rebaño lo nivela todo; el individuo superior se realiza separándose de él."
+ ],
+ [
+  "Mi éxito personal se debe más a mí que a la sociedad en que vivo.",
+  "Ayn Rand: lo que un hombre logra es fruto de su propia mente y de su esfuerzo.",
+  "Paulo Freire: nadie se hace solo; nos hacemos en comunión, mediados por el mundo."
+ ],
+ [
+  "Una vida sencilla y austera trae más felicidad que una vida de lujo.",
+  "Thoreau: un hombre es rico en proporción a las cosas de las que puede prescindir.",
+  "Aristipo: prefería los banquetes y la comodidad, y sabía disfrutarlos sin perderse."
+ ],
+ [
+  "Una persona mala puede ser plenamente feliz.",
+  "Max Stirner: lo que importa es mi goce; el bien y el mal son fantasmas que me aprisionan.",
+  "Sócrates: el injusto es el más infeliz de los hombres, más aún si escapa al castigo."
+ ],
+ [
+  "La buena comida, el sexo y la fiesta son parte esencial de una vida feliz.",
+  "Michel Onfray: el cuerpo y sus placeres están en el centro de una vida bien vivida.",
+  "San Agustín: los placeres de la carne atan al alma; la verdadera felicidad está en Dios."
+ ],
+ [
+  "Vale la pena pasar por el sufrimiento para convertirse en una mejor persona.",
+  "Séneca: el fuego prueba el oro, y la adversidad prueba a los hombres fuertes.",
+  "Aristipo: el bien es el placer del momento, y el dolor debe evitarse siempre."
+ ],
+ [
+  "Algún día la ciencia explicará la conciencia por completo.",
+  "Hobbes: pensar es un movimiento dentro del cuerpo, explicable como cualquier otro mecanismo.",
+  "Descartes: la mente que piensa no se reduce a la extensión y al movimiento de los cuerpos."
+ ],
+ [
+  "La oración puede tener efectos reales, aunque la ciencia no pueda medirlos.",
+  "San Agustín: Dios escucha a quien lo busca, y la oración transforma por dentro a quien reza.",
+  "Epicuro: los dioses no se ocupan de los asuntos humanos; de nada sirve pedirles."
+ ],
+ [
+  "Sentimientos como el amor son, en el fondo, reacciones químicas del cuerpo.",
+  "Michel Onfray: el cuerpo lo es todo; nuestras pasiones e ideas nacen de la carne y los nervios.",
+  "Platón: el amor es el alma que sube de la belleza de los cuerpos hasta la belleza en sí."
+ ],
+ [
+  "Hay una dimensión sagrada en la naturaleza que va más allá de lo físico.",
+  "Lao-Tse: detrás de todas las cosas corre el Tao, que ningún nombre puede decir.",
+  "Demócrito: en la naturaleza solo existen átomos y vacío; todo lo demás es convención."
+ ],
+ [
+  "En cuestiones de fe, la duda es señal de honestidad, no de debilidad.",
+  "Kierkegaard: la fe no es certeza tranquila; es un salto dado en medio de la incertidumbre.",
+  "Calvino: la fe es un conocimiento firme y cierto de la bondad de Dios para con nosotros."
+ ],
+ [
+  "Algunas cosas son verdaderas para todos, independientemente de la cultura.",
+  "Platón: el bien y lo justo son Formas eternas, las mismas para cualquier pueblo.",
+  "Protágoras: cada ciudad considera justo lo que le parece justo, mientras así le parezca."
+ ],
+ [
+  "Incluso las teorías científicas más sólidas pueden algún día resultar erróneas.",
+  "Popper: todo conocimiento científico es provisional; la próxima refutación puede derribarlo.",
+  "Comte: las leyes establecidas por la ciencia positiva dan certezas que ponen fin a las viejas disputas."
+ ],
+ [
+  "En la mayoría de las discusiones, un lado tiene razón y el otro está equivocado.",
+  "Ayn Rand: A es A; entre lo verdadero y lo falso no existe término medio.",
+  "Montaigne: cada costumbre y opinión tiene sus razones; nadie posee la verdad entera."
+ ],
+ [
+  "Los cambios sociales deben ser lentos y graduales, nunca bruscos.",
+  "Edmund Burke: reformar con prudencia, conservando lo que funciona, es mejor que empezar de cero.",
+  "Frantz Fanon: la descolonización no se hace poco a poco; es la sustitución total del orden colonial."
+ ],
+ [
+  "La escuela debe enseñar a los jóvenes a cuestionar lo que recibieron de sus padres.",
+  "Paulo Freire: educar es ayudar a leer el mundo críticamente, no a repetir lo recibido.",
+  "Confucio: el joven debe ser obediente en casa y respetuoso fuera, aprendiendo de los antiguos."
+ ],
+ [
+  "En el arte, romper con las reglas del pasado vale más que dominarlas.",
+  "Adorno: el arte auténtico niega las formas gastadas; el arte que solo agrada se vuelve mercancía.",
+  "Roger Scruton: la belleza depende de formas heredadas; el arte que desprecia la tradición la pierde."
+ ],
+ [
+  "El modelo tradicional de familia sigue siendo el mejor para criar a los hijos.",
+  "Chesterton: la familia es la institución más antigua y la mejor escuela de libertad que existe.",
+  "Simone de Beauvoir: el matrimonio tradicional ata a la mujer al hogar y necesita ser repensado."
+ ],
+ [
+  "Ante una enfermedad incurable, aceptar el final es más sabio que luchar hasta el último día.",
+  "Marco Aurelio: la muerte es una obra de la naturaleza; recibirla con serenidad es propio del sabio.",
+  "Camus: vivir es mantener viva la rebeldía, rechazando la resignación hasta el final."
+ ],
+ [
+  "En el trabajo, vale más adaptarse a las condiciones que pelear para cambiarlas.",
+  "Epicteto: eres actor de una obra escogida por otro; te toca representar bien tu papel.",
+  "Marx: el trabajador alienado solo recupera su humanidad luchando contra quien lo explota."
+ ],
+ [
+  "La rabia ante la injusticia es un sentimiento sano.",
+  "Frantz Fanon: la rebeldía del colonizado es el camino para recuperar su propia dignidad.",
+  "Séneca: la ira es una locura breve; ninguna injusticia justifica entregarse a ella."
+ ],
+ [
+  "No hay nada de noble en soportar el sufrimiento en silencio.",
+  "Michel Onfray: el dolor no redime nada; es un mal que hay que combatir, no celebrar.",
+  "San Agustín: las tribulaciones purifican el alma y la hacen volverse hacia Dios."
+ ],
+ [
+  "Los hijos deben obedecer a sus padres aunque no entiendan los motivos.",
+  "Confucio: la piedad filial es la raíz de la virtud; servir a los padres es el primer deber.",
+  "John Stuart Mill: la obediencia sin razones forma personas dóciles; la individualidad necesita espacio."
+ ],
+ [
+  "Los adultos deberían poder consumir drogas libremente, siempre que no perjudiquen a nadie.",
+  "Nozick: un Estado mínimo no puede prohibir lo que los adultos hacen consigo mismos.",
+  "Platón: la ciudad debe educar y controlar los deseos de los ciudadanos para el bien de todos."
+ ],
+ [
+  "En una crisis, es mejor confiar en un líder fuerte que en largos debates.",
+  "Maquiavelo: en tiempos difíciles, el príncipe debe actuar con firmeza, sin esperar consenso.",
+  "Hayek: entregar poderes de emergencia a un líder es el camino más corto hacia la servidumbre."
+ ],
+ [
+  "Nadie debería necesitar un sacerdote, pastor o gurú para llegar a Dios.",
+  "Kierkegaard: ante Dios, cada uno está solo; ninguna iglesia puede creer en su lugar.",
+  "San Agustín: yo no creería en el Evangelio si la autoridad de la Iglesia no me moviera a ello."
+ ],
+ [
+  "Si un razonamiento lógico contradice lo que veo, confío en el razonamiento.",
+  "Platón: lo que ven los ojos son sombras; solo la razón alcanza lo real.",
+  "Epicuro: si no confiamos en los sentidos, no tendremos ningún criterio para juzgar nada."
+ ],
+ [
+  "La moral se aprende viviendo y conviviendo, no deduciendo principios.",
+  "Hume: la moral nace del sentimiento y la costumbre, no de demostraciones de la razón.",
+  "Kant: la ley moral se conoce a priori por la razón, no se extrae de la experiencia."
+ ],
+ [
+  "Toda la física podría, en principio, deducirse de unos pocos principios racionales.",
+  "Descartes: quería deducir toda la física de principios claros, como un árbol que nace de sus raíces.",
+  "Hume: solo la experiencia muestra causas y efectos; nada de eso se deduce de antemano."
+ ],
+ [
+  "Viajar y conocer otras culturas enseña más que leer a grandes filósofos.",
+  "Montaigne: aprendió más observando las costumbres de otros pueblos que siguiendo los sistemas de los filósofos.",
+  "Plotino: la sabiduría viene de volverse hacia dentro, alejándose del mundo sensible."
+ ],
+ [
+  "El carácter de una persona está definido antes de que pueda elegir.",
+  "Schopenhauer: el carácter es innato e inmutable; solo lo conocemos al ver lo que hacemos.",
+  "Sartre: la existencia precede a la esencia; el cobarde se hace cobarde por sus actos."
+ ],
+ [
+  "Los grandes acontecimientos de la historia dependen de las elecciones de personas comunes.",
+  "Hannah Arendt: cada persona que actúa puede iniciar algo nuevo e imprevisible en el mundo.",
+  "Hegel: la historia sigue el camino de la razón, y los individuos son solo sus instrumentos."
+ ],
+ [
+  "Las reglas de nuestra cultura piensan por nosotros más de lo que imaginamos.",
+  "Lévi-Strauss: estructuras inconscientes de la cultura organizan el pensamiento sin que lo notemos.",
+  "Thoreau: nadie necesita vivir como manda la sociedad; puedo elegir otra vida."
+ ],
+ [
+  "Ante cualquier situación, siempre queda alguna elección por hacer.",
+  "Paulo Freire: el ser humano no está determinado, está condicionado, y puede superarlo.",
+  "Calvino: la voluntad humana, sin la gracia de Dios, no puede elegir el bien por sí sola."
+ ],
+ [
+  "La naturaleza tiene un orden que muestra cómo debemos vivir.",
+  "Marco Aurelio: vivir bien es vivir de acuerdo con la naturaleza y la razón del universo.",
+  "Foucault: lo que llamamos natural suele ser una norma inventada por la sociedad."
+ ],
+ [
+  "Una vida sin religión puede tener tanto sentido como una vida con fe.",
+  "Camus: aun sin Dios, la rebeldía y la libertad bastan para dar valor a la vida.",
+  "Pascal: sin Dios el hombre es miserable; solo en él encuentra sentido y reposo."
+ ],
+ [
+  "Todo sufrimiento tiene una razón de ser, aun cuando no la entendamos.",
+  "Leibniz: vivimos en el mejor de los mundos posibles; hasta el mal sirve a un plan mayor.",
+  "Simone de Beauvoir: el mundo no trae justificaciones ya hechas; nos toca a nosotros dar sentido a lo que vivimos."
+ ],
+ [
+  "Los valores morales son invenciones humanas, no descubrimientos.",
+  "Nietzsche: no hay hechos morales, solo interpretaciones morales de los fenómenos.",
+  "Platón: el Bien existe por sí mismo, por encima de cualquier opinión humana."
+ ],
+ [
+  "En un accidente inevitable, un auto autónomo debe elegir la maniobra que mate a menos gente.",
+  "Bentham: lo correcto es siempre lo que produce el menor sufrimiento total para todos los involucrados.",
+  "Nozick: las personas no son recursos que se suman; cada vida impone límites a lo que se puede hacer."
+ ],
+ [
+  "Hay cosas que no se hacen, aunque nadie salga perjudicado.",
+  "Tomás de Aquino: algunos actos van contra la ley natural, aunque no causen daño visible.",
+  "John Stuart Mill: la sociedad solo puede condenar las acciones que perjudican a otros."
+ ],
+ [
+  "Quien roba un medicamento para salvar a un hijo enfermo hace lo correcto.",
+  "Peter Singer: ante un mal grave que podemos evitar, salvar una vida pesa más que la regla.",
+  "Guillermo de Ockham: lo correcto es lo que Dios ordena; ninguna buena razón humana dispensa del mandamiento."
+ ],
+ [
+  "Debemos respetar los derechos de una persona aunque eso perjudique a muchas otras.",
+  "John Rawls: cada persona tiene una inviolabilidad que ni el bienestar de todos puede anular.",
+  "Maquiavelo: quien gobierna debe hacer lo que el bien del Estado exige, aunque hiera a algunos."
+ ],
+ [
+  "Una persona puede ser feliz viviendo completamente aislada de la sociedad.",
+  "Thoreau: vivió solo en una cabaña en el bosque para vivir de forma deliberada.",
+  "Aristóteles: quien vive fuera de la ciudad es una bestia o un dios."
+ ],
+ [
+  "La identidad de una persona viene principalmente del pueblo y de la cultura donde nació.",
+  "Gadamer: siempre estamos dentro de una tradición que nos forma antes de que reflexionemos.",
+  "Kierkegaard: llegar a ser uno mismo es tarea del individuo ante Dios, no de la multitud."
+ ],
+ [
+  "La competencia hace más bien a la sociedad que la cooperación.",
+  "Hayek: la competencia descubre lo que ningún planificador sabe y acaba beneficiando a todos.",
+  "Bakunin: la libertad de cada uno solo se realiza en la solidaridad de todos."
+ ],
+ [
+  "Los bienes esenciales, como el agua y la tierra, deberían pertenecer a todos.",
+  "Rousseau: el primero que cercó un terreno y dijo esto es mío fundó la desigualdad.",
+  "Locke: quien mezcla su trabajo con la tierra la hace legítimamente suya."
+ ],
+ [
+  "Quien tiene un carácter íntegro es feliz incluso en la pobreza o la enfermedad.",
+  "Epicteto: la felicidad depende solo de lo que está en nosotros, no de la salud ni de la riqueza.",
+  "Michel Onfray: la alegría pasa por el cuerpo; no hay felicidad despreciando la salud y los placeres."
+ ],
+ [
+  "Una vida de experiencias intensas vale más que una vida correcta y tranquila.",
+  "Deleuze: el deseo es fuerza productiva; reprimirlo en nombre de la moral empobrece la vida.",
+  "Marco Aurelio: vive cada día con rectitud, sin agitación, sin letargo y sin fingimiento."
+ ],
+ [
+  "Ser feliz es, ante todo, estar en paz con la propia conciencia.",
+  "Buda: la felicidad viene de purificar la mente, no de satisfacer deseos.",
+  "Epicuro: la virtud solo vale porque trae placer, como la medicina vale por la salud."
+ ],
+ [
+  "Gastar dinero en experiencias agradables es un gran camino hacia la felicidad.",
+  "Voltaire: el paraíso terrenal está donde yo estoy, con el lujo y los placeres de esta vida.",
+  "Diógenes: cuanto menos necesitamos, más cerca estamos de los dioses."
+ ],
+ [
+  "Todo lo que existe puede, en principio, medirse y pesarse.",
+  "Comte: el espíritu positivo cambia la búsqueda de causas ocultas por el estudio de las leyes observables.",
+  "Simone Weil: el mundo está regido por la gravedad, pero la gracia es una fuerza de otro orden."
+ ],
+ [
+  "Una obra de arte puede tocar algo del alma que la materia no explica.",
+  "Hegel: en el arte, el espíritu se manifiesta de forma sensible y se reconoce a sí mismo.",
+  "Marx: el arte, como toda ideología, brota de las condiciones materiales de cada época."
+ ],
+ [
+  "El ser humano es un animal como los demás, solo que más complejo.",
+  "Peter Singer: ninguna diferencia de naturaleza coloca al ser humano por encima de los demás animales.",
+  "Tomás de Aquino: el ser humano tiene un alma racional e inmortal, que lo separa de los animales."
+ ],
+ [
+  "Los milagros pueden ocurrir de verdad, incluso hoy.",
+  "Pascal: los milagros son señales que Dios da a quien tiene el corazón dispuesto a ver.",
+  "Hume: ningún testimonio basta para probar un milagro contra las leyes de la naturaleza."
+ ],
+ [
+  "Quien está muy seguro de sus propias ideas suele estar equivocado.",
+  "Bertrand Russell: los tontos están llenos de certezas, mientras los sabios viven llenos de dudas.",
+  "Descartes: tras la duda metódica, llego a ideas claras y distintas que no pueden ser falsas."
+ ],
+ [
+  "Las matemáticas nos dan verdades que nunca van a cambiar.",
+  "Pitágoras: los números son la esencia de las cosas, y sus relaciones son eternas.",
+  "Nietzsche: hasta la lógica y las matemáticas descansan sobre ficciones útiles que inventamos para vivir."
+ ],
+ [
+  "Nuestros recuerdos y percepciones nos engañan más de lo que imaginamos.",
+  "Pirrón: los sentidos muestran las cosas de una manera, y nada garantiza que sean así.",
+  "Tomás de Aquino: los sentidos, bien usados, nos dan un conocimiento verdadero del mundo."
+ ],
+ [
+  "Es posible saber con seguridad qué es correcto y qué es incorrecto.",
+  "Spinoza: la ética puede demostrarse con el mismo rigor que la geometría.",
+  "Foucault: lo que cada época llama verdad moral es producto de relaciones de poder."
+ ],
+ [
+  "Cada generación debe decidir sus propias reglas, sin quedar atada a las de las anteriores.",
+  "Mary Wollstonecraft: la costumbre antigua no justifica nada; cada generación debe usar su propia razón.",
+  "Edmund Burke: la sociedad es un pacto entre los muertos, los vivos y los que aún han de nacer."
+ ],
+ [
+  "Los rituales religiosos y las fiestas tradicionales dan un suelo firme a la vida.",
+  "MacIntyre: las prácticas heredadas de una comunidad dan forma y rumbo a la vida buena.",
+  "Michel Onfray: los ritos religiosos son herencias que mantienen sumisos al cuerpo y al deseo."
+ ],
+ [
+  "Es sano que los jóvenes rechacen los valores de sus padres.",
+  "Nietzsche: el espíritu debe volverse león y decir no al \"tú debes\" antes de crear valores.",
+  "Aristóteles: la virtud nace del hábito, aprendido desde temprano con la familia y la ciudad."
+ ],
+ [
+  "La experiencia de los mayores vale más que las ideas nuevas de los jóvenes.",
+  "Confucio: transmito y no invento; confío en los antiguos y aprendo de ellos.",
+  "Paulo Freire: nadie educa a nadie; educador y educando aprenden juntos, y lo nuevo también enseña."
+ ],
+ [
+  "Muchas veces, dejar que las cosas sigan su curso resuelve más que intervenir.",
+  "Lao-Tse: el sabio actúa sin forzar, como el agua, que vence sin luchar.",
+  "Sartre: quedarse quieto también es una elección, y somos responsables de ella."
+ ],
+ [
+  "Ante la opresión, resistir vale la pena aunque cueste la propia seguridad.",
+  "Thoreau: bajo un gobierno que encarcela injustamente, el lugar del hombre justo es la cárcel.",
+  "Hobbes: es mejor soportar a un soberano duro que arriesgar la guerra de todos contra todos."
+ ],
+ [
+  "Desear menos es el mejor camino para sufrir menos.",
+  "Schopenhauer: la voluntad insaciable es la raíz del dolor; negarla es el único alivio verdadero.",
+  "Deleuze: el deseo no es carencia, es fuerza productiva; reprimirlo es empobrecer la vida."
+ ],
+ [
+  "En la vejez, vale más seguir luchando por nuevos proyectos que aceptar el declive.",
+  "Simone de Beauvoir: la vejez no debe vivirse con resignación; los proyectos le dan sentido.",
+  "Séneca: la vejez, cuando se acepta, tiene sus propios placeres; quien la combate solo sufre más."
+ ],
+ [
+  "Las grandes decisiones deben quedar en manos de expertos, no de la población en general.",
+  "Comte: la sociedad debe ser guiada por científicos y sabios, no por la opinión de las masas.",
+  "Proudhon: ser gobernado es ser vigilado, inspeccionado y dirigido por quien no tiene derecho a ello."
+ ],
+ [
+  "La escuela debería dejar que los niños elijan lo que quieren aprender.",
+  "Max Stirner: la escuela debe formar personas libres, no súbditos adiestrados para obedecer.",
+  "Kant: el niño necesita primero aprender disciplina para después usar bien la libertad."
+ ],
+ [
+  "El gobierno debe vigilar a las personas si eso trae más seguridad.",
+  "Hobbes: los súbditos cambian parte de su libertad por la protección del soberano.",
+  "Foucault: la vigilancia constante fabrica cuerpos dóciles y sirve al poder, no a las personas."
+ ],
+ [
+  "Las jerarquías rígidas perjudican a una sociedad más de lo que la ayudan.",
+  "Bakunin: toda jerarquía genera privilegio; la libertad solo existe entre iguales.",
+  "Joseph de Maistre: todo orden social descansa sobre la autoridad; sin ella, solo quedan caos y sangre."
+ ]
+]

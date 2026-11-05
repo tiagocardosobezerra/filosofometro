@@ -1,0 +1,914 @@
+[
+ {
+  "id": "bartolome-de-las-casas",
+  "n": "Bartolomé de las Casas",
+  "s": "Escolástica humanista",
+  "era": "Iberoamérica",
+  "v": [
+   0.2,
+   0.6,
+   -0.9,
+   -0.8,
+   0.6,
+   0.8,
+   0.8,
+   -0.7,
+   0.4,
+   0.9,
+   0.3
+  ],
+  "q": "Todas las naciones del mundo son hombres, con entendimiento y voluntad.",
+  "b": "Brevísima relación de la destrucción de las Indias",
+  "reading": [
+   "Historia de las Indias",
+   "En busca de los pobres de Jesucristo: el pensamiento de Bartolomé de las Casas (Gustavo Gutiérrez)"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Fray_Bartolom%C3%A9_de_las_Casas.jpg/500px-Fray_Bartolom%C3%A9_de_las_Casas.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Bartolom%C3%A9_de_las_Casas",
+  "born": 1484,
+  "died": 1566,
+  "approx": true,
+  "place": "Sevilla (España)",
+  "bio": "Llegó a América como colono y dueño de indígenas, pero la violencia que vio lo hizo cambiar de vida y hacerse fraile dominico. Pasó medio siglo denunciando ante la Corona los abusos de la conquista. En el debate de Valladolid defendió que los pueblos indígenas eran plenamente humanos, libres y dueños de sus tierras, y su voz es una raíz temprana de los derechos humanos.",
+  "ideas": [
+   "Los pueblos indígenas tienen razón, libertad y derechos como cualquier otro pueblo.",
+   "La fe no puede imponerse por la fuerza, solo proponerse con paz y buen ejemplo.",
+   "Una conquista hecha con violencia y despojo es injusta, aunque la ordene un rey."
+  ],
+  "line": "La escolástica humanista aplicó la teología de Tomás de Aquino a los problemas nuevos de la conquista. Las Casas fue su voz más combativa, la que convirtió la doctrina en denuncia."
+ },
+ {
+  "id": "francisco-suarez",
+  "n": "Francisco Suárez",
+  "s": "Escolástica barroca",
+  "era": "Iberoamérica",
+  "v": [
+   0,
+   0.6,
+   -1,
+   -0.7,
+   0.6,
+   0.7,
+   0.9,
+   -0.8,
+   -0.6,
+   -0.2,
+   -0.3
+  ],
+  "q": "El poder político no viene al rey directamente de Dios, sino a través de la comunidad.",
+  "b": "Disputaciones metafísicas",
+  "reading": [
+   "Tratado de las leyes y de Dios legislador",
+   "Defensa de la fe católica y apostólica contra los errores del anglicanismo"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Suarez_LOC_hec.13754_%28cropped%29.jpg/500px-Suarez_LOC_hec.13754_%28cropped%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Francisco_Su%C3%A1rez",
+  "born": 1548,
+  "died": 1617,
+  "approx": false,
+  "place": "Granada (España)",
+  "bio": "Jesuita y profesor en Salamanca, Roma y Coímbra, fue llamado el Doctor Eximio. Sus Disputaciones metafísicas ordenaron toda la filosofía de su tiempo y se leyeron durante siglos en universidades católicas y protestantes. En política sostuvo que la autoridad nace del pueblo y que es legítimo resistir al tirano, ideas que influyeron en el derecho internacional moderno.",
+  "ideas": [
+   "La autoridad política reside primero en la comunidad, que la transfiere al gobernante.",
+   "Existe un derecho entre las naciones, fundado en la ley natural y en el acuerdo de los pueblos.",
+   "El ser humano es libre de verdad, y Dios respeta esa libertad."
+  ],
+  "line": "La escolástica barroca es la renovación del pensamiento de Tomás de Aquino en la España de los siglos XVI y XVII. Suárez es su gran sistematizador y el puente entre la Edad Media y la filosofía moderna."
+ },
+ {
+  "id": "sor-juana-ines-de-la-cruz",
+  "n": "Sor Juana Inés de la Cruz",
+  "s": "Humanismo barroco",
+  "era": "Iberoamérica",
+  "v": [
+   -0.3,
+   0.6,
+   -0.4,
+   -0.3,
+   -0.5,
+   0.6,
+   0.7,
+   0.3,
+   0.5,
+   0.6,
+   0.5
+  ],
+  "q": "Yo no estudio para saber más, sino para ignorar menos.",
+  "b": "Respuesta a sor Filotea de la Cruz",
+  "reading": [
+   "Primero sueño",
+   "Sor Juana Inés de la Cruz o las trampas de la fe (Octavio Paz)"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Sor_Juana_by_Miguel_Cabrera_%28cropped%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Juana_In%C3%A9s_de_la_Cruz",
+  "born": 1648,
+  "died": 1695,
+  "approx": true,
+  "place": "San Miguel Nepantla (México)",
+  "bio": "Aprendió a leer a los tres años y entró al convento para poder dedicarse al estudio, algo casi imposible para una mujer en la Nueva España. Fue poeta, dramaturga y pensadora, y reunió una de las mayores bibliotecas de América. Cuando un obispo la reprendió por escribir, respondió con una defensa brillante y erudita del derecho de las mujeres a saber.",
+  "ideas": [
+   "Las mujeres tienen el mismo derecho que los hombres a estudiar y pensar.",
+   "El deseo de conocer es parte de la naturaleza humana y no se puede apagar.",
+   "La razón humana busca abarcarlo todo, aunque al final descubra sus propios límites."
+  ],
+  "line": "El humanismo barroco unió fe católica, ciencia antigua y una curiosidad sin fronteras. Sor Juana es su cumbre en América y una de las primeras voces feministas del continente."
+ },
+ {
+  "id": "andres-bello",
+  "n": "Andrés Bello",
+  "s": "Republicanismo ilustrado",
+  "era": "Iberoamérica",
+  "v": [
+   0.5,
+   0.3,
+   -0.4,
+   -0.2,
+   0.4,
+   0.5,
+   0.4,
+   -0.2,
+   -0.5,
+   -0.3,
+   -0.5
+  ],
+  "q": "Todas las verdades se tocan.",
+  "b": "Filosofía del entendimiento",
+  "reading": [
+   "Gramática de la lengua castellana destinada al uso de los americanos",
+   "Andrés Bello: la pasión por el orden (Iván Jaksić)"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Andres_Bello-Quinsac.jpg/500px-Andres_Bello-Quinsac.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Andr%C3%A9s_Bello",
+  "born": 1781,
+  "died": 1865,
+  "approx": false,
+  "place": "Caracas (Venezuela)",
+  "bio": "Fue maestro de Simón Bolívar, vivió casi veinte años en Londres y luego se instaló en Chile, donde fundó la Universidad de Chile y redactó el Código Civil. Escribió una gramática pensada para los americanos y una filosofía del conocimiento de corte empirista. Creía que las nuevas repúblicas necesitaban leyes, educación y una lengua común para durar.",
+  "ideas": [
+   "La libertad de las naciones nuevas se sostiene con leyes claras e instituciones estables.",
+   "El conocimiento parte de la experiencia y se ordena con la razón.",
+   "Una lengua común y cuidada mantiene unida a la familia de pueblos hispanoamericanos."
+  ],
+  "line": "El republicanismo ilustrado buscó construir repúblicas con ley, educación y orden después de la independencia. Bello fue su arquitecto más paciente, más cerca del cambio gradual que de la ruptura."
+ },
+ {
+  "id": "domingo-f-sarmiento",
+  "n": "Domingo F. Sarmiento",
+  "s": "Liberalismo civilizador",
+  "era": "Iberoamérica",
+  "v": [
+   0.7,
+   0.6,
+   0.3,
+   0.6,
+   -0.2,
+   0.2,
+   -0.3,
+   -0.2,
+   0.8,
+   0.6,
+   -0.2
+  ],
+  "q": "Educar al pueblo es la tarea primera y más urgente de una república.",
+  "b": "Facundo: civilización y barbarie",
+  "reading": [
+   "Recuerdos de provincia",
+   "Viajes por Europa, África y América"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Sarmiento.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Domingo_Faustino_Sarmiento",
+  "born": 1811,
+  "died": 1888,
+  "approx": false,
+  "place": "San Juan (Argentina)",
+  "bio": "Maestro rural, periodista y exiliado en Chile, llegó a ser presidente de la Argentina. En Facundo describió el país como una lucha entre la civilización de las ciudades y la barbarie del caudillismo. Fundó escuelas, bibliotecas y observatorios, y creía que la educación pública era el camino para modernizar la nación, aunque su desprecio por gauchos e indígenas sigue siendo muy discutido.",
+  "ideas": [
+   "La escuela pública es la base de una república moderna.",
+   "El atraso de un país se combate con instrucción, ciencia e inmigración.",
+   "El caudillismo es enemigo de la ley y de la libertad."
+  ],
+  "line": "El liberalismo civilizador quiso modernizar América Latina siguiendo el modelo de Europa y los Estados Unidos. Sarmiento es su figura más enérgica y también la más polémica."
+ },
+ {
+  "id": "jose-marti",
+  "n": "José Martí",
+  "s": "Americanismo emancipador",
+  "era": "Iberoamérica",
+  "v": [
+   0.2,
+   0.8,
+   -0.2,
+   -0.4,
+   0.8,
+   0.8,
+   0.6,
+   -0.2,
+   0.8,
+   1,
+   0.4
+  ],
+  "q": "Ser culto es el único modo de ser libre.",
+  "b": "Nuestra América",
+  "reading": [
+   "La Edad de Oro",
+   "Versos sencillos"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Jos%C3%A9_Mart%C3%AD_retrato_hecho_en_M%C3%A9xico_1875.jpg/500px-Jos%C3%A9_Mart%C3%AD_retrato_hecho_en_M%C3%A9xico_1875.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Jos%C3%A9_Mart%C3%AD",
+  "born": 1853,
+  "died": 1895,
+  "approx": false,
+  "place": "La Habana (Cuba)",
+  "bio": "Poeta, periodista y organizador de la independencia de Cuba, pasó gran parte de su vida en el exilio, sobre todo en Nueva York. En Nuestra América pidió a los pueblos latinoamericanos conocerse a sí mismos en vez de copiar modelos ajenos. Murió en combate al regresar a Cuba, y su obra une ética, poesía y política en una misma causa: la dignidad humana.",
+  "ideas": [
+   "América Latina debe gobernarse según su propia realidad y no con libros importados.",
+   "La educación y la cultura son condiciones de la libertad.",
+   "Hay que luchar contra la injusticia sin odio, con amor a los pueblos."
+  ],
+  "line": "El americanismo emancipador defiende la independencia política y cultural de América Latina. Martí es su voz más querida, la que une la lucha por la libertad con una ética del amor."
+ },
+ {
+  "id": "jose-enrique-rodo",
+  "n": "José Enrique Rodó",
+  "s": "Arielismo",
+  "era": "Iberoamérica",
+  "v": [
+   -0.3,
+   0.6,
+   -0.2,
+   -0.4,
+   0.2,
+   0.8,
+   0.8,
+   0.1,
+   -0.2,
+   0.2,
+   0.1
+  ],
+  "q": "Reformarse es vivir.",
+  "b": "Ariel",
+  "reading": [
+   "Motivos de Proteo",
+   "El mirador de Próspero"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Jos%C3%A9_Enrique_Rod%C3%B3_%28Almanaque_Sudamericano_1898%29.jpg/500px-Jos%C3%A9_Enrique_Rod%C3%B3_%28Almanaque_Sudamericano_1898%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Jos%C3%A9_Enrique_Rod%C3%B3",
+  "born": 1871,
+  "died": 1917,
+  "approx": false,
+  "place": "Montevideo (Uruguay)",
+  "bio": "Ensayista y político uruguayo, publicó en 1900 Ariel, un discurso dirigido a la juventud de América que se volvió un libro de cabecera en todo el continente. Allí opuso el espíritu, la belleza y el desinterés al utilitarismo que veía en la cultura de los Estados Unidos. Más tarde, en Motivos de Proteo, reflexionó sobre la vocación y la renovación constante de la persona.",
+  "ideas": [
+   "Una vida plena no se mide por la utilidad sino por el cultivo del espíritu.",
+   "La juventud tiene la misión de renovar los ideales de su pueblo.",
+   "La personalidad se rehace a lo largo de toda la vida."
+  ],
+  "line": "El arielismo fue un movimiento idealista que defendió la herencia cultural latina frente al materialismo práctico. Rodó es su fundador y su escritor más elegante."
+ },
+ {
+  "id": "concepcion-arenal",
+  "n": "Concepción Arenal",
+  "s": "Reformismo social",
+  "era": "Iberoamérica",
+  "v": [
+   0.4,
+   0.5,
+   -0.5,
+   -0.4,
+   0.6,
+   0.8,
+   0.5,
+   -0.3,
+   0.6,
+   0.7,
+   0.2
+  ],
+  "q": "Odia el delito y compadece al delincuente.",
+  "b": "La mujer del porvenir",
+  "reading": [
+   "Cartas a los delincuentes",
+   "El visitador del pobre"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Concepcion_Arenal_1.jpg/500px-Concepcion_Arenal_1.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Concepci%C3%B3n_Arenal",
+  "born": 1820,
+  "died": 1893,
+  "approx": false,
+  "place": "Ferrol (España)",
+  "bio": "Asistió vestida de hombre a clases de Derecho en Madrid, porque a las mujeres no se les permitía entrar a la universidad. Fue visitadora de prisiones y escribió sobre cárceles, pobreza y educación femenina. Católica y reformista, defendió que el castigo debía buscar la corrección de la persona y no la venganza, y abrió camino al feminismo español moderno.",
+  "ideas": [
+   "La pena debe corregir y rehabilitar, no vengarse.",
+   "La mujer tiene derecho a educarse y a desarrollar todas sus capacidades.",
+   "La caridad verdadera se convierte en justicia y en reforma de las instituciones."
+  ],
+  "line": "El reformismo social del siglo XIX buscó mejorar cárceles, hospitales y escuelas sin romper con el orden existente. Arenal es su gran pionera en España, con una mirada cristiana y feminista."
+ },
+ {
+  "id": "miguel-de-unamuno",
+  "n": "Miguel de Unamuno",
+  "s": "Existencialismo trágico",
+  "era": "Iberoamérica",
+  "v": [
+   0.1,
+   0.7,
+   0.4,
+   -0.3,
+   -0.8,
+   0.3,
+   0.7,
+   0.9,
+   0.3,
+   0.9,
+   0.6
+  ],
+  "q": "Fe que no duda es fe muerta.",
+  "b": "Del sentimiento trágico de la vida",
+  "reading": [
+   "San Manuel Bueno, mártir",
+   "Niebla"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Miguel_de_Unamuno_Meurisse_1925.jpg/500px-Miguel_de_Unamuno_Meurisse_1925.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Miguel_de_Unamuno",
+  "born": 1864,
+  "died": 1936,
+  "approx": false,
+  "place": "Bilbao (España)",
+  "bio": "Rector de la Universidad de Salamanca, novelista, poeta y ensayista, fue una de las grandes voces de la generación del 98. Toda su obra gira en torno a la lucha entre la razón, que niega la inmortalidad, y el corazón, que la desea. Fue desterrado por la dictadura de Primo de Rivera y, al final de su vida, enfrentó en público a los militares franquistas.",
+  "ideas": [
+   "El ser humano de carne y hueso quiere no morir, y ese deseo es el centro de la filosofía.",
+   "La razón y la fe viven en lucha, y esa agonía es la vida del espíritu.",
+   "Hay que vivir de modo que la nada, si llega, sea una injusticia."
+  ],
+  "line": "El existencialismo trágico vive la tensión entre el anhelo de eternidad y la duda de la razón. Unamuno es su gran precursor, antes incluso que los existencialistas franceses."
+ },
+ {
+  "id": "jose-ortega-y-gasset",
+  "n": "José Ortega y Gasset",
+  "s": "Raciovitalismo",
+  "era": "Iberoamérica",
+  "v": [
+   0.3,
+   0.7,
+   0.6,
+   -0.1,
+   -0.4,
+   0.4,
+   0.2,
+   0.2,
+   0.1,
+   0.4,
+   0.1
+  ],
+  "q": "Yo soy yo y mi circunstancia, y si no la salvo a ella no me salvo yo.",
+  "b": "La rebelión de las masas",
+  "reading": [
+   "Meditaciones del Quijote",
+   "¿Qué es filosofía?"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/5/5c/JoseOrtegayGasset.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Jos%C3%A9_Ortega_y_Gasset",
+  "born": 1883,
+  "died": 1955,
+  "approx": false,
+  "place": "Madrid (España)",
+  "bio": "Catedrático de Metafísica en Madrid, fundó la Revista de Occidente y llevó a España la filosofía alemana de su tiempo. Pensó que la razón debe partir de la vida concreta de cada persona y no de abstracciones. En La rebelión de las masas advirtió sobre el hombre masa que exige derechos sin asumir deberes, y su influencia en el mundo hispano fue enorme.",
+  "ideas": [
+   "La vida es la realidad radical: todo lo demás aparece dentro de ella.",
+   "Cada persona es inseparable de su circunstancia, que debe comprender y transformar.",
+   "La vida es quehacer: no nos es dada hecha y tenemos que decidir qué ser."
+  ],
+  "line": "El raciovitalismo une la razón con la vida: pensar es una función de vivir, no algo separado de ella. Ortega es su creador y el filósofo español más influyente del siglo XX."
+ },
+ {
+  "id": "maria-zambrano",
+  "n": "María Zambrano",
+  "s": "Razón poética",
+  "era": "Iberoamérica",
+  "v": [
+   -0.1,
+   0.3,
+   -0.3,
+   -0.3,
+   0.3,
+   0.6,
+   0.9,
+   0.5,
+   0.3,
+   0.2,
+   0.3
+  ],
+  "q": "La razón tiene que volverse poética para alcanzar lo que la vida siente.",
+  "b": "El hombre y lo divino",
+  "reading": [
+   "Filosofía y poesía",
+   "Claros del bosque"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Mar%C3%ADa-Zambrano-1-e1602071174321.png/500px-Mar%C3%ADa-Zambrano-1-e1602071174321.png",
+  "wiki": "https://es.wikipedia.org/wiki/Mar%C3%ADa_Zambrano",
+  "born": 1904,
+  "died": 1991,
+  "approx": false,
+  "place": "Vélez-Málaga (España)",
+  "bio": "Discípula de Ortega y Gasset, apoyó a la República y tras la Guerra Civil vivió casi medio siglo en el exilio, en México, Cuba, Italia y Suiza. Propuso una razón poética, capaz de escuchar los sueños, los sentimientos y lo sagrado que la filosofía tradicional dejaba fuera. Volvió a España en 1984 y fue la primera mujer en recibir el Premio Cervantes.",
+  "ideas": [
+   "La filosofía necesita la poesía para no perder el contacto con la vida.",
+   "Lo sagrado y los sueños son también caminos de conocimiento.",
+   "El exilio puede ser un lugar desde donde se ve con más claridad."
+  ],
+  "line": "La razón poética busca un pensamiento que no corte la vida en conceptos, sino que la acompañe. Zambrano es su creadora, a partir de la herencia de Ortega y de la mística española."
+ },
+ {
+  "id": "xavier-zubiri",
+  "n": "Xavier Zubiri",
+  "s": "Filosofía de la realidad",
+  "era": "Iberoamérica",
+  "v": [
+   0.3,
+   0.3,
+   -0.6,
+   -0.4,
+   0.3,
+   0.5,
+   0.3,
+   -0.4,
+   -0.3,
+   -0.2,
+   -0.1
+  ],
+  "q": "Inteligir y sentir no son dos actos distintos: la inteligencia humana es sentiente.",
+  "b": "Naturaleza, Historia, Dios",
+  "reading": [
+   "Sobre la esencia",
+   "Inteligencia sentiente"
+  ],
+  "img": "",
+  "wiki": "https://es.wikipedia.org/wiki/Xavier_Zubiri",
+  "born": 1898,
+  "died": 1983,
+  "approx": false,
+  "place": "San Sebastián (España)",
+  "bio": "Sacerdote en su juventud, estudió con Husserl y Heidegger y conocía a fondo la física y la biología de su época. Dejó la universidad en 1942 y enseñó en cursos privados en Madrid durante décadas. En obras como Sobre la esencia e Inteligencia sentiente construyó una filosofía rigurosa de la realidad que supera la vieja separación entre sentir y pensar.",
+  "ideas": [
+   "La inteligencia humana capta la realidad sintiendo, no por encima de los sentidos.",
+   "El ser humano es un animal de realidades, abierto a todo lo que hay.",
+   "La religión nace de que la persona se descubre religada a un fundamento."
+  ],
+  "line": "La filosofía de la realidad de Zubiri parte de la fenomenología, pero vuelve a la pregunta clásica por lo que las cosas son. Es el gran metafísico del pensamiento español del siglo XX."
+ },
+ {
+  "id": "adela-cortina",
+  "n": "Adela Cortina",
+  "s": "Ética discursiva",
+  "era": "Iberoamérica",
+  "v": [
+   -0.4,
+   0.6,
+   -0.1,
+   -0.6,
+   0.7,
+   0.6,
+   0,
+   -0.2,
+   0.5,
+   0.7,
+   0.3
+  ],
+  "q": "No rechazamos al extranjero por ser extranjero, sino por ser pobre.",
+  "b": "Aporofobia, el rechazo al pobre",
+  "reading": [
+   "Ética mínima",
+   "Ciudadanos del mundo"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/%28Adela_Cortina%29_La_alcaldesa_-_%E2%80%9CMe_siento_orgullosa_de_la_solidaridad_de_Espa%C3%B1a_con_la_acogida_a_los_migrantes_del_Aquarius%E2%80%9D.jpg/500px-%28Adela_Cortina%29_La_alcaldesa_-_%E2%80%9CMe_siento_orgullosa_de_la_solidaridad_de_Espa%C3%B1a_con_la_acogida_a_los_migrantes_del_Aquarius%E2%80%9D.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Adela_Cortina",
+  "born": 1947,
+  "died": null,
+  "approx": false,
+  "place": "Valencia (España)",
+  "bio": "Catedrática de Ética en la Universidad de Valencia, fue la primera mujer en ingresar en la Real Academia de Ciencias Morales y Políticas. Desarrolló en español la ética del diálogo de Apel y Habermas y la aplicó a la economía, la empresa, la bioética y la ciudadanía. Su término aporofobia, el rechazo al pobre, fue elegido palabra del año en España en 2017.",
+  "ideas": [
+   "Una sociedad plural necesita una ética mínima compartida por todos.",
+   "Las normas justas son las que aceptarían todos los afectados en un diálogo libre.",
+   "El rechazo al pobre es una forma de discriminación que hay que nombrar y combatir."
+  ],
+  "line": "La ética discursiva sostiene que lo justo se decide en un diálogo donde todos los afectados pueden participar. Cortina es su principal voz en lengua española, cercana a Kant y a Habermas."
+ },
+ {
+  "id": "jose-vasconcelos",
+  "n": "José Vasconcelos",
+  "s": "Monismo estético",
+  "era": "Iberoamérica",
+  "v": [
+   -0.4,
+   0.4,
+   -0.6,
+   -0.4,
+   0.8,
+   0.7,
+   0.9,
+   -0.4,
+   0.3,
+   0.4,
+   -0.4
+  ],
+  "q": "Por mi raza hablará el espíritu.",
+  "b": "La raza cósmica",
+  "reading": [
+   "Ulises criollo",
+   "Indología"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Jose_Vasconcelos_portriat_c.1920s.jpg/500px-Jose_Vasconcelos_portriat_c.1920s.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Jos%C3%A9_Vasconcelos",
+  "born": 1882,
+  "died": 1959,
+  "approx": false,
+  "place": "Oaxaca (México)",
+  "bio": "Fue rector de la Universidad Nacional y primer secretario de Educación Pública de México, desde donde impulsó escuelas rurales, bibliotecas y los murales de Rivera y Orozco. En La raza cósmica imaginó que la mezcla de todos los pueblos en América daría lugar a una humanidad nueva. Con los años, tras perder las elecciones de 1929, se volvió más conservador y católico.",
+  "ideas": [
+   "El mestizaje americano anuncia una humanidad nueva y universal.",
+   "La belleza y la emoción estética son el camino más alto hacia el espíritu.",
+   "Educar a todo el pueblo es la gran tarea de una revolución."
+  ],
+  "line": "El monismo estético ve en la belleza la clave de la unidad del universo y del espíritu humano. Vasconcelos fue su creador y el gran educador del México posrevolucionario."
+ },
+ {
+  "id": "jose-carlos-mariategui",
+  "n": "José Carlos Mariátegui",
+  "s": "Marxismo indoamericano",
+  "era": "Iberoamérica",
+  "v": [
+   0.6,
+   0.3,
+   0.3,
+   0.4,
+   1,
+   0.6,
+   -0.5,
+   -0.2,
+   1,
+   1,
+   0.1
+  ],
+  "q": "No queremos que el socialismo sea en América calco y copia, sino creación heroica.",
+  "b": "Siete ensayos de interpretación de la realidad peruana",
+  "reading": [
+   "Defensa del marxismo",
+   "El alma matinal y otras estaciones del hombre de hoy"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Jos%C3%A9_Carlos_Mari%C3%A1tegui_in_1929.jpg/500px-Jos%C3%A9_Carlos_Mari%C3%A1tegui_in_1929.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Jos%C3%A9_Carlos_Mari%C3%A1tegui",
+  "born": 1894,
+  "died": 1930,
+  "approx": false,
+  "place": "Moquegua (Perú)",
+  "bio": "Periodista autodidacta, vivió en Europa y volvió al Perú convencido de que el socialismo debía partir de la realidad indígena de los Andes. Fundó la revista Amauta y el Partido Socialista Peruano. En sus Siete ensayos vinculó el problema del indio con el problema de la tierra. Murió a los 35 años, pero sigue siendo el marxista latinoamericano más original.",
+  "ideas": [
+   "El problema del indígena es, en el fondo, el problema de la tierra.",
+   "El socialismo en América debe nacer de sus propias tradiciones comunitarias.",
+   "Las grandes transformaciones necesitan una fe y un mito que movilicen a los pueblos."
+  ],
+  "line": "El marxismo indoamericano adapta las ideas de Marx a la realidad andina y campesina. Mariátegui es su fundador, cercano a Gramsci por la importancia que dio a la cultura."
+ },
+ {
+  "id": "octavio-paz",
+  "n": "Octavio Paz",
+  "s": "Humanismo liberal",
+  "era": "Iberoamérica",
+  "v": [
+   0.4,
+   0.7,
+   0.6,
+   0,
+   -0.3,
+   0.2,
+   0.2,
+   0.6,
+   0.3,
+   0.4,
+   0.6
+  ],
+  "q": "La soledad es el fondo último de la condición humana.",
+  "b": "El laberinto de la soledad",
+  "reading": [
+   "El arco y la lira",
+   "El ogro filantrópico"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Octavio_Paz_1984_%28colorized%29.jpg/500px-Octavio_Paz_1984_%28colorized%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Octavio_Paz",
+  "born": 1914,
+  "died": 1998,
+  "approx": false,
+  "place": "Ciudad de México (México)",
+  "bio": "Poeta, ensayista y diplomático, ganó el Premio Nobel de Literatura en 1990. En El laberinto de la soledad exploró las máscaras, las fiestas y la historia del mexicano. Al principio cercano a la izquierda, rompió con los regímenes autoritarios y se volvió un defensor de la democracia liberal y de la libertad del artista, desde las revistas Plural y Vuelta.",
+  "ideas": [
+   "La poesía es una forma de conocimiento y de comunión entre las personas.",
+   "Ninguna utopía justifica sacrificar la libertad y la democracia.",
+   "Cada pueblo debe mirar su historia sin máscaras para poder cambiar."
+  ],
+  "line": "El humanismo liberal defiende la libertad individual, la democracia y la crítica frente a cualquier dogma. Paz es su gran voz en América Latina, unida a una visión poética del mundo."
+ },
+ {
+  "id": "enrique-dussel",
+  "n": "Enrique Dussel",
+  "s": "Filosofía de la liberación",
+  "era": "Iberoamérica",
+  "v": [
+   0.4,
+   0.5,
+   0.1,
+   -0.3,
+   0.9,
+   0.6,
+   -0.2,
+   -0.3,
+   0.9,
+   1,
+   0.2
+  ],
+  "q": "La filosofía comienza cuando escuchamos el grito del otro, del pobre que reclama justicia.",
+  "b": "Filosofía de la liberación",
+  "reading": [
+   "Ética de la liberación en la edad de la globalización y de la exclusión",
+   "20 tesis de política"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/EnriqueDussel.jpg/500px-EnriqueDussel.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Enrique_Dussel",
+  "born": 1934,
+  "died": 2023,
+  "approx": false,
+  "place": "Mendoza (Argentina)",
+  "bio": "Filósofo, historiador y teólogo argentino, se exilió en México en 1975 tras un atentado con bomba contra su casa. Allí enseñó durante décadas y escribió una obra inmensa. Partiendo de Levinas y de Marx, pensó la filosofía desde las víctimas de la historia, los pueblos colonizados y los pobres, y criticó la idea de que Europa sea el centro del pensamiento.",
+  "ideas": [
+   "La ética comienza con el rostro del otro que sufre y pide justicia.",
+   "La modernidad europea tiene un lado oculto: la colonización de América.",
+   "El poder legítimo es un servicio que obedece al pueblo."
+  ],
+  "line": "La filosofía de la liberación piensa desde los excluidos de América Latina y del sur global. Dussel es su autor más conocido en el mundo y el que más la sistematizó."
+ },
+ {
+  "id": "rodolfo-kusch",
+  "n": "Rodolfo Kusch",
+  "s": "Pensamiento popular americano",
+  "era": "Iberoamérica",
+  "v": [
+   0.6,
+   -0.4,
+   -0.4,
+   -0.1,
+   0.8,
+   0.5,
+   0.7,
+   0.4,
+   -0.6,
+   -0.4,
+   0.1
+  ],
+  "q": "Antes que ser alguien, el americano busca estar en el mundo, arraigado en su suelo.",
+  "b": "América profunda",
+  "reading": [
+   "El pensamiento indígena y popular en América",
+   "Geocultura del hombre americano"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/5/52/RodolfoKusch.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Rodolfo_Kusch",
+  "born": 1922,
+  "died": 1979,
+  "approx": false,
+  "place": "Buenos Aires (Argentina)",
+  "bio": "Hijo de inmigrantes alemanes, recorrió el altiplano boliviano y el norte argentino para escuchar a campesinos y comunidades indígenas. A partir de ese trabajo de campo propuso que en América hay un pensamiento propio, ligado a la tierra, al rito y al simple estar. Criticó la mentalidad urbana y moderna que desprecia lo popular y lo vive como atraso.",
+  "ideas": [
+   "En América late un modo de vida centrado en el estar más que en el ser.",
+   "El pensamiento popular e indígena es una sabiduría, no una ignorancia.",
+   "La ciudad moderna teme al suelo americano y trata de olvidarlo."
+  ],
+  "line": "El pensamiento popular americano busca la filosofía en la vida de los pueblos andinos y campesinos. Kusch es su figura central, con una mirada cercana a la antropología."
+ },
+ {
+  "id": "mario-bunge",
+  "n": "Mario Bunge",
+  "s": "Realismo científico",
+  "era": "Iberoamérica",
+  "v": [
+   0.6,
+   0.4,
+   -0.2,
+   0.5,
+   0.2,
+   0.2,
+   -1,
+   -0.4,
+   0.3,
+   0.4,
+   0.3
+  ],
+  "q": "Disfruta de la vida y ayuda a vivir a los demás.",
+  "b": "La ciencia, su método y su filosofía",
+  "reading": [
+   "Memorias: entre dos mundos",
+   "Diccionario de filosofía"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/2/28/MarioBungesmall.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Mario_Bunge",
+  "born": 1919,
+  "died": 2020,
+  "approx": false,
+  "place": "Buenos Aires (Argentina)",
+  "bio": "Físico y filósofo, enseñó durante más de cincuenta años en la Universidad McGill, en Canadá, y escribió más de cuarenta libros. Construyó un gran sistema filosófico basado en la ciencia, materialista y realista. Fue un crítico feroz de las pseudociencias, del psicoanálisis y de las filosofías oscuras, y defendió una democracia integral, política y económica.",
+  "ideas": [
+   "El mundo existe por sí mismo y la ciencia puede conocerlo cada vez mejor.",
+   "Todo lo que existe es material, incluida la mente, que es actividad del cerebro.",
+   "La filosofía debe ser clara, rigurosa y útil para la ciencia y la sociedad."
+  ],
+  "line": "El realismo científico sostiene que la ciencia describe un mundo real que no depende de nosotros. Bunge es su gran representante en lengua española, materialista y enemigo de la vaguedad."
+ },
+ {
+  "id": "gloria-anzaldua",
+  "n": "Gloria Anzaldúa",
+  "s": "Feminismo chicano",
+  "era": "Iberoamérica",
+  "v": [
+   0.7,
+   0.6,
+   0.9,
+   0.2,
+   0.4,
+   0,
+   0.4,
+   0.7,
+   1,
+   0.9,
+   0.8
+  ],
+  "q": "Vivir en la frontera es aprender a sostener varias culturas a la vez.",
+  "b": "Borderlands / La Frontera: la nueva mestiza",
+  "reading": [
+   "Esta puente, mi espalda: voces de mujeres tercermundistas en los Estados Unidos (con Cherríe Moraga)",
+   "Prietita y la Llorona"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Gloria_Anzaldua.jpg/500px-Gloria_Anzaldua.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Gloria_Anzald%C3%BAa",
+  "born": 1942,
+  "died": 2004,
+  "approx": false,
+  "place": "Valle del Río Grande, Texas (Estados Unidos)",
+  "bio": "Creció en una familia de trabajadores del campo en la frontera entre Texas y México. Escritora, poeta y teórica, mezcló inglés, español y náhuatl en sus textos. En Borderlands describió la conciencia mestiza de quien vive entre culturas, lenguas y géneros, y abrió caminos para el feminismo chicano, los estudios de frontera y la teoría queer en todo el mundo.",
+  "ideas": [
+   "La frontera no es solo una línea: es una forma de vivir entre mundos.",
+   "La conciencia mestiza tolera la contradicción y crea algo nuevo con ella.",
+   "Nadie debe avergonzarse de su lengua ni de su cuerpo."
+  ],
+  "line": "El feminismo chicano une la lucha de las mujeres con la experiencia de los mexicoamericanos en los Estados Unidos. Anzaldúa es su pensadora más influyente y una pionera de la teoría de la frontera."
+ },
+ {
+  "id": "nicolas-gomez-davila",
+  "n": "Nicolás Gómez Dávila",
+  "s": "Pensamiento reaccionario",
+  "era": "Iberoamérica",
+  "v": [
+   0.1,
+   0.3,
+   -1,
+   -0.7,
+   0.2,
+   0.7,
+   0.9,
+   -0.3,
+   -1,
+   -0.6,
+   -0.8
+  ],
+  "q": "El reaccionario no es el soñador nostálgico de pasados abolidos, sino el cazador de sombras sagradas sobre las colinas eternas.",
+  "b": "Escolios a un texto implícito",
+  "reading": [
+   "Notas",
+   "Textos I"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/5/56/Nicol%C3%A1s_G%C3%B3mez_D%C3%A1vila.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Nicol%C3%A1s_G%C3%B3mez_D%C3%A1vila",
+  "born": 1913,
+  "died": 1994,
+  "approx": false,
+  "place": "Bogotá (Colombia)",
+  "bio": "Educado en París, pasó casi toda su vida encerrado en su biblioteca de Bogotá, de más de treinta mil volúmenes. Escribió miles de escolios, frases breves y afiladas contra la modernidad, el progreso y la democracia. Católico tradicional, se definió a sí mismo como reaccionario, y su obra fue descubierta y admirada en Europa, sobre todo en Alemania, tras su muerte.",
+  "ideas": [
+   "El progreso moderno no es una mejora, sino una pérdida de lo sagrado.",
+   "Las jerarquías naturales son más justas que la igualdad impuesta.",
+   "Pensar bien es pensar en fragmentos breves y precisos, no en sistemas."
+  ],
+  "line": "El pensamiento reaccionario rechaza la modernidad en nombre de la tradición y de un orden sagrado. Gómez Dávila es su aforista más brillante, cercano a De Maistre por su crítica a la Revolución."
+ },
+ {
+  "id": "gustavo-gutierrez",
+  "n": "Gustavo Gutiérrez",
+  "s": "Teología de la liberación",
+  "era": "Iberoamérica",
+  "v": [
+   0.5,
+   0.4,
+   -0.8,
+   -0.2,
+   0.9,
+   0.7,
+   0.6,
+   -0.5,
+   0.7,
+   1,
+   0.1
+  ],
+  "q": "Amar a Dios exige optar primero por los pobres.",
+  "b": "Teología de la liberación: perspectivas",
+  "reading": [
+   "Beber en su propio pozo",
+   "Dios o el oro en las Indias"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Gustavo_gutierrez_%28Peruvian_theologian%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Gustavo_Guti%C3%A9rrez_(te%C3%B3logo)",
+  "born": 1928,
+  "died": 2024,
+  "approx": false,
+  "place": "Lima (Perú)",
+  "bio": "Sacerdote peruano que trabajó durante décadas en el barrio popular del Rímac, en Lima. En 1971 publicó Teología de la liberación, el libro que dio nombre a todo un movimiento en la Iglesia latinoamericana. Pensó la fe desde la pobreza y la injusticia, y su opción preferencial por los pobres terminó entrando en el lenguaje oficial de la Iglesia católica.",
+  "ideas": [
+   "La fe cristiana se vive en el compromiso con los pobres y oprimidos.",
+   "La pobreza no es una fatalidad, sino una injusticia que se puede cambiar.",
+   "La teología es una reflexión que nace de la práctica, no al revés."
+  ],
+  "line": "La teología de la liberación lee el Evangelio desde los pobres de América Latina y une fe con lucha por la justicia. Gutiérrez es su fundador y su teólogo más reconocido."
+ },
+ {
+  "id": "gabriela-mistral",
+  "n": "Gabriela Mistral",
+  "s": "Humanismo cristiano",
+  "era": "Iberoamérica",
+  "v": [
+   0.4,
+   0.3,
+   -0.6,
+   -0.4,
+   0.7,
+   0.8,
+   0.8,
+   -0.2,
+   0.2,
+   0.4,
+   0.1
+  ],
+  "q": "Muchas cosas pueden esperar, el niño no: su nombre es hoy.",
+  "b": "Recados: contando a Chile",
+  "reading": [
+   "Desolación",
+   "Lecturas para mujeres"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/6/64/Gabriela_Mistral_1945.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Gabriela_Mistral",
+  "born": 1889,
+  "died": 1957,
+  "approx": false,
+  "place": "Vicuña (Chile)",
+  "bio": "Maestra rural en el norte de Chile, colaboró con Vasconcelos en la reforma educativa de México y luego fue cónsul en varios países. En 1945 se convirtió en la primera persona de América Latina en ganar el Premio Nobel de Literatura. En sus prosas y recados defendió a los niños, a las mujeres, a los campesinos y a los pueblos indígenas desde una fe cristiana sencilla.",
+  "ideas": [
+   "La educación de los niños es la tarea más urgente de cualquier sociedad.",
+   "La dignidad de campesinos, mujeres e indígenas es parte del alma de América.",
+   "La belleza y la fe sostienen la vida en medio del dolor."
+  ],
+  "line": "El humanismo cristiano pone a la persona y su dignidad en el centro, a la luz del Evangelio. Mistral lo vivió como maestra y poeta, con una cercanía franciscana a los humildes."
+ },
+ {
+  "id": "jorge-luis-borges",
+  "n": "Jorge Luis Borges",
+  "s": "Escepticismo idealista",
+  "era": "Iberoamérica",
+  "v": [
+   -0.3,
+   -0.6,
+   0.3,
+   0,
+   -0.7,
+   0.2,
+   0.6,
+   1,
+   -0.2,
+   -0.6,
+   0.6
+  ],
+  "q": "El tiempo es la sustancia de que estoy hecho.",
+  "b": "Otras inquisiciones",
+  "reading": [
+   "Ficciones",
+   "Historia de la eternidad"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Jorge_Luis_Borges_1951%2C_by_Grete_Stern_%28full%29.jpg/500px-Jorge_Luis_Borges_1951%2C_by_Grete_Stern_%28full%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Jorge_Luis_Borges",
+  "born": 1899,
+  "died": 1986,
+  "approx": false,
+  "place": "Buenos Aires (Argentina)",
+  "bio": "Cuentista, poeta y ensayista, dirigió la Biblioteca Nacional argentina ya casi ciego. En sus ensayos y ficciones jugó con las ideas de Berkeley, Schopenhauer y los místicos: laberintos, espejos, el infinito y la irrealidad del tiempo. Escéptico ante todo dogma, desconfiaba del Estado y de los nacionalismos, y es uno de los escritores más leídos por filósofos del mundo entero.",
+  "ideas": [
+   "Toda teoría del universo puede ser una ficción, y vale la pena explorarla como tal.",
+   "El tiempo y la identidad personal son más extraños de lo que parecen.",
+   "Desconfiar del Estado y de los fanatismos es una forma de cortesía y de libertad."
+  ],
+  "line": "El escepticismo idealista duda de toda certeza y sospecha que el mundo puede ser una construcción de la mente. Borges lo practicó como ensayista, más cerca de Hume y Berkeley que de cualquier escuela."
+ }
+]

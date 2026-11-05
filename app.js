@@ -1,5 +1,7 @@
 // Filosofômetro UI. All numbers come from AgoraEngine; this file only renders and routes.
 (function(){
+// Every interface string is Portuguese inside L`...`; i18n.js swaps it for the page's language.
+const I=window.AgoraI18n,{L,t}=I;
 const E=AgoraEngine.create(AgoraData);
 const {AXES,QS,PH,SCALE}=E;
 const app=document.getElementById("app");
@@ -25,7 +27,7 @@ const store={
 };
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const fmt=(x,d=2)=>(x>=0?"+":"−")+Math.abs(x).toFixed(d).replace(".",",");
+const fmt=(x,d=2)=>(x>=0?"+":"−")+Math.abs(x).toFixed(d).replace(".",I.dec);
 const pad=n=>String(n).padStart(2,"0");
 const icon={
   arrow:'<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
@@ -44,7 +46,7 @@ const pts=v=>v.map((x,i)=>[Math.cos(angle(i))*radius(x),Math.sin(angle(i))*radiu
 const path=v=>"M"+pts(v).map(p=>p.map(n=>n.toFixed(2)).join(" ")).join("L")+"Z";
 function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",decorative=false,tips=false}={}){
   const pad=labels?66:6;
-  let s=`<svg viewBox="${-R-pad} ${-R-pad} ${2*(R+pad)} ${2*(R+pad)}" ${decorative?'aria-hidden="true" focusable="false"':`role="img" aria-label="${esc(title||"Perfil nos 11 eixos")}"`}>`;
+  let s=`<svg viewBox="${-R-pad} ${-R-pad} ${2*(R+pad)} ${2*(R+pad)}" ${decorative?'aria-hidden="true" focusable="false"':`role="img" aria-label="${esc(title||L`Perfil nos 11 eixos`)}"`}>`;
   [.33,.66,1].forEach(f=>s+=`<circle class="sg-ring" r="${(R*(.16+.84*f)).toFixed(1)}"/>`);
   AXES.forEach((_,i)=>s+=`<line class="sg-spoke" x1="0" y1="0" x2="${(Math.cos(angle(i))*R).toFixed(1)}" y2="${(Math.sin(angle(i))*R).toFixed(1)}"/>`);
   if(compare)s+=`<path class="sg-them" d="${path(compare)}"/>`;
@@ -61,7 +63,7 @@ function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",de
     AXES.forEach((a,i)=>{
       const a1=angle(i)-half,a2=angle(i)+half;
       const p1=[Math.cos(a1)*rr,Math.sin(a1)*rr],p2=[Math.cos(a2)*rr,Math.sin(a2)*rr];
-      s+=`<path class="sg-hit" data-ax="${i}" tabindex="0" role="button" aria-label="${esc(a.name)}: ${esc(a.l)} ou ${esc(a.r)}. Ver explicação" d="M0 0L${p1[0].toFixed(1)} ${p1[1].toFixed(1)}A${rr} ${rr} 0 0 1 ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}Z"/>`;
+      s+=`<path class="sg-hit" data-ax="${i}" tabindex="0" role="button" aria-label="${L`${esc(a.name)}: ${esc(a.l)} ou ${esc(a.r)}. Ver explicação`}" d="M0 0L${p1[0].toFixed(1)} ${p1[1].toFixed(1)}A${rr} ${rr} 0 0 1 ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}Z"/>`;
     });
   }
   return s+"</svg>";
@@ -69,38 +71,38 @@ function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",de
 
 /* ---------- Sigil explanations ---------- */
 const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
-const lean=(a,x)=>Math.abs(x)<.13?"Equilíbrio":`${x<0?a.l:a.r}${Math.abs(x)>=.6?", forte":""}`;
+const lean=(a,x)=>Math.abs(x)<.13?L`Equilíbrio`:`${x<0?a.l:a.r}${Math.abs(x)>=.6?L`, forte`:""}`;
 // How two people differ on one axis. On the same side it is a difference of strength, not of direction.
 function diffText(a,n1,v1,n2,v2){
   if(Math.sign(v1)===Math.sign(v2)&&Math.abs(v1)>=.13&&Math.abs(v2)>=.13)
-    return `Os dois tendem a <b>${esc(v1<0?a.l:a.r)}</b>, mas ${esc(Math.abs(v1)>Math.abs(v2)?n1:n2)} com mais força.`;
+    return L`Os dois tendem a <b>${esc(v1<0?a.l:a.r)}</b>, mas ${esc(Math.abs(v1)>Math.abs(v2)?n1:n2)} com mais força.`;
   return `${esc(n1)}: <b>${esc(lean(a,v1))}</b>. ${esc(n2)}: <b>${esc(lean(a,v2))}</b>.`;
 }
-const num2=x=>(x>=0?"+":"−")+Math.abs(x).toFixed(2).replace(".",",");
+const num2=x=>(x>=0?"+":"−")+Math.abs(x).toFixed(2).replace(".",I.dec);
 // Why the user sits where they do on one axis: the answers that pulled hardest in that direction.
 function whyUser(r,ax){
   const qs=r.perQuestion.filter(q=>q.axis===ax);
   const score=r.scores[ax];
   if(Math.abs(score)<.13){
     const pulls=qs.filter(q=>q.contribution!==0);
-    return pulls.length?`Suas respostas se equilibraram: ${pulls.length} puxaram para lados opostos.`:"Você ficou neutro nas 4 afirmações deste eixo.";
+    return pulls.length?L`Suas respostas se equilibraram: ${pulls.length} puxaram para lados opostos.`:L`Você ficou neutro nas afirmações deste eixo.`;
   }
   const dir=Math.sign(score);
   const top=qs.filter(q=>Math.sign(q.contribution)===dir).sort((a,b)=>Math.abs(b.contribution)-Math.abs(a.contribution)).slice(0,2);
-  const said=q=>`“${SCALE[q.answer].label.toLowerCase()}” para “${q.text.replace(/\.$/,"")}”`;
-  return `Você respondeu ${top.map(said).join(" e ")}.`;
+  const said=q=>L`“${t(SCALE[q.answer].label).toLowerCase()}” para “${QS[q.i][0].replace(/\.$/,"")}”`;
+  return L`Você respondeu ${top.map(said).join(L` e `)}.`;
 }
 // The example in the quiz where this thinker is cited on this axis, if any.
 function thinkerCite(p,ax){
   for(const q of QS){if(q[1]!==ax)continue;for(const ex of [q[3],q[4]]){const n=ex.slice(0,ex.indexOf(": "));if(thinkerByName(n)===p)return ex.slice(ex.indexOf(": ")+2)}}
   return null;
 }
-function tipHTML(ax,{user=null,r=null,p=null,you="Você"}){
+function tipHTML(ax,{user=null,r=null,p=null,you=L`Você`}){
   const a=AXES[ax];
-  let h=`<button class="tip-x" type="button" aria-label="Fechar explicação">×</button><b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${esc(a.l)} no centro ↔ ${esc(a.r)} na borda</span>`;
+  let h=`<button class="tip-x" type="button" aria-label="${L`Fechar explicação`}">×</button><b class="tip-t">${esc(cap(a.name))}</b><span class="tip-poles">${L`${esc(a.l)} no centro ↔ ${esc(a.r)} na borda`}</span>`;
   if(user)h+=`<span class="tip-row"><i class="tip-dot you"></i>${esc(you)}: ${num2(user[ax])} · ${esc(lean(a,user[ax]))}</span>`;
   if(p)h+=`<span class="tip-row"><i class="tip-dot them"></i>${esc(p.n)}: ${num2(p.v[ax])} · ${esc(lean(a,p.v[ax]))}</span>`;
-  if(r)h+=`<span class="tip-why"><b>Por quê:</b> ${esc(whyUser(r,ax))}</span>`;
+  if(r)h+=`<span class="tip-why"><b>${L`Por quê:`}</b> ${esc(whyUser(r,ax))}</span>`;
   else if(p){const c=thinkerCite(p,ax);if(c)h+=`<span class="tip-why"><b>${esc(p.n)}:</b> ${esc(c)}</span>`;}
   return h;
 }
@@ -156,7 +158,7 @@ function route(){
   document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(name==="p"&&a.dataset.nav==="pensadores")));
   // Header call to action: the last result if there is one, otherwise the quiz. Hidden while taking the quiz.
   const cta=document.getElementById("navCta"),lastCode=store.get("last");
-  if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.innerHTML=hasLast?`<span class="cta-lg">Meu resultado</span><span class="cta-sm">Resultado</span>`:`<span class="cta-lg">Fazer o teste</span><span class="cta-sm">Teste</span>`;cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
+  if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.innerHTML=hasLast?`<span class="cta-lg">${L`Meu resultado`}</span><span class="cta-sm">${L`Resultado`}</span>`:`<span class="cta-lg">${L`Fazer o teste`}</span><span class="cta-sm">${L`Teste`}</span>`;cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
   if(a11yNav(name))return;
   track(name==="p"&&byId[parts[1]]?"/p/"+parts[1]:name==="r"&&parts[2]==="ver"?"/resultado-de-outra-pessoa":PAGE[name]||"/nao-encontrado");
   if(name==="teste")renderQuiz(parts[1]);
@@ -180,7 +182,7 @@ function a11yNav(name){
 }
 function mount(html,title){
   app.innerHTML=`<div class="view">${html}</div>`;
-  document.title=title?`${title} | Filosofômetro`:"Filosofômetro: qual filósofo pensa como você?";
+  document.title=title?`${title} | Filosofômetro`:L`Filosofômetro: qual filósofo pensa como você?`;
   revealOnScroll();
 }
 // Blocks below the fold rise in as they enter the screen; siblings follow one another by a few frames.
@@ -214,46 +216,46 @@ function renderHome(){
   mount(`
   <section class="wrap hero">
     <div>
-      <span class="eyebrow">Teste filosófico</span>
-      <h1 class="display"><span class="line"><span>Qual filósofo</span></span><span class="line"><span>pensa como</span></span><span class="line"><span><em class="it accent">você?</em></span></span></h1>
-      <p class="lede">Responda afirmações sobre verdade, liberdade, moral e poder, em três níveis de profundidade. Descubra seu par entre ${PH.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.</p>
+      <span class="eyebrow">${L`Teste filosófico`}</span>
+      <h1 class="display"><span class="line"><span>${L`Qual filósofo`}</span></span><span class="line"><span>${L`pensa como`}</span></span><span class="line"><span><em class="it accent">${L`você?`}</em></span></span></h1>
+      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder, em três níveis de profundidade. Descubra seu par entre ${PH.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.`}</p>
       <div class="cta-row">
-        <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?`Continuar de onde parei · ${done}/${saved.answers.length}`:"Começar o teste"} ${icon.arrow}</a>
-        ${resume?`<a class="btn ghost" href="#/teste" data-fresh="1">Recomeçar</a>`:`<a class="btn ghost" href="#/metodo">Como funciona</a>`}
+        <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?L`Continuar de onde parei · ${done}/${saved.answers.length}`:L`Começar o teste`} ${icon.arrow}</a>
+        ${resume?`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Recomeçar`}</a>`:`<a class="btn ghost" href="#/metodo">${L`Como funciona`}</a>`}
       </div>
-      <div class="facts"><span><b>3</b> níveis: ${E.LEVELS.map(l=>l.n).join(", ")} afirmações</span><span><b>11</b> eixos</span><span><b>${PH.length+BR.length}</b> pensadores</span><span>Sem cadastro</span></div>
+      <div class="facts"><span>${L`<b>3</b> níveis: ${E.LEVELS.map(l=>l.n).join(", ")} afirmações`}</span><span>${L`<b>11</b> eixos`}</span><span>${L`<b>${PH.length+BR.length}</b> pensadores`}</span><span>${L`Sem cadastro`}</span></div>
     </div>
     <div class="hero-art">
       <div class="duo hero-duo">
         <figure class="portrait" id="heroPic" aria-hidden="true"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"><img alt="" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer"></figure>
         <div class="sigil-badge" id="heroSigil"></div>
       </div>
-      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint">A mandala desenha o pensamento em 11 eixos. <span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> para ver cada um.</p></div>
+      <div class="hero-caption fade-swap" id="heroCap"><a class="who" href="#/"></a><div class="what"></div><p class="tip-hint hero-hint">${L`A mandala desenha o pensamento em 11 eixos. <span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> para ver cada um.`}</p></div>
     </div>
   </section>
   <div class="marquee" aria-hidden="true"><div class="track">${names}${names}</div></div>
   ${discoverHTML()}
   <section class="wrap section" style="padding-top:0">
     <div class="section-head">
-      <div><span class="eyebrow">O mapa</span><h2 class="h2">Onze tensões que <em class="it">definem</em> um pensamento</h2></div>
-      <p>Cada eixo opõe duas respostas legítimas a uma pergunta antiga. Não existe lado certo: existe o seu lado, e quem esteve nele antes de você.</p>
+      <div><span class="eyebrow">${L`O mapa`}</span><h2 class="h2">${L`Onze tensões que <em class="it">definem</em> um pensamento`}</h2></div>
+      <p>${L`Cada eixo opõe duas respostas legítimas a uma pergunta antiga. Não existe lado certo: existe o seu lado, e quem esteve nele antes de você.`}</p>
     </div>
     <ol class="axes-list">${AXES.map((a,i)=>`<li><span class="n">${pad(i+1)}</span><span class="pole">${esc(a.l)}</span><span class="mid"><i></i>${esc(a.name)}</span><span class="pole r">${esc(a.r)}</span></li>`).join("")}</ol>
   </section>
   <section class="wrap section" style="padding-top:0">
     <div class="section-head">
-      <div><span class="eyebrow">O método</span><h2 class="h2">Sem caixa-preta</h2></div>
-      <p>O cálculo inteiro aparece no seu resultado: cada resposta, cada eixo, cada distância. Você pode refazer a conta à mão.</p>
+      <div><span class="eyebrow">${L`O método`}</span><h2 class="h2">${L`Sem caixa-preta`}</h2></div>
+      <p>${L`O cálculo inteiro aparece no seu resultado: cada resposta, cada eixo, cada distância. Você pode refazer a conta à mão.`}</p>
     </div>
     <div class="steps">
-      <div class="step"><span class="num">i.</span><h3>Você responde</h3><p>Escolha o nível e concorde ou discorde das afirmações. Elas vêm misturadas, e metade de cada eixo puxa para cada lado.</p></div>
-      <div class="step"><span class="num">ii.</span><h3>Mapeamos seu formato</h3><p>Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de ${PH.length} pensadores.</p></div>
-      <div class="step"><span class="num">iii.</span><h3>Você audita</h3><p>Veja passo a passo por que deu quem deu, compare com qualquer pensador e baixe os dados.</p></div>
+      <div class="step"><span class="num">i.</span><h3>${L`Você responde`}</h3><p>${L`Escolha o nível e concorde ou discorde das afirmações. Elas vêm misturadas, e metade de cada eixo puxa para cada lado.`}</p></div>
+      <div class="step"><span class="num">ii.</span><h3>${L`Mapeamos seu formato`}</h3><p>${L`Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de ${PH.length} pensadores.`}</p></div>
+      <div class="step"><span class="num">iii.</span><h3>${L`Você audita`}</h3><p>${L`Veja passo a passo por que deu quem deu, compare com qualquer pensador e baixe os dados.`}</p></div>
     </div>
   </section>
   <section class="wrap big-cta">
-    <h2 class="h2">Conhece-te<br><em class="it accent">a ti mesmo.</em></h2>
-    <a class="btn accent" href="#/teste" data-fresh="1">Começar agora ${icon.arrow}</a>
+    <h2 class="h2">${L`Conhece-te<br><em class="it accent">a ti mesmo.</em>`}</h2>
+    <a class="btn accent" href="#/teste" data-fresh="1">${L`Começar agora`} ${icon.arrow}</a>
   </section>`);
   app.querySelectorAll("[data-fresh]").forEach(a=>a.addEventListener("click",()=>store.del("progress")));
   heroAnimation();
@@ -270,7 +272,7 @@ function wireDiscover(){
   const deck=["simone-de-beauvoir","david-hume","confucio","karl-marx","ayn-rand","buda","friedrich-hayek","spinoza"].map(id=>byId[id]).filter(Boolean);
   let i=0,cur=deck[0].v.slice(),raf=0,cycle=0,count=0;
   onLeave(()=>{clearInterval(cycle);cancelAnimationFrame(raf);cancelAnimationFrame(count)});
-  host.innerHTML=sigil(cur,{cls:"sg-user",tips:true,title:`Perfil de ${deck[0].n} nos 11 eixos`});
+  host.innerHTML=sigil(cur,{cls:"sg-user",tips:true,title:L`Perfil de ${deck[0].n} nos 11 eixos`});
   wireTips(host,()=>({p:deck[i]}));
   // Portraits load ahead so each swap shows a face, not an empty frame.
   deck.forEach(p=>{if(p.img){const im=new Image();im.crossOrigin="anonymous";im.referrerPolicy="no-referrer";im.src=p.img}});
@@ -280,7 +282,7 @@ function wireDiscover(){
     const fig=par.querySelector(".bt-pic");fig.classList.add("out");
     setTimeout(()=>{fig.outerHTML=portrait(p,{cls:"bt-pic out"});requestAnimationFrame(()=>par.querySelector(".bt-pic").classList.remove("out"))},250);
     who.classList.add("out");setTimeout(()=>{who.innerHTML=`<b>${esc(p.n)}</b> · ${esc(p.s)}`;who.classList.remove("out")},250);
-    host.querySelector("svg").setAttribute("aria-label",`Perfil de ${p.n} nos 11 eixos`);
+    host.querySelector("svg").setAttribute("aria-label",L`Perfil de ${p.n} nos 11 eixos`);
     cancelAnimationFrame(raf);
     const step=now=>{
       const t=reduceMotion?1:Math.min(1,(now-t0)/800),e=1-Math.pow(1-t,4);
@@ -302,7 +304,7 @@ function wireDiscover(){
     let k=0;PH.forEach((p,j)=>{if(Math.abs(p.born-y)<Math.abs(PH[k].born-y))k=j});
     const p=PH[k],left=(p.born-min)/(max-min)*100;
     mark.style.left=left+"%";dots.forEach((d,j)=>d.classList.toggle("on",j===k));
-    year.textContent=`${p.n} · ${p.born<0?`${-p.born} a.C.`:p.born}`;year.style.left=Math.max(14,Math.min(86,left))+"%";tl.classList.add("live");
+    year.textContent=`${p.n} · ${yearText(p.born)}`;year.style.left=Math.max(14,Math.min(86,left))+"%";tl.classList.add("live");
   };
   tl.addEventListener("pointermove",e=>at(e.clientX));
   tl.addEventListener("pointerleave",()=>{tl.classList.remove("live");mark.style.left="62%";dots.forEach(d=>d.classList.remove("on"))});
@@ -322,39 +324,40 @@ function wireDiscover(){
 function discoverHTML(){
   const pick=id=>byId[id]||PH[0];
   const a=pick("simone-de-beauvoir"),b=pick("nietzsche")||PH[1],opp=pick("tomas-de-aquino");
-  const brs=["paulo-freire","marilena-chaui","lelia-gonzalez","milton-santos"].map(id=>byId[id]).filter(Boolean).slice(0,3);
+  // The regional tile shows three faces from this language's regional list.
+  const brs=(I.lang==="pt"?["paulo-freire","marilena-chaui","lelia-gonzalez","milton-santos"].map(id=>byId[id]).filter(Boolean):BR.filter(p=>p.img)).slice(0,3);
   const span=Math.max(...PH.map(p=>p.born))-Math.min(...PH.map(p=>p.born)),min=Math.min(...PH.map(p=>p.born));
   const dots=PH.map(p=>`<i style="left:${((p.born-min)/span*100).toFixed(1)}%"></i>`).join("");
   return `<section class="wrap section discover">
     <div class="section-head">
-      <div><span class="eyebrow">O resultado</span><h2 class="h2">O que você <em class="it">descobre</em></h2></div>
-      <p>Não é só um nome. É um retrato do seu jeito de pensar, com gente de verdade dos dois lados, e uma conversa pronta para começar com os amigos.</p>
+      <div><span class="eyebrow">${L`O resultado`}</span><h2 class="h2">${L`O que você <em class="it">descobre</em>`}</h2></div>
+      <p>${L`Não é só um nome. É um retrato do seu jeito de pensar, com gente de verdade dos dois lados, e uma conversa pronta para começar com os amigos.`}</p>
     </div>
     <div class="bento">
       <article class="bt bt-par">
         <div class="bt-art">${portrait(a,{cls:"bt-pic"})}<div class="bt-sigil"></div><span class="bt-who"><b>${esc(a.n)}</b> · ${esc(a.s)}</span></div>
-        <div><span class="bt-k">01 · Seu par</span><h3>O pensador com o formato mais parecido com o seu</h3><p>Com percentual de compatibilidade, biografia, ideias centrais e onde vocês concordam e divergem.</p></div>
+        <div><span class="bt-k">${L`01 · Seu par`}</span><h3>${L`O pensador com o formato mais parecido com o seu`}</h3><p>${L`Com percentual de compatibilidade, biografia, ideias centrais e onde vocês concordam e divergem.`}</p></div>
       </article>
       <article class="bt bt-opp">
-        <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}<span class="bt-reveal">${esc(shortName(b.n))} e ${esc(shortName(opp.n))} concordam em ${AXES.filter((_,i)=>Math.sign(b.v[i])===Math.sign(opp.v[i])).length} de ${AXES.length} eixos</span></div>
-        <span class="bt-k">02 · Seu oposto</span><h3>Quem mais discordaria de você</h3>
+        <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}<span class="bt-reveal">${L`${esc(shortName(b.n))} e ${esc(shortName(opp.n))} concordam em ${AXES.filter((_,i)=>Math.sign(b.v[i])===Math.sign(opp.v[i])).length} de ${AXES.length} eixos`}</span></div>
+        <span class="bt-k">${L`02 · Seu oposto`}</span><h3>${L`Quem mais discordaria de você`}</h3>
       </article>
       <article class="bt bt-br">
         <span class="br-flag" aria-hidden="true"></span>
-        <div class="bt-stack">${brs.map(p=>portrait(p,{cls:"bt-av"})).join("")}<span class="bt-reveal">${brs.map(p=>esc(shortName(p.n))).join(", ")} e mais</span></div>
-        <span class="bt-k">03 · No Brasil</span><h3>Quem pensa como você entre ${BR.length+PH.filter(p=>p.br).length} brasileiros</h3>
+        <div class="bt-stack">${brs.map(p=>portrait(p,{cls:"bt-av"})).join("")}<span class="bt-reveal">${L`${brs.map(p=>esc(shortName(p.n))).join(", ")} e mais`}</span></div>
+        <span class="bt-k">${L`03 · No Brasil`}</span><h3>${L`Quem pensa como você entre ${E.BRAZIL.length} brasileiros`}</h3>
       </article>
       <article class="bt bt-tl">
         <div class="bt-time" aria-hidden="true">${dots}<b style="left:62%"></b><span class="bt-year"></span></div>
-        <span class="bt-k">04 · Linha do tempo</span><h3>Onde você está na história, de ${Math.abs(min)} a.C. até hoje</h3>
+        <span class="bt-k">${L`04 · Linha do tempo`}</span><h3>${L`Onde você está na história, de ${yearText(min)} até hoje`}</h3>
       </article>
       <article class="bt bt-vsf">
-        <div class="bt-duo">${sigil(a.v,{compare:b.v,cls:"sg-user",tips:true,title:`${a.n} e ${b.n} nos 11 eixos`})}</div>
-        <span class="bt-k">05 · Desafie um amigo</span><h3>Mande o link e vejam, eixo por eixo, quanto são compatíveis</h3>
+        <div class="bt-duo">${sigil(a.v,{compare:b.v,cls:"sg-user",tips:true,title:L`${a.n} e ${b.n} nos 11 eixos`})}</div>
+        <span class="bt-k">${L`05 · Desafie um amigo`}</span><h3>${L`Mande o link e vejam, eixo por eixo, quanto são compatíveis`}</h3>
       </article>
       <article class="bt bt-story">
         <div class="bt-phone" aria-hidden="true"><span class="ph-pct">94%</span><span class="ph-nm">${esc(shortName(a.n))}</span><span class="ph-bar"></span></div>
-        <span class="bt-k">06 · Story</span><h3>Um card pronto para postar</h3>
+        <span class="bt-k">${L`06 · Story`}</span><h3>${L`Um card pronto para postar`}</h3>
       </article>
     </div>
   </section>`;
@@ -369,7 +372,7 @@ function heroAnimation(){
   const preload=p=>{const i=new Image();i.crossOrigin="anonymous";i.referrerPolicy="no-referrer";i.src=p.img};
   imgs[0].src=deck[0].img;imgs[0].classList.add("on");preload(deck[1]);
   const setCap=p=>{const w=cap.querySelector(".who");w.textContent=p.n;w.href="#/p/"+p.id;cap.querySelector(".what").textContent=p.s};
-  host.innerHTML=sigil(cur,{cls:"sg-user",tips:true,title:`Perfil de ${deck[0].n} nos 11 eixos`});setCap(deck[0]);
+  host.innerHTML=sigil(cur,{cls:"sg-user",tips:true,title:L`Perfil de ${deck[0].n} nos 11 eixos`});setCap(deck[0]);
   // The tooltip always describes the thinker on screen, and the cycle pauses while someone reads it.
   wireTips(host,()=>({p:deck[idx]}));
   const tip=document.getElementById("tip");
@@ -377,7 +380,7 @@ function heroAnimation(){
   if(reduceMotion)return;
   const tick=()=>{
     if(reading())return;
-    host.querySelector("svg").setAttribute("aria-label",`Perfil de ${deck[(idx+1)%deck.length].n} nos 11 eixos`);
+    host.querySelector("svg").setAttribute("aria-label",L`Perfil de ${deck[(idx+1)%deck.length].n} nos 11 eixos`);
     const from=cur.slice(),to=deck[(idx+1)%deck.length].v,t0=performance.now();
     idx=(idx+1)%deck.length;
     const back=imgs[1-front];back.src=deck[idx].img;back.classList.add("on");imgs[front].classList.remove("on");front=1-front;
@@ -409,7 +412,7 @@ function finishQuiz(answers){
 }
 
 // Examples are "Name: position". The name is matched to the catalog to show the thinker's portrait.
-const NAME_ALIAS={"Espinosa":"spinoza","Calvino":"joao-calvino","Lao Tsé":"lao-tse"};
+const NAME_ALIAS={"Espinosa":"spinoza","Calvino":"joao-calvino","Lao Tsé":"lao-tse",...((window.AgoraLang||{}).alias||{})};
 function thinkerByName(name){
   if(NAME_ALIAS[name])return byId[NAME_ALIAS[name]];
   return PH.find(p=>p.n===name)||PH.find(p=>p.n.endsWith(" "+name))||PH.find(p=>p.n.split(" ").includes(name));
@@ -421,9 +424,9 @@ function citation(ex){
 }
 // What a simulated retest shows for each level (tests/levels in the method page): accuracy grows with statements.
 const LEVEL_INFO={
-  1:{tag:"Para começar",precision:"Boa",retest:"55%",desc:"O suficiente para conhecer seu par e se divertir."},
-  2:{tag:"Recomendado",precision:"Alta",retest:"83%",desc:"Resultado bem mais estável. Inclui as 44 do Rápido."},
-  3:{tag:"Para quem quer ir fundo",precision:"Muito alta",retest:"94%",desc:"O retrato mais fiel. Inclui as 88 do Completo."},
+  1:{tag:L`Para começar`,precision:L`Boa`,retest:"55%",desc:L`O suficiente para conhecer seu par e se divertir.`},
+  2:{tag:L`Recomendado`,precision:L`Alta`,retest:"83%",desc:L`Resultado bem mais estável. Inclui as 44 do Rápido.`},
+  3:{tag:L`Para quem quer ir fundo`,precision:L`Muito alta`,retest:"94%",desc:L`O retrato mais fiel. Inclui as 88 do Completo.`},
 };
 const levelBy=id=>E.LEVELS.find(l=>l.id===id);
 const nextLevel=n=>E.LEVELS.find(l=>l.n>n)||null;
@@ -436,19 +439,19 @@ function renderLevelPick(){
   const vs=store.get("vs");
   mount(`
   <section class="wrap section" style="padding-top:clamp(28px,6vh,64px)">
-    <span class="eyebrow">${vs?"Desafio aceito":"Antes de começar"}</span>
-    <h1 class="h2" style="font-size:clamp(44px,min(7vw,10vh),96px)">Quanto você quer <em class="it accent">ir fundo?</em></h1>
-    <p class="lede" style="margin-top:14px;max-width:56ch">Os três níveis usam os mesmos 11 eixos. Quanto mais afirmações, mais preciso fica o resultado. Dá para começar no Rápido e aprofundar depois, sem perder nada.</p>
+    <span class="eyebrow">${vs?L`Desafio aceito`:L`Antes de começar`}</span>
+    <h1 class="h2" style="font-size:clamp(44px,min(7vw,10vh),96px)">${L`Quanto você quer <em class="it accent">ir fundo?</em>`}</h1>
+    <p class="lede" style="margin-top:14px;max-width:56ch">${L`Os três níveis usam os mesmos 11 eixos. Quanto mais afirmações, mais preciso fica o resultado. Dá para começar no Rápido e aprofundar depois, sem perder nada.`}</p>
     <div class="levels">${E.LEVELS.map(l=>{const i=LEVEL_INFO[l.id];return `<a class="level ${l.id===2?"rec":""}" href="#/teste/${l.id}">
       <span class="lv-tag">${esc(i.tag)}</span>
-      <span class="lv-name">${esc(l.name)}</span>
-      <span class="lv-n"><b>${l.n}</b> afirmações · ≈ ${l.minutes} min</span>
+      <span class="lv-name">${esc(t(l.name))}</span>
+      <span class="lv-n">${L`<b>${l.n}</b> afirmações · ≈ ${l.minutes} min`}</span>
       <span class="lv-bars" aria-hidden="true">${[1,2,3].map(k=>`<i class="${k<=l.id?"on":""}"></i>`).join("")}</span>
       <span class="lv-desc">${esc(i.desc)}</span>
-      <span class="lv-meta">Precisão ${esc(i.precision).toLowerCase()} · mesmo par ao refazer em ${i.retest} das vezes</span>
-      <span class="btn ${l.id===2?"accent":"ghost"} sm">Começar ${icon.arrow}</span>
+      <span class="lv-meta">${L`Precisão ${esc(i.precision).toLowerCase()} · mesmo par ao refazer em ${i.retest} das vezes`}</span>
+      <span class="btn ${l.id===2?"accent":"ghost"} sm">${L`Começar`} ${icon.arrow}</span>
     </a>`}).join("")}</div>
-  </section>`,"Escolha o nível");
+  </section>`,L`Escolha o nível`);
 }
 function renderQuiz(arg){
   // "#/teste/1|2|3" starts that level from zero; "#/teste/aprofundar" continues from the last result.
@@ -481,8 +484,8 @@ function renderQuiz(arg){
   <section class="wrap quiz" aria-labelledby="qText">
     <div class="quiz-top">
       <span class="qa-top"><span class="qa-mini" aria-hidden="true">${sigil(AXES.map(()=>0),{cls:"sg-user",decorative:true})}</span><span class="axis-tag" id="axisTag"></span></span>
-      <span class="lv-chip">${esc(lv.name)}</span>
-      <a class="link-btn" href="#/">Sair <span class="sr">do teste (seu progresso fica salvo)</span></a>
+      <span class="lv-chip">${esc(t(lv.name))}</span>
+      <a class="link-btn" href="#/">${L`Sair <span class="sr">do teste (seu progresso fica salvo)</span>`}</a>
     </div>
     <div class="progress ${total>44?"dense":""}" style="grid-template-columns:repeat(${total},1fr)" aria-hidden="true">${order.map(()=>"<i></i>").join("")}</div>
     <div class="quiz-body">
@@ -492,25 +495,25 @@ function renderQuiz(arg){
         <p class="sr" id="qLive" aria-live="polite"></p>
         <h1 class="q-text" id="qText"></h1>
         <div class="examples" id="examples">
-          <div class="ex ex-d"><span class="ex-k">Quem discorda</span><div id="exD"></div></div>
-          <div class="ex ex-a"><span class="ex-k">Quem concorda</span><div id="exA"></div></div>
+          <div class="ex ex-d"><span class="ex-k">${L`Quem discorda`}</span><div id="exD"></div></div>
+          <div class="ex ex-a"><span class="ex-k">${L`Quem concorda`}</span><div id="exA"></div></div>
         </div>
       </div>
       <div class="scale" role="radiogroup" aria-labelledby="qText" aria-describedby="examples" id="scale">
-        <div class="choices">${UI.map((code,j)=>`<button type="button" class="choice" role="radio" aria-checked="false" data-code="${code}" data-tone="${TONE[j]}"><span class="ch-mark" aria-hidden="true"><i></i><i></i></span><span class="ch-lbl">${SCALE[code].label}</span><span class="ch-k" aria-hidden="true">${j+1}</span></button>`).join("")}</div>
+        <div class="choices">${UI.map((code,j)=>`<button type="button" class="choice" role="radio" aria-checked="false" data-code="${code}" data-tone="${TONE[j]}"><span class="ch-mark" aria-hidden="true"><i></i><i></i></span><span class="ch-lbl">${esc(t(SCALE[code].label))}</span><span class="ch-k" aria-hidden="true">${j+1}</span></button>`).join("")}</div>
       </div>
     </div>
     <aside class="quiz-aside" aria-hidden="true">
       <div class="qa-sigil" id="qaSigil">${sigil(AXES.map(()=>0),{cls:"sg-user",labels:true,decorative:true})}</div>
-      <div class="qa-cap"><span class="eyebrow">Seu formato até agora</span><p id="qaAxis"></p></div>
+      <div class="qa-cap"><span class="eyebrow">${L`Seu formato até agora`}</span><p id="qaAxis"></p></div>
     </aside>
     </div>
     <div class="quiz-foot">
-      <span style="display:flex;gap:20px;align-items:center"><button type="button" class="link-btn" id="prevBtn">${icon.back} Anterior</button><button type="button" class="link-btn accent hidden" id="toResult">Ver resultado ${icon.arrow}</button></span>
+      <span style="display:flex;gap:20px;align-items:center"><button type="button" class="link-btn" id="prevBtn">${icon.back} ${L`Anterior`}</button><button type="button" class="link-btn accent hidden" id="toResult">${L`Ver resultado`} ${icon.arrow}</button></span>
       <span class="qf-count mono" id="qfCount" aria-hidden="true"></span>
-      <span class="kbd-help">Atalhos: <span class="kbd">1</span> a <span class="kbd">5</span> responder · <span class="kbd">⌫</span> voltar</span>
+      <span class="kbd-help">${L`Atalhos: <span class="kbd">1</span> a <span class="kbd">5</span> responder · <span class="kbd">⌫</span> voltar`}</span>
     </div>
-  </section>`,"Teste");
+  </section>`,L`Teste`);
   const ticks=[...app.querySelectorAll(".progress i")];
   const btns=[...app.querySelectorAll(".choice")];
   const anim=document.getElementById("qAnim");
@@ -525,7 +528,7 @@ function renderQuiz(arg){
     pts(v).forEach(([x,y],i)=>{qaDots[i].setAttribute("cx",x.toFixed(1));qaDots[i].setAttribute("cy",y.toFixed(1))});
     qaLbls.forEach((t,i)=>t.classList.toggle("on",i===ax));qaSpokes.forEach((t,i)=>t.classList.toggle("on",i===ax));
     const done=answers.filter(a=>a!==null).length;
-    document.getElementById("qaAxis").innerHTML=`Agora: <b>${esc(cap(AXES[ax].name))}</b>, entre ${esc(AXES[ax].l)} e ${esc(AXES[ax].r)}.<br><span class="muted">${done?`${done} de ${total} respondidas.`:"A mandala ganha forma a cada resposta."}</span>`;
+    document.getElementById("qaAxis").innerHTML=`${L`Agora: <b>${esc(cap(AXES[ax].name))}</b>, entre ${esc(AXES[ax].l)} e ${esc(AXES[ax].r)}.`}<br><span class="muted">${done?L`${done} de ${total} respondidas.`:L`A mandala ganha forma a cada resposta.`}</span>`;
   }
   function paint(){
     const qi=order[pos],[text,ax,,exAgree,exDisagree]=QS[qi];
@@ -534,9 +537,9 @@ function renderQuiz(arg){
     document.getElementById("exA").innerHTML=citation(exAgree);
     document.getElementById("exD").innerHTML=citation(exDisagree);
     document.getElementById("qCount").textContent=`${pad(pos+1)} / ${total}`;
-    document.getElementById("qfCount").textContent=`${answers.filter(a=>a!==null).length} de ${total}`;
-    document.getElementById("qLive").textContent=`Afirmação ${pos+1} de ${total}: ${text}`;
-    document.getElementById("axisTag").innerHTML=`Eixo <b>${pad(ax+1)}</b> · ${esc(AXES[ax].name)}`;
+    document.getElementById("qfCount").textContent=L`${answers.filter(a=>a!==null).length} de ${total}`;
+    document.getElementById("qLive").textContent=L`Afirmação ${pos+1} de ${total}: ${text}`;
+    document.getElementById("axisTag").innerHTML=L`Eixo <b>${pad(ax+1)}</b> · ${esc(AXES[ax].name)}`;
     ticks.forEach((t,i)=>{t.className=i===pos?"now":answers[order[i]]!==null?"done":""});
     btns.forEach(b=>{const on=answers[qi]===+b.dataset.code;b.setAttribute("aria-checked",on);b.tabIndex=on||(answers[qi]===null&&b.dataset.code==="2")?0:-1});
     document.getElementById("prevBtn").disabled=pos===0;
@@ -553,7 +556,7 @@ function renderQuiz(arg){
     const qi=order[pos];answers[qi]=code;save();paintAside(QS[qi][1]);
     // A short tick under the finger on phones that support it, and a one-time tip about swiping back.
     if(TOUCH){if(navigator.vibrate)try{navigator.vibrate(8)}catch(e){}
-      if(!store.get("swipeTip")&&answers.filter(a=>a!==null).length===2){store.set("swipeTip",1);later(()=>toast("Dica: deslize para a direita para voltar",3500),500)}}
+      if(!store.get("swipeTip")&&answers.filter(a=>a!==null).length===2){store.set("swipeTip",1);later(()=>toast(L`Dica: deslize para a direita para voltar`,3500),500)}}
     btns.forEach(b=>b.setAttribute("aria-checked",+b.dataset.code===code));
     // Next: the first open statement ahead; when reviewing past answers, simply the next one;
     // at the end, any statement still open. The result opens only when every statement is answered.
@@ -604,10 +607,10 @@ function renderQuiz(arg){
 
 /* ---------- Result ---------- */
 let current=null;
-const pctText=x=>x===null?"sem %":`${x}%`;
+const pctText=x=>x===null?L`sem %`:`${x}%`;
 function renderResult(code,mode){
   const answers=E.decode(code);
-  if(!answers){renderNotFound("Este link de resultado está incompleto ou é de uma versão antiga do teste.");return}
+  if(!answers){renderNotFound(L`Este link de resultado está incompleto ou é de uma versão antiga do teste.`);return}
   // A link someone else sent opens as an invite: the visitor is asked to take the test and compare.
   // Only the person who finished the test on this browser sees it as their own result.
   const own=store.get("last")===code;
@@ -618,63 +621,63 @@ function renderResult(code,mode){
   const nameLines=p.n.split(" ").length>2?[p.n.split(" ").slice(0,-1).join(" "),p.n.split(" ").slice(-1)[0]]:[p.n];
   const userV=r.scores;
   const T=visitor
-    ?{kicker:flat?"Mais perto desta pessoa":"Par filosófico desta pessoa",axes:"Os 11 eixos desta pessoa",also:"Também pensam assim",br:"No Brasil, quem pensa assim",opp:"O oposto",you:"esta pessoa"}
-    :{kicker:flat?"Mais perto de você":"Seu par filosófico",axes:"Seus 11 eixos",also:flat?"Também perto de você":"Também pensam como você",br:"No Brasil, quem pensa como você",opp:"Seu oposto",you:"você"};
-  const flatNote="Suas respostas se equilibraram e seu perfil ficou sem direção. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador cujas posições ficam mais perto das suas.";
+    ?{kicker:flat?L`Mais perto desta pessoa`:L`Par filosófico desta pessoa`,axes:L`Os 11 eixos desta pessoa`,also:L`Também pensam assim`,br:L`No Brasil, quem pensa assim`,opp:L`O oposto`,you:L`esta pessoa`}
+    :{kicker:flat?L`Mais perto de você`:L`Seu par filosófico`,axes:L`Seus 11 eixos`,also:flat?L`Também perto de você`:L`Também pensam como você`,br:L`No Brasil, quem pensa como você`,opp:L`Seu oposto`,you:L`você`};
+  const flatNote=L`Suas respostas se equilibraram e seu perfil ficou sem direção. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador cujas posições ficam mais perto das suas.`;
   const strongest=AXES.map((a,i)=>({a,i,x:userV[i]})).filter(t=>Math.abs(t.x)>=.25).sort((s,t)=>Math.abs(t.x)-Math.abs(s.x)).slice(0,3);
   mount(`
-  ${visitor?`<div class="visitor-bar"><div class="wrap"><span>Este é o resultado de outra pessoa.</span><a class="btn accent sm" href="#/vs/${code}" >Fazer o teste e comparar ${icon.arrow}</a></div></div>`:""}
+  ${visitor?`<div class="visitor-bar"><div class="wrap"><span>${L`Este é o resultado de outra pessoa.`}</span><a class="btn accent sm" href="#/vs/${code}" >${L`Fazer o teste e comparar`} ${icon.arrow}</a></div></div>`:""}
   <section class="wrap res-hero">
     <div>
       <div class="res-kicker"><span class="eyebrow">${T.kicker}</span></div>
       ${flat?"":`<div class="res-pct" aria-hidden="true"><span id="pctNum">${reduceMotion?top.pct:0}</span>%</div>`}
-      <h1 class="res-name">${flat?"":`<span class="sr">${top.pct}% de compatibilidade com </span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
+      <h1 class="res-name">${flat?"":`<span class="sr">${L`${top.pct}% de compatibilidade com `}</span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
-      ${r.level?`<div class="lvl-line"><span class="lv-chip">Nível ${esc(r.level.name)}</span><span>${r.level.n} afirmações · precisão ${esc(LEVEL_INFO[r.level.id].precision.toLowerCase())}</span>${!visitor&&nextLevel(r.level.n)?`<a class="lvl-up" href="#/teste/aprofundar">Aprofundar com mais ${nextLevel(r.level.n).n-r.level.n} ${icon.arrow}</a>`:""}</div>`:""}
-      ${strongest.length?`<div class="traits" aria-label="Traços mais fortes">${strongest.map((t,i)=>`<span class="trait" style="--i:${i}"><small>${esc(t.a.name)}</small>${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
+      ${r.level?`<div class="lvl-line"><span class="lv-chip">${L`Nível ${esc(t(r.level.name))}`}</span><span>${L`${r.level.n} afirmações · precisão ${esc(LEVEL_INFO[r.level.id].precision.toLowerCase())}`}</span>${!visitor&&nextLevel(r.level.n)?`<a class="lvl-up" href="#/teste/aprofundar">${L`Aprofundar com mais ${nextLevel(r.level.n).n-r.level.n}`} ${icon.arrow}</a>`:""}</div>`:""}
+      ${strongest.length?`<div class="traits" aria-label="${L`Traços mais fortes`}">${strongest.map((t,i)=>`<span class="trait" style="--i:${i}"><small>${esc(t.a.name)}</small>${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
       ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
       <div class="res-actions">
-        ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
-        ${flat?"":`<button class="btn accent" id="shareBtn" type="button">${icon.share} Compartilhar no story</button>`}
-        <button class="btn ghost" id="challengeBtn" type="button">${icon.link} Desafiar um amigo</button>
-        <a class="btn ghost" href="#/teste" id="redoBtn">Refazer</a>`}
+        ${visitor?`<a class="btn accent" href="#/vs/${code}">${L`Fazer o teste e comparar`} ${icon.arrow}</a>`:`
+        ${flat?"":`<button class="btn accent" id="shareBtn" type="button">${icon.share} ${L`Compartilhar no story`}</button>`}
+        <button class="btn ghost" id="challengeBtn" type="button">${icon.link} ${L`Desafiar um amigo`}</button>
+        <a class="btn ghost" href="#/teste" id="redoBtn">${L`Refazer`}</a>`}
       </div>
     </div>
-    ${duo(p,{user:userV,title:`Perfil de ${T.you} comparado ao de ${p.n}`})}
+    ${duo(p,{user:userV,title:L`Perfil de ${T.you} comparado ao de ${p.n}`})}
   </section>
   <section class="wrap" style="padding-bottom:24px">
-    <h2 class="chapter"><span>1</span>${visitor?"Quem é o par desta pessoa":"Quem é o seu par"}</h2>
+    <h2 class="chapter"><span>1</span>${visitor?L`Quem é o par desta pessoa`:L`Quem é o seu par`}</h2>
     ${p.bio||!flat?`<div class="grid2">${aboutHTML(p)}${agreementHTML(r,top)}</div>`:""}
 
-    <h2 class="chapter"><span>2</span>Por que deu ${esc(p.n)}</h2>
+    <h2 class="chapter"><span>2</span>${L`Por que deu ${esc(p.n)}`}</h2>
     <div class="grid2">
       <div class="panel">
         <h2>${T.axes}</h2>
-        <p class="sub">Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${T.you}. Tracejado na mandala e traço nas barras: ${esc(p.n)}. A porcentagem compara o formato das duas mandalas.</p>
-        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver o que ele mede e por que ficou ali.</p>
+        <p class="sub">${L`Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${T.you}. Tracejado na mandala e traço nas barras: ${esc(p.n)}. A porcentagem compara o formato das duas mandalas.`}</p>
+        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:L`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint">${L`<span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver o que ele mede e por que ficou ali.`}</p>
         ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],T.you,p.n)).join("")}
       </div>
       <div style="display:grid;gap:20px;align-content:start">
         <div class="panel">
           <h2>${T.also}</h2>
-          <p class="sub">Os próximos da lista, pela mesma conta.</p>
+          <p class="sub">${L`Os próximos da lista, pela mesma conta.`}</p>
           <ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul>
         </div>
         ${brazilHTML(r,T.br)}
       </div>
     </div>
 
-    <h2 class="chapter"><span>3</span>Onde ${visitor?"essa pessoa está":"você está"} na história</h2>
+    <h2 class="chapter"><span>3</span>${visitor?L`Onde essa pessoa está na história`:L`Onde você está na história`}</h2>
     ${timelineHTML(r)}
     <div class="grid2" style="margin-top:20px">
       ${opp?`<div class="panel">
         <h2>${T.opp}</h2>
-        <p class="sub">Quem mais discordaria${visitor?"":" de você"}.</p>
+        <p class="sub">${visitor?L`Quem mais discordaria.`:L`Quem mais discordaria de você.`}</p>
         <a class="opp" href="#/p/${opp.p.id}" style="text-decoration:none">${portrait(opp.p,{cls:"opp-pic"})}<span><span class="nm">${esc(opp.p.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(opp.p.s)} · ${pctText(opp.pct)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(opp.p.q)}”</span></span></a>
       </div>`:""}
       <div class="panel">
-        <h2>Comece por aqui</h2>
-        <p class="sub">Três portas de entrada para ler ${esc(p.n)}.</p>
+        <h2>${L`Comece por aqui`}</h2>
+        <p class="sub">${L`Três portas de entrada para ler ${esc(p.n)}.`}</p>
         ${readingHTML(p)}
       </div>
     </div>
@@ -684,19 +687,19 @@ function renderResult(code,mode){
     <div class="finale">
       ${portrait(p,{cls:"finale-pic"})}
       <blockquote class="finale-quote">“${esc(p.q)}”</blockquote>
-      <p class="finale-by">${esc(p.n)}${visitor?"":`, ${flat?"o pensador mais perto de você":`seu par com ${top.pct}%`}`}</p>
-      <p class="finale-lede">${visitor?"Quer saber quem pensa como você? O teste rápido leva uns 6 minutos.":"Agora descubra qual dos seus amigos pensa como você. Mande o desafio e vejam, eixo por eixo, onde concordam e onde vão discutir."}</p>
+      <p class="finale-by">${esc(p.n)}${visitor?"":`, ${flat?L`o pensador mais perto de você`:L`seu par com ${top.pct}%`}`}</p>
+      <p class="finale-lede">${visitor?L`Quer saber quem pensa como você? O teste rápido leva uns 6 minutos.`:L`Agora descubra qual dos seus amigos pensa como você. Mande o desafio e vejam, eixo por eixo, onde concordam e onde vão discutir.`}</p>
       <div class="cta-row" style="justify-content:center">
-        ${visitor?`<a class="btn accent" href="#/vs/${code}">Fazer o teste e comparar ${icon.arrow}</a>`:`
-        <button class="btn accent" id="challengeBtn2" type="button">${icon.link} Desafiar um amigo</button>
-        ${r.level&&nextLevel(r.level.n)?`<a class="btn ghost" href="#/teste/aprofundar">Aprofundar: nível ${esc(nextLevel(r.level.n).name)}</a>`:""}
-        ${flat?"":`<button class="btn ghost" id="shareBtn2" type="button">${icon.share} Compartilhar no story</button>`}`}
-        <a class="btn ghost" href="#/pensadores">Ver os ${PH.length+BR.length} pensadores</a>
+        ${visitor?`<a class="btn accent" href="#/vs/${code}">${L`Fazer o teste e comparar`} ${icon.arrow}</a>`:`
+        <button class="btn accent" id="challengeBtn2" type="button">${icon.link} ${L`Desafiar um amigo`}</button>
+        ${r.level&&nextLevel(r.level.n)?`<a class="btn ghost" href="#/teste/aprofundar">${L`Aprofundar: nível ${esc(t(nextLevel(r.level.n).name))}`}</a>`:""}
+        ${flat?"":`<button class="btn ghost" id="shareBtn2" type="button">${icon.share} ${L`Compartilhar no story`}</button>`}`}
+        <a class="btn ghost" href="#/pensadores">${L`Ver os ${PH.length+BR.length} pensadores`}</a>
       </div>
     </div>
 
     ${auditPanel(r)}
-  </section>`,flat?`Mais perto: ${p.n}`:`${top.pct}% ${p.n}`);
+  </section>`,flat?L`Mais perto: ${p.n}`:`${top.pct}% ${p.n}`);
   // Count-up for the percentage.
   if(!flat&&!reduceMotion){
     const el=document.getElementById("pctNum"),t0=performance.now();
@@ -724,8 +727,8 @@ function portrait(p,{cls="",eager=false}={}){
   const initials=p.n.split(" ").filter(w=>/^[A-ZÀ-Ý]/.test(w)).slice(0,2).map(w=>w[0]).join("");
   // Without a freely licensed photo, the portrait is drawn from the thought itself: the thinker's own sigil behind the initials.
   const fallback=`<span class="mono-fallback" aria-hidden="true">${sigil(p.v,{cls:"sg-solo",decorative:true})}<b>${esc(initials)}</b></span>`;
-  if(!p.img)return `<figure class="portrait noimg ${cls}" role="img" aria-label="${esc(p.n)}: retrato desenhado pelo perfil nos 11 eixos (sem foto de licença livre)">${fallback}</figure>`;
-  return `<figure class="portrait ${cls}"><img src="${esc(p.img)}" alt="Retrato de ${esc(p.n)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')">${fallback}</figure>`;
+  if(!p.img)return `<figure class="portrait noimg ${cls}" role="img" aria-label="${L`${esc(p.n)}: retrato desenhado pelo perfil nos 11 eixos (sem foto de licença livre)`}">${fallback}</figure>`;
+  return `<figure class="portrait ${cls}"><img src="${esc(p.img)}" alt="${L`Retrato de ${esc(p.n)}`}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add('noimg')">${fallback}</figure>`;
 }
 
 /* ---------- Compare with a friend ---------- */
@@ -741,29 +744,29 @@ function answersFromLink(t){
 // On the published site, shared links go through /s/ and /c/ so chat apps show a picture of the result
 // (api/share.js). Locally there is no server function, so the plain hash link is used.
 const PREVIEW=location.protocol==="https:"&&!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-const inviteURL=r=>{const nm=encName(store.get("name")||""),tail=`${E.encode(r.answers)}${nm?`/${nm}`:""}`;return PREVIEW?`${location.origin}/s/${tail}`:`${location.href.split("#")[0]}#/vs/${tail}`};
-const compareURL=(a,b,nA,nB)=>{const tail=`${a}/${b}${nA||nB?`/${encName(nA)}/${encName(nB)}`:""}`;return PREVIEW?`${location.origin}/c/${tail}`:`${location.href.split("#")[0]}#/comparar/${tail}`};
-const challengeText=r=>r.directionless?`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:`Fiz o Filosofômetro e deu ${r.top.pct}% ${r.top.p.n}. Faz o teste e vê quanto a gente pensa parecido:`;
+const inviteURL=r=>{const nm=encName(store.get("name")||""),tail=`${E.encode(r.answers)}${nm?`/${nm}`:""}`;return PREVIEW?`${location.origin}${I.prefix}/s/${tail}`:`${location.href.split("#")[0]}#/vs/${tail}`};
+const compareURL=(a,b,nA,nB)=>{const tail=`${a}/${b}${nA||nB?`/${encName(nA)}/${encName(nB)}`:""}`;return PREVIEW?`${location.origin}${I.prefix}/c/${tail}`:`${location.href.split("#")[0]}#/comparar/${tail}`};
+const challengeText=r=>r.directionless?L`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:L`Fiz o Filosofômetro e deu ${r.top.pct}% ${r.top.p.n}. Faz o teste e vê quanto a gente pensa parecido:`;
 // Native share sheet on phones; copy to clipboard elsewhere.
 async function challenge(r){
   track("/evento/convite");
   const url=inviteURL(r),text=challengeText(r);
   if(navigator.share){try{await navigator.share({title:"Filosofômetro",text,url});return}catch(e){if(e.name==="AbortError")return}}
-  try{await navigator.clipboard.writeText(`${text} ${url}`);toast("Convite copiado. Agora é só mandar!")}catch(e){prompt("Copie o convite:",url)}
+  try{await navigator.clipboard.writeText(`${text} ${url}`);toast(L`Convite copiado. Agora é só mandar!`)}catch(e){prompt(L`Copie o convite:`,url)}
 }
 function invitePanelHTML(r){
   return `<div class="panel compare-cta">
-    <h2>Compare com alguém</h2>
-    <p class="sub">Quem abrir o seu convite faz o teste e cai direto numa comparação com você: onde pensam igual, onde divergem e quanto são compatíveis.</p>
+    <h2>${L`Compare com alguém`}</h2>
+    <p class="sub">${L`Quem abrir o seu convite faz o teste e cai direto numa comparação com você: onde pensam igual, onde divergem e quanto são compatíveis.`}</p>
     <div class="cmp-form">
-      <label class="sr" for="myName">Seu nome (opcional)</label>
-      <input class="search sm" id="myName" placeholder="Como você quer aparecer no convite (opcional)" maxlength="24" autocomplete="given-name" value="${esc(cleanName(store.get("name")||""))}">
-      <button class="btn accent sm" id="inviteBtn" type="button">${icon.link} Desafiar um amigo</button>
+      <label class="sr" for="myName">${L`Seu nome (opcional)`}</label>
+      <input class="search sm" id="myName" placeholder="${L`Como você quer aparecer no convite (opcional)`}" maxlength="24" autocomplete="given-name" value="${esc(cleanName(store.get("name")||""))}">
+      <button class="btn accent sm" id="inviteBtn" type="button">${icon.link} ${L`Desafiar um amigo`}</button>
     </div>
     <div class="cmp-form">
-      <label class="sr" for="theirLink">Link de outra pessoa</label>
-      <input class="search sm" id="theirLink" placeholder="Já tem o link de alguém? Cole aqui" autocomplete="off" spellcheck="false">
-      <button class="btn ghost sm" id="compareBtn" type="button">Comparar</button>
+      <label class="sr" for="theirLink">${L`Link de outra pessoa`}</label>
+      <input class="search sm" id="theirLink" placeholder="${L`Já tem o link de alguém? Cole aqui`}" autocomplete="off" spellcheck="false">
+      <button class="btn ghost sm" id="compareBtn" type="button">${L`Comparar`}</button>
     </div>
   </div>`;
 }
@@ -775,7 +778,7 @@ function wireInvite(r){
   document.getElementById("inviteBtn").addEventListener("click",()=>{store.set("name",cleanName(nameInput.value));challenge(r)});
   const go=()=>{
     const theirs=answersFromLink(document.getElementById("theirLink").value);
-    if(!theirs){toast("Não reconheci esse link");return}
+    if(!theirs){toast(L`Não reconheci esse link`);return}
     location.hash=`#/comparar/${E.encode(theirs)}/${mine}`;
   };
   document.getElementById("compareBtn").addEventListener("click",go);
@@ -784,8 +787,8 @@ function wireInvite(r){
 // Landing for an invite link: show who invited and start the test; the comparison opens after it.
 function renderInvite(code,rawName){
   const a=E.decode(code);
-  if(!a){renderNotFound("Este convite está incompleto ou é de uma versão antiga do teste.");return}
-  const r=E.evaluate(a),p=r.top.p,named=cleanName(rawName),who=named||"Alguém";
+  if(!a){renderNotFound(L`Este convite está incompleto ou é de uma versão antiga do teste.`);return}
+  const r=E.evaluate(a),p=r.top.p,named=cleanName(rawName),who=named||L`Alguém`;
   // Opening your own invite link (another device, or testing it) goes straight to your result.
   if(store.get("last")===code){location.replace(`#/r/${code}`);return}
   store.set("vs",{code,name:named});
@@ -794,25 +797,25 @@ function renderInvite(code,rawName){
   mount(`
   <section class="wrap res-hero">
     <div>
-      <span class="eyebrow">Desafio filosófico</span>
-      <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${esc(who)} te desafiou</span></span></h1>
-      <p class="lede">${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Escolha um nível (de 6 a 18 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.</p>
+      <span class="eyebrow">${L`Desafio filosófico`}</span>
+      <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${L`${esc(who)} te desafiou`}</span></span></h1>
+      <p class="lede">${L`${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?L`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Escolha um nível (de 6 a 18 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.`}</p>
       <div class="cta-row">
-        <a class="btn accent" href="#/teste" data-fresh="1">${hasMine?"Fazer o teste de novo e comparar":"Aceitar o desafio"} ${icon.arrow}</a>
-        ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">Comparar com meu resultado</a>`:""}
+        <a class="btn accent" href="#/teste" data-fresh="1">${hasMine?L`Fazer o teste de novo e comparar`:L`Aceitar o desafio`} ${icon.arrow}</a>
+        ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">${L`Comparar com meu resultado`}</a>`:""}
       </div>
-      <p class="invite-peek"><a href="#/r/${code}/ver">Ver o resultado completo de ${esc(named||"quem te convidou")}</a></p>
+      <p class="invite-peek"><a href="#/r/${code}/ver">${L`Ver o resultado completo de ${esc(named||L`quem te convidou`)}`}</a></p>
     </div>
-    ${duo(p,{title:`Perfil de ${p.n}`})}
-  </section>`,named?`${named} te desafiou`:"Desafio filosófico");
+    ${duo(p,{title:L`Perfil de ${p.n}`})}
+  </section>`,named?L`${named} te desafiou`:L`Desafio filosófico`);
   wireTips(app,{p});
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
 }
 function renderCompare(codeA,codeB,rawA,rawB){
   const a=E.decode(codeA),b=E.decode(codeB);
-  if(!a||!b){renderNotFound("Este link de comparação está incompleto.");return}
+  if(!a||!b){renderNotFound(L`Este link de comparação está incompleto.`);return}
   const c=E.comparePeople(a,b),ra=c.a,rb=c.b;
-  const nameA=cleanName(rawA)||"Seu amigo",nameB=cleanName(rawB)||"Você";
+  const nameA=cleanName(rawA)||L`Seu amigo`,nameB=cleanName(rawB)||L`Você`;
   const rows=c.perAxis.map(x=>({ax:x.axis,diff:x.diff,A:ra.scores[x.axis],B:rb.scores[x.axis]}));
   const close=rows.slice().sort((x,y)=>x.diff-y.diff).slice(0,3),far=rows.slice().sort((x,y)=>y.diff-x.diff).slice(0,3);
   const topA=new Set(ra.ranking.slice(0,10).map(x=>x.p.id));
@@ -824,74 +827,74 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const split=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.y!=null).map(q=>({...q,gap:Math.abs(SCALE[q.x].value-SCALE[q.y].value)})).filter(q=>q.gap>=2).sort((p,q)=>q.gap-p.gap||p.i-q.i).slice(0,3);
   const same=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.x===q.y&&q.x!==2).length;
   const answered=a.filter((x,i)=>x!=null&&b[i]!=null).length;
-  const verdict=c.pct===null?"Um dos perfis ficou sem direção, então não dá para medir compatibilidade.":c.pct>=80?"Almas filosóficas gêmeas.":c.pct>=60?"Bastante em comum, com boas brigas pela frente.":c.pct>=40?"Concordam em algumas coisas e discordam com vontade em outras.":"Pensam quase ao contrário. Rende uma ótima conversa.";
-  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?"perfil sem direção":`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
-  const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?`Os dois tendem a <b>${esc(lean(ax,x.A).replace(", forte",""))}</b>.`:diffText(ax,nameA,x.A,nameB,x.B)}</span></li>`};
+  const verdict=c.pct===null?L`Um dos perfis ficou sem direção, então não dá para medir compatibilidade.`:c.pct>=80?L`Almas filosóficas gêmeas.`:c.pct>=60?L`Bastante em comum, com boas brigas pela frente.`:c.pct>=40?L`Concordam em algumas coisas e discordam com vontade em outras.`:L`Pensam quase ao contrário. Rende uma ótima conversa.`;
+  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?L`perfil sem direção`:`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
+  const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?L`Os dois tendem a <b>${esc(x.A<0?ax.l:ax.r)}</b>.`:diffText(ax,nameA,x.A,nameB,x.B)}</span></li>`};
   mount(`
   <section class="wrap section" style="padding-top:clamp(24px,5vh,56px)">
-    <span class="eyebrow">Comparação</span>
-    <h1 class="res-name" style="font-size:clamp(44px,min(8vw,11vh),120px)"><span class="line"><span>${c.pct===null?"Sem direção":`${c.pct}% compatíveis`}</span></span></h1>
+    <span class="eyebrow">${L`Comparação`}</span>
+    <h1 class="res-name" style="font-size:clamp(44px,min(8vw,11vh),120px)"><span class="line"><span>${c.pct===null?L`Sem direção`:L`${c.pct}% compatíveis`}</span></span></h1>
     <p class="lede" style="margin-top:6px">${esc(verdict)}</p>
     <div class="cmp-grid">
       ${card(nameA,ra)}
-      <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:`${nameB} e ${nameA} nos 11 eixos`})}
+      <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:L`${nameB} e ${nameA} nos 11 eixos`})}
         <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div></div>
       ${card(nameB,rb)}
     </div>
     <div class="grid2" style="margin-top:24px">
       <div class="panel agree">
-        <h2>Onde vocês se encontram</h2>
-        <p class="sub">Os eixos com o formato de pensamento mais parecido entre vocês.</p>
+        <h2>${L`Onde vocês se encontram`}</h2>
+        <p class="sub">${L`Os eixos com o formato de pensamento mais parecido entre vocês.`}</p>
         <ul class="ag-list">${close.map(x=>item(x,"close")).join("")}</ul>
-        <h3 class="about-h ag-no">Onde vocês mais se afastam</h3>
+        <h3 class="about-h ag-no">${L`Onde vocês mais se afastam`}</h3>
         <ul class="ag-list">${far.map(x=>item(x,"far")).join("")}</ul>
       </div>
       <div style="display:grid;gap:20px;align-content:start">
         <div class="panel mediator">
-          <h2>Quem fica no meio</h2>
-          <p class="sub">O pensador mais perto do ponto entre vocês dois. Um bom juiz para a próxima discussão.</p>
+          <h2>${L`Quem fica no meio`}</h2>
+          <p class="sub">${L`O pensador mais perto do ponto entre vocês dois. Um bom juiz para a próxima discussão.`}</p>
           <a class="opp" href="#/p/${mediator.id}" style="text-decoration:none">${portrait(mediator,{cls:"opp-pic"})}<span><span class="nm">${esc(mediator.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(mediator.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(mediator.q)}”</span></span></a>
         </div>
         <div class="panel">
-          <h2>Pensadores em comum</h2>
-          <p class="sub">Aparecem entre os 10 mais parecidos com os dois.</p>
-          ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.</p>`}
+          <h2>${L`Pensadores em comum`}</h2>
+          <p class="sub">${L`Aparecem entre os 10 mais parecidos com os dois.`}</p>
+          ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.`}</p>`}
         </div>
       </div>
     </div>
 
-    <h2 class="chapter"><span>1</span>Eixo por eixo</h2>
+    <h2 class="chapter"><span>1</span>${L`Eixo por eixo`}</h2>
     <div class="panel cmp-axes">
-      <p class="sub">Bolinha laranja: ${esc(nameB)}. Traço: ${esc(nameA)}. Do eixo onde vocês mais se parecem ao que mais separa.</p>
+      <p class="sub">${L`Bolinha laranja: ${esc(nameB)}. Traço: ${esc(nameA)}. Do eixo onde vocês mais se parecem ao que mais separa.`}</p>
       ${rows.slice().sort((x,y)=>x.diff-y.diff).map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(AXES[x.ax].name))}</span>${axisRow(AXES[x.ax],x.B,x.A,nameB,nameA,{named:false})}</div>`).join("")}
     </div>
 
-    <h2 class="chapter"><span>2</span>Para conversar</h2>
+    <h2 class="chapter"><span>2</span>${L`Para conversar`}</h2>
     <div class="grid2">
       <div class="panel">
-        <h2>Onde vocês mais se dividiram</h2>
-        <p class="sub">${answered?`Das ${answered} afirmações que os dois responderam, deram a mesma resposta em ${same}.`:""} Estas foram as que mais separaram vocês.</p>
-        ${split.length?`<ul class="split-list">${split.map(q=>`<li><p class="serif">“${esc(QS[q.i][0])}”</p><span><b>${esc(nameA)}:</b> ${esc(SCALE[q.x].label)}</span><span><b>${esc(nameB)}:</b> ${esc(SCALE[q.y].label)}</span></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">Nenhuma afirmação separou vocês por mais de um passo. Raro.</p>`}
+        <h2>${L`Onde vocês mais se dividiram`}</h2>
+        <p class="sub">${answered?L`Das ${answered} afirmações que os dois responderam, deram a mesma resposta em ${same}.`:""} ${L`Estas foram as que mais separaram vocês.`}</p>
+        ${split.length?`<ul class="split-list">${split.map(q=>`<li><p class="serif">“${esc(QS[q.i][0])}”</p><span><b>${esc(nameA)}:</b> ${esc(t(SCALE[q.x].label))}</span><span><b>${esc(nameB)}:</b> ${esc(t(SCALE[q.y].label))}</span></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhuma afirmação separou vocês por mais de um passo. Raro.`}</p>`}
       </div>
       <div class="panel">
-        <h2>Para ler</h2>
-        <p class="sub">Um livro para cada um entender o outro, e um para ler juntos.</p>
-        <ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,`Para ler juntos · ${esc(mediator.n)}`)}</ol>
+        <h2>${L`Para ler`}</h2>
+        <p class="sub">${L`Um livro para cada um entender o outro, e um para ler juntos.`}</p>
+        <ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,L`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,L`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,L`Para ler juntos · ${esc(mediator.n)}`)}</ol>
         ${affNote()}
       </div>
     </div>
     <div class="res-actions" style="justify-content:center;margin-top:28px">
-      ${store.get("last")===codeB?`<a class="btn accent" href="#/r/${codeB}">Ver meu resultado completo ${icon.arrow}</a>
-      <button class="btn ghost" id="cmpChallenge" type="button">${icon.link} Desafiar outra pessoa</button>`:""}
-      <button class="btn ${store.get("last")===codeB?"ghost":"accent"}" id="cmpCopy" type="button">${icon.link} Copiar esta comparação</button>
-      ${store.get("last")===codeB?"":`<a class="btn ghost" href="#/teste" data-fresh="1">Fazer o teste</a>`}
+      ${store.get("last")===codeB?`<a class="btn accent" href="#/r/${codeB}">${L`Ver meu resultado completo`} ${icon.arrow}</a>
+      <button class="btn ghost" id="cmpChallenge" type="button">${icon.link} ${L`Desafiar outra pessoa`}</button>`:""}
+      <button class="btn ${store.get("last")===codeB?"ghost":"accent"}" id="cmpCopy" type="button">${icon.link} ${L`Copiar esta comparação`}</button>
+      ${store.get("last")===codeB?"":`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Fazer o teste`}</a>`}
     </div>
-    <p class="cmp-foot">Mesma regra do resultado: distância média de ${num(c.distance,3)} nos 11 eixos. <a href="#/metodo">Como calculamos</a></p>
-  </section>`,c.pct===null?"Comparação":`${c.pct}% compatíveis`);
+    <p class="cmp-foot">${L`Mesma regra do resultado: distância média de ${num(c.distance,3)} nos 11 eixos.`} <a href="#/metodo">${L`Como calculamos`}</a></p>
+  </section>`,c.pct===null?L`Comparação`:L`${c.pct}% compatíveis`);
   wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
   document.getElementById("cmpCopy").addEventListener("click",async()=>{
     const url=compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB));
-    try{await navigator.clipboard.writeText(url);toast("Link copiado")}catch(e){prompt("Copie o link:",url)}
+    try{await navigator.clipboard.writeText(url);toast(L`Link copiado`)}catch(e){prompt(L`Copie o link:`,url)}
   });
   const cc=document.getElementById("cmpChallenge");if(cc)cc.addEventListener("click",()=>challenge(rb));
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
@@ -900,14 +903,14 @@ function renderCompare(codeA,codeB,rawA,rawB){
 
 /* ---------- Brazil ---------- */
 // Brazilian thinkers ranked against the user with the engine's own rule (audited as "brazil").
-function brazilHTML(r,title="No Brasil, quem pensa como você"){
+function brazilHTML(r,title=L`No Brasil, quem pensa como você`){
   if(!r.brazil.length)return "";
   const [first,...rest]=r.brazil,b=first.p;
   return `<div class="panel brazil">
     <span class="br-flag" aria-hidden="true"></span>
     <h2>${esc(title)}</h2>
-    <p class="sub">Entre ${r.brazil.length} pensadores brasileiros, pela mesma conta do seu resultado.</p>
-    <a class="br-main" href="#/p/${b.id}">${portrait(b,{cls:"br-pic"})}<span><span class="nm">${esc(b.n)}</span><span class="sc">${esc(b.s)}${first.pct!==null?` · ${first.pct}% com você`:""}</span>${b.bio?`<span class="br-bio">${esc(b.bio)}</span>`:""}</span></a>
+    <p class="sub">${L`Entre ${r.brazil.length} pensadores brasileiros, pela mesma conta do seu resultado.`}</p>
+    <a class="br-main" href="#/p/${b.id}">${portrait(b,{cls:"br-pic"})}<span><span class="nm">${esc(b.n)}</span><span class="sc">${esc(b.s)}${first.pct!==null?L` · ${first.pct}% com você`:""}</span>${b.bio?`<span class="br-bio">${esc(b.bio)}</span>`:""}</span></a>
     <ul class="match-list">${rest.slice(0,3).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul>
   </div>`;
 }
@@ -917,7 +920,7 @@ function brazilHTML(r,title="No Brasil, quem pensa como você"){
 // Covers come from Open Library (covers.js); a missing or broken one falls back to the colored spine.
 function readingHTML(p){
   const books=[p.b,...(SUP.READING[p.id]||[])];
-  return `<ol class="reads">${books.map((t,i)=>bookItem(p,i,t,`${i?"":"Comece por este · "}Ver na Amazon`)).join("")}</ol>${affNote()}`;
+  return `<ol class="reads">${books.map((t,i)=>bookItem(p,i,t,i?L`Ver na Amazon`:L`Comece por este · Ver na Amazon`)).join("")}</ol>${affNote()}`;
 }
 // One book row: cover (or the colored spine), title, a short line under it and the Amazon link.
 function bookItem(p,i,title,line){
@@ -925,29 +928,29 @@ function bookItem(p,i,title,line){
   return `<li><a href="${esc(SUP.bookURL(title,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov?`<img src="/covers/${cov}.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(title)}</span><span class="muted">${line}</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`;
 }
 function affNote(){
-  const note=[SUP.SUPPORT.amazonTag?"Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você.":"",HAS_PIX?'Prefere ajudar direto? <a href="#/apoie">Faça um Pix</a>.':""].filter(Boolean).join(" ");
+  const note=[SUP.SUPPORT.amazonTag?L`Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você.`:"",HAS_PIX?L`Prefere ajudar direto? <a href="#/apoie">Faça um Pix</a>.`:""].filter(Boolean).join(" ");
   return note?`<p class="aff-note">${note}</p>`:"";
 }
 function kinHTML(p){
-  if(p.era==="Brasil"){
+  if(p.regional){
     const kin=(p.akin||[]).map(id=>byId[id]).filter(Boolean);
     if(!kin.length)return "";
-    return `<div class="panel"><h2>Parentes pelo mundo</h2><p class="sub">Pensadores do catálogo internacional na mesma linha de ${esc(p.n)}.</p>
+    return `<div class="panel"><h2>${L`Parentes pelo mundo`}</h2><p class="sub">${L`Pensadores do catálogo internacional na mesma linha de ${esc(p.n)}.`}</p>
       <ul class="match-list">${kin.map(x=>`<li><a href="#/p/${x.id}">${portrait(x,{cls:"avatar"})}<span><span class="nm">${esc(x.n)}</span><span class="sc">${esc(x.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul></div>`;
   }
   const near=E.rank(p.v,E.BRAZIL).rows.filter(x=>x.p.id!==p.id).slice(0,3);
-  return `<div class="panel brazil"><span class="br-flag" aria-hidden="true"></span><h2>No Brasil, na mesma linha</h2><p class="sub">Os pensadores brasileiros com o formato de pensamento mais parecido com o de ${esc(p.n)}.</p>
+  return `<div class="panel brazil"><span class="br-flag" aria-hidden="true"></span><h2>${L`No Brasil, na mesma linha`}</h2><p class="sub">${L`Os pensadores brasileiros com o formato de pensamento mais parecido com o de ${esc(p.n)}.`}</p>
     <ul class="match-list">${near.map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${x.pct}%</span></a></li>`).join("")}</ul></div>`;
 }
-const credit=p=>p.img?`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">Imagem: Wikimedia Commons, via Wikipédia ↗</a>`:`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">Retrato desenhado pelo perfil (sem foto livre) · Wikipédia ↗</a>`;
+const credit=p=>p.img?`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">${L`Imagem: Wikimedia Commons, via Wikipédia ↗`}</a>`:`<a class="credit" href="${esc(p.wiki)}" target="_blank" rel="noopener">${L`Retrato desenhado pelo perfil (sem foto livre) · Wikipédia ↗`}</a>`;
 // Portrait and sigil together: the face of the thinker and the shape of the thought.
 // On a result the user is orange and the thinker dashed; on a thinker's page the thinker is orange.
 function duo(p,{user=null,title="",thinkerFirst=false}={}){
   const main=user&&!thinkerFirst?user:p.v,other=user?(thinkerFirst?user:p.v):null;
-  const mainName=user&&!thinkerFirst?"Você":p.n,otherName=thinkerFirst?"Você":p.n;
+  const mainName=user&&!thinkerFirst?L`Você`:p.n,otherName=thinkerFirst?L`Você`:p.n;
   return `<div class="duo">
     ${portrait(p,{eager:true})}
-    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||`Perfil de ${p.n}`})}<span class="badge-hint" aria-hidden="true"><span class="on-hover">Passe o mouse nos eixos</span><span class="on-touch">Toque nos eixos</span></span></div>
+    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||L`Perfil de ${p.n}`})}<span class="badge-hint" aria-hidden="true"><span class="on-hover">${L`Passe o mouse nos eixos`}</span><span class="on-touch">${L`Toque nos eixos`}</span></span></div>
     ${user?`<div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(mainName)}</span><span><i class="dash"></i>${esc(otherName)}</span></div>`:""}
     ${credit(p)}
   </div>`;
@@ -956,28 +959,27 @@ function duo(p,{user=null,title="",thinkerFirst=false}={}){
 // One axis bar: "main" is the orange dot, "other" the dark tick. Labels name both for screen readers.
 function axisRow(a,main,other,mainLabel,otherLabel,{named=true}={}){
   const left=Math.min(50,(main+1)*50),width=Math.abs(main)*50;
-  const lean=Math.abs(main)<.13?"Equilíbrio":main<0?a.l:a.r;
   const label=`${a.name}: ${mainLabel} ${fmt(main)}${other===undefined?"":`, ${otherLabel} ${fmt(other)}`}`;
   return `<div class="axis-row">
-    <div class="poles"><span>${Math.abs(main)>=.13&&main<0?`<b>${esc(a.l)}</b>`:esc(a.l)}</span><span class="val">${named?`<b class="ax-n">${esc(a.name)}</b> · `:""}${Math.abs(main)<.13?"equilíbrio · ":""}${fmt(main)}</span><span>${Math.abs(main)>=.13&&main>0?`<b>${esc(a.r)}</b>`:esc(a.r)}</span></div>
+    <div class="poles"><span>${Math.abs(main)>=.13&&main<0?`<b>${esc(a.l)}</b>`:esc(a.l)}</span><span class="val">${named?`<b class="ax-n">${esc(a.name)}</b> · `:""}${Math.abs(main)<.13?L`equilíbrio · `:""}${fmt(main)}</span><span>${Math.abs(main)>=.13&&main>0?`<b>${esc(a.r)}</b>`:esc(a.r)}</span></div>
     <div class="track" role="img" aria-label="${esc(label)}"><span class="center"></span><span class="fill" style="left:${left}%;width:${width}%;transform-origin:${main<0?"right":"left"}"></span>${other===undefined?"":`<span class="them" style="left:${(other+1)*50}%"></span>`}<span class="you" style="left:${(main+1)*50}%"></span></div>
   </div>`;
 }
 
 /* ---------- Thinker profile and agreement ---------- */
 // Who the thinker was: life, bio, central ideas and the line of thought.
-function aboutHTML(p,{title=`Quem foi ${p.n}`}={}){
+function aboutHTML(p,{title=L`Quem foi ${p.n}`}={}){
   if(!p.bio)return "";
   const sameLine=PH.filter(x=>x!==p&&x.s===p.s);
   return `<div class="panel about">
     <h2>${esc(title)}</h2>
     <p class="sub">${esc(lifeText(p))}${p.place?` · ${esc(p.place)}`:""}</p>
     <p class="about-bio">${esc(p.bio)}</p>
-    <h3 class="about-h">Ideias centrais</h3>
+    <h3 class="about-h">${L`Ideias centrais`}</h3>
     <ul class="about-ideas">${p.ideas.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
-    <h3 class="about-h">A linha: ${esc(p.s)}</h3>
-    <p class="about-line">${esc(p.line)}</p>
-    ${sameLine.length?`<p class="about-same">Na mesma linha: ${sameLine.map(x=>`<a href="#/p/${x.id}">${esc(x.n)}</a>`).join(", ")}</p>`:""}
+    ${p.line?`<h3 class="about-h">${L`A linha: ${esc(p.s)}`}</h3>
+    <p class="about-line">${esc(p.line)}</p>`:""}
+    ${sameLine.length?`<p class="about-same">${L`Na mesma linha:`} ${sameLine.map(x=>`<a href="#/p/${x.id}">${esc(x.n)}</a>`).join(", ")}</p>`:""}
   </div>`;
 }
 // Where the user and the thinker agree and differ most, axis by axis, on the normalized shapes the match uses.
@@ -988,15 +990,15 @@ function agreementHTML(r,x){
   const far=rows.slice().sort((a,b)=>b.diff-a.diff).slice(0,3);
   const item=(c,kind)=>{const a=AXES[c.ax];
     const text=kind==="close"
-      ?(Math.sign(c.you)===Math.sign(c.them)&&Math.abs(c.you)>=.13?`Os dois tendem a <b>${esc(lean(a,c.you).replace(", forte",""))}</b>.`:`Os dois ficam perto do equilíbrio entre ${esc(a.l)} e ${esc(a.r)}.`)
-      :diffText(a,"você",c.you,x.p.n,c.them).replace(/^você:/,"Você:");
+      ?(Math.sign(c.you)===Math.sign(c.them)&&Math.abs(c.you)>=.13?L`Os dois tendem a <b>${esc(c.you<0?a.l:a.r)}</b>.`:L`Os dois ficam perto do equilíbrio entre ${esc(a.l)} e ${esc(a.r)}.`)
+      :cap(diffText(a,L`você`,c.you,x.p.n,c.them));
     return `<li><span class="ag-axis">${esc(cap(a.name))}</span><span>${text}</span></li>`;};
   return `<div class="panel agree">
-    <h2>Você e ${esc(x.p.n)}</h2>
-    <p class="sub">Os eixos onde seus formatos de pensamento mais se encontram e mais se afastam.</p>
-    <h3 class="about-h ag-yes">Onde vocês concordam</h3>
+    <h2>${L`Você e ${esc(x.p.n)}`}</h2>
+    <p class="sub">${L`Os eixos onde seus formatos de pensamento mais se encontram e mais se afastam.`}</p>
+    <h3 class="about-h ag-yes">${L`Onde vocês concordam`}</h3>
     <ul class="ag-list">${close.map(c=>item(c,"close")).join("")}</ul>
-    <h3 class="about-h ag-no">Onde vocês mais se afastam</h3>
+    <h3 class="about-h ag-no">${L`Onde vocês mais se afastam`}</h3>
     <ul class="ag-list">${far.map(c=>item(c,"far")).join("")}</ul>
   </div>`;
 }
@@ -1005,10 +1007,10 @@ function agreementHTML(r,x){
 // Eras get fixed shares of the width, so the crowded modern centuries are readable
 // next to the long ancient ones. A thinker is placed at their prime (birth + 35 years).
 const ERAS=[
-  {name:"Antiguidade",from:-650,to:450,w:.22},
-  {name:"Idade Média e Renascimento",from:450,to:1600,w:.18},
-  {name:"Modernidade",from:1600,to:1880,w:.28},
-  {name:"Contemporâneo",from:1880,to:2030,w:.32},
+  {name:L`Antiguidade`,from:-650,to:450,w:.22},
+  {name:L`Idade Média e Renascimento`,from:450,to:1600,w:.18},
+  {name:L`Modernidade`,from:1600,to:1880,w:.28},
+  {name:L`Contemporâneo`,from:1880,to:2030,w:.32},
 ];
 function timeX(year){
   let left=0;
@@ -1017,9 +1019,9 @@ function timeX(year){
     left+=e.w;
   }
 }
-const yearText=y=>y<0?`${-y} a.C.`:`${y}`;
-const lifeText=p=>p.born===undefined?"":p.legend?`séc. VI a.C. (data tradicional)`:
-  `${p.approx?"c. ":""}${yearText(p.born)}${p.died===null?" até hoje":` a ${yearText(p.died)}`}`;
+const yearText=y=>y<0?L`${-y} a.C.`:`${y}`;
+const lifeText=p=>p.born===undefined?"":p.legend?L`séc. VI a.C. (data tradicional)`:
+  `${p.approx?L`c. `:""}${yearText(p.born)}${p.died===null?L` até hoje`:L` a ${yearText(p.died)}`}`;
 function timelineHTML(r){
   if(PH.some(p=>p.born===undefined))return "";
   const prime=p=>p.born+35;
@@ -1045,14 +1047,14 @@ function timelineHTML(r){
     while(dotRows[row]!==undefined&&x-dotRows[row]<.9)row++;
     dotRows[row]=x;return {p,x,row};
   });
-  const tag={top:"Seu par",near:"Parecido",opp:"Oposto"};
+  const tag={top:L`Seu par`,near:L`Parecido`,opp:L`Oposto`};
   let left=0;
   const eraMarks=ERAS.map(e=>{const s=`<span class="tl-era" style="left:${left*100}%;width:${e.w*100}%">${esc(e.name)}</span>`;left+=e.w;return s}).join("");
   return `<div class="panel tl-panel">
-    <h2>Sua linhagem no tempo</h2>
-    <p class="sub">Os ${PH.length} pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.</p>
-    <div class="tl-scroll" tabindex="0" aria-label="Linha do tempo, role para os lados"><div class="tl" style="--rows:${rows.length}">
-      <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}${l.x<9?" edge-l":l.x>91?" edge-r":""}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">Você está aqui</span>`:""}</a>`).join("")}</div>
+    <h2>${L`Sua linhagem no tempo`}</h2>
+    <p class="sub">${L`Os ${PH.length} pensadores na época em que viveram. Destaque para o seu par, os 5 mais parecidos e o seu oposto. Toque em qualquer ponto para conhecer o pensador.`}</p>
+    <div class="tl-scroll" tabindex="0" aria-label="${L`Linha do tempo, role para os lados`}"><div class="tl" style="--rows:${rows.length}">
+      <div class="tl-labels">${labels.map(l=>`<a class="tl-label ${l.kind}${l.x<9?" edge-l":l.x>91?" edge-r":""}" href="#/p/${l.p.id}" style="left:${l.x}%;--row:${l.row}">${portrait(l.p,{cls:"tl-pic"})}<span class="tl-name">${esc(l.p.n)}</span><span class="tl-tag">${tag[l.kind]}${l.kind==="top"&&r.top.pct!==null?` · ${r.top.pct}%`:""} · ${esc(lifeText(l.p))}</span>${l.kind==="top"?`<span class="tl-you">${L`Você está aqui`}</span>`:""}</a>`).join("")}</div>
       <div class="tl-line"></div>
       <div class="tl-dots">${dots.map(d=>`<a class="tl-dot" href="#/p/${d.p.id}" style="left:${d.x}%;--row:${d.row}" title="${esc(d.p.n)} (${esc(lifeText(d.p))})" aria-label="${esc(d.p.n)}, ${esc(lifeText(d.p))}"></a>`).join("")}</div>
       <div class="tl-eras">${eraMarks}</div>
@@ -1061,58 +1063,58 @@ function timelineHTML(r){
 }
 
 /* ---------- Audit ---------- */
-const num=(x,d=6)=>x===null?"sem valor":x.toFixed(d).replace(".",",");
+const num=(x,d=6)=>x===null?L`sem valor`:x.toFixed(d).replace(".",I.dec);
 function auditPanel(r){
   const P=r.params,u=r.user;
   return `<details class="audit" id="audit">
-    <summary><span><h2 class="t">Auditoria do cálculo</h2><span class="s">Cada passo, com os números exatos. Motor v${r.version} · código <span class="mono">${r.code}</span> · catálogo <span class="mono">${r.fingerprint}</span></span></span><span class="chev">${icon.chev}</span></summary>
+    <summary><span><h2 class="t">${L`Auditoria do cálculo`}</h2><span class="s">${L`Cada passo, com os números exatos. Motor v${r.version} · código <span class="mono">${r.code}</span> · catálogo <span class="mono">${r.fingerprint}</span>`}</span></span><span class="chev">${icon.chev}</span></summary>
     <div class="audit-body">
-      <h3 class="h-audit">Passo 1 · Respostas viram eixos</h3>
-      <div class="formula">valor da resposta: concordo totalmente +2 · concordo +1 · neutro 0 · discordo −1 · discordo totalmente −2
+      <h3 class="h-audit">${L`Passo 1 · Respostas viram eixos`}</h3>
+      <div class="formula">${L`valor da resposta: concordo totalmente +2 · concordo +1 · neutro 0 · discordo −1 · discordo totalmente −2
 contribuição = valor × direção da afirmação (+1 ou −1)
-posição no eixo = soma das 4 contribuições ÷ 8      (vai de −1 a +1)</div>
-      <div class="tbl-wrap" style="margin-top:12px"><table class="tbl"><thead><tr><th>Eixo</th><th>−1</th><th>+1</th><th class="n">Soma</th><th class="n">Máx.</th><th class="n">Posição</th></tr></thead><tbody>
+posição no eixo = soma das contribuições ÷ (2 × afirmações do eixo)      (vai de −1 a +1)`}</div>
+      <div class="tbl-wrap" style="margin-top:12px"><table class="tbl"><thead><tr><th>${L`Eixo`}</th><th>−1</th><th>+1</th><th class="n">${L`Soma`}</th><th class="n">${L`Máx.`}</th><th class="n">${L`Posição`}</th></tr></thead><tbody>
       ${r.perAxis.map(a=>`<tr><td>${esc(AXES[a.axis].name)}</td><td>${esc(AXES[a.axis].l)}</td><td>${esc(AXES[a.axis].r)}</td><td class="n">${a.sum>0?"+":""}${a.sum}</td><td class="n">${a.max}</td><td class="n">${fmt(a.score,4)}</td></tr>`).join("")}
       </tbody></table></div>
 
-      <h3 class="h-audit">Passo 2 · Formato do perfil</h3>
-      <div class="formula">intensidade = média de |posição| nos 11 eixos
+      <h3 class="h-audit">${L`Passo 2 · Formato do perfil`}</h3>
+      <div class="formula">${L`intensidade = média de |posição| nos 11 eixos
 fator = mín(${P.maxGain}, ${r.catalogIntensity.toFixed(6)} ÷ intensidade)      (${r.catalogIntensity.toFixed(6)} = intensidade média do catálogo)
 perfil normalizado = posição × fator
 se a intensidade for menor que ${P.minIntensity}, o perfil não tem direção: fator 0 e nenhum percentual
-O mesmo vale para cada pensador. Assim comparamos a direção do pensamento, não a força.
+O mesmo vale para cada pensador. Assim comparamos a direção do pensamento, não a força.`}
 
-Sua intensidade: ${u.intensity.toFixed(6)}
-Seu fator: ${r.directionless?"0 (perfil sem direção: o ranking usa só a distância bruta)":u.k.toFixed(6)+(u.capped?` (limitado pelo teto de ${P.maxGain})`:"")}</div>
+${L`Sua intensidade:`} ${u.intensity.toFixed(6)}
+${L`Seu fator:`} ${r.directionless?L`0 (perfil sem direção: o ranking usa só a distância bruta)`:u.k.toFixed(6)+(u.capped?L` (limitado pelo teto de ${P.maxGain})`:"")}</div>
 
-      <h3 class="h-audit">Passo 3 · Comparação com um pensador</h3>
-      <div class="formula">distância = média de |você normalizado − pensador normalizado| nos 11 eixos
-compatibilidade = ${esc(E.PERCENT_RULE)}      (τ = ${P.tau})</div>
-      <label class="muted" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 12px;font-size:14px">Comparar com
+      <h3 class="h-audit">${L`Passo 3 · Comparação com um pensador`}</h3>
+      <div class="formula">${L`distância = média de |você normalizado − pensador normalizado| nos 11 eixos`}
+${L`compatibilidade`} = ${esc(t(E.PERCENT_RULE))}      (τ = ${P.tau})</div>
+      <label class="muted" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 12px;font-size:14px">${L`Comparar com`}
         <select class="select" id="cmpSel">${r.ranking.map(x=>`<option value="${x.p.id}">${x.rank}º · ${esc(x.p.n)} · ${pctText(x.pct)}</option>`).join("")}</select>
       </label>
       <div id="cmpOut"></div>
 
-      <h3 class="h-audit">Passo 4 · Ranking e desempate</h3>
-      <div class="formula">ordem: ${esc(E.TIE_BREAK)}
-eps = ${P.eps}      distância bruta = média de |sua posição − posição do pensador|, sem normalizar</div>
-      <div class="tbl-wrap" style="margin-top:12px"><table class="tbl"><thead><tr><th class="n">#</th><th>Pensador</th><th class="n">Distância</th><th class="n">Dist. bruta</th><th class="n">%</th><th>Desempate</th></tr></thead><tbody>
-      ${r.ranking.map((x,i)=>`<tr class="${i===0||(r.opposite&&i===r.ranking.length-1)?"hl":""}"><td class="n">${x.rank}</td><td>${esc(x.p.n)} <span class="muted mono" style="font-size:11px">${x.p.id}</span></td><td class="n">${num(x.distance)}</td><td class="n">${num(x.rawDistance)}</td><td class="n">${x.pct===null?"sem %":x.pct}</td><td>${x.tiedWithPrev||x.tiedWithNext?`<span class="tie">empate de distância</span>`:""}</td></tr>`).join("")}
+      <h3 class="h-audit">${L`Passo 4 · Ranking e desempate`}</h3>
+      <div class="formula">${L`ordem:`} ${esc(t(E.TIE_BREAK))}
+eps = ${P.eps}      ${L`distância bruta = média de |sua posição − posição do pensador|, sem normalizar`}</div>
+      <div class="tbl-wrap" style="margin-top:12px"><table class="tbl"><thead><tr><th class="n">#</th><th>${L`Pensador`}</th><th class="n">${L`Distância`}</th><th class="n">${L`Dist. bruta`}</th><th class="n">%</th><th>${L`Desempate`}</th></tr></thead><tbody>
+      ${r.ranking.map((x,i)=>`<tr class="${i===0||(r.opposite&&i===r.ranking.length-1)?"hl":""}"><td class="n">${x.rank}</td><td>${esc(x.p.n)} <span class="muted mono" style="font-size:11px">${x.p.id}</span></td><td class="n">${num(x.distance)}</td><td class="n">${num(x.rawDistance)}</td><td class="n">${x.pct===null?L`sem %`:x.pct}</td><td>${x.tiedWithPrev||x.tiedWithNext?`<span class="tie">${L`empate de distância`}</span>`:""}</td></tr>`).join("")}
       </tbody></table></div>
 
-      <h3 class="h-audit">Suas ${r.answers.length} respostas</h3>
-      <p class="muted" style="font-size:13px;margin:0 0 10px">“Nº” é a posição da afirmação no catálogo, usada no código de respostas. “No teste” é a ordem em que ela apareceu para você.</p>
-      <div class="tbl-wrap"><table class="tbl"><thead><tr><th class="n">Nº</th><th class="n">No teste</th><th>Afirmação</th><th>Eixo</th><th>Resposta</th><th class="n">Contribuição</th></tr></thead><tbody>
-      ${r.perQuestion.map(q=>`<tr><td class="n">${q.i+1}</td><td class="n">${q.shown}</td><td class="wrap">${esc(q.text)}</td><td>${esc(AXES[q.axis].name)} → ${esc(q.dir>0?AXES[q.axis].r:AXES[q.axis].l)}</td><td>${esc(SCALE[q.answer].label)} <span class="muted mono">(${q.answer})</span></td><td class="n">${q.contribution>0?"+":""}${q.contribution}</td></tr>`).join("")}
+      <h3 class="h-audit">${L`Suas ${r.answers.length} respostas`}</h3>
+      <p class="muted" style="font-size:13px;margin:0 0 10px">${L`“Nº” é a posição da afirmação no catálogo, usada no código de respostas. “No teste” é a ordem em que ela apareceu para você.`}</p>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th class="n">${L`Nº`}</th><th class="n">${L`No teste`}</th><th>${L`Afirmação`}</th><th>${L`Eixo`}</th><th>${L`Resposta`}</th><th class="n">${L`Contribuição`}</th></tr></thead><tbody>
+      ${r.perQuestion.map(q=>`<tr><td class="n">${q.i+1}</td><td class="n">${q.shown}</td><td class="wrap">${esc(q.text)}</td><td>${esc(AXES[q.axis].name)} → ${esc(q.dir>0?AXES[q.axis].r:AXES[q.axis].l)}</td><td>${esc(t(SCALE[q.answer].label))} <span class="muted mono">(${q.answer})</span></td><td class="n">${q.contribution>0?"+":""}${q.contribution}</td></tr>`).join("")}
       </tbody></table></div>
 
-      <h3 class="h-audit">Verificação</h3>
-      <div class="audit-meta"><span>Motor <code>v${r.version}</code></span><span>Código do motor <code>${r.code}</code></span><span>Catálogo <code>${r.fingerprint}</code></span><span>Parâmetros <code>τ=${P.tau}</code> <code>teto=${P.maxGain}</code> <code>mín=${P.minIntensity}</code> <code>eps=${P.eps}</code></span><span>Respostas <code>${E.encode(r.answers)}</code></span></div>
-      <p class="muted" style="font-size:13px;margin:12px 0 0">A tabela mostra 6 casas decimais. O arquivo de auditoria traz todos os números com precisão completa, para refazer a conta sem diferenças de arredondamento.</p>
+      <h3 class="h-audit">${L`Verificação`}</h3>
+      <div class="audit-meta"><span>${L`Motor`} <code>v${r.version}</code></span><span>${L`Código do motor`} <code>${r.code}</code></span><span>${L`Catálogo`} <code>${r.fingerprint}</code></span><span>${L`Parâmetros`} <code>τ=${P.tau}</code> <code>${L`teto`}=${P.maxGain}</code> <code>${L`mín`}=${P.minIntensity}</code> <code>eps=${P.eps}</code></span><span>${L`Respostas`} <code>${E.encode(r.answers)}</code></span></div>
+      <p class="muted" style="font-size:13px;margin:12px 0 0">${L`A tabela mostra 6 casas decimais. O arquivo de auditoria traz todos os números com precisão completa, para refazer a conta sem diferenças de arredondamento.`}</p>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
-        <button class="btn sm ghost" id="dlAudit" type="button">Baixar auditoria (JSON)</button>
-        <a class="btn sm ghost" href="#/verificar/${E.encode(r.answers)}">Verificar com cálculo independente</a>
-        <a class="btn sm ghost" href="#/metodo">Ler o método completo</a>
+        <button class="btn sm ghost" id="dlAudit" type="button">${L`Baixar auditoria (JSON)`}</button>
+        <a class="btn sm ghost" href="#/verificar/${E.encode(r.answers)}">${L`Verificar com cálculo independente`}</a>
+        <a class="btn sm ghost" href="#/metodo">${L`Ler o método completo`}</a>
       </div>
     </div>
   </details>`;
@@ -1121,12 +1123,12 @@ function wireAudit(r){
   const sel=document.getElementById("cmpSel"),out=document.getElementById("cmpOut");
   const draw=()=>{
     const x=r.ranking.find(y=>y.p.id===sel.value);
-    out.innerHTML=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Eixo</th><th class="n">Você</th><th class="n">Você norm.</th><th class="n">${esc(x.p.n)}</th><th class="n">Norm.</th><th class="n">|Dif.|</th></tr></thead><tbody>
+    out.innerHTML=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>${L`Eixo`}</th><th class="n">${L`Você`}</th><th class="n">${L`Você norm.`}</th><th class="n">${esc(x.p.n)}</th><th class="n">${L`Norm.`}</th><th class="n">${L`|Dif.|`}</th></tr></thead><tbody>
       ${x.perAxis.map(a=>`<tr><td>${esc(AXES[a.axis].name)}</td><td class="n">${fmt(r.scores[a.axis],4)}</td><td class="n">${fmt(a.user,6)}</td><td class="n">${fmt(a.thinkerRaw,1)}</td><td class="n">${fmt(a.thinker,6)}</td><td class="n">${a.diff.toFixed(6)}</td></tr>`).join("")}
-      <tr class="hl"><td colspan="5">Distância (média das diferenças) → ${x.rank}º lugar</td><td class="n">${x.distance.toFixed(6)}</td></tr>
-      <tr class="hl"><td colspan="5">${x.pct===null?"Perfil sem direção: sem percentual":`max(1, min(100, round(100 × e^(−(${x.distance.toFixed(6)} ÷ ${r.params.tau})²))))`}</td><td class="n">${pctText(x.pct)}</td></tr>
-      <tr><td colspan="5">Distância bruta (desempate)</td><td class="n">${x.rawDistance.toFixed(6)}</td></tr>
-    </tbody></table></div><p class="muted" style="font-size:13px;margin:8px 0 0">Intensidade do pensador ${x.thinkerIntensity.toFixed(6)} · fator ${x.thinkerK.toFixed(6)}</p>`;
+      <tr class="hl"><td colspan="5">${L`Distância (média das diferenças) → ${x.rank}º lugar`}</td><td class="n">${x.distance.toFixed(6)}</td></tr>
+      <tr class="hl"><td colspan="5">${x.pct===null?L`Perfil sem direção: sem percentual`:`max(1, min(100, round(100 × e^(−(${x.distance.toFixed(6)} ÷ ${r.params.tau})²))))`}</td><td class="n">${pctText(x.pct)}</td></tr>
+      <tr><td colspan="5">${L`Distância bruta (desempate)`}</td><td class="n">${x.rawDistance.toFixed(6)}</td></tr>
+    </tbody></table></div><p class="muted" style="font-size:13px;margin:8px 0 0">${L`Intensidade do pensador ${x.thinkerIntensity.toFixed(6)} · fator ${x.thinkerK.toFixed(6)}`}</p>`;
   };
   sel.addEventListener("change",draw);draw();
   document.getElementById("dlAudit").addEventListener("click",()=>{
@@ -1148,34 +1150,34 @@ function renderCatalog(){
   let era="",q="",sort=lastR?"match":"era";
   mount(`
   <section class="wrap section" style="padding-top:clamp(32px,6vh,64px)">
-    <span class="eyebrow">Catálogo</span>
-    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${ALL.length} pensadores</h1>
-    <p class="lede" style="margin-top:16px">${new Set(PH.map(p=>p.s)).size} correntes, da Grécia antiga a hoje. ${lastR?"Cada card mostra sua compatibilidade e sua posição no ranking.":"Faça o teste para ver sua compatibilidade com cada um."}</p>
+    <span class="eyebrow">${L`Catálogo`}</span>
+    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${L`${ALL.length} pensadores`}</h1>
+    <p class="lede" style="margin-top:16px">${L`${new Set(PH.map(p=>p.s)).size} correntes, da Grécia antiga a hoje.`} ${lastR?L`Cada card mostra sua compatibilidade e sua posição no ranking.`:L`Faça o teste para ver sua compatibilidade com cada um.`}</p>
     <div class="cat-tools">
-      <label class="sr" for="q">Buscar pensador ou corrente</label>
-      <input class="search" id="q" type="search" placeholder="Buscar pensador ou corrente" autocomplete="off">
-      <div class="chips" role="group" aria-label="Filtrar por época">
-        <button class="chip" type="button" aria-pressed="true" data-era="">Todos</button>
+      <label class="sr" for="q">${L`Buscar pensador ou corrente`}</label>
+      <input class="search" id="q" type="search" placeholder="${L`Buscar pensador ou corrente`}" autocomplete="off">
+      <div class="chips" role="group" aria-label="${L`Filtrar por época`}">
+        <button class="chip" type="button" aria-pressed="true" data-era="">${L`Todos`}</button>
         ${eras.map(e=>`<button class="chip" type="button" aria-pressed="false" data-era="${esc(e)}">${esc(e)}</button>`).join("")}
       </div>
-      <label class="sr" for="sortSel">Ordenar</label>
+      <label class="sr" for="sortSel">${L`Ordenar`}</label>
       <select class="select" id="sortSel">
-        ${lastR?`<option value="match">Mais compatíveis comigo</option>`:""}
-        <option value="era">Ordem histórica</option>
-        <option value="az">Ordem alfabética</option>
+        ${lastR?`<option value="match">${L`Mais compatíveis comigo`}</option>`:""}
+        <option value="era">${L`Ordem histórica`}</option>
+        <option value="az">${L`Ordem alfabética`}</option>
       </select>
     </div>
     <p class="sr" id="count" aria-live="polite"></p>
     <div class="cards" id="cards"></div>
-  </section>`,"Pensadores");
+  </section>`,L`Pensadores`);
   const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
   const draw=()=>{
     const list=ALL.filter(p=>(!era||p.era===era)&&(!q||norm(p.n+" "+p.s).includes(norm(q))));
-    if(sort==="az")list.sort((a,b)=>a.n.localeCompare(b.n));
+    if(sort==="az")list.sort((a,b)=>a.n.localeCompare(b.n,I.html));
     // Main and Brazilian thinkers share one scale (same normalized distance), so they sort together.
     if(sort==="match")list.sort((a,b)=>rankOf[a.id].distance-rankOf[b.id].distance||(a.id<b.id?-1:1));
-    document.getElementById("count").textContent=`${list.length} pensadores`;
-    document.getElementById("cards").innerHTML=list.length?list.map(p=>`<a class="tcard" href="#/p/${p.id}"><span class="tcard-art">${portrait(p)}<span class="mini">${sigil(p.v,{decorative:true,cls:"sg-user"})}</span></span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(p.era)}</span>${lastR?`<span class="pc">${hasPct?`${pctOf(p.id)}% com você`:""}${p.era==="Brasil"?"":`${hasPct?" · ":""}${rankOf[p.id].rank}º`}</span>`:""}</a>`).join(""):`<p class="empty">Nenhum pensador encontrado.</p>`;
+    document.getElementById("count").textContent=L`${list.length} pensadores`;
+    document.getElementById("cards").innerHTML=list.length?list.map(p=>`<a class="tcard" href="#/p/${p.id}"><span class="tcard-art">${portrait(p)}<span class="mini">${sigil(p.v,{decorative:true,cls:"sg-user"})}</span></span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(p.era)}</span>${lastR?`<span class="pc">${hasPct?L`${pctOf(p.id)}% com você`:""}${p.regional?"":`${hasPct?" · ":""}${rankOf[p.id].rank}º`}</span>`:""}</a>`).join(""):`<p class="empty">${L`Nenhum pensador encontrado.`}</p>`;
   };
   document.getElementById("q").addEventListener("input",e=>{q=e.target.value;draw()});
   document.getElementById("sortSel").addEventListener("change",e=>{sort=e.target.value;draw()});
@@ -1187,33 +1189,33 @@ function renderCatalog(){
 
 function renderThinker(id){
   const p=byId[id];
-  if(!p){renderNotFound("Não encontramos esse pensador.");return}
+  if(!p){renderNotFound(L`Não encontramos esse pensador.`);return}
   const last=store.get("last"),lastR=last&&E.decode(last)?E.evaluate(E.decode(last)):null;
   const mine=lastR&&(lastR.ranking.find(x=>x.p.id===id)||lastR.brazil.find(x=>x.p.id===id));
-  const ofN=lastR&&lastR.ranking.some(x=>x.p.id===id)?`${PH.length}`:`${E.BRAZIL.length} brasileiros`;
+  const ofN=lastR&&lastR.ranking.some(x=>x.p.id===id)?`${PH.length}`:L`${E.BRAZIL.length} brasileiros`;
   // Closest thinkers by the same rule the engine uses for users: this thinker's positions as the profile.
   const twins=E.rank(p.v).rows.filter(x=>x.p.id!==p.id).slice(0,4).map(x=>({x:x.p}));
   mount(`
   <section class="wrap th-hero">
     <div>
-      <a class="back" href="#/pensadores">${icon.back} Todos os pensadores</a>
+      <a class="back" href="#/pensadores">${icon.back} ${L`Todos os pensadores`}</a>
       <h1 class="res-name" style="margin-top:18px"><span class="line"><span>${esc(p.n)}</span></span></h1>
       <div class="res-school">${esc(p.s)} · ${esc(p.era)}</div>
       <blockquote class="res-quote">“${esc(p.q)}”</blockquote>
-      <div class="res-actions">${mine?`<span class="btn ghost" style="cursor:default">${mine.pct===null?"":`${mine.pct}% com você · `}${mine.rank}º de ${ofN}</span>`:`<a class="btn accent" href="#/teste">Ver minha compatibilidade ${icon.arrow}</a>`}</div>
+      <div class="res-actions">${mine?`<span class="btn ghost" style="cursor:default">${mine.pct===null?"":L`${mine.pct}% com você · `}${L`${mine.rank}º de ${ofN}`}</span>`:`<a class="btn accent" href="#/teste">${L`Ver minha compatibilidade`} ${icon.arrow}</a>`}</div>
     </div>
-    ${duo(p,{user:lastR?lastR.scores:null,thinkerFirst:true,title:lastR?`Perfil de ${p.n} comparado ao seu`:`Perfil de ${p.n}`})}
+    ${duo(p,{user:lastR?lastR.scores:null,thinkerFirst:true,title:lastR?L`Perfil de ${p.n} comparado ao seu`:L`Perfil de ${p.n}`})}
   </section>
   <section class="wrap" style="padding-bottom:64px">
     <div class="grid2">
-      <div class="panel"><h2>Posições</h2><p class="sub">Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${esc(p.n)}.${lastR?" Tracejado na mandala e traço nas barras: você.":""}</p>
-        <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:`Perfil de ${p.n} nos 11 eixos`})}</div><p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver a posição de ${esc(p.n)}.</p>
-        ${AXES.map((a,i)=>axisRow(a,p.v[i],lastR?lastR.scores[i]:undefined,p.n,"você")).join("")}</div>
+      <div class="panel"><h2>${L`Posições`}</h2><p class="sub">${L`Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${esc(p.n)}.`}${lastR?L` Tracejado na mandala e traço nas barras: você.`:""}</p>
+        <div class="panel-sigil">${sigil(p.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:L`Perfil de ${p.n} nos 11 eixos`})}</div><p class="tip-hint">${L`<span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver a posição de ${esc(p.n)}.`}</p>
+        ${AXES.map((a,i)=>axisRow(a,p.v[i],lastR?lastR.scores[i]:undefined,p.n,L`você`)).join("")}</div>
       <div style="display:grid;gap:20px;align-content:start">
-        ${aboutHTML(p,{title:"Quem foi"})}
+        ${aboutHTML(p,{title:L`Quem foi`})}
         ${kinHTML(p)}
-        <div class="panel"><h2>Para ler</h2><p class="sub">Comece pelo primeiro.</p>${readingHTML(p)}</div>
-        <div class="panel"><h2>Parentes próximos</h2><p class="sub">Pensadores com o formato mais parecido.</p>
+        <div class="panel"><h2>${L`Para ler`}</h2><p class="sub">${L`Comece pelo primeiro.`}</p>${readingHTML(p)}</div>
+        <div class="panel"><h2>${L`Parentes próximos`}</h2><p class="sub">${L`Pensadores com o formato mais parecido.`}</p>
           <ul class="match-list">${twins.map(({x})=>`<li><a href="#/p/${x.id}">${portrait(x,{cls:"avatar"})}<span><span class="nm">${esc(x.n)}</span><span class="sc">${esc(x.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul></div>
       </div>
     </div>
@@ -1226,83 +1228,83 @@ function renderMethod(){
   const P=E.PARAMS,ci=E.catalogIntensity.toFixed(6);
   mount(`
   <section class="wrap section" style="padding-top:clamp(32px,6vh,64px)">
-    <span class="eyebrow">Método</span>
-    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">Como o <em class="it accent">motor</em> pensa</h1>
+    <span class="eyebrow">${L`Método`}</span>
+    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${L`Como o <em class="it accent">motor</em> pensa`}</h1>
     <div class="stat-grid">
-      <div class="stat"><b>${E.LEVELS.map(l=>l.n).join(" · ")}</b><span>afirmações nos 3 níveis</span></div>
-      <div class="stat"><b>${AXES.length}</b><span>eixos independentes</span></div>
-      <div class="stat"><b>${PH.length}</b><span>pensadores</span></div>
-      <div class="stat"><b class="mono" style="font-size:24px;padding:8px 0 6px">${E.codeFingerprint()}</b><span>código do motor v${E.VERSION}</span></div>
-      <div class="stat"><b class="mono" style="font-size:24px;padding:8px 0 6px">${E.fingerprint()}</b><span>catálogo</span></div>
+      <div class="stat"><b>${E.LEVELS.map(l=>l.n).join(" · ")}</b><span>${L`afirmações nos 3 níveis`}</span></div>
+      <div class="stat"><b>${AXES.length}</b><span>${L`eixos independentes`}</span></div>
+      <div class="stat"><b>${PH.length}</b><span>${L`pensadores`}</span></div>
+      <div class="stat"><b class="mono" style="font-size:24px;padding:8px 0 6px">${E.codeFingerprint()}</b><span>${L`código do motor v${E.VERSION}`}</span></div>
+      <div class="stat"><b class="mono" style="font-size:24px;padding:8px 0 6px">${E.fingerprint()}</b><span>${L`catálogo`}</span></div>
     </div>
     <div class="prose">
-      <h2>1. Afirmações equilibradas, em três níveis</h2>
-      <p>O teste tem três níveis que se somam: ${E.LEVELS.map(l=>`${l.name}, com ${l.n} afirmações`).join("; ")}. Cada nível acrescenta 4 afirmações por eixo, e em cada bloco duas puxam para um polo e duas para o outro. Quem concorda com tudo, ou discorda de tudo, cai exatamente no centro em qualquer nível. Isso anula o viés de quem tende a dizer sim.</p>
-      <p>Mais afirmações reduzem o efeito de uma resposta dada no impulso. Numa simulação com respostas imprecisas, a mesma pessoa recebe o mesmo par ao refazer o teste em ${E.LEVELS.map(l=>`${LEVEL_INFO[l.id].retest} das vezes no ${l.name}`).join(", ")}.</p>
-      <p>As afirmações aparecem misturadas entre os eixos, em rodízio dentro de cada nível. As respostas são guardadas sempre pela posição da afirmação no catálogo, por isso um resultado do nível Rápido pode ser aprofundado sem perder nada, e a auditoria mostra as duas numerações.</p>
-      <h2>2. Da resposta ao eixo</h2>
-      <div class="formula">concordo totalmente +2 · concordo +1 · neutro 0 · discordo −1 · discordo totalmente −2
+      <h2>${L`1. Afirmações equilibradas, em três níveis`}</h2>
+      <p>${L`O teste tem três níveis que se somam: ${E.LEVELS.map(l=>L`${t(l.name)}, com ${l.n} afirmações`).join("; ")}. Cada nível acrescenta 4 afirmações por eixo, e em cada bloco duas puxam para um polo e duas para o outro. Quem concorda com tudo, ou discorda de tudo, cai exatamente no centro em qualquer nível. Isso anula o viés de quem tende a dizer sim.`}</p>
+      <p>${L`Mais afirmações reduzem o efeito de uma resposta dada no impulso. Numa simulação com respostas imprecisas, a mesma pessoa recebe o mesmo par ao refazer o teste em ${E.LEVELS.map(l=>L`${LEVEL_INFO[l.id].retest} das vezes no ${t(l.name)}`).join(", ")}.`}</p>
+      <p>${L`As afirmações aparecem misturadas entre os eixos, em rodízio dentro de cada nível. As respostas são guardadas sempre pela posição da afirmação no catálogo, por isso um resultado do nível Rápido pode ser aprofundado sem perder nada, e a auditoria mostra as duas numerações.`}</p>
+      <h2>${L`2. Da resposta ao eixo`}</h2>
+      <div class="formula">${L`concordo totalmente +2 · concordo +1 · neutro 0 · discordo −1 · discordo totalmente −2
 contribuição = valor × direção (+1 ou −1)
-posição = soma das contribuições do eixo ÷ (2 × afirmações do eixo)        ∈ [−1, +1]</div>
-      <h2>3. Formato, não força</h2>
-      <p>Duas pessoas podem pensar na mesma direção com intensidades diferentes: uma marca “concordo”, outra “concordo totalmente”. Para que as duas encontrem o mesmo par, ajustamos a intensidade.</p>
-      <div class="formula">intensidade = média de |posição| nos 11 eixos
+posição = soma das contribuições do eixo ÷ (2 × afirmações do eixo)        ∈ [−1, +1]`}</div>
+      <h2>${L`3. Formato, não força`}</h2>
+      <p>${L`Duas pessoas podem pensar na mesma direção com intensidades diferentes: uma marca “concordo”, outra “concordo totalmente”. Para que as duas encontrem o mesmo par, ajustamos a intensidade.`}</p>
+      <div class="formula">${L`intensidade = média de |posição| nos 11 eixos
 fator = mín(${P.maxGain}, ${ci} ÷ intensidade)
-normalizado = posição × fator</div>
-      <p>${ci} é a intensidade média do catálogo. A mesma conta vale para os pensadores, então nem os moderados nem os radicais levam vantagem.</p>
-      <p>O fator nunca passa de ${P.maxGain}. Sem esse teto, um perfil quase neutro, com um único eixo levemente marcado, seria ampliado até esse eixo decidir sozinho o resultado.</p>
-      <p>Se a intensidade fica abaixo de ${P.minIntensity}, o perfil não tem direção. Nesse caso não existe formato para comparar: o resultado mostra o pensador cujas posições ficam mais perto das suas, sem percentual e sem oposto.</p>
-      <h2>4. Distância e compatibilidade</h2>
-      <div class="formula">distância = média de |você normalizado − pensador normalizado| nos 11 eixos
-compatibilidade = ${esc(E.PERCENT_RULE)}
+normalizado = posição × fator`}</div>
+      <p>${L`${ci} é a intensidade média do catálogo. A mesma conta vale para os pensadores, então nem os moderados nem os radicais levam vantagem.`}</p>
+      <p>${L`O fator nunca passa de ${P.maxGain}. Sem esse teto, um perfil quase neutro, com um único eixo levemente marcado, seria ampliado até esse eixo decidir sozinho o resultado.`}</p>
+      <p>${L`Se a intensidade fica abaixo de ${P.minIntensity}, o perfil não tem direção. Nesse caso não existe formato para comparar: o resultado mostra o pensador cujas posições ficam mais perto das suas, sem percentual e sem oposto.`}</p>
+      <h2>${L`4. Distância e compatibilidade`}</h2>
+      <div class="formula">${L`distância = média de |você normalizado − pensador normalizado| nos 11 eixos`}
+${L`compatibilidade`} = ${esc(t(E.PERCENT_RULE))}
 τ = ${P.tau}</div>
-      <p>A curva faz pares próximos parecerem próximos e derruba rápido os distantes. O resultado é arredondado para o inteiro mais próximo e fica sempre entre 1 e 100. O valor ${P.tau} foi calibrado para que responder exatamente como um pensador dê 85% ou mais.</p>
-      <h2>5. Ranking e desempate</h2>
-      <p>Empates exatos de distância acontecem com frequência, porque as respostas são números inteiros. A ordem é sempre esta:</p>
-      <div class="formula">${esc(E.TIE_BREAK)}
+      <p>${L`A curva faz pares próximos parecerem próximos e derruba rápido os distantes. O resultado é arredondado para o inteiro mais próximo e fica sempre entre 1 e 100. O valor ${P.tau} foi calibrado para que responder exatamente como um pensador dê 85% ou mais.`}</p>
+      <h2>${L`5. Ranking e desempate`}</h2>
+      <p>${L`Empates exatos de distância acontecem com frequência, porque as respostas são números inteiros. A ordem é sempre esta:`}</p>
+      <div class="formula">${esc(t(E.TIE_BREAK))}
 eps = ${P.eps}
-distância bruta = média de |sua posição − posição do pensador|, sem normalizar</div>
-      <p>O id é comparado pelos códigos dos caracteres, sem depender do idioma do navegador. Assim, as mesmas respostas dão sempre o mesmo ranking, em qualquer computador. A auditoria marca cada empate e mostra a distância bruta usada para desfazê-lo.</p>
-      <h3>Pensadores brasileiros</h3>
-      <p>O resultado também mostra quem, no Brasil, pensa como você. São ${E.BRAZIL.length} pensadores brasileiros: um catálogo próprio de ${BR.length}, mais os ${PH.filter(p=>p.br).length} brasileiros do catálogo principal. Eles são comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos ${PH.length} pensadores.</p>
-      <h3>Comparar com outra pessoa</h3>
-      <p>Duas pessoas são comparadas exatamente como uma pessoa e um pensador: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos e a compatibilidade usa a mesma curva. A conta é simétrica, e uma pessoa comparada consigo mesma dá 100%.</p>
-      <h2>6. Aviso de confiabilidade</h2>
-      <p>Se você escolhe a mesma opção em ${Math.round(P.repeatWarning*100)}% das afirmações ou mais (no nível Rápido, ${Math.ceil(P.repeatWarning*E.LEVELS[0].n)} de ${E.LEVELS[0].n}), ou se a intensidade fica abaixo de ${P.centerWarning}, o resultado vem com um aviso.</p>
-      <h2>7. Como verificamos</h2>
-      <p>Uma bateria de testes automatizados roda sobre o motor e o catálogo. Ela confere, entre outras coisas:</p>
+${L`distância bruta = média de |sua posição − posição do pensador|, sem normalizar`}</div>
+      <p>${L`O id é comparado pelos códigos dos caracteres, sem depender do idioma do navegador. Assim, as mesmas respostas dão sempre o mesmo ranking, em qualquer computador. A auditoria marca cada empate e mostra a distância bruta usada para desfazê-lo.`}</p>
+      <h3>${L`Pensadores brasileiros`}</h3>
+      <p>${L`O resultado também mostra quem, no Brasil, pensa como você. São ${E.BRAZIL.length} pensadores brasileiros: um catálogo próprio de ${BR.length}, mais os ${PH.filter(p=>p.br).length} brasileiros do catálogo principal. Eles são comparados com a mesma conta, num ranking separado, para que o ranking principal continue com os mesmos ${PH.length} pensadores.`}</p>
+      <h3>${L`Comparar com outra pessoa`}</h3>
+      <p>${L`Duas pessoas são comparadas exatamente como uma pessoa e um pensador: os dois perfis são normalizados, a distância é a média das diferenças nos 11 eixos e a compatibilidade usa a mesma curva. A conta é simétrica, e uma pessoa comparada consigo mesma dá 100%.`}</p>
+      <h2>${L`6. Aviso de confiabilidade`}</h2>
+      <p>${L`Se você escolhe a mesma opção em ${Math.round(P.repeatWarning*100)}% das afirmações ou mais (no nível Rápido, ${Math.ceil(P.repeatWarning*E.LEVELS[0].n)} de ${E.LEVELS[0].n}), ou se a intensidade fica abaixo de ${P.centerWarning}, o resultado vem com um aviso.`}</p>
+      <h2>${L`7. Como verificamos`}</h2>
+      <p>${L`Uma bateria de testes automatizados roda sobre o motor e o catálogo. Ela confere, entre outras coisas:`}</p>
       <ul>
-        <li>que o motor e o verificador independente chegam aos mesmos números, sem nenhuma diferença, em milhares de respostas aleatórias, inclusive nos empates;</li>
-        <li>que o arquivo de auditoria basta, sozinho, para refazer o ranking inteiro;</li>
-        <li>que todos os ${PH.length} pensadores vencem quando alguém responde exatamente como eles;</li>
-        <li>que nenhum pensador concentra mais de 5% dos resultados em usuários simulados;</li>
-        <li>que mudar duas respostas em um passo mantém o mesmo par no top 3 em mais de 95% dos casos;</li>
-        <li>que todos os 11 eixos influenciam o resultado.</li>
+        <li>${L`que o motor e o verificador independente chegam aos mesmos números, sem nenhuma diferença, em milhares de respostas aleatórias, inclusive nos empates;`}</li>
+        <li>${L`que o arquivo de auditoria basta, sozinho, para refazer o ranking inteiro;`}</li>
+        <li>${L`que todos os ${PH.length} pensadores vencem quando alguém responde exatamente como eles;`}</li>
+        <li>${L`que nenhum pensador concentra mais de 5% dos resultados em usuários simulados;`}</li>
+        <li>${L`que mudar duas respostas em um passo mantém o mesmo par no top 3 em mais de 95% dos casos;`}</li>
+        <li>${L`que todos os 11 eixos influenciam o resultado.`}</li>
       </ul>
-      <p>Uma segunda auditoria prova que todos os ${PH.length} pensadores, e portanto todas as ${new Set(PH.map(p=>p.s)).size} correntes, podem ser o resultado: pelo perfil exato de cada um, por uma busca que parte de respostas aleatórias e por simulação com 60 mil pessoas. O mesmo vale para os ${E.BRAZIL.length} pensadores do ranking brasileiro.</p>
-      <h3>Sem viés de lado, de época ou de nível</h3>
+      <p>${L`Uma segunda auditoria prova que todos os ${PH.length} pensadores, e portanto todas as ${new Set(PH.map(p=>p.s)).size} correntes, podem ser o resultado: pelo perfil exato de cada um, por uma busca que parte de respostas aleatórias e por simulação com 60 mil pessoas. O mesmo vale para os ${E.BRAZIL.length} pensadores do ranking brasileiro.`}</p>
+      <h3>${L`Sem viés de lado, de época ou de nível`}</h3>
       <ul>
-        <li><b>Espelho:</b> inverter todas as respostas inverte exatamente todos os eixos. E se o catálogo inteiro também for espelhado, o ranking sai idêntico, com as mesmas distâncias. A fórmula não prefere nenhum polo.</li>
-        <li><b>Épocas:</b> cada época vence numa proporção próxima do seu peso no catálogo. Antigos, medievais, modernos, contemporâneos e orientais têm a mesma chance por pensador.</li>
-        <li><b>Polos:</b> em cada um dos 22 polos, pelo menos 65% das pessoas fortemente nele recebem um par do mesmo lado. Quando um polo ficou abaixo disso, o problema era falta de pensadores ali, e o catálogo ganhou nomes como Lucrécio, Yang Zhu, La Mettrie, Fourier, Wilde, Marcuse, Oakeshott, Kirk, Sidgwick, Godwin e Frege.</li>
-        <li><b>Níveis:</b> passar de 44 para 132 afirmações refina a posição sem empurrá-la para nenhum lado: o deslocamento médio é praticamente zero em todos os eixos.</li>
+        <li>${L`<b>Espelho:</b> inverter todas as respostas inverte exatamente todos os eixos. E se o catálogo inteiro também for espelhado, o ranking sai idêntico, com as mesmas distâncias. A fórmula não prefere nenhum polo.`}</li>
+        <li>${L`<b>Épocas:</b> cada época vence numa proporção próxima do seu peso no catálogo. Antigos, medievais, modernos, contemporâneos e orientais têm a mesma chance por pensador.`}</li>
+        <li>${L`<b>Polos:</b> em cada um dos 22 polos, pelo menos 65% das pessoas fortemente nele recebem um par do mesmo lado. Quando um polo ficou abaixo disso, o problema era falta de pensadores ali, e o catálogo ganhou nomes como Lucrécio, Yang Zhu, La Mettrie, Fourier, Wilde, Marcuse, Oakeshott, Kirk, Sidgwick, Godwin e Frege.`}</li>
+        <li>${L`<b>Níveis:</b> passar de 44 para 132 afirmações refina a posição sem empurrá-la para nenhum lado: o deslocamento médio é praticamente zero em todos os eixos.`}</li>
       </ul>
-      <h2>8. Verifique você mesmo</h2>
-      <p>Nada aqui depende de confiança. O verificador refaz qualquer resultado com uma segunda implementação, num arquivo separado (<code>verify.js</code>) que não compartilha código com o motor, e compara cada número do arquivo de auditoria.</p>
-      <p>As duas impressões digitais usam ${esc(E.HASH_RULE)}. A do código cobre o motor inteiro, com as quebras de linha normalizadas. A do catálogo cobre exatamente o objeto <code>fingerprintInput</code> incluído no catálogo para download, com eixos, afirmações, nomes, ids e posições.</p>
+      <h2>${L`8. Verifique você mesmo`}</h2>
+      <p>${L`Nada aqui depende de confiança. O verificador refaz qualquer resultado com uma segunda implementação, num arquivo separado (<code>verify.js</code>) que não compartilha código com o motor, e compara cada número do arquivo de auditoria.`}</p>
+      <p>${L`As duas impressões digitais usam ${esc(t(E.HASH_RULE))}. A do código cobre o motor inteiro, com as quebras de linha normalizadas. A do catálogo cobre exatamente o objeto <code>fingerprintInput</code> incluído no catálogo para download, com eixos, afirmações, nomes, ids e posições.`}</p>
       <div class="cta-row" style="margin:20px 0 8px">
-        <a class="btn accent sm" href="#/verificar">Abrir o verificador</a>
-        <button class="btn ghost sm" id="dlCatalog" type="button">Baixar catálogo (JSON)</button>
-        <a class="btn ghost sm" href="engine.js" target="_blank" rel="noopener">Ver código do motor</a>
-        <a class="btn ghost sm" href="verify.js" target="_blank" rel="noopener">Ver código do verificador</a>
-        <a class="btn ghost sm" href="https://github.com/tiagocardosobezerra/filosofometro" target="_blank" rel="noopener">Código completo e testes no GitHub</a>
+        <a class="btn accent sm" href="#/verificar">${L`Abrir o verificador`}</a>
+        <button class="btn ghost sm" id="dlCatalog" type="button">${L`Baixar catálogo (JSON)`}</button>
+        <a class="btn ghost sm" href="/engine.js" target="_blank" rel="noopener">${L`Ver código do motor`}</a>
+        <a class="btn ghost sm" href="/verify.js" target="_blank" rel="noopener">${L`Ver código do verificador`}</a>
+        <a class="btn ghost sm" href="https://github.com/tiagocardosobezerra/filosofometro" target="_blank" rel="noopener">${L`Código completo e testes no GitHub`}</a>
       </div>
-      <h2>9. Limites honestos</h2>
-      <p>As posições dos pensadores são uma leitura acadêmica resumida, revisada mas discutível: filósofos reais não cabem em 11 números. As frases de autores modernos são paráfrases curtas. Use o resultado como porta de entrada para ler, não como diagnóstico.</p>
-      <h2>10. Quem fez</h2>
-      <p>O Filosofômetro foi criado por <a href="https://github.com/tiagocardosobezerra" target="_blank" rel="noopener author">Tiago Cardoso Bezerra</a>. É gratuito, sem anúncios e sem cadastro, e suas respostas ficam só no seu navegador.</p>
+      <h2>${L`9. Limites honestos`}</h2>
+      <p>${L`As posições dos pensadores são uma leitura acadêmica resumida, revisada mas discutível: filósofos reais não cabem em 11 números. As frases de autores modernos são paráfrases curtas. Use o resultado como porta de entrada para ler, não como diagnóstico.`}</p>
+      <h2>${L`10. Quem fez`}</h2>
+      <p>${L`O Filosofômetro foi criado por <a href="https://github.com/tiagocardosobezerra" target="_blank" rel="noopener author">Tiago Cardoso Bezerra</a>. É gratuito, sem anúncios e sem cadastro, e suas respostas ficam só no seu navegador.`}</p>
     </div>
-  </section>`,"Método");
+  </section>`,L`Método`);
   document.getElementById("dlCatalog").addEventListener("click",()=>{
     const catalog={
       engine:{version:E.VERSION,code:E.codeFingerprint(),catalog:E.fingerprint(),params:E.PARAMS,scale:SCALE,
@@ -1326,22 +1328,24 @@ function codeFromText(t){
   const m=s.match(/(?:#\/(?:r|verificar)\/|#r=)?([^/#=\s]*)$/);
   return m?E.decode(m[1]):null;
 }
+// The verifier's details are short Portuguese phrases with numbers in them; the pack translates their words.
+const detailText=s=>{const w=(window.AgoraLang||{}).words;return w?Object.keys(w).sort((a,b)=>b.length-a.length).reduce((x,k)=>x.split(k).join(w[k]),String(s)):s};
 function renderVerify(code){
   const current={catalog:E.fingerprint(),code:E.codeFingerprint()};
   mount(`
   <section class="wrap section" style="padding-top:clamp(32px,6vh,64px)">
-    <span class="eyebrow">Verificação</span>
-    <h1 class="h2" style="font-size:clamp(48px,7vw,96px)">Confira qualquer <em class="it accent">resultado</em></h1>
-    <p class="lede" style="margin-top:16px;max-width:58ch">Cole um link de resultado ou envie o arquivo de auditoria. Esta página refaz a conta com uma segunda implementação, que não compartilha código com o motor, e compara cada número: respostas, eixos, normalização, distâncias, desempates e percentuais.</p>
+    <span class="eyebrow">${L`Verificação`}</span>
+    <h1 class="h2" style="font-size:clamp(48px,7vw,96px)">${L`Confira qualquer <em class="it accent">resultado</em>`}</h1>
+    <p class="lede" style="margin-top:16px;max-width:58ch">${L`Cole um link de resultado ou envie o arquivo de auditoria. Esta página refaz a conta com uma segunda implementação, que não compartilha código com o motor, e compara cada número: respostas, eixos, normalização, distâncias, desempates e percentuais.`}</p>
     <div class="verify-form">
-      <label class="sr" for="vIn">Link ou código do resultado</label>
-      <input class="search" id="vIn" placeholder="Cole o link do resultado ou o código de respostas" value="${code?esc(code):""}" autocomplete="off" spellcheck="false">
-      <button class="btn accent" id="vGo" type="button">Verificar</button>
-      <label class="btn ghost" for="vFile" style="cursor:pointer">Enviar auditoria (JSON)</label>
+      <label class="sr" for="vIn">${L`Link ou código do resultado`}</label>
+      <input class="search" id="vIn" placeholder="${L`Cole o link do resultado ou o código de respostas`}" value="${code?esc(code):""}" autocomplete="off" spellcheck="false">
+      <button class="btn accent" id="vGo" type="button">${L`Verificar`}</button>
+      <label class="btn ghost" for="vFile" style="cursor:pointer">${L`Enviar auditoria (JSON)`}</label>
       <input type="file" id="vFile" accept="application/json,.json" class="sr">
     </div>
     <div id="vOut" aria-live="polite"></div>
-  </section>`,"Verificar");
+  </section>`,L`Verificar`);
   const out=document.getElementById("vOut");
   const fail=msg=>{out.innerHTML=`<p class="note">${icon.info}<span>${esc(msg)}</span></p>`};
   // A link is checked by exporting the engine's audit and comparing it with the independent recomputation.
@@ -1350,36 +1354,36 @@ function renderVerify(code){
     const checks=AgoraVerify.checkAudit(AgoraData,audit,current),all=checks.every(c=>c.ok);
     const answers=E.decode(audit.answers&&audit.answers.code);
     const r=answers&&E.evaluate(answers);
-    out.innerHTML=`<div class="verdict ${all?"ok":"bad"}"><span class="v-ic">${all?"✓":"!"}</span><span><b>${all?"Tudo confere.":"Há divergências."}</b> ${all?`O motor e o verificador independente chegam aos mesmos números${r?(r.directionless?`: perfil sem direção, mais perto de ${esc(r.top.p.n)}.`:`: ${r.top.pct}% ${esc(r.top.p.n)}.`):"."}`:"Veja os itens marcados abaixo."}</span></div>
-      <p class="muted" style="font-size:14px;margin:0 0 12px">Fonte verificada: ${esc(source)}</p>
-      <ul class="checks">${checks.map(c=>`<li class="${c.ok?"ok":"bad"}"><span class="v-ic" aria-hidden="true">${c.ok?"✓":"✗"}</span><span><b>${esc(c.label)}</b><span class="muted">${esc(c.detail)}</span></span><span class="sr">${c.ok?"confere":"não confere"}</span></li>`).join("")}</ul>
-      <div class="audit-meta" style="margin-top:16px"><span>Motor <code>v${E.VERSION}</code></span><span>Código do motor <code>${current.code}</code></span><span>Catálogo <code>${current.catalog}</code></span></div>
-      ${answers?`<div class="cta-row" style="margin-top:20px"><a class="btn ghost sm" href="#/r/${E.encode(answers)}">Abrir este resultado</a></div>`:""}`;
+    out.innerHTML=`<div class="verdict ${all?"ok":"bad"}"><span class="v-ic">${all?"✓":"!"}</span><span><b>${all?L`Tudo confere.`:L`Há divergências.`}</b> ${all?(r?(r.directionless?L`O motor e o verificador independente chegam aos mesmos números: perfil sem direção, mais perto de ${esc(r.top.p.n)}.`:L`O motor e o verificador independente chegam aos mesmos números: ${r.top.pct}% ${esc(r.top.p.n)}.`):L`O motor e o verificador independente chegam aos mesmos números.`):L`Veja os itens marcados abaixo.`}</span></div>
+      <p class="muted" style="font-size:14px;margin:0 0 12px">${L`Fonte verificada:`} ${esc(source)}</p>
+      <ul class="checks">${checks.map(c=>`<li class="${c.ok?"ok":"bad"}"><span class="v-ic" aria-hidden="true">${c.ok?"✓":"✗"}</span><span><b>${esc(t(c.label))}</b><span class="muted">${esc(detailText(c.detail))}</span></span><span class="sr">${c.ok?L`confere`:L`não confere`}</span></li>`).join("")}</ul>
+      <div class="audit-meta" style="margin-top:16px"><span>${L`Motor`} <code>v${E.VERSION}</code></span><span>${L`Código do motor`} <code>${current.code}</code></span><span>${L`Catálogo`} <code>${current.catalog}</code></span></div>
+      ${answers?`<div class="cta-row" style="margin-top:20px"><a class="btn ghost sm" href="#/r/${E.encode(answers)}">${L`Abrir este resultado`}</a></div>`:""}`;
   };
   const fromLink=t=>{
     const answers=codeFromText(t);
-    if(!answers){fail("Não reconheci esse resultado. O código precisa ter 44, 88 ou 132 dígitos de 0 a 4, como nos links do Filosofômetro.");return}
-    show(E.auditJSON(E.evaluate(answers)),"link de resultado, recalculado pelo motor agora");
+    if(!answers){fail(L`Não reconheci esse resultado. O código precisa ter 44, 88 ou 132 dígitos de 0 a 4, como nos links do Filosofômetro.`);return}
+    show(E.auditJSON(E.evaluate(answers)),L`link de resultado, recalculado pelo motor agora`);
   };
   document.getElementById("vGo").addEventListener("click",()=>fromLink(document.getElementById("vIn").value));
   document.getElementById("vIn").addEventListener("keydown",e=>{if(e.key==="Enter")fromLink(e.target.value)});
   document.getElementById("vFile").addEventListener("change",async e=>{
     const f=e.target.files[0];if(!f)return;
     let j=null;try{j=JSON.parse(await f.text())}catch(err){}
-    if(!j||j.format!=="filosofometro-audit/2"){fail("Esse arquivo não é uma auditoria do Filosofômetro nesta versão (formato filosofometro-audit/2).");return}
-    show(j,`arquivo ${f.name}`);
+    if(!j||j.format!=="filosofometro-audit/2"){fail(L`Esse arquivo não é uma auditoria do Filosofômetro nesta versão (formato filosofometro-audit/2).`);return}
+    show(j,L`arquivo ${f.name}`);
   });
   if(code)fromLink(code);
 }
 
-function renderNotFound(msg="Esta página não existe."){
-  mount(`<section class="wrap section"><span class="eyebrow">Ops</span><h1 class="h2">${esc(msg)}</h1><div class="cta-row" style="margin-top:32px"><a class="btn accent" href="#/">Ir para o início ${icon.arrow}</a></div></section>`,"Não encontrado");
+function renderNotFound(msg=L`Esta página não existe.`){
+  mount(`<section class="wrap section"><span class="eyebrow">${L`Ops`}</span><h1 class="h2">${esc(msg)}</h1><div class="cta-row" style="margin-top:32px"><a class="btn accent" href="#/">${L`Ir para o início`} ${icon.arrow}</a></div></section>`,L`Não encontrado`);
 }
 
 /* ---------- Support ---------- */
 // Pix donations: QR code and "copia e cola" built from SUPPORT in support.js. The QR library loads only here.
 function renderSupport(){
-  if(!HAS_PIX)return renderNotFound("A página de apoio ainda não está ativa.");
+  if(!HAS_PIX)return renderNotFound(L`A página de apoio ainda não está ativa.`);
   const code=SUP.pixPayload();
   mount(`
   <section class="wrap section support" style="padding-top:clamp(32px,6vh,64px)">
@@ -1401,7 +1405,7 @@ function renderSupport(){
     </div>
   </section>`,"Apoie");
   document.getElementById("pixCopy").onclick=async()=>{
-    try{await navigator.clipboard.writeText(code);toast("Código Pix copiado. Cole no app do banco.",3200);track("/evento/pix-copiado")}catch(e){prompt("Copie o código Pix:",code)}
+    try{await navigator.clipboard.writeText(code);toast(L`Código Pix copiado. Cole no app do banco.`,3200);track("/evento/pix-copiado")}catch(e){prompt("Copie o código Pix:",code)}
   };
   const draw=()=>{
     const host=document.getElementById("pixQr");if(!host||!window.qrcode)return;
@@ -1417,8 +1421,8 @@ function renderSupport(){
 /* ---------- Share ---------- */
 function toast(t,ms=2200){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),ms)}
 async function copyLink(){
-  try{await navigator.clipboard.writeText(location.href);toast("Link copiado")}
-  catch(e){prompt("Copie o link:",location.href)}
+  try{await navigator.clipboard.writeText(location.href);toast(L`Link copiado`)}
+  catch(e){prompt(L`Copie o link:`,location.href)}
 }
 async function shareCard(r,usePic=true){
   if(usePic)track("/evento/story");
@@ -1435,7 +1439,7 @@ async function shareCard(r,usePic=true){
   x.fillStyle=g;x.fillRect(0,0,W,H);
   x.textAlign="center";
   x.fillStyle=ink;x.font="400 50px 'Instrument Serif'";x.fillText("Filosofômetro",W/2,108);
-  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced("MEU PAR FILOSÓFICO"),W/2,160);
+  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced(L`MEU PAR FILOSÓFICO`),W/2,160);
   // Portrait arch with the sigil badge over its corner.
   // A name that wraps to two lines takes the room from the portrait, so the axis rulers still fit.
   x.font="400 98px 'Instrument Serif'";const nameLines=lineCount(x,p.n,960);
@@ -1473,10 +1477,10 @@ async function shareCard(r,usePic=true){
   const strong=AXES.map((a,i)=>({a,i,s:Math.abs(r.scores[i])})).sort((m,n)=>n.s-m.s).slice(0,3);
   const ry=y+64;
   x.font="500 24px 'Inter Tight'";
-  const youW=x.measureText("eu").width,parName=shortName(p.n),parW=x.measureText(parName).width;
+  const me0=L`eu`,youW=x.measureText(me0).width,parName=shortName(p.n),parW=x.measureText(parName).width;
   const legW=22+10+youW+40+22+10+parW;let lx=W/2-legW/2;
   x.beginPath();x.arc(lx+11,ry-8,10,0,Math.PI*2);x.fillStyle=accent;x.fill();
-  x.textAlign="left";x.fillStyle=ink;x.fillText("eu",lx+32,ry);lx+=32+youW+40;
+  x.textAlign="left";x.fillStyle=ink;x.fillText(me0,lx+32,ry);lx+=32+youW+40;
   x.beginPath();x.arc(lx+11,ry-8,9,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=3;x.stroke();
   x.fillStyle=ink;x.fillText(parName,lx+32,ry);
   const bx0=380,bx1=700,pos=v=>bx0+(Math.max(-1,Math.min(1,v))+1)/2*(bx1-bx0);
@@ -1492,7 +1496,7 @@ async function shareCard(r,usePic=true){
   });
   x.textAlign="center";
   // Also think like: three runner-ups with portraits.
-  x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign="center";x.fillText(spaced("TAMBÉM PENSO COMO"),W/2,1458);
+  x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign="center";x.fillText(spaced(L`TAMBÉM PENSO COMO`),W/2,1458);
   near.forEach((n,i)=>{
     const nx=W/2+(i-1)*300,ny=1536;
     circlePic(x,nearPics[i],n.p,nx,ny,62,line);
@@ -1501,25 +1505,25 @@ async function shareCard(r,usePic=true){
   });
   // Brazilian match and opposite.
   x.fillStyle=muted;x.font="500 28px 'Inter Tight'";
-  const lineBr=[br?`No Brasil: ${br.n}`:"",opp?`Oposto: ${opp.n}`:""].filter(Boolean).join("   ·   ");
+  const lineBr=[br?L`No Brasil: ${br.n}`:"",opp?L`Oposto: ${opp.n}`:""].filter(Boolean).join("   ·   ");
   x.fillText(lineBr,W/2,1720);
   // Sign-off: a hairline, the question in the display serif, then the address with the brand dot in accent.
   x.fillStyle=line;x.fillRect(W/2-180,1756,360,2);
-  x.fillStyle=ink;x.font="italic 400 58px 'Instrument Serif'";x.fillText("Qual filósofo pensa como você?",W/2,1824);
+  x.fillStyle=ink;x.font="italic 400 58px 'Instrument Serif'";x.fillText(L`Qual filósofo pensa como você?`,W/2,1824);
   x.font="600 32px 'Inter Tight'";
-  const host="filosofometro",tld=".com.br",hw=x.measureText(host).width,tw=x.measureText(tld).width;
+  const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
   x.textAlign="left";x.fillStyle=muted;x.fillText(host,W/2-(hw+tw)/2,1878);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1878);x.textAlign="center";
   // A portrait served without CORS taints the canvas; redraw without images rather than fail.
   let blob;
   try{blob=await new Promise((res,rej)=>{try{c.toBlob(b=>b?res(b):rej(new Error("empty")),"image/png")}catch(e){rej(e)}})}
-  catch(e){if(usePic)return shareCard(r,false);toast("Não foi possível gerar a imagem");return}
+  catch(e){if(usePic)return shareCard(r,false);toast(L`Não foi possível gerar a imagem`);return}
   const file=new File([blob],`filosofometro-${p.id}.png`,{type:"image/png"});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(e){if(e.name==="AbortError")return}
   }
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`filosofometro-${p.id}.png`;a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-  toast("Imagem salva. Poste no story e cole o link do convite!");
+  toast(L`Imagem salva. Poste no story e cole o link do convite!`);
 }
 // Canvas helpers for the story card.
 const spaced=s=>s.split("").join(" ");
@@ -1554,6 +1558,31 @@ document.getElementById("themeBtn").addEventListener("click",()=>{
   root.dataset.theme=dark?"light":"dark";
   try{localStorage.setItem("agora.theme",root.dataset.theme)}catch(e){}
 });
+// Language menu: each language is its own page (/, /en/, /es/); the current route travels along.
+{
+  const btn=document.getElementById("langBtn"),menu=document.getElementById("langMenu");
+  if(btn&&menu){
+    btn.textContent=I.lang.toUpperCase();
+    const set=open=>{menu.hidden=!open;btn.setAttribute("aria-expanded",open)};
+    btn.addEventListener("click",e=>{e.stopPropagation();set(menu.hidden)});
+    document.addEventListener("click",e=>{if(!e.target.closest("#langBox"))set(false)});
+    menu.querySelectorAll("a").forEach(a=>{
+      if(a.dataset.lang===I.lang)a.setAttribute("aria-current","true");
+      a.addEventListener("click",e=>{e.preventDefault();store.set("lang",a.dataset.lang);track(`/evento/idioma-${a.dataset.lang}`);location.href=a.getAttribute("href")+location.hash});
+    });
+  }
+  // A first visit from a browser in another language gets a one-time offer, never an automatic redirect
+  // (search engines index each language page as it is).
+  const want=(navigator.languages||[navigator.language||""]).map(l=>l.slice(0,2).toLowerCase()).find(l=>["pt","en","es"].includes(l));
+  if(want&&want!==I.lang&&!store.get("lang")){
+    const names={pt:"Ver em português",en:"View in English",es:"Ver en español"},href={pt:"/",en:"/en/",es:"/es/"}[want];
+    const el=document.createElement("div");el.className="lang-offer";el.setAttribute("lang",want);
+    el.innerHTML=`<a href="${href}">${names[want]}</a><button type="button" aria-label="${L`Fechar`}">×</button>`;
+    el.querySelector("a").addEventListener("click",e=>{e.preventDefault();store.set("lang",want);location.href=href+location.hash});
+    el.querySelector("button").addEventListener("click",()=>{store.set("lang",I.lang);el.remove()});
+    document.body.appendChild(el);
+  }
+}
 const bar=document.getElementById("bar");
 addEventListener("scroll",()=>bar.classList.toggle("scrolled",scrollY>8),{passive:true});
 addEventListener("mousedown",()=>document.body.classList.remove("kbd-mode"));
@@ -1572,7 +1601,7 @@ function wireTimeline(){
     if(armed===d)return;
     e.preventDefault();armed=d;
     const p=byId[d.getAttribute("href").split("/").pop()];if(!p)return;
-    tip.innerHTML=`<button class="tip-x" type="button" aria-label="Fechar">×</button><b class="tip-t">${esc(p.n)}</b><span class="tip-poles">${esc(p.s)} · ${esc(p.era)}</span><span>${esc(lifeText(p))}${p.place?` · ${esc(p.place)}`:""}</span><a class="btn accent sm tip-go" href="#/p/${p.id}">Conhecer ${esc(p.n)} ${icon.arrow}</a>`;
+    tip.innerHTML=`<button class="tip-x" type="button" aria-label="${L`Fechar`}">×</button><b class="tip-t">${esc(p.n)}</b><span class="tip-poles">${esc(p.s)} · ${esc(p.era)}</span><span>${esc(lifeText(p))}${p.place?` · ${esc(p.place)}`:""}</span><a class="btn accent sm tip-go" href="#/p/${p.id}">${L`Conhecer ${esc(p.n)}`} ${icon.arrow}</a>`;
     tip.style.left=tip.style.top="";tip.classList.add("show","sheet");
   }));
   tip.ontransitionend=()=>{if(!tip.classList.contains("show"))armed=null};
@@ -1592,13 +1621,13 @@ if(PREVIEW&&"serviceWorker" in navigator)addEventListener("load",()=>navigator.s
   const ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
   let deferred=null;
   addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;if(!standalone)btn.classList.remove("hidden")});
-  addEventListener("appinstalled",()=>{btn.classList.add("hidden");deferred=null;toast("App instalado");track("/evento/app-instalado")});
+  addEventListener("appinstalled",()=>{btn.classList.add("hidden");deferred=null;toast(L`App instalado`);track("/evento/app-instalado")});
   // Clicks on any book link (all of them carry rel="sponsored").
   document.addEventListener("click",e=>{if(e.target.closest('a[rel~="sponsored"]'))track("/evento/livro")});
   if(ios&&!standalone)btn.classList.remove("hidden");
   btn.addEventListener("click",async()=>{
     if(deferred){deferred.prompt();await deferred.userChoice.catch(()=>{});deferred=null;btn.classList.add("hidden");return}
-    if(ios)toast("No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início",6000);
+    if(ios)toast(L`No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início`,6000);
   });
 }
 })();
