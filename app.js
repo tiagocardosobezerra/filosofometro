@@ -218,7 +218,7 @@ function renderHome(){
     <div>
       <span class="eyebrow">${L`Teste filosófico`}</span>
       <h1 class="display"><span class="line"><span>${L`Qual filósofo`}</span></span><span class="line"><span>${L`pensa como`}</span></span><span class="line"><span><em class="it accent">${L`você?`}</em></span></span></h1>
-      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder, em três níveis de profundidade. Descubra seu par entre ${PH.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.`}</p>
+      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder, em três níveis de profundidade. Descubra seu par entre ${PH.length+BR.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.`}</p>
       <div class="cta-row">
         <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?L`Continuar de onde parei · ${done}/${saved.answers.length}`:L`Começar o teste`} ${icon.arrow}</a>
         ${resume?`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Recomeçar`}</a>`:`<a class="btn ghost" href="#/metodo">${L`Como funciona`}</a>`}
@@ -249,7 +249,7 @@ function renderHome(){
     </div>
     <div class="steps">
       <div class="step"><span class="num">i.</span><h3>${L`Você responde`}</h3><p>${L`Escolha o nível e concorde ou discorde das afirmações. Elas vêm misturadas, e metade de cada eixo puxa para cada lado.`}</p></div>
-      <div class="step"><span class="num">ii.</span><h3>${L`Mapeamos seu formato`}</h3><p>${L`Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de ${PH.length} pensadores.`}</p></div>
+      <div class="step"><span class="num">ii.</span><h3>${L`Mapeamos seu formato`}</h3><p>${L`Suas respostas viram uma posição em 11 eixos. Comparamos o formato desse perfil com o de ${PH.length+BR.length} pensadores.`}</p></div>
       <div class="step"><span class="num">iii.</span><h3>${L`Você audita`}</h3><p>${L`Veja passo a passo por que deu quem deu, compare com qualquer pensador e baixe os dados.`}</p></div>
     </div>
   </section>
@@ -424,7 +424,7 @@ function citation(ex){
 }
 // What a simulated retest shows for each level (tests/levels in the method page): accuracy grows with statements.
 const LEVEL_INFO={
-  1:{tag:L`Para começar`,precision:L`Boa`,retest:"55%",desc:L`O suficiente para conhecer seu par e se divertir.`},
+  1:{tag:L`Para começar`,precision:L`Boa`,retest:"55%",desc:L`Seu par e seus eixos mais fortes em poucos minutos. Dá para aprofundar depois.`},
   2:{tag:L`Recomendado`,precision:L`Alta`,retest:"83%",desc:L`Resultado bem mais estável. Inclui as 44 do Rápido.`},
   3:{tag:L`Para quem quer ir fundo`,precision:L`Muito alta`,retest:"94%",desc:L`O retrato mais fiel. Inclui as 88 do Completo.`},
 };
@@ -537,7 +537,7 @@ function renderQuiz(arg){
     document.getElementById("exA").innerHTML=citation(exAgree);
     document.getElementById("exD").innerHTML=citation(exDisagree);
     document.getElementById("qCount").textContent=`${pad(pos+1)} / ${total}`;
-    document.getElementById("qfCount").textContent=L`${answers.filter(a=>a!==null).length} de ${total}`;
+    document.getElementById("qfCount").textContent=L`${pos+1} de ${total}`;
     document.getElementById("qLive").textContent=L`Afirmação ${pos+1} de ${total}: ${text}`;
     document.getElementById("axisTag").innerHTML=L`Eixo <b>${pad(ax+1)}</b> · ${esc(AXES[ax].name)}`;
     ticks.forEach((t,i)=>{t.className=i===pos?"now":answers[order[i]]!==null?"done":""});
@@ -547,9 +547,9 @@ function renderQuiz(arg){
     document.getElementById("toResult").classList.toggle("hidden",answers.some(a=>a===null));
   }
   function go(next){
-    if(reduceMotion){pos=next;paint();save();return}
+    if(reduceMotion){pos=next;paint();save();if(innerWidth<=720)scrollTo({top:0,behavior:"instant"});return}
     anim.classList.add("leave");
-    later(()=>{pos=next;paint();save();anim.classList.remove("leave");anim.classList.add("enter");anim.offsetWidth;anim.classList.remove("enter");busy=false},260);
+    later(()=>{pos=next;paint();save();anim.classList.remove("leave");anim.classList.add("enter");anim.offsetWidth;anim.classList.remove("enter");busy=false;if(innerWidth<=720)scrollTo({top:0,behavior:"instant"})},170);
   }
   function pick(code){
     if(busy)return;
@@ -569,7 +569,7 @@ function renderQuiz(arg){
       if(firstOpen===-1&&(next===-1||pos===order.length-1)){store.del("progress");finishQuiz(answers);return}
       go(next===-1?firstOpen:next);
       if(reduceMotion)busy=false;
-    },reduceMotion?60:220);
+    },reduceMotion?60:130);
   }
   btns.forEach(b=>{
     b.addEventListener("click",()=>pick(+b.dataset.code));
@@ -623,7 +623,7 @@ function renderResult(code,mode){
   const T=visitor
     ?{kicker:flat?L`Mais perto desta pessoa`:L`Par filosófico desta pessoa`,axes:L`Os 11 eixos desta pessoa`,also:L`Também pensam assim`,br:L`No Brasil, quem pensa assim`,opp:L`O oposto`,you:L`esta pessoa`}
     :{kicker:flat?L`Mais perto de você`:L`Seu par filosófico`,axes:L`Seus 11 eixos`,also:flat?L`Também perto de você`:L`Também pensam como você`,br:L`No Brasil, quem pensa como você`,opp:L`Seu oposto`,you:L`você`};
-  const flatNote=L`Suas respostas se equilibraram e seu perfil ficou sem direção. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador cujas posições ficam mais perto das suas.`;
+  const flatNote=L`Suas respostas ficaram no meio, sem puxar para um lado. Sem direção não dá para medir compatibilidade, então não mostramos percentuais nem oposto. Este é o pensador mais perto de você. Aprofundar o teste mostra para onde você pende.`;
   const strongest=AXES.map((a,i)=>({a,i,x:userV[i]})).filter(t=>Math.abs(t.x)>=.25).sort((s,t)=>Math.abs(t.x)-Math.abs(s.x)).slice(0,3);
   mount(`
   ${visitor?`<div class="visitor-bar"><div class="wrap"><span>${L`Este é o resultado de outra pessoa.`}</span><a class="btn accent sm" href="#/vs/${code}" >${L`Fazer o teste e comparar`} ${icon.arrow}</a></div></div>`:""}
@@ -638,7 +638,8 @@ function renderResult(code,mode){
       ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
       <div class="res-actions">
         ${visitor?`<a class="btn accent" href="#/vs/${code}">${L`Fazer o teste e comparar`} ${icon.arrow}</a>`:`
-        ${flat?"":`<button class="btn accent" id="shareBtn" type="button">${icon.share} ${L`Compartilhar no story`}</button>`}
+        ${flat&&r.level&&nextLevel(r.level.n)?`<a class="btn accent" href="#/teste/aprofundar">${L`Aprofundar para desempatar`} ${icon.arrow}</a>`:""}
+        <button class="btn ${flat&&r.level&&nextLevel(r.level.n)?"ghost":"accent"}" id="shareBtn" type="button">${icon.share} ${L`Compartilhar no story`}</button>
         <button class="btn ghost" id="challengeBtn" type="button">${icon.link} ${L`Desafiar um amigo`}</button>
         <a class="btn ghost" href="#/teste" id="redoBtn">${L`Refazer`}</a>`}
       </div>
@@ -693,7 +694,7 @@ function renderResult(code,mode){
         ${visitor?`<a class="btn accent" href="#/vs/${code}">${L`Fazer o teste e comparar`} ${icon.arrow}</a>`:`
         <button class="btn accent" id="challengeBtn2" type="button">${icon.link} ${L`Desafiar um amigo`}</button>
         ${r.level&&nextLevel(r.level.n)?`<a class="btn ghost" href="#/teste/aprofundar">${L`Aprofundar: nível ${esc(t(nextLevel(r.level.n).name))}`}</a>`:""}
-        ${flat?"":`<button class="btn ghost" id="shareBtn2" type="button">${icon.share} ${L`Compartilhar no story`}</button>`}`}
+        <button class="btn ghost" id="shareBtn2" type="button">${icon.share} ${L`Compartilhar no story`}</button>`}
         <a class="btn ghost" href="#/pensadores">${L`Ver os ${PH.length+BR.length} pensadores`}</a>
       </div>
     </div>
@@ -711,7 +712,9 @@ function renderResult(code,mode){
     onLeave(()=>{live=false;clearTimeout(done)});
   }
   if(!visitor){
-    ["shareBtn","shareBtn2"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>shareCard(r))});
+    ["shareBtn","shareBtn2"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>shareFlow(r))});
+    warmShare(r);
+    stickyShare();
     ["challengeBtn","challengeBtn2"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>challenge(r))});
     document.getElementById("redoBtn").addEventListener("click",()=>store.del("progress"));
     wireInvite(r);
@@ -801,7 +804,8 @@ function renderInvite(code,rawName){
       <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${L`${esc(who)} te desafiou`}</span></span></h1>
       <p class="lede">${L`${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?L`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Escolha um nível (de 6 a 18 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.`}</p>
       <div class="cta-row">
-        <a class="btn accent" href="#/teste" data-fresh="1">${hasMine?L`Fazer o teste de novo e comparar`:L`Aceitar o desafio`} ${icon.arrow}</a>
+        <a class="btn accent" href="#/teste/1" data-fresh="1">${hasMine?L`Fazer o teste de novo e comparar`:L`Aceitar o desafio`} ${icon.arrow}</a>
+        <a class="btn ghost" href="#/teste" data-fresh="1">${L`Escolher o nível`}</a>
         ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">${L`Comparar com meu resultado`}</a>`:""}
       </div>
       <p class="invite-peek"><a href="#/r/${code}/ver">${L`Ver o resultado completo de ${esc(named||L`quem te convidou`)}`}</a></p>
@@ -1430,20 +1434,21 @@ async function shareCard(r,usePic=true){
   const W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;
   const x=c.getContext("2d"),p=r.top.p;
   const bg="#0F0E0C",ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
-  const near=r.ranking.slice(1,4),br=r.brazil[0]?r.brazil[0].p:null,opp=r.opposite?r.opposite.p:null;
+  const near=r.ranking.slice(1,4);
   const pics=usePic?await Promise.all([p,...near.map(n=>n.p)].map(t=>t.img?loadImage(t.img):Promise.resolve(null))):[];
   const [pic,...nearPics]=pics;
   // Background: deep ink with a warm glow behind the portrait.
   x.fillStyle=bg;x.fillRect(0,0,W,H);
-  const g=x.createRadialGradient(W/2,560,60,W/2,560,820);g.addColorStop(0,"rgba(240,106,67,.30)");g.addColorStop(1,"rgba(240,106,67,0)");
+  const g=x.createRadialGradient(W/2,640,60,W/2,640,860);g.addColorStop(0,"rgba(240,106,67,.30)");g.addColorStop(1,"rgba(240,106,67,0)");
   x.fillStyle=g;x.fillRect(0,0,W,H);
   x.textAlign="center";
-  x.fillStyle=ink;x.font="400 50px 'Instrument Serif'";x.fillText("Filosofômetro",W/2,108);
-  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced(L`MEU PAR FILOSÓFICO`),W/2,160);
+  const flat=r.directionless;
+  // Instagram covers about the top and bottom 250px of a story, so everything that matters stays between 270 and 1650.
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(flat?L`MEU PAR MAIS PRÓXIMO`:L`MEU PAR FILOSÓFICO`),W/2,308);
   // Portrait arch with the sigil badge over its corner.
   // A name that wraps to two lines takes the room from the portrait, so the axis rulers still fit.
-  x.font="400 98px 'Instrument Serif'";const nameLines=lineCount(x,p.n,960);
-  const ax=310,ay=196,aw=460,ah=nameLines>1?404:500,rad=aw/2;
+  x.font="400 86px 'Instrument Serif'";const nameLines=lineCount(x,p.n,960);
+  const aw=380,ax=(W-aw)/2,ay=336,ah=nameLines>1?300:350,rad=aw/2;
   const arch=()=>{x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-26);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-26,ay+ah);x.lineTo(ax+26,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-26);x.closePath()};
   x.save();arch();x.clip();
   if(pic){
@@ -1451,68 +1456,62 @@ async function shareCard(r,usePic=true){
     x.filter="grayscale(1) sepia(.22) contrast(1.08) brightness(.97)";x.drawImage(pic,ax+(aw-dw)/2,ay+(ah-dh)*.2,dw,dh);x.filter="none";
     const tint=x.createLinearGradient(0,ay+ah*.45,0,ay+ah);tint.addColorStop(0,"rgba(240,106,67,0)");tint.addColorStop(1,"rgba(240,106,67,.45)");
     x.globalCompositeOperation="multiply";x.fillStyle=tint;x.fillRect(ax,ay,aw,ah);x.globalCompositeOperation="source-over";
-  }else{x.fillStyle="#1D1A16";x.fillRect(ax,ay,aw,ah);x.fillStyle=muted;x.font="400 160px 'Instrument Serif'";x.fillText(initials(p.n),W/2,ay+ah/2+50)}
+  }else{x.fillStyle="#1D1A16";x.fillRect(ax,ay,aw,ah);x.fillStyle=muted;x.font="400 140px 'Instrument Serif'";x.fillText(initials(p.n),W/2,ay+ah/2+46)}
   x.restore();
   x.strokeStyle=line;x.lineWidth=2;arch();x.stroke();
   // Badge sits on the arch's lower right, clear of the percentage below it.
-  const cx=ax+aw+10,cy=ay+ah-165,S=1.4;
+  const cx=ax+aw+6,cy=ay+ah-120,S=1.15;
   x.beginPath();x.arc(cx,cy,R*S+22,0,Math.PI*2);x.fillStyle="rgba(21,19,15,.92)";x.fill();x.strokeStyle=line;x.stroke();
   [.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
   const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=3.5;x.stroke();x.setLineDash([])};
   poly(p.v,null,"rgba(241,234,220,.8)",[8,9]);
   poly(r.scores,"rgba(240,106,67,.22)",accent);
-  // Headline: percent, name, line and years.
-  let y=ay+ah+150;
-  x.fillStyle=accent;x.font="400 176px 'Instrument Serif'";x.fillText(r.top.pct+"%",W/2,y);
-  x.fillStyle=ink;x.font="400 98px 'Instrument Serif'";y=wrapText(x,p.n,W/2,y+106,960,96);
-  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(`${p.s} · ${lifeText(p)}`.toUpperCase(),W/2,y+60);
-  y+=60;
-  // Quote, only if it still leaves room for the axis rulers below.
-  const RULERS=302,RULERS_END=1416;
-  x.font="italic 400 42px 'Instrument Serif'";
-  const quoteLines=lineCount(x,"“"+p.q+"”",880);
-  if(y+74+(quoteLines-1)*50+RULERS<RULERS_END){x.fillStyle=ink;y=wrapText(x,"“"+p.q+"”",W/2,y+74,880,50);}
+  // Headline: percent (or a word when the profile has no direction), name, line and years.
+  let y=ay+ah+122;
+  x.fillStyle=accent;
+  if(flat){x.font="italic 400 104px 'Instrument Serif'";x.fillText(L`Equilíbrio`,W/2,y-6)}
+  else{x.font="400 140px 'Instrument Serif'";x.fillText(r.top.pct+"%",W/2,y)}
+  x.fillStyle=ink;x.font="400 86px 'Instrument Serif'";y=wrapText(x,p.n,W/2,y+88,960,86);
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(`${p.s} · ${lifeText(p)}`.toUpperCase(),W/2,y+54);
+  y+=54;
   // The three axes where the person leans hardest, each as a labeled ruler: axis name, both poles,
   // the person's mark (filled, accent) and the match's mark (ring), so the card explains itself.
   const strong=AXES.map((a,i)=>({a,i,s:Math.abs(r.scores[i])})).sort((m,n)=>n.s-m.s).slice(0,3);
-  const ry=y+64;
-  x.font="500 24px 'Inter Tight'";
+  const ry=y+66;
+  x.font="500 28px 'Inter Tight'";
   const me0=L`eu`,youW=x.measureText(me0).width,parName=shortName(p.n),parW=x.measureText(parName).width;
   const legW=22+10+youW+40+22+10+parW;let lx=W/2-legW/2;
-  x.beginPath();x.arc(lx+11,ry-8,10,0,Math.PI*2);x.fillStyle=accent;x.fill();
+  x.beginPath();x.arc(lx+11,ry-9,10,0,Math.PI*2);x.fillStyle=accent;x.fill();
   x.textAlign="left";x.fillStyle=ink;x.fillText(me0,lx+32,ry);lx+=32+youW+40;
-  x.beginPath();x.arc(lx+11,ry-8,9,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=3;x.stroke();
+  x.beginPath();x.arc(lx+11,ry-9,9,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=3;x.stroke();
   x.fillStyle=ink;x.fillText(parName,lx+32,ry);
   const bx0=380,bx1=700,pos=v=>bx0+(Math.max(-1,Math.min(1,v))+1)/2*(bx1-bx0);
   strong.forEach(({a,i},k)=>{
-    const by=ry+70+k*76,me=r.scores[i],par=p.v[i];
-    x.textAlign="center";x.fillStyle=muted;x.font="600 19px 'Inter Tight'";x.fillText(spaced(a.name.toUpperCase()),W/2,by-26);
-    x.font="600 30px 'Inter Tight'";
-    x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-26,by+10);
-    x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+26,by+10);
+    const by=ry+84+k*74,me=r.scores[i],par=p.v[i];
+    x.textAlign="center";x.fillStyle=muted;x.font="600 22px 'Inter Tight'";x.fillText(spaced(a.name.toUpperCase()),W/2,by-26);
+    x.font="600 32px 'Inter Tight'";
+    x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-26,by+11);
+    x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+26,by+11);
     x.fillStyle=line;x.fillRect(bx0,by-1,bx1-bx0,3);x.fillRect(W/2-1,by-10,3,21);
     x.beginPath();x.arc(pos(par),by,13,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=3;x.stroke();
     x.beginPath();x.arc(pos(me),by,12,0,Math.PI*2);x.fillStyle=accent;x.fill();
   });
   x.textAlign="center";
   // Also think like: three runner-ups with portraits.
-  x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign="center";x.fillText(spaced(L`TAMBÉM PENSO COMO`),W/2,1458);
+  const nl=ry+84+2*74+70;
+  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced(L`TAMBÉM PENSO COMO`),W/2,nl);
   near.forEach((n,i)=>{
-    const nx=W/2+(i-1)*300,ny=1536;
-    circlePic(x,nearPics[i],n.p,nx,ny,62,line);
-    x.fillStyle=ink;x.font="400 38px 'Instrument Serif'";x.fillText(shortName(n.p.n),nx,ny+108);
-    x.fillStyle=accent;x.font="600 26px 'Inter Tight'";x.fillText(`${n.pct}%`,nx,ny+144);
+    const nx=W/2+(i-1)*300,ny=nl+60;
+    circlePic(x,nearPics[i],n.p,nx,ny,42,line);
+    x.fillStyle=ink;x.font="400 38px 'Instrument Serif'";x.fillText(shortName(n.p.n),nx,ny+80);
+    if(n.pct!==null){x.fillStyle=accent;x.font="600 30px 'Inter Tight'";x.fillText(`${n.pct}%`,nx,ny+112)}
   });
-  // Brazilian match and opposite.
-  x.fillStyle=muted;x.font="500 28px 'Inter Tight'";
-  const lineBr=[br?L`No Brasil: ${br.n}`:"",opp?L`Oposto: ${opp.n}`:""].filter(Boolean).join("   ·   ");
-  x.fillText(lineBr,W/2,1720);
-  // Sign-off: a hairline, the question in the display serif, then the address with the brand dot in accent.
-  x.fillStyle=line;x.fillRect(W/2-180,1756,360,2);
-  x.fillStyle=ink;x.font="italic 400 58px 'Instrument Serif'";x.fillText(L`Qual filósofo pensa como você?`,W/2,1824);
-  x.font="600 32px 'Inter Tight'";
-  const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
-  x.textAlign="left";x.fillStyle=muted;x.fillText(host,W/2-(hw+tw)/2,1878);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1878);x.textAlign="center";
+  // Sign-off: the question in the display serif, then the address with the brand dot in accent.
+  const sy=Math.min(nl+60+112+84,1570);
+  x.fillStyle=ink;x.font="italic 400 56px 'Instrument Serif'";x.fillText(L`Qual filósofo pensa como você?`,W/2,sy);
+  x.font="600 36px 'Inter Tight'";
+  const host="filosofometro",tld=".com.br",hw=x.measureText(host).width,tw=x.measureText(tld).width;
+  x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,sy+58);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,sy+58);x.textAlign="center";
   // A portrait served without CORS taints the canvas; redraw without images rather than fail.
   let blob;
   try{blob=await new Promise((res,rej)=>{try{c.toBlob(b=>b?res(b):rej(new Error("empty")),"image/png")}catch(e){rej(e)}})}
@@ -1521,9 +1520,56 @@ async function shareCard(r,usePic=true){
   if(navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(e){if(e.name==="AbortError")return}
   }
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`filosofometro-${p.id}.png`;a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-  toast(L`Imagem salva. Poste no story e cole o link do convite!`);
+  // No native share sheet (most desktops): show the picture with the ways to take it.
+  storyModal(r,c,blob,file);
+}
+// Button state while the picture is drawn, so a slow first run (fonts, portraits) never looks like a dead click.
+async function shareFlow(r){
+  if(shareFlow.busy)return;
+  shareFlow.busy=true;
+  const bs=["shareBtn","shareBtn2"].map(id=>document.getElementById(id)).filter(Boolean),saved=bs.map(b=>b.innerHTML);
+  bs.forEach(b=>{b.disabled=true;b.setAttribute("aria-busy","true");b.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`});
+  try{await shareCard(r)}finally{shareFlow.busy=false;bs.forEach((b,i)=>{b.disabled=false;b.removeAttribute("aria-busy");b.innerHTML=saved[i]})}
+}
+// Fonts and portraits for the card are fetched while the person reads, so the click answers at once.
+function warmShare(r){
+  const go=()=>{try{["400 40px 'Instrument Serif'","italic 400 40px 'Instrument Serif'","600 28px 'Inter Tight'","500 28px 'Inter Tight'"].forEach(f=>document.fonts.load(f));[r.top.p,...r.ranking.slice(1,4).map(n=>n.p)].forEach(t=>{if(t.img)loadImage(t.img)})}catch(e){}};
+  if(window.requestIdleCallback)requestIdleCallback(go,{timeout:2500});else setTimeout(go,1200);
+}
+// Phones: once the hero buttons scroll away, a slim bar keeps share and challenge in thumb reach until the finale.
+function stickyShare(){
+  if(!window.IntersectionObserver)return;
+  const acts=app.querySelector(".res-actions"),fin=app.querySelector(".finale");
+  if(!acts)return;
+  const bar=document.createElement("div");bar.className="res-sticky";
+  bar.innerHTML=`<button type="button" class="btn accent sm" data-t="shareBtn">${icon.share} ${L`Compartilhar no story`}</button><button type="button" class="btn ghost sm" data-t="challengeBtn">${icon.link} ${L`Desafiar um amigo`}</button>`;
+  bar.addEventListener("click",e=>{const b=e.target.closest("button");const t=b&&document.getElementById(b.dataset.t);if(t)t.click()});
+  document.body.appendChild(bar);
+  let a=true,f=false;const upd=()=>bar.classList.toggle("on",!a&&!f);
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.target===acts)a=e.isIntersecting;else f=e.isIntersecting;upd()}));
+  io.observe(acts);if(fin)io.observe(fin);
+  onLeave(()=>{io.disconnect();bar.remove()});
+}
+function storyModal(r,c,blob,file){
+  const prev=document.activeElement,d=document.createElement("div");
+  d.className="story-modal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label",L`Imagem do story`);
+  const canCopy=!!(navigator.clipboard&&window.ClipboardItem);
+  d.innerHTML=`<div class="sm-card"><div class="sm-pic"></div><div class="sm-side"><h2 class="serif">${L`Imagem do story`}</h2><p class="muted">${L`Poste no story e cole o link do convite no adesivo de link.`}</p><div class="sm-actions"><button type="button" class="btn accent" data-a="dl">${L`Baixar imagem`}</button>${canCopy?`<button type="button" class="btn ghost" data-a="img">${L`Copiar imagem`}</button>`:""}<button type="button" class="btn ghost" data-a="link">${icon.link} ${L`Copiar link do convite`}</button><button type="button" class="btn ghost" data-a="x">${L`Fechar`}</button></div></div></div>`;
+  c.className="sm-canvas";c.setAttribute("role","img");c.setAttribute("aria-label",L`Imagem do story`);
+  d.querySelector(".sm-pic").appendChild(c);
+  const close=()=>{document.removeEventListener("keydown",key);d.remove();if(prev&&prev.focus)prev.focus()};
+  const key=e=>{if(e.key==="Escape")close()};
+  document.addEventListener("keydown",key);
+  d.addEventListener("click",async e=>{
+    if(e.target===d){close();return}
+    const a=e.target.closest("button");if(!a)return;
+    if(a.dataset.a==="x")close();
+    else if(a.dataset.a==="dl"){const l=document.createElement("a");l.href=URL.createObjectURL(blob);l.download=file.name;l.click();setTimeout(()=>URL.revokeObjectURL(l.href),2000);toast(L`Imagem salva. Poste no story e cole o link do convite!`)}
+    else if(a.dataset.a==="img"){try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);toast(L`Imagem copiada`)}catch(err){toast(L`Não foi possível copiar a imagem`)}}
+    else if(a.dataset.a==="link"){try{await navigator.clipboard.writeText(`${challengeText(r)} ${inviteURL(r)}`);toast(L`Convite copiado. Agora é só mandar!`)}catch(err){prompt(L`Copie o convite:`,inviteURL(r))}}
+  });
+  document.body.appendChild(d);
+  d.querySelector("button").focus();
 }
 // Canvas helpers for the story card.
 const spaced=s=>s.split("").join(" ");

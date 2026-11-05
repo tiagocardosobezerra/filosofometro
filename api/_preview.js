@@ -66,7 +66,7 @@ function compareInfo(codeA, codeB, rawA, rawB, rawLang) {
 /* ---------- The share page: metadata for crawlers, an instant redirect for people ---------- */
 function sharePage(info, origin, imageQuery) {
   const prefix = info.lang === "pt" ? "" : `/${info.lang}`;
-  const target = `${origin}${prefix}/${info.hash}`, image = `${origin}/api/og?${imageQuery}`;
+  const target = `${origin}${prefix}/${info.hash}`, self = `${origin}${prefix}${info.hash.replace(/^#\/vs\//, "/s/").replace(/^#\/comparar\//, "/c/")}`, image = `${origin}/api/og?${imageQuery}`;
   return `<!doctype html><html lang="${info.T.html}"><head><meta charset="utf-8">
 <title>${esc(info.title)}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -78,12 +78,12 @@ function sharePage(info, origin, imageQuery) {
 <meta property="og:image" content="${esc(image)}">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${esc(info.title)}">
-<meta property="og:url" content="${esc(target)}">
+<meta property="og:url" content="${esc(self)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(info.title)}">
 <meta name="twitter:description" content="${esc(info.description)}">
 <meta name="twitter:image" content="${esc(image)}">
-<link rel="canonical" href="${esc(target)}">
+<link rel="canonical" href="${esc(self)}">
 <meta http-equiv="refresh" content="0;url=${esc(target)}">
 <script>location.replace(${JSON.stringify(target)})</script>
 </head><body style="background:#0F0E0C;color:#F1EADC;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0">
