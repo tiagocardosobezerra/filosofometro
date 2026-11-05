@@ -1431,7 +1431,9 @@ async function shareCard(r,usePic=true){
   x.fillStyle=ink;x.font="400 50px 'Instrument Serif'";x.fillText("Filosofômetro",W/2,108);
   x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced("MEU PAR FILOSÓFICO"),W/2,160);
   // Portrait arch with the sigil badge over its corner.
-  const ax=300,ay=200,aw=480,ah=590,rad=aw/2;
+  // A name that wraps to two lines takes the room from the portrait, so the axis rulers still fit.
+  x.font="400 98px 'Instrument Serif'";const nameLines=lineCount(x,p.n,960);
+  const ax=310,ay=196,aw=460,ah=nameLines>1?404:500,rad=aw/2;
   const arch=()=>{x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-26);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-26,ay+ah);x.lineTo(ax+26,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-26);x.closePath()};
   x.save();arch();x.clip();
   if(pic){
@@ -1455,22 +1457,38 @@ async function shareCard(r,usePic=true){
   x.fillStyle=ink;x.font="400 98px 'Instrument Serif'";y=wrapText(x,p.n,W/2,y+106,960,96);
   x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(`${p.s} · ${lifeText(p)}`.toUpperCase(),W/2,y+60);
   y+=60;
-  // Quote, only if it fits above the lower blocks.
+  // Quote, only if it still leaves room for the axis rulers below.
+  const RULERS=302,RULERS_END=1416;
   x.font="italic 400 42px 'Instrument Serif'";
   const quoteLines=lineCount(x,"“"+p.q+"”",880);
-  if(y+50+quoteLines*50<1300){x.fillStyle=ink;y=wrapText(x,"“"+p.q+"”",W/2,y+74,880,50);}
-  // Strongest traits as pills.
-  const traits=AXES.map((a,i)=>({lbl:r.scores[i]<0?a.l:a.r,s:Math.abs(r.scores[i])})).filter(t=>t.s>=.25).sort((a,b)=>b.s-a.s).slice(0,3).map(t=>t.lbl);
-  if(traits.length){
-    x.font="600 28px 'Inter Tight'";
-    const pw=traits.map(t=>x.measureText(t).width+48),total=pw.reduce((a,b)=>a+b,0)+(traits.length-1)*14;
-    let px=W/2-total/2;const py=Math.max(y+56,1250);
-    traits.forEach((t,i)=>{pill(x,px,py,pw[i],54,"rgba(240,106,67,.18)");x.fillStyle=accent;x.textAlign="center";x.fillText(t,px+pw[i]/2,py+37);px+=pw[i]+14});
-  }
+  if(y+74+(quoteLines-1)*50+RULERS<RULERS_END){x.fillStyle=ink;y=wrapText(x,"“"+p.q+"”",W/2,y+74,880,50);}
+  // The three axes where the person leans hardest, each as a labeled ruler: axis name, both poles,
+  // the person's mark (filled, accent) and the match's mark (ring), so the card explains itself.
+  const strong=AXES.map((a,i)=>({a,i,s:Math.abs(r.scores[i])})).sort((m,n)=>n.s-m.s).slice(0,3);
+  const ry=y+64;
+  x.font="500 24px 'Inter Tight'";
+  const youW=x.measureText("eu").width,parName=shortName(p.n),parW=x.measureText(parName).width;
+  const legW=22+10+youW+40+22+10+parW;let lx=W/2-legW/2;
+  x.beginPath();x.arc(lx+11,ry-8,10,0,Math.PI*2);x.fillStyle=accent;x.fill();
+  x.textAlign="left";x.fillStyle=ink;x.fillText("eu",lx+32,ry);lx+=32+youW+40;
+  x.beginPath();x.arc(lx+11,ry-8,9,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=3;x.stroke();
+  x.fillStyle=ink;x.fillText(parName,lx+32,ry);
+  const bx0=380,bx1=700,pos=v=>bx0+(Math.max(-1,Math.min(1,v))+1)/2*(bx1-bx0);
+  strong.forEach(({a,i},k)=>{
+    const by=ry+70+k*76,me=r.scores[i],par=p.v[i];
+    x.textAlign="center";x.fillStyle=muted;x.font="600 19px 'Inter Tight'";x.fillText(spaced(a.name.toUpperCase()),W/2,by-26);
+    x.font="600 30px 'Inter Tight'";
+    x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-26,by+10);
+    x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+26,by+10);
+    x.fillStyle=line;x.fillRect(bx0,by-1,bx1-bx0,3);x.fillRect(W/2-1,by-10,3,21);
+    x.beginPath();x.arc(pos(par),by,13,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=3;x.stroke();
+    x.beginPath();x.arc(pos(me),by,12,0,Math.PI*2);x.fillStyle=accent;x.fill();
+  });
+  x.textAlign="center";
   // Also think like: three runner-ups with portraits.
-  x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign="center";x.fillText(spaced("TAMBÉM PENSO COMO"),W/2,1420);
+  x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign="center";x.fillText(spaced("TAMBÉM PENSO COMO"),W/2,1458);
   near.forEach((n,i)=>{
-    const nx=W/2+(i-1)*300,ny=1510;
+    const nx=W/2+(i-1)*300,ny=1536;
     circlePic(x,nearPics[i],n.p,nx,ny,62,line);
     x.fillStyle=ink;x.font="400 38px 'Instrument Serif'";x.fillText(shortName(n.p.n),nx,ny+108);
     x.fillStyle=accent;x.font="600 26px 'Inter Tight'";x.fillText(`${n.pct}%`,nx,ny+144);
@@ -1478,7 +1496,7 @@ async function shareCard(r,usePic=true){
   // Brazilian match and opposite.
   x.fillStyle=muted;x.font="500 28px 'Inter Tight'";
   const lineBr=[br?`No Brasil: ${br.n}`:"",opp?`Oposto: ${opp.n}`:""].filter(Boolean).join("   ·   ");
-  x.fillText(lineBr,W/2,1712);
+  x.fillText(lineBr,W/2,1720);
   // Sign-off: a hairline, the question in the display serif, then the address with the brand dot in accent.
   x.fillStyle=line;x.fillRect(W/2-180,1756,360,2);
   x.fillStyle=ink;x.font="italic 400 58px 'Instrument Serif'";x.fillText("Qual filósofo pensa como você?",W/2,1824);
@@ -1501,7 +1519,6 @@ async function shareCard(r,usePic=true){
 const spaced=s=>s.split("").join(" ");
 const initials=n=>n.split(" ").filter(w=>/^[A-ZÀ-Ý]/.test(w)).slice(0,2).map(w=>w[0]).join("");
 const shortName=n=>{const w=n.split(" ");return w.length>2?w.slice(-1)[0]:n};
-function pill(x,px,py,w,h,fill){x.beginPath();x.roundRect(px,py,w,h,h/2);x.fillStyle=fill;x.fill()}
 function lineCount(x,t,w){let n=1,line="";for(const wd of t.split(" ")){const tt=line?line+" "+wd:wd;if(x.measureText(tt).width>w&&line){n++;line=wd}else line=tt}return n}
 function circlePic(x,img,p,cx,cy,r,stroke){
   x.save();x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.clip();
