@@ -170,6 +170,7 @@ function route(){
   else if(name==="verificar")renderVerify(parts[1]);
   else if(name==="vs")renderInvite(parts[1],parts[2]);
   else if(name==="comparar")renderCompare(parts[1],parts[2],parts[3],parts[4]);
+  else if(name==="novo")renderResultV2(parts[1]||store.get("last"));
   else if(name===""||name==="app")renderHome();
   else renderNotFound();
   window.scrollTo({top:0,behavior:"instant"});
@@ -789,9 +790,13 @@ function openReveal(r){
   const nx=r.level&&nextLevel(r.level.n);
   if(nx){const u=LEVEL_INFO[nx.id].unlock.slice(1);slides.push(`<span class="rv-k">${L`Ainda há mais`}</span><h2 class="rv-h">${L`No nível ${esc(t(nx.name))}`}</h2><ul class="rv-unlock">${u.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="rv-p">${L`Mais ${nx.n-r.level.n} afirmações. Suas respostas de agora ficam guardadas.`}</p><div class="rv-actions"><a class="btn ghost" href="#/teste/aprofundar" data-a="deeper">${L`Aprofundar agora`} ${icon.arrow}</a></div>`)}
   slides.push(`<span class="rv-k">${L`Agora é com você`}</span><h2 class="rv-h">${L`Quem dos seus amigos pensa como você?`}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="share">${icon.share} ${L`Compartilhar no story`}</button><button type="button" class="btn ghost" data-a="challenge">${icon.link} ${L`Desafiar um amigo`}</button><button type="button" class="btn ghost" data-a="close">${L`Ver resultado completo`}</button></div>`);
+  openRevealSlides(r,slides);
+}
+// Shared player for reveal cards: tap, swipe or arrows; skip button when asked.
+function openRevealSlides(r,slides,skip=false){
   const prev=document.activeElement,d=document.createElement("div");
   d.className="reveal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label",L`Seu resultado, passo a passo`);
-  d.innerHTML=`<div class="rv-bars">${slides.map(()=>"<i><b></b></i>").join("")}</div><button type="button" class="rv-x" aria-label="${L`Fechar`}">×</button><div class="rv-stage" aria-live="polite"></div><button type="button" class="rv-nav rv-prev" aria-label="${L`Anterior`}"></button><button type="button" class="rv-nav rv-next" aria-label="${L`Próximo`}"></button>`;
+  d.innerHTML=`<div class="rv-bars">${slides.map(()=>"<i><b></b></i>").join("")}</div><button type="button" class="rv-x" aria-label="${L`Fechar`}">×</button>${skip?`<button type="button" class="rv-skip" data-a="close">Pular</button>`:""}<div class="rv-stage" aria-live="polite"></div><button type="button" class="rv-nav rv-prev" aria-label="${L`Anterior`}"></button><button type="button" class="rv-nav rv-next" aria-label="${L`Próximo`}"></button>`;
   document.body.appendChild(d);document.body.classList.add("rv-open");
   const stage=d.querySelector(".rv-stage"),bars=[...d.querySelectorAll(".rv-bars i")];
   let i=-1,raf=0;
@@ -1619,6 +1624,161 @@ function renderVerify(code){
     show(j,L`arquivo ${f.name}`);
   });
   if(code)fromLink(code);
+}
+
+/* ---------- Prototype: the new result page (#/novo/<code>) ----------
+   A side-by-side test of the council's spec. It does not replace #/r/; nothing links here yet.
+   Portuguese only while it is a prototype. */
+const V2_LEVEL=["rascunho","boa","alta"];
+// Sharpness of the portrait: the level, minus a point when the 2nd thinker is within 3 points,
+// minus a point when fewer than 60% of the themes have answers pointing mostly one way.
+function sharpness(r){
+  let s=levelId(r);
+  const gap=r.ranking[0].pct!==null&&r.ranking[1].pct!==null?r.ranking[0].pct-r.ranking[1].pct:0;
+  if(gap<3)s--;
+  const coherent=AXES.filter((_,ax)=>{const qs=r.perQuestion.filter(q=>q.axis===ax&&q.contribution!==0);if(!qs.length)return false;const sum=qs.reduce((t,q)=>t+q.contribution,0);return qs.filter(q=>Math.sign(q.contribution)===Math.sign(sum)).length/qs.length>=.75}).length/AXES.length;
+  if(coherent<.6)s--;
+  return {level:Math.max(1,s),gap,coherent};
+}
+// Face to face: statements where the match is quoted in the quiz come first, with the quiz's paraphrase;
+// the rest come from the match's catalog position on that theme, marked as an estimate.
+function faceToFace(r){
+  const p=r.top.p,n=levelId(r)===1?3:levelId(r)===2?4:6,want={agree:Math.ceil(n*2/3),disagree:Math.floor(n/3)||1};
+  const items=r.perQuestion.filter(q=>q.value!==0).map(q=>{
+    const [,ax,,exA,exD]=QS[q.i];
+    let side=0,line=null;
+    for(const [ex,s] of [[exA,1],[exD,-1]]){const nm=ex.slice(0,ex.indexOf(": "));if(thinkerByName(nm)===p){side=s;line=ex.slice(ex.indexOf(": ")+2)}}
+    const quoted=!!side;
+    if(!side){const pos=p.v[ax]*q.dir;if(Math.abs(p.v[ax])<.4)return null;side=Math.sign(pos)}
+    return {q,quoted,line,agree:Math.sign(q.value)===side,w:Math.abs(q.value)+(quoted?2:0)+Math.abs(p.v[ax])};
+  }).filter(Boolean).sort((a,b)=>b.w-a.w);
+  return {agree:items.filter(x=>x.agree).slice(0,want.agree),disagree:items.filter(x=>!x.agree).slice(0,want.disagree)};
+}
+// Pulling two ways: two "totally" answers on one theme that pull to opposite poles, with the thinker who
+// sides with the person on each statement (from the quiz's own examples).
+function tensionV2(r){
+  for(const ax of AXES.map((_,i)=>i)){
+    const strong=r.perQuestion.filter(q=>q.axis===ax&&Math.abs(q.value)===2);
+    const a=strong.find(q=>q.contribution>0),b=strong.find(q=>q.contribution<0);
+    if(a&&b)return {ax,a,b};
+  }
+  return null;
+}
+const sideWith=q=>{const ex=QS[q.i][q.value>0?3:4];return {name:ex.slice(0,ex.indexOf(": ")),line:ex.slice(ex.indexOf(": ")+2)}};
+// Who stands with the person on each theme: the two strongest catalog positions on their side, the strongest on the other.
+function alliesOn(ax,x){
+  const side=Math.sign(x)||1,mine=PH.filter(p=>Math.sign(p.v[ax])===side).sort((a,b)=>Math.abs(b.v[ax])-Math.abs(a.v[ax])||(a.id<b.id?-1:1));
+  const other=PH.filter(p=>Math.sign(p.v[ax])===-side).sort((a,b)=>Math.abs(b.v[ax])-Math.abs(a.v[ax])||(a.id<b.id?-1:1));
+  return {mine:mine.slice(0,2),other:other[0]};
+}
+function renderResultV2(code){
+  const answers=E.decode(code||"");
+  if(!answers){renderNotFound("Faça o teste primeiro para ver o protótipo da nova tela.");return}
+  const r=E.evaluate(answers),p=r.top.p,second=r.ranking[1].p,flat=r.directionless;
+  const arch=archetype(r.scores),sr=selfReading(r),sh=sharpness(r),ff=faceToFace(r),ten=tensionV2(r);
+  const pair=arch.poles.map(([ax,s])=>s?AXES[ax].r:AXES[ax].l);
+  const ans=q=>esc(t(SCALE[q.answer].label));
+  const item=x=>`<li class="ff-item"><p class="ff-q">“${esc(QS[x.q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(x.q)}</p><p class="ff-them"><b>${esc(shortName(p.n))}:</b> ${x.quoted?`“${esc(x.line)}” <small>(paráfrase)</small>`:`${x.agree===(x.q.value>0)?"tenderia a concordar":"tenderia a discordar"} <small>(pela posição no catálogo)</small>`}</p></li>`;
+  const nextN=nextLevel(r.answers.length);
+  const shText=sh.level===1?`${esc(shortName(second.n))} está a ${sh.gap} pontos e pode passar à frente.${nextN?` Responda mais ${nextN.n-r.answers.length} frases para ver.`:""}`:sh.level===2?`${nextN?`Mais ${nextN.n-r.answers.length} frases deixam tudo mais firme.`:""}`:"";
+  const strongOrder=AXES.map((a,i)=>({a,i,x:r.scores[i]})).sort((u,v)=>Math.abs(v.x)-Math.abs(u.x));
+  const topThree=new Set(strongOrder.slice(0,3).map(s=>s.i));
+  const themes=strongOrder.map(({a,i,x})=>{const al=alliesOn(i,x);const balanced=Math.abs(x)<.13;
+    return `<details class="th"${topThree.has(i)?" open":""}><summary><span class="th-n">${esc(cap(a.name))}</span><span class="th-pole">${balanced?"no meio":esc(x<0?a.l:a.r)}</span></summary>
+      <p>${balanced?`Você está entre ${esc(a.l)} e ${esc(a.r)}.`:esc(POLE_TEXT[i][x<0?0:1])}</p>
+      ${balanced?"":`<div class="th-who"><span class="th-k">Do seu lado</span>${al.mine.map(m=>`<a href="#/p/${m.id}">${portrait(m,{cls:"th-av"})}<span>${esc(m.n)}</span></a>`).join("")}<span class="th-k">Do outro lado</span>${al.other?`<a href="#/p/${al.other.id}">${portrait(al.other,{cls:"th-av"})}<span>${esc(al.other.n)}</span></a>`:""}</div>`}
+    </details>`}).join("");
+  mount(`
+  <div class="v2-banner"><div class="wrap"><b>Protótipo</b> da nova tela de resultado. A tela atual continua em <a href="#/r/${code}">#/r/…</a>. <button type="button" class="link-btn" id="v2Reveal">Ver a revelação nova</button></div></div>
+  <section class="wrap v2-hero">
+    <div class="v2-top">
+      ${portrait(p,{cls:"v2-pic",eager:true})}
+      <div>
+        <span class="eyebrow">Seu jeito de pensar</span>
+        <h1 class="v2-arch">${esc(arch.name)}</h1>
+        <p class="v2-why">Nome criado a partir dos seus 2 traços mais fortes: ${pair.map(esc).join(" e ")}.</p>
+        <p class="v2-match">Você pensa parecido com <b>${esc(p.n)}</b></p>
+        ${flat?"":`<p class="v2-pct"><b>${r.top.pct}%</b> de afinidade · em 2º: ${esc(second.n)}, ${r.ranking[1].pct}%</p>`}
+        <div class="res-actions"><button class="btn accent" type="button" id="v2Share">${icon.share} Compartilhar no story</button><button class="btn ghost" type="button" id="v2Challenge">${icon.link} Desafiar um amigo</button></div>
+      </div>
+    </div>
+    <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Nitidez do retrato: ${V2_LEVEL[sh.level-1]}.</b> ${shText}</span>${nextN?`<a class="btn ghost sm" href="#/teste/aprofundar">Responder mais ${nextN.n-r.answers.length}</a>`:""}</div>
+  </section>
+  <nav class="v2-jump" aria-label="Atalhos"><a href="#v2-retrato" data-j>Retrato</a><a href="#v2-ff" data-j>Frente a frente</a><a href="#v2-temas" data-j>Temas</a><a href="#v2-ler" data-j>Ler</a><a href="#v2-comparar" data-j>Comparar</a></nav>
+  <section class="wrap v2-body">
+    <div class="panel v2-sec" id="v2-retrato">
+      <span class="eyebrow">Seu retrato</span>
+      <ul class="self-list">${sr.strong.map(s=>`<li><b>${esc(cap(s.a.name))}</b><span>${esc(POLE_TEXT[s.i][s.x<0?0:1])}</span></li>`).join("")}</ul>
+      <p class="v2-p">${sr.kin.length} dos ${PH.length} pensadores do site têm esses ${sr.strong.length} traços${sr.kin.length?`: ${sr.kin.slice(0,3).map(k=>esc(k.n)).join(", ")}${sr.kin.length>3?` e mais ${sr.kin.length-3}`:""}`:""}.</p>
+      <p class="v2-p">Onde você ainda está dividido: <b>${esc(sr.torn.a.name)}</b>, entre ${esc(sr.torn.a.l)} e ${esc(sr.torn.a.r)}.</p>
+    </div>
+    <div class="panel v2-sec" id="v2-ff">
+      <span class="eyebrow">Você e ${esc(shortName(p.n))}, frente a frente</span>
+      ${ff.agree.length?`<h3 class="v2-h">Aqui vocês concordam</h3><ul class="ff">${ff.agree.map(item).join("")}</ul>`:""}
+      ${ff.disagree.length?`<h3 class="v2-h">Aqui vocês discutiriam</h3><ul class="ff">${ff.disagree.map(item).join("")}</ul>`:""}
+      <p class="v2-p v2-small">Livro principal de ${esc(p.n)}: <i>${esc(p.b)}</i></p>
+    </div>
+    ${ten?`<div class="panel v2-sec"><span class="eyebrow">Onde você puxa para dois lados</span>
+      ${[ten.a,ten.b].map(q=>{const w=sideWith(q);return `<div class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(q)}</p><p class="ff-them">Aqui você fica com <b>${esc(w.name)}</b>: “${esc(w.line)}” <small>(paráfrase)</small></p></div>`}).join("")}
+      <p class="v2-p">As duas respostas puxam <b>${esc(AXES[ten.ax].name)}</b> para lados opostos. Muitos filósofos discutiram exatamente isso.</p></div>`:""}
+    <div class="panel v2-sec" id="v2-temas"><span class="eyebrow">Quem está do seu lado em cada tema</span><div class="v2-mandala">${sigil(r.scores,{labels:true,cls:"sg-user",tips:true,title:"Seu perfil nos 11 temas"})}</div>${themes}</div>
+    <div class="grid2">${aboutHTML(p,{title:`Quem foi ${p.n}`})}<div class="panel"><h2>Pensam parecido com você</h2><ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul></div></div>
+    ${brazilHTML(r,"No Brasil, quem pensa parecido")}
+    ${timelineHTML(r)}
+    ${r.opposite?`<div class="panel v2-sec"><span class="eyebrow">Quem mais discordaria de você</span><a class="opp" href="#/p/${r.opposite.p.id}" style="text-decoration:none">${portrait(r.opposite.p,{cls:"opp-pic"})}<span><span class="nm">${esc(r.opposite.p.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(r.opposite.p.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px">“${esc(r.opposite.p.q)}”</span></span></a></div>`:""}
+    <div class="panel v2-sec" id="v2-ler"><span class="eyebrow">Por onde começar a ler</span><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol></div>
+    <div id="v2-comparar">${invitePanelHTML(r)}</div>
+    <div class="panel v2-sec"><span class="eyebrow">Prévia dos cards de story</span><p class="v2-p v2-small">Os três modelos propostos. Os cards atuais continuam na tela antiga.</p><div class="v2-cards" id="v2Cards"><p class="muted">Gerando…</p></div></div>
+    <p class="v2-foot"><a href="#/metodo">Como calculamos</a> · <button type="button" class="link-btn" onclick="print()">Versão para imprimir</button></p>
+  </section>`,`Protótipo · ${p.n}`);
+  wireTips(app,{user:r.scores,r,p});wireTimeline();wireInvite(r);
+  document.getElementById("v2Challenge").addEventListener("click",()=>challenge(r));
+  document.getElementById("v2Share").addEventListener("click",()=>document.getElementById("v2Cards").scrollIntoView({behavior:"smooth"}));
+  document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
+  app.querySelectorAll("[data-j]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:reduceMotion?"auto":"smooth"})}));
+  v2Cards(r,ff);
+}
+// The proposed reveal: at most 6 cards, skip always visible.
+function revealV2(r){
+  const p=r.top.p,arch=archetype(r.scores),sr=selfReading(r),{conv}=revealFacts(r),ten=tensionV2(r);
+  const slides=[];
+  slides.push(`<span class="rv-k">Seu jeito de pensar</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><p class="rv-p rv-small">${sr.kin.length} dos ${PH.length} pensadores do site têm esses traços.</p>`);
+  if(conv)slides.push(`<span class="rv-k">O que você defende com mais força</span><blockquote class="rv-q">“${esc(QS[conv.i][0])}”<cite>${esc(t(SCALE[conv.answer].label))}</cite></blockquote><p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
+  if(ten){const a=sideWith(ten.a),b=sideWith(ten.b);slides.push(`<span class="rv-k">Onde você puxa para dois lados</span><h2 class="rv-h">${esc(cap(AXES[ten.ax].name))}</h2><p class="rv-p">Numa frase você ficou com <b>${esc(a.name)}</b>; em outra, com <b>${esc(b.name)}</b>.</p>`)}
+  if(p.place&&p.born!==undefined)slides.push(`<span class="rv-k">Uma pista</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">Viveu por volta de ${yearText(p.born+35)}.</p>`);
+  slides.push(`<span class="rv-k">Você pensa parecido com…</span>${portrait(p,{cls:"rv-pic",eager:true})}<h2 class="rv-h">${esc(p.n)}</h2>${r.directionless?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div><p class="rv-p rv-small">de afinidade</p>`}`);
+  slides.push(`<span class="rv-k">Mostre seu jeito de pensar</span><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="close">Compartilhar no story</button><button type="button" class="btn ghost" data-a="close">Ver meu resultado</button></div>`);
+  openRevealSlides(r,slides,true);
+}
+// Story card previews for the three proposed models, drawn on the page as images.
+async function v2Cards(r,ff){
+  await document.fonts.ready;
+  const p=r.top.p,arch=archetype(r.scores),{conv}=revealFacts(r),host=document.getElementById("v2Cards");if(!host)return;
+  const W=1080,H=1920,ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
+  const base=()=>{const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,760,60,W/2,760,860);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);x.textAlign="center";return [c,x]};
+  const foot=x=>{x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";x.fillText("E você, pensa parecido com quem?",W/2,1560);x.font="600 34px 'Inter Tight'";x.fillStyle=accent;x.fillText(`filosofometro.com.br${I.prefix}`,W/2,1620)};
+  const wheel=(x,cx,cy,S)=>{[.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=2;x.stroke()});x.beginPath();pts(r.scores).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.fillStyle="rgba(240,106,67,.24)";x.fill();x.strokeStyle=accent;x.lineWidth=6;x.lineJoin="round";x.stroke()};
+  const cards=[];
+  // 1. Tipo
+  {const [c,x]=base();x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("M E U   J E I T O   D E   P E N S A R",W/2,330);
+   wheel(x,W/2,620,2.2);
+   x.fillStyle=accent;x.font="italic 400 96px 'Instrument Serif'";const [a1,...a2]=arch.name.split(" ");x.fillText(a1,W/2,960);x.fillText(a2.join(" "),W/2,1060);
+   x.fillStyle=ink;x.font="400 52px 'Instrument Serif'";x.fillText(`Penso parecido com ${shortName(p.n)}${r.directionless?"":` · ${r.top.pct}%`}`,W/2,1190);
+   if(conv){x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.fillText("O  QUE  EU  DEFENDO  COM  MAIS  FORÇA",W/2,1300);x.fillStyle=ink;x.font="italic 400 40px 'Instrument Serif'";wrapText(x,`“${QS[conv.i][0]}”`,W/2,1360,880,50)}
+   foot(x);cards.push(["Tipo",c])}
+  // 2. Duelo
+  {const it=(ff.agree.find(i=>i.quoted)||ff.agree[0]);const [c,x]=base();x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("E U   E   " + spaced(shortName(p.n).toUpperCase()),W/2,330);
+   if(it){x.fillStyle=ink;x.font="400 64px 'Instrument Serif'";let y=wrapText(x,`“${QS[it.q.i][0]}”`,W/2,520,900,74);
+    x.fillStyle=accent;x.font="600 34px 'Inter Tight'";x.fillText(`EU: ${t(SCALE[it.q.answer].label).toUpperCase()}`,W/2,y+120);
+    x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";y=wrapText(x,it.quoted?`${shortName(p.n)}: “${it.line}”`:`${shortName(p.n)} também pensava assim.`,W/2,y+240,880,62);
+    if(it.quoted){x.fillStyle=muted;x.font="500 28px 'Inter Tight'";x.fillText("(paráfrase)",W/2,y+56)}}
+   x.fillStyle=accent;x.font="italic 400 60px 'Instrument Serif'";x.fillText(arch.name,W/2,1400);foot(x);cards.push(["Duelo",c])}
+  // 3. Temas
+  {const [c,x]=base();x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("M E U S   T E M A S   M A I S   F O R T E S",W/2,330);
+   const st=AXES.map((a,i)=>({a,i,s:Math.abs(r.scores[i])})).sort((m,n)=>n.s-m.s).slice(0,3),bx0=360,bx1=720,pos=v=>bx0+(Math.max(-1,Math.min(1,v))+1)/2*(bx1-bx0);
+   st.forEach(({a,i},k)=>{const by=560+k*190,me=r.scores[i];x.textAlign="center";x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(a.name.toUpperCase(),W/2,by-50);x.font="600 40px 'Inter Tight'";x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-30,by+14);x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+30,by+14);x.fillStyle=line;x.fillRect(bx0,by-2,bx1-bx0,4);x.beginPath();x.arc(pos(me),by,18,0,Math.PI*2);x.fillStyle=accent;x.fill()});
+   x.textAlign="center";x.fillStyle=accent;x.font="italic 400 70px 'Instrument Serif'";x.fillText(arch.name,W/2,1260);x.fillStyle=ink;x.font="400 46px 'Instrument Serif'";x.fillText(`Penso parecido com ${shortName(p.n)}`,W/2,1350);foot(x);cards.push(["Temas",c])}
+  host.innerHTML=cards.map(([n,c])=>`<figure><img src="${c.toDataURL("image/jpeg",.85)}" alt="Card ${n}" loading="lazy"><figcaption>${n}</figcaption></figure>`).join("");
 }
 
 function renderNotFound(msg=L`Esta página não existe.`){
