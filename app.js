@@ -170,6 +170,8 @@ function route(){
   else if(name==="verificar")renderVerify(parts[1]);
   else if(name==="vs")renderInvite(parts[1],parts[2]);
   else if(name==="comparar")renderCompare(parts[1],parts[2],parts[3],parts[4]);
+  // #/novo-teste: the full prototype flow. The quiz runs as usual and ends on #/novo with the new reveal.
+  else if(name==="novo-teste"){store.set("proto",1);store.del("progress");location.replace("#/teste");return}
   else if(name==="novo")renderResultV2(parts[1]||store.get("last"));
   else if(name===""||name==="app")renderHome();
   else renderNotFound();
@@ -410,6 +412,7 @@ function finishQuiz(answers){
   store.set("last",code);
   store.set("reveal",code);
   if(vs&&E.decode(vs.code)){store.del("vs");location.replace(`#/comparar/${vs.code}/${code}${vs.name?`/${encName(vs.name)}`:""}`);return}
+  if(store.get("proto")){store.del("proto");store.del("reveal");store.set("protoReveal",code);location.replace("#/novo/"+code);return}
   location.replace("#/r/"+code);
 }
 
@@ -1777,6 +1780,7 @@ function renderResultV2(code){
   document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
   app.querySelectorAll("[data-j]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:reduceMotion?"auto":"smooth"})}));
   v2Cards(r,ff);
+  if(store.get("protoReveal")===code){store.del("protoReveal");revealV2(r)}
 }
 // The proposed reveal: at most 6 cards, skip always visible.
 function revealV2(r){
