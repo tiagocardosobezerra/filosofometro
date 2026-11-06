@@ -145,7 +145,7 @@ const brand = (x, y) => `<path d="M${x + 14} ${y - 22}L${x + 28} ${y + 4}L${x} $
 
 // The archetype, the same rule as archetype() in app.js: the strongest pole gives the noun and the second
 // qualifies it. The words are the Portuguese keys of the interface; packs translate them.
-const ARCH_NOUN = [["Racionalista","Empirista"],["Fatalista","Voluntarista"],["Essencialista","Existencialista"],["Deontologista","Pragmatista"],["Individualista","Comunitarista"],["Hedonista","Asceta"],["Materialista","Espiritualista"],["Realista","Relativista"],["Tradicionalista","Reformista"],["Quietista","Ativista"],["Legalista","Autonomista"]];
+const ARCH_NOUN = [["Racionalista","Empirista"],["Determinista","Voluntarista"],["Essencialista","Existencialista"],["Deontologista","Pragmatista"],["Individualista","Comunitarista"],["Hedonista","Eudemonista"],["Materialista","Espiritualista"],["Realista","Relativista"],["Tradicionalista","Reformista"],["Quietista","Ativista"],["Institucionalista","Autonomista"]];
 const ARCH_OF = [["da Razão","da Experiência"],["do Destino","da Liberdade"],["do Sentido","da Criação"],["do Dever","das Consequências"],["do Indivíduo","da Comunidade"],["do Prazer","da Virtude"],["da Matéria","do Espírito"],["da Certeza","da Dúvida"],["da Tradição","da Ruptura"],["da Aceitação","da Resistência"],["da Ordem","da Autonomia"]];
 function archName(v, lang) {
   const ui = (lang && lang !== "pt" ? PACKS[lang]().ui : null) || {}, tr = k => ui[k] || k;
