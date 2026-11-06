@@ -11,6 +11,15 @@ const BR=AgoraData.BR||[];
 const SUP=window.AgoraSupport||{SUPPORT:{},READING:{},bookURL:()=>"#"};
 const HAS_PIX=!!(SUP.SUPPORT.pixKey||"").trim();
 const byId=Object.fromEntries([...PH,...BR].map(p=>[p.id,p]));
+// Schools of thought (correntes.js): each one keeps the thinkers present in this language, its average
+// profile on the 11 themes and the span of years its members were born in.
+const CORR=(window.AgoraCorrentes||[]).map(c=>({...c,ms:c.m.map(id=>byId[id]).filter(Boolean)})).filter(c=>c.ms.length).map(c=>({...c,
+  v:AXES.map((_,i)=>c.ms.reduce((s,p)=>s+p.v[i],0)/c.ms.length),
+  from:Math.min(...c.ms.map(p=>p.born)),to:Math.max(...c.ms.map(p=>p.born)),alive:c.ms.some(p=>p.died===null)}));
+const corrById=Object.fromEntries(CORR.map(c=>[c.id,c]));
+const corrOf=Object.fromEntries(CORR.flatMap(c=>c.ms.map(p=>[p.id,c])));
+// A thinker's own school label, linked to the page of the corrente it belongs to.
+const schoolLink=p=>{const c=corrOf[p.id];return c?`<a class="school-link" href="#/corrente/${c.id}">${esc(p.s)}</a>`:esc(p.s)};
 
 // The order statements are shown in comes from the engine, so the audit can report it.
 const ORDER=E.ORDER;
@@ -18,7 +27,7 @@ const ORDER=E.ORDER;
 // Privacy-friendly analytics (Vercel Web Analytics, no cookies). Hash routes and funnel steps are sent as
 // readable virtual pages; result codes never leave the browser, so "/r/<code>" is reported as "/resultado".
 const track=path=>{try{window.va&&window.va("pageview",{route:path,path})}catch(e){}};
-const PAGE={"":"/",teste:"/teste",r:"/resultado",pensadores:"/pensadores",metodo:"/metodo",verificar:"/verificar",vs:"/convite",comparar:"/comparacao",apoie:"/apoie"};
+const PAGE={"":"/",teste:"/teste",r:"/resultado",pensadores:"/pensadores",metodo:"/metodo",verificar:"/verificar",vs:"/convite",comparar:"/comparacao",apoie:"/apoie",correntes:"/correntes"};
 
 const store={
   get(k){try{return JSON.parse(localStorage.getItem("agora."+k))}catch(e){return null}},
@@ -151,16 +160,18 @@ function route(){
   if(legacy){location.replace("#/r/"+legacy[1]);return}
   const parts=h.replace(/^#\/?/,"").split("/");
   const name=parts[0]||"";
-  document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(name==="p"&&a.dataset.nav==="pensadores")));
+  document.querySelectorAll("[data-nav]").forEach(a=>a.toggleAttribute("aria-current",a.dataset.nav===name||(["p","correntes","corrente"].includes(name)&&a.dataset.nav==="pensadores")));
   // Header call to action: the last result if there is one, otherwise the quiz. Hidden while taking the quiz.
   const cta=document.getElementById("navCta"),lastCode=store.get("last");
   if(cta){const hasLast=!!(lastCode&&E.decode(lastCode));cta.href=hasLast?"#/r/"+lastCode:"#/teste";cta.innerHTML=hasLast?`<span class="cta-lg">${L`Meu resultado`}</span><span class="cta-sm">${L`Resultado`}</span>`:`<span class="cta-lg">${L`Fazer o teste`}</span><span class="cta-sm">${L`Teste`}</span>`;cta.classList.toggle("hidden",name==="teste"||(hasLast&&name==="r"&&parts[1]===lastCode))}
   if(a11yNav(name))return;
-  track(name==="p"&&byId[parts[1]]?"/p/"+parts[1]:name==="r"&&parts[2]==="ver"?"/resultado-de-outra-pessoa":PAGE[name]||"/nao-encontrado");
+  track(name==="p"&&byId[parts[1]]?"/p/"+parts[1]:name==="corrente"&&corrById[parts[1]]?"/corrente/"+parts[1]:name==="r"&&parts[2]==="ver"?"/resultado-de-outra-pessoa":PAGE[name]||"/nao-encontrado");
   if(name==="teste")renderQuiz(parts[1]);
   else if(name==="r")renderResult(parts[1],parts[2]);
   else if(name==="pensadores")renderCatalog();
   else if(name==="p")renderThinker(parts[1]);
+  else if(name==="correntes")renderCorrentes();
+  else if(name==="corrente")renderCorrente(parts[1]);
   else if(name==="metodo")renderMethod();
   else if(name==="apoie")renderSupport();
   else if(name==="verificar")renderVerify(parts[1]);
@@ -702,7 +713,7 @@ function renderResult(code,mode){
       <p class="v2-why">${flat?L`As respostas ficaram perto do centro em todos os temas.`:L`Nome criado a partir dos 2 traços mais fortes: ${pair.map(esc).join(L` e `)}.`}</p>
       <p class="v2-match-k">${T.like}</p>
       <div class="res-name v2-name">${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</div>
-      <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
+      <div class="res-school">${schoolLink(p)} · ${esc(lifeText(p))}</div>
       ${flat?"":`<p class="v2-pct"><b><span id="pctNum">${reduceMotion?top.pct:0}</span>%</b> ${L`de afinidade`} <span class="v2-second">${L`· em 2º: ${esc(second.p.n)}, ${second.pct}%`}</span></p>`}
       <div class="res-actions">${visitor?`<a class="btn accent" href="#/vs/${code}">${L`Fazer o teste e comparar`} ${icon.arrow}</a>`:`<button class="btn accent" type="button" id="shareBtn">${icon.share} ${L`Compartilhar no story`}</button><button class="btn ghost" type="button" id="challengeBtn">${icon.link} ${L`Desafiar um amigo`}</button>`}</div>
       <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>${L`Nitidez do retrato: ${SHARP[sh.level-1]}.`}</b> ${shText}</span>${nextN&&!visitor?`<a class="btn ghost sm" href="#/teste/aprofundar" id="deeperBtn">${L`Responder mais ${more}`}</a>`:""}</div>
@@ -1229,16 +1240,17 @@ function axisRow(a,main,other,mainLabel,otherLabel,{named=true}={}){
 // Who the thinker was: life, bio, central ideas and the line of thought.
 function aboutHTML(p,{title=p.died===null?L`Quem é ${p.n}`:L`Quem foi ${p.n}`}={}){
   if(!p.bio)return "";
-  const sameLine=PH.filter(x=>x!==p&&x.s===p.s);
+  const c=corrOf[p.id],same=c?c.ms.filter(x=>x!==p):[];
   return `<div class="panel about">
     <h2>${esc(title)}</h2>
     <p class="sub">${esc(lifeText(p))}${p.place?` · ${esc(p.place)}`:""}</p>
     <p class="about-bio">${esc(p.bio)}</p>
     <h3 class="about-h">${L`Ideias centrais`}</h3>
     <ul class="about-ideas">${p.ideas.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
-    ${p.line?`<h3 class="about-h">${L`A linha: ${esc(p.s)}`}</h3>
-    <p class="about-line">${esc(p.line)}</p>`:""}
-    ${sameLine.length?`<p class="about-same">${L`Na mesma linha:`} ${sameLine.map(x=>`<a href="#/p/${x.id}">${esc(x.n)}</a>`).join(", ")}</p>`:""}
+    ${p.line||c?`<h3 class="about-h">${L`A linha: ${esc(p.s)}`}</h3>
+    <p class="about-line">${esc(p.line||c.short)}</p>`:""}
+    ${same.length?`<p class="about-same">${L`Na mesma corrente:`} ${same.map(x=>`<a href="#/p/${x.id}">${esc(x.n)}</a>`).join(", ")}</p>`:""}
+    ${c?`<a class="btn ghost sm about-corr" href="#/corrente/${c.id}">${L`Conhecer a corrente: ${esc(c.n)}`} ${icon.arrow}</a>`:""}
   </div>`;
 }
 /* ---------- Timeline ---------- */
@@ -1388,9 +1400,9 @@ function renderCatalog(){
   let era="",q="",sort=lastR?"match":"era";
   mount(`
   <section class="wrap section" style="padding-top:clamp(32px,6vh,64px)">
-    <span class="eyebrow">${L`Catálogo`}</span>
+    ${catTabs("pensadores")}
     <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${L`${ALL.length} pensadores`}</h1>
-    <p class="lede" style="margin-top:16px">${L`${new Set(PH.map(p=>p.s)).size} correntes, da Grécia antiga a hoje.`} ${lastR?L`Cada card mostra sua afinidade e sua posição no ranking.`:L`Faça o teste para ver sua afinidade com cada um.`}</p>
+    <p class="lede" style="margin-top:16px">${L`<a href="#/correntes">${CORR.length} correntes</a>, da Grécia antiga a hoje.`} ${lastR?L`Cada card mostra sua afinidade e sua posição no ranking.`:L`Faça o teste para ver sua afinidade com cada um.`}</p>
     <div class="cat-tools">
       <label class="sr" for="q">${L`Buscar pensador ou corrente`}</label>
       <input class="search" id="q" type="search" placeholder="${L`Buscar pensador ou corrente`}" autocomplete="off">
@@ -1411,7 +1423,7 @@ function renderCatalog(){
   const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
   let offTips=null;
   const draw=()=>{
-    const list=ALL.filter(p=>(!era||p.era===era)&&(!q||norm(p.n+" "+p.s).includes(norm(q))));
+    const list=ALL.filter(p=>(!era||p.era===era)&&(!q||norm(p.n+" "+p.s+" "+((corrOf[p.id]||{}).n||"")).includes(norm(q))));
     if(sort==="az")list.sort((a,b)=>a.n.localeCompare(b.n,I.html));
     // Main and Brazilian thinkers share one scale (same normalized distance), so they sort together.
     if(sort==="match")list.sort((a,b)=>rankOf[a.id].distance-rankOf[b.id].distance||(a.id<b.id?-1:1));
@@ -1427,6 +1439,104 @@ function renderCatalog(){
   draw();
 }
 
+/* ---------- Schools of thought ---------- */
+// The catalog has two views, thinkers and schools; these tabs switch between them.
+const catTabs=on=>`<nav class="cat-tabs" aria-label="${L`Catálogo`}"><a href="#/pensadores"${on==="pensadores"?' aria-current="page"':""}>${L`Pensadores`}</a><a href="#/correntes"${on==="correntes"?' aria-current="page"':""}>${L`Correntes`}</a></nav>`;
+const corrYears=c=>c.alive?L`De ${yearText(c.from)} até hoje`:c.from===c.to?L`Nascido em ${yearText(c.from)}`:L`De ${yearText(c.from)} a ${yearText(c.to)}`;
+// The user's affinity with a school: the average of the affinities with its thinkers, same scale as the ranking.
+function corrMatch(c,r){
+  if(!r)return null;
+  const rows=[...r.ranking,...r.brazil].filter(x=>c.ms.includes(x.p));
+  if(!rows.length)return null;
+  const best=rows.reduce((a,b)=>b.distance<a.distance?b:a);
+  return {pct:r.directionless?null:Math.round(rows.reduce((s,x)=>s+x.pct,0)/rows.length),distance:rows.reduce((s,x)=>s+x.distance,0)/rows.length,best};
+}
+const corrDist=(a,b)=>a.v.reduce((s,x,i)=>s+Math.abs(x-b.v[i]),0)/a.v.length;
+const lastResult=()=>{const last=store.get("last");return last&&E.decode(last)?E.evaluate(E.decode(last)):null};
+
+function renderCorrentes(){
+  const lastR=lastResult(),m=Object.fromEntries(CORR.map(c=>[c.id,corrMatch(c,lastR)]));
+  const hasPct=!!lastR&&!lastR.directionless;
+  let q="",sort=lastR?"match":"era";
+  mount(`
+  <section class="wrap section" style="padding-top:clamp(32px,6vh,64px)">
+    ${catTabs("correntes")}
+    <h1 class="h2" style="font-size:clamp(52px,8vw,112px)">${L`${CORR.length} correntes`}</h1>
+    <p class="lede" style="margin-top:16px">${L`Escolas e tradições de pensamento, da Grécia antiga a hoje. Cada uma reúne os pensadores do catálogo que seguem esse caminho, e a mandala mostra a média deles nos 11 temas.`} ${lastR?L`Cada card mostra sua afinidade média com os pensadores da corrente.`:L`Faça o teste para ver sua afinidade com cada uma.`}</p>
+    <div class="cat-tools">
+      <label class="sr" for="q">${L`Buscar corrente ou pensador`}</label>
+      <input class="search" id="q" type="search" placeholder="${L`Buscar corrente ou pensador`}" autocomplete="off">
+      <label class="sr" for="sortSel">${L`Ordenar`}</label>
+      <select class="select" id="sortSel">
+        ${lastR?`<option value="match">${L`Maior afinidade comigo`}</option>`:""}
+        <option value="era">${L`Ordem histórica`}</option>
+        <option value="az">${L`Ordem alfabética`}</option>
+      </select>
+    </div>
+    <p class="sr" id="count" aria-live="polite"></p>
+    <div class="cards ccards" id="cards"></div>
+  </section>`,L`Correntes`);
+  const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  let offTips=null;
+  const draw=()=>{
+    const list=CORR.filter(c=>!q||norm(c.n+" "+c.short+" "+c.ms.map(p=>p.n+" "+p.s).join(" ")).includes(norm(q)));
+    if(sort==="era")list.sort((a,b)=>a.from-b.from);
+    if(sort==="az")list.sort((a,b)=>a.n.localeCompare(b.n,I.html));
+    if(sort==="match")list.sort((a,b)=>m[a.id].distance-m[b.id].distance);
+    document.getElementById("count").textContent=L`${list.length} correntes`;
+    document.getElementById("cards").innerHTML=list.length?list.map(c=>`<a class="tcard ccard" href="#/corrente/${c.id}"><span class="ccard-art"><span class="mini" data-id="${c.id}">${sigil(c.v,{cls:"sg-user",tips:true,title:L`Perfil médio de ${c.n} nos 11 temas`})}</span><span class="ccard-faces" aria-hidden="true">${c.ms.slice(0,4).map(p=>portrait(p,{cls:"avatar"})).join("")}</span></span><span class="nm">${esc(c.n)}</span><span class="ccard-short">${esc(c.short)}</span><span class="sc">${c.ms.length===1?L`1 pensador`:L`${c.ms.length} pensadores`} · ${esc(corrYears(c))}</span>${hasPct&&m[c.id]?`<span class="pc">${L`${m[c.id].pct}% de afinidade`}</span>`:""}</a>`).join(""):`<p class="empty">${L`Nenhuma corrente encontrada.`}</p>`;
+    if(offTips)offTips();offTips=wireTips(document.getElementById("cards"),el=>{const c=corrById[el.closest(".mini").dataset.id];return {p:{n:c.n,v:c.v},user:lastR?lastR.scores:null}});
+  };
+  document.getElementById("q").addEventListener("input",e=>{q=e.target.value;draw()});
+  document.getElementById("sortSel").addEventListener("change",e=>{sort=e.target.value;draw()});
+  draw();
+}
+
+function renderCorrente(id){
+  const c=corrById[id];
+  if(!c){renderNotFound(L`Não encontramos essa corrente.`);return}
+  const lastR=lastResult(),mt=corrMatch(c,lastR);
+  const rowOf=Object.fromEntries(lastR?[...lastR.ranking,...lastR.brazil].map(x=>[x.p.id,x]):[]);
+  const prof={n:c.n,v:c.v};
+  // The three themes where the school leans hardest, and the schools with the closest average profile.
+  const strong=AXES.map((a,i)=>({a,i,x:c.v[i]})).filter(s=>Math.abs(s.x)>=.13).sort((a,b)=>Math.abs(b.x)-Math.abs(a.x)).slice(0,3);
+  const near=CORR.filter(x=>x!==c).sort((a,b)=>corrDist(a,c)-corrDist(b,c)).slice(0,3);
+  const starters=c.ms.slice(0,3);
+  mount(`
+  <section class="wrap th-hero">
+    <div>
+      <a class="back" href="#/correntes">${icon.back} ${L`Todas as correntes`}</a>
+      <h1 class="res-name" style="margin-top:18px"><span class="line"><span>${esc(c.n)}</span></span></h1>
+      <div class="res-school">${c.ms.length===1?L`1 pensador`:L`${c.ms.length} pensadores`} · ${esc(corrYears(c))}</div>
+      <p class="corr-short">${esc(c.short)}</p>
+      ${strong.length?`<div class="traits">${strong.map((s,i)=>`<span class="trait" style="--i:${i}"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")}</div>`:""}
+      <div class="res-actions">${mt?`<span class="btn ghost" style="cursor:default">${mt.pct===null?L`Mais perto de você: ${esc(mt.best.p.n)}`:L`${mt.pct}% de afinidade média`}</span>`:`<a class="btn accent" href="#/teste">${L`Ver minha afinidade`} ${icon.arrow}</a>`}</div>
+    </div>
+    <div class="panel-sigil corr-sigil">${sigil(c.v,{labels:true,cls:"sg-user",compare:lastR?lastR.scores:null,tips:true,title:L`Perfil médio de ${c.n} nos 11 temas`})}<p class="tip-hint">${L`Média dos pensadores da corrente.`} ${L`<span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada tema para ver a posição de ${esc(c.n)}.`}${lastR?` ${L`Tracejado: você.`}`:""}</p></div>
+  </section>
+  <section class="wrap" style="padding-bottom:64px">
+    <div class="grid2">
+      <div style="display:grid;gap:20px;align-content:start">
+        <div class="panel about">
+          <h2>${L`O que é`}</h2>
+          ${c.text.map(t=>`<p class="about-bio">${esc(t)}</p>`).join("")}
+          <h3 class="about-h">${L`Ideias centrais`}</h3>
+          <ul class="about-ideas">${c.ideas.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+        </div>
+        <div class="panel"><h2>${L`Para começar a ler`}</h2><p class="sub">${L`O livro de entrada de cada pensador, escolhido para quem está começando.`}</p>
+          <ol class="reads">${starters.map(p=>bookItem(p,0,p.b,L`${esc(p.n)} · Ver na Amazon`)).join("")}</ol>${affNote()}</div>
+      </div>
+      <div style="display:grid;gap:20px;align-content:start">
+        <div class="panel"><h2>${c.ms.length===1?L`O pensador`:L`Os pensadores`}</h2><p class="sub">${lastR?L`Com a sua afinidade com cada um.`:L`Cada um com seu jeito de seguir a corrente.`}</p>
+          <ul class="match-list">${c.ms.map(p=>{const x=rowOf[p.id];return `<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(lifeText(p))}</span></span><span class="pc">${x&&x.pct!==null?`${x.pct}%`:'<span aria-hidden="true">→</span>'}</span></a></li>`}).join("")}</ul></div>
+        <div class="panel"><h2>${L`Correntes vizinhas`}</h2><p class="sub">${L`As de perfil médio mais parecido nos 11 temas.`}</p>
+          <ul class="match-list">${near.map(x=>`<li><a href="#/corrente/${x.id}"><span class="avatar corr-mini" aria-hidden="true">${sigil(x.v,{cls:"sg-user",decorative:true})}</span><span><span class="nm">${esc(x.n)}</span><span class="sc">${esc(x.short)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul></div>
+      </div>
+    </div>
+  </section>`,c.n);
+  wireTips(app,{user:lastR?lastR.scores:null,r:null,p:prof});
+}
+
 function renderThinker(id){
   const p=byId[id];
   if(!p){renderNotFound(L`Não encontramos esse pensador.`);return}
@@ -1440,7 +1550,7 @@ function renderThinker(id){
     <div>
       <a class="back" href="#/pensadores">${icon.back} ${L`Todos os pensadores`}</a>
       <h1 class="res-name" style="margin-top:18px"><span class="line"><span>${esc(p.n)}</span></span></h1>
-      <div class="res-school">${esc(p.s)} · ${esc(p.era)}</div>
+      <div class="res-school">${schoolLink(p)} · ${esc(p.era)}</div>
       <div class="res-arch">${L`Arquétipo:`} <b>${esc(archetype(p.v).name)}</b></div>
       <blockquote class="res-quote">“${esc(p.q)}”</blockquote>
       <div class="res-actions">${mine?`<span class="btn ghost" style="cursor:default">${mine.pct===null?"":L`${mine.pct}% de afinidade · `}${L`${mine.rank}º de ${ofN}`}</span>`:`<a class="btn accent" href="#/teste">${L`Ver minha afinidade`} ${icon.arrow}</a>`}</div>
@@ -1522,7 +1632,7 @@ ${L`distância bruta = média de |sua posição − posição do pensador|, sem 
         <li>${L`que mudar duas respostas em um passo mantém o mesmo par no top 3 em mais de 95% dos casos;`}</li>
         <li>${L`que todos os 11 eixos influenciam o resultado.`}</li>
       </ul>
-      <p>${L`Uma segunda auditoria prova que todos os ${PH.length} pensadores, e portanto todas as ${new Set(PH.map(p=>p.s)).size} correntes, podem ser o resultado: pelo perfil exato de cada um, por uma busca que parte de respostas aleatórias e por simulação com 60 mil pessoas. O mesmo vale para os ${E.BRAZIL.length} pensadores do ranking brasileiro.`}</p>
+      <p>${L`Uma segunda auditoria prova que todos os ${PH.length} pensadores, e portanto todas as ${CORR.filter(c=>c.ms.some(p=>!p.regional)).length} correntes, podem ser o resultado: pelo perfil exato de cada um, por uma busca que parte de respostas aleatórias e por simulação com 60 mil pessoas. O mesmo vale para os ${E.BRAZIL.length} pensadores do ranking brasileiro.`}</p>
       <h3>${L`Sem viés de lado, de época ou de nível`}</h3>
       <ul>
         <li>${L`<b>Espelho:</b> inverter todas as respostas inverte exatamente todos os eixos. E se o catálogo inteiro também for espelhado, o ranking sai idêntico, com as mesmas distâncias. A fórmula não prefere nenhum polo.`}</li>

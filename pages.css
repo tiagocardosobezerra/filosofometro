@@ -28,3 +28,11 @@
   .sp-pic{width:min(220px,60%)}
 }
 .sp-arch{margin:6px 0 0;color:var(--ink2)}.sp-arch b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.4em;color:var(--accent)}
+/* School pages: a row of member portraits stands in for the single portrait. */
+.sp-faces{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-self:center}
+.sp-faces .avatar{width:100%;height:auto;aspect-ratio:1;flex:none}
+.sp-faces .noimg{display:grid;place-items:center}
+.sp-faces .sp-initials{font-size:36px}
+.sp-schools .sc+.sc{margin-top:6px}
+.eyebrow a{color:inherit}
+@media (max-width:760px){.sp-faces{grid-template-columns:repeat(4,64px)}}

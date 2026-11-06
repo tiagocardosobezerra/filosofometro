@@ -56,7 +56,11 @@ for (const lang of Object.keys(FIXED)) {
   const miss = DATA.PH.filter(p => !ph[p.id]).map(p => p.id);
   if (miss.length) throw new Error(`${lang}: thinkers without translation: ${miss.join(", ")}`);
   if (qs.length !== DATA.QS.length) throw new Error(`${lang}: ${qs.length} statements, expected ${DATA.QS.length}`);
-  const pack = { lang, regionName: F.regionName, axes: F.axes.map(([name, l, r]) => ({ name, l, r })), eras: F.eras, words: F.words, alias, ui, qs, ph, regional };
+  // Schools of thought: name, summary, text and ideas for every corrente in correntes.js.
+  const correntes = read(`${lang}-correntes.json`);
+  const missC = require(path.join(ROOT, "correntes.js")).filter(c => !correntes[c.id]).map(c => c.id);
+  if (missC.length) throw new Error(`${lang}: correntes without translation: ${missC.join(", ")}`);
+  const pack = { lang, regionName: F.regionName, axes: F.axes.map(([name, l, r]) => ({ name, l, r })), eras: F.eras, words: F.words, alias, ui, qs, ph, regional, correntes };
   const json = JSON.stringify(pack);
   if (/[—–]/.test(json)) console.warn(`${lang}: contains a long dash`);
   fs.mkdirSync(path.join(ROOT, "i18n"), { recursive: true });

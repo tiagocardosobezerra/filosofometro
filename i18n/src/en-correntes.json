@@ -1,0 +1,509 @@
+{
+ "pre-socraticos": {
+  "n": "Pre-Socratics",
+  "short": "The first Greek philosophers, who tried to explain nature and the cosmos through reason rather than myth alone.",
+  "text": [
+   "The Pre-Socratics asked a simple and bold question: what is the world made of, and why does it change? Instead of putting everything down to the will of the gods, they looked for a natural principle behind things, which they called the arche. Some bet on water, fire or numbers; others asked whether change is real or only appearance. With them comes the idea that nature can be understood by thinking.",
+   "They lived between the sixth and fifth centuries BC, in Greek cities in Asia Minor, Italy and Sicily. The name comes from their working before Socrates or outside his influence. Pythagoras saw numbers in the order of the universe, Heraclitus stressed constant flux, Parmenides denied change, Democritus proposed atoms, and Protagoras, already a Sophist, turned to human beings. Their questions opened the way for both philosophy and science."
+  ],
+  "ideas": [
+   "Nature follows principles that reason can discover",
+   "Behind the variety of things lies a common origin",
+   "Change and permanence are the great riddle of the world"
+  ]
+ },
+ "platonismo": {
+  "n": "Platonism",
+  "short": "A tradition that sees, beyond the world of the senses, a reality of eternal ideas such as the Good, Beauty and Justice.",
+  "text": [
+   "Platonism holds that the world we see is not the whole of reality. Things change and pass away, but what makes them just, beautiful or true would be something stable that reason can grasp: the Ideas, or Forms. Its central question is how to move from opinion to true knowledge. For Platonists, knowing the Good changes one's life, and philosophy is a path that transforms the soul.",
+   "It arose in Athens in the fourth century BC, when Plato turned the conversations of his teacher Socrates into a system and founded the Academy. Centuries later Plotinus created Neoplatonism, which deeply shaped Saint Augustine and, through him, Christian thought. In seventeenth-century England Ralph Cudworth led the Cambridge Platonists, and in the twentieth century Iris Murdoch defended the idea of the Good in ethics. Current debates on whether numbers and values are real still engage this tradition."
+  ],
+  "ideas": [
+   "Beyond the world of the senses there are eternal, unchanging Ideas",
+   "To know is to rise from opinion to truth",
+   "The Good is the highest standard for life and knowledge"
+  ]
+ },
+ "aristotelismo-escolastica": {
+  "n": "Aristotelianism and Scholasticism",
+  "short": "Aristotle's philosophy and the medieval tradition that joined it to faith, seeking rational order in nature, ethics and God.",
+  "text": [
+   "Aristotelianism starts from the concrete world: to understand something, we must ask what it is made of, what form it has, what produces it and what it is for. Every being has a nature and a purpose, and the good life consists in fulfilling human nature well through the virtues. Scholasticism, the method of the medieval schools, applied this rigorous logic to a great question: how can reason and faith agree?",
+   "Aristotle taught in Athens in the fourth century BC. His works were preserved and commented on in the Islamic and Jewish worlds by Averroes and Maimonides, and reached the European universities, where Thomas Aquinas joined them to Christian theology. William of Ockham challenged part of that structure. In the Iberian world, Francisco Suárez, Juan de Mariana and Bartolomé de las Casas applied the tradition to law and politics, and António Vieira took it to the pulpit. In the twentieth century Elizabeth Anscombe helped revive virtue ethics."
+  ],
+  "ideas": [
+   "Every being has its own nature and purpose",
+   "Happiness comes from living according to the virtues",
+   "Reason and faith can go together without contradiction"
+  ]
+ },
+ "cinismo-estoicismo": {
+  "n": "Cynicism and Stoicism",
+  "short": "Greek and Roman schools that teach living in agreement with nature, seeking virtue and inner freedom.",
+  "text": [
+   "Cynics and Stoics ask what truly depends on us and what we need in order to live well. Their shared answer: virtue is enough. Wealth, fame and comfort are not the true good, and whoever clings to them becomes a slave of chance. The Cynics took this to the extreme, living with almost nothing and defying convention. The Stoics turned it into a way of life: accept what we cannot control and act justly in what we can.",
+   "Cynicism arose in Athens in the fourth century BC with Antisthenes and Diogenes, famous for living in a jar and mocking the powerful. Soon after, Zeno of Citium founded Stoicism, inspired by that simplicity but with a broader view of the cosmos and civic duty. In Rome the school gained three famous voices: Seneca, adviser to Nero; Epictetus, a former slave; and the emperor Marcus Aurelius. Today their ideas reappear in self-help books and in cognitive psychology."
+  ],
+  "ideas": [
+   "Virtue is the only true good",
+   "We must separate what depends on us from what does not",
+   "To live well is to live in agreement with nature and reason"
+  ]
+ },
+ "hedonismo": {
+  "n": "Hedonism and Epicureanism",
+  "short": "A tradition that sees pleasure and the absence of pain as the measure of a good life, in both intense and moderate versions.",
+  "text": [
+   "Hedonism holds that pleasure is the good and pain is the bad, and asks: which kind of pleasure is worth pursuing? For some it is the intense pleasure of the present moment. For Epicureanism it is above all tranquility: a body free of pain and a mind free of fear. That calls for a simple life, solid friendships and freedom from fears such as those of death and the gods.",
+   "Aristippus of Cyrene, a pupil of Socrates, defended immediate pleasure in the fourth century BC. Soon after, Epicurus founded the Garden in Athens, a community of friends that sought moderate pleasures and explained the world through atoms. In Rome, Lucretius set out these ideas in the poem On the Nature of Things. In modern times Oscar Wilde made aesthetic pleasure a way of life, and Michel Onfray revived hedonism as an atheist and libertarian philosophy."
+  ],
+  "ideas": [
+   "Pleasure is the good, and pain is the evil to avoid",
+   "The greatest pleasure is a calm body and mind",
+   "Death is not to be feared, since we will not feel it"
+  ]
+ },
+ "ceticismo": {
+  "n": "Skepticism",
+  "short": "A tradition that doubts we can reach certainty and proposes suspending judgment in order to live more calmly.",
+  "text": [
+   "Skepticism asks: can we be certain of anything? For almost every claim, the skeptic notes, one can find an opposing argument just as strong. Instead of taking a side, the skeptic proposes suspending judgment, neither affirming nor denying. This does not mean giving up on life: the skeptic follows custom and everyday appearances, and believes that letting go of the craving for certainty brings peace of mind.",
+   "Pyrrho of Elis, in the fourth century BC, is regarded as the founder of ancient skepticism, later set down in writing by Sextus Empiricus. In the Renaissance, Montaigne revived doubt in his Essays, asking 'what do I know?'. In Argentina, Jorge Luis Borges explored the limits of knowledge in stories and essays. In Brazil, Oswaldo Porchat developed a neo-Pyrrhonism that accepts ordinary life without dogmas. The tradition remains alive in debates about what we really know."
+  ],
+  "ideas": [
+   "Every argument can be met by an opposing one of equal force",
+   "Suspending judgment brings peace of mind",
+   "One can live by appearances without asserting truths"
+  ]
+ },
+ "pensamento-chines": {
+  "n": "Confucianism and Taoism",
+  "short": "The two great traditions of classical Chinese philosophy: one focused on social order and virtue, the other on harmony with the Tao.",
+  "text": [
+   "Classical Chinese thought asks how to live in harmony with oneself, with others and with the world. Confucianism answers with cultivated virtues: respect for parents, sincerity, ritual and rulers who lead by example. Taoism answers with the Tao, the natural way of things, which cannot be forced: acting without forcing (wu wei), simplifying life and learning from water, which overcomes the hard by being soft.",
+   "These traditions arose in China between the sixth and third centuries BC, in an age of war and political crisis. Confucius taught that a good society begins with good personal conduct. Lao Tzu, to whom the Tao Te Ching is attributed, urged distrust of power and artificial rules. Yang Zhu, more radical, defended preserving one's own life rather than sacrificing it for the state. Together these views shaped East Asian culture for more than two thousand years."
+  ],
+  "ideas": [
+   "A good society grows from virtue cultivated in each person",
+   "Acting without forcing, following the Tao, leads to harmony",
+   "Ritual and respectful relationships sustain life in common"
+  ]
+ },
+ "budismo": {
+  "n": "Buddhism",
+  "short": "A tradition born in India that sees suffering as the fruit of attachment and teaches a path to be freed from it.",
+  "text": [
+   "Buddhism starts from an observation: life involves suffering, and much of it comes from attachment, from wanting things to be permanent when everything changes. Not even the self would be a fixed thing. The central question is how to be freed from this cycle. The answer is the Noble Eightfold Path, which joins ethical conduct, meditation and wisdom, leading to nirvana, the extinction of the craving that produces suffering.",
+   "It arose in northern India around the fifth century BC with the teachings of Siddhartha Gautama, the Buddha. It spread across Asia and developed many schools. In thirteenth-century Japan, Dogen founded the Soto school of Zen, centered on seated meditation. In the twentieth century Alan Watts introduced Zen to Western audiences, and in Brazil Monja Coen, of the Soto lineage, teaches the practice. Today mindfulness techniques inspired by Buddhism are used even in health care."
+  ],
+  "ideas": [
+   "Suffering arises from attachment and craving",
+   "Everything is impermanent, including the self",
+   "Ethics, meditation and wisdom lead to liberation"
+  ]
+ },
+ "vedanta": {
+  "n": "Vedanta",
+  "short": "A school of Indian philosophy that, drawing on the Upanishads, explores the link between the inner self and ultimate reality.",
+  "text": [
+   "Vedanta asks what ultimate reality is and who we truly are. Drawing on the Upanishads, the texts that close the Vedas, it holds that there is an absolute reality, Brahman, and a deep self, Atman. In its Advaita, or non-dual, branch the two are one and the same: the feeling of being individuals cut off from the whole comes from ignorance, and liberation comes from directly knowing this unity.",
+   "Vedanta took shape over centuries in India through commentaries on the Upanishads, the Brahma Sutras and the Bhagavad Gita. Around the eighth century, Shankara gave Advaita Vedanta its classic form, travelling across India, debating other schools and founding monasteries. Later branches kept some distinction between the self and God. In the nineteenth century Vedanta reached the West and influenced writers, scientists and spiritual seekers."
+  ],
+  "ideas": [
+   "There is a single ultimate reality, called Brahman",
+   "The deep self (Atman) is identical to Brahman",
+   "Liberation comes from knowledge, not from ritual alone"
+  ]
+ },
+ "pensamento-cristao": {
+  "n": "Christian thought",
+  "short": "Philosophical reflection grounded in Christian faith, on God, the human person, evil, grace and the meaning of life.",
+  "text": [
+   "Christian thought starts from faith in a personal, creating and loving God, revealed in Jesus Christ, and asks what this means for reason and for life. How can the existence of evil be reconciled with divine goodness? What is the dignity of the person? What roles do grace and freedom play? Its authors hold that faith does not cancel thinking but gives it a horizon and a moral demand.",
+   "It has accompanied Christianity from the start, but this group brings together modern voices. John Calvin, in the sixteenth century, was a leader of the Protestant Reformation. Pascal, in the seventeenth, wrote of the reasons of the heart. John Henry Newman, in the nineteenth, reflected on conscience and the development of doctrine. In the twentieth century G. K. Chesterton and C. S. Lewis defended faith with humor and argument, Simone Weil wrote on attention and suffering, and Gabriela Mistral joined faith, poetry and social commitment."
+  ],
+  "ideas": [
+   "Faith and reason complete each other in the search for truth",
+   "Every person has dignity as a creature of God",
+   "Love of neighbor is the heart of moral life"
+  ]
+ },
+ "realismo-politico": {
+  "n": "Political realism",
+  "short": "A tradition that studies power as it actually works rather than as it should be, setting politics apart from idealized morality.",
+  "text": [
+   "Political realism asks how power is really won and kept. Instead of describing ideal governments, it looks at people as they are: driven by interest, ambition and fear. From this it concludes that those who govern must sometimes act in prudent and calculated ways, weighing consequences more than good intentions. For this tradition, ignoring the reality of power usually leads to failure.",
+   "It has ancient roots, such as the Greek historian Thucydides, but took modern shape in Renaissance Italy with Machiavelli, who in The Prince described the techniques of rule without euphemism. In the seventeenth century the Spanish Jesuit Baltasar Gracián brought this outlook to court life and personal relations, with advice on prudence and discretion. The tradition later influenced the theory of international relations and remains present in discussions of ethics and power."
+  ],
+  "ideas": [
+   "Politics must be seen as it is, not as it ought to be",
+   "Results matter more than good intentions",
+   "Prudence and calculation are virtues for those who hold power"
+  ]
+ },
+ "racionalismo": {
+  "n": "Rationalism",
+  "short": "A modern tradition that sees reason, rather than the senses, as the main source of secure knowledge.",
+  "text": [
+   "Rationalism asks where certain knowledge comes from. Its answer: from reason. The senses deceive, but the mind can reach necessary truths, like those of mathematics, by deduction from self-evident principles. Many rationalists also hold that we are born with certain ideas, such as those of number or of God. The ideal is to build knowledge like a geometric structure, step by step and without gaps.",
+   "It flourished in seventeenth-century Europe. Descartes sought an indubitable foundation and found it in 'I think, therefore I am'. Spinoza wrote his Ethics in geometric form, identifying God with nature. Leibniz held that nothing happens without a sufficient reason. Rationalism debated British empiricism, and Kant later tried to reconcile the two. In Brazil, Marilena Chauí has devoted decades to studying Spinoza, linking his philosophy to the defense of democracy."
+  ],
+  "ideas": [
+   "Reason is the most secure source of knowledge",
+   "Some ideas are innate and do not come from experience",
+   "Everything has a reason that can be understood"
+  ]
+ },
+ "empirismo": {
+  "n": "Empiricism",
+  "short": "A tradition holding that all knowledge comes from experience and the senses, not from innate ideas.",
+  "text": [
+   "Empiricism holds that the mind starts as a blank slate and that everything we know comes from experience. Its central question is how far experience can take us. If we only know what we perceive, what can we say about things we never observe directly, such as causation, substance or the self? Taken seriously, empiricism sets clear limits on what we can claim with confidence.",
+   "It developed mainly in the British Isles in the seventeenth and eighteenth centuries, with John Locke as a key reference. The Irish bishop George Berkeley radicalized the idea: to be is to be perceived, and only minds and their perceptions exist. The Scot David Hume showed that we never see causation, only repeated sequences, and that our belief in it comes from habit. Their ideas influenced Kant, the philosophy of science and the experimental method."
+  ],
+  "ideas": [
+   "All knowledge begins with the experience of the senses",
+   "There are no innate ideas: the mind starts as a blank slate",
+   "Belief in causation comes from habit, not pure reason"
+  ]
+ },
+ "contratualismo": {
+  "n": "Social contract theory",
+  "short": "A tradition that explains society and government as the result of an agreement, or contract, among free and equal people.",
+  "text": [
+   "Social contract theory asks: why should we obey the government? Its answer is that political power is legitimate only if it can be seen as the result of an agreement among the people. To think this through, it imagines a state of nature, with no government or laws, and asks why anyone would agree to leave it. The social contract would explain both the origin of authority and its limits.",
+   "It gained ground in Europe in the seventeenth and eighteenth centuries, amid civil wars and revolutions. Thomas Hobbes saw the state of nature as a war of all against all and argued for a strong sovereign. John Locke held that people have natural rights to life, liberty and property, which government must protect. Rousseau wrote of the general will and the sovereignty of the people. Their ideas shaped modern democracies and today's theories of justice."
+  ],
+  "ideas": [
+   "Political power is legitimate when it rests on consent",
+   "Without government, life would be insecure or unjust",
+   "The social contract sets both authority and its limits"
+  ]
+ },
+ "iluminismo": {
+  "n": "Enlightenment",
+  "short": "An 18th-century movement that trusted reason, science and liberty to criticize tradition and reform society.",
+  "text": [
+   "The Enlightenment held that people should use their own reason instead of accepting, without examination, the authority of kings, churches and customs. Its core question was: how can life and politics be organized rationally, securing freedom and dignity for every individual? From this came the defense of religious tolerance, freedom of expression, broad education, natural rights and governments that answer to their citizens.",
+   "The movement gained strength in 18th-century Europe, above all in France, England and Scotland, and inspired the American and French revolutions. Voltaire was its most famous voice against intolerance and fanaticism. Thomas Paine brought these ideas to a wide public, defending American independence and the rights of man. In Spanish America, Andrés Bello applied this spirit to the education and law of the new republics. Many of today's democracies inherit these ideals."
+  ],
+  "ideas": [
+   "Reason should examine every authority, including religious and political ones.",
+   "Every human being has natural rights that government must respect.",
+   "Education and science are paths to progress and freedom."
+  ]
+ },
+ "liberalismo": {
+  "n": "Liberalism",
+  "short": "A tradition that puts individual liberty, rights and government limited by law at the center of political and economic life.",
+  "text": [
+   "Liberalism holds that every person has rights no government may violate, such as the freedom to think, speak, believe, work and trade. Its core question is: how can people with different values live together in freedom? The answer involves the rule of law, separation of powers, tolerance, property and markets. Within it there are versions that rely more on free markets and versions that ask the state to secure the minimum conditions everyone needs to exercise their freedom.",
+   "Born between the 17th and 18th centuries, liberalism gained an economic foundation with Adam Smith, who showed how free exchange can create prosperity. In the 20th century, Friedrich Hayek defended the market against central planning, while John Rawls formulated a liberalism focused on social justice. Isaiah Berlin distinguished negative and positive liberty, and Martha Nussbaum developed the idea of human capabilities. In Brazil, José Guilherme Merquior sought to join liberty and social justice, and in Argentina Domingo F. Sarmiento linked liberalism and education."
+  ],
+  "ideas": [
+   "The individual has rights that come before the power of the state.",
+   "Political power must be limited by laws, constitutions and elections.",
+   "A free society must make room for people with different beliefs."
+  ]
+ },
+ "libertarismo": {
+  "n": "Libertarianism",
+  "short": "A tradition that defends maximum individual liberty, private property and a minimal state, or even no state at all.",
+  "text": [
+   "Libertarianism starts from the idea that each person owns themselves and the fruits of their own labor. Therefore no one, not even the government, may use force against someone who has harmed no one. Its core question is: what justifies the state in compelling anyone to do anything? For libertarians, high taxes, extensive regulation and forced redistribution of income usually violate rights. Human relations should rest on voluntary exchanges and agreements.",
+   "The tradition took shape in the 20th-century United States, heir to classical liberalism and the Austrian school of economics. Ayn Rand, who preferred to call her philosophy Objectivism, defended individualism and rational self-interest in widely read novels and essays. In 1974 Robert Nozick argued that only a minimal state, limited to protecting against force, theft and fraud, is legitimate. Murray Rothbard went further and proposed anarcho-capitalism, a society without a state. It remains present in debates about taxes, regulation and civil liberties."
+  ],
+  "ideas": [
+   "Each person owns themselves and the fruits of their own labor.",
+   "No one may initiate force against someone who has harmed no one.",
+   "The state should be minimal or, for some, should not exist at all."
+  ]
+ },
+ "conservadorismo": {
+  "n": "Conservatism",
+  "short": "A tradition that values institutions, customs and accumulated experience, and prefers gradual reform to radical rupture.",
+  "text": [
+   "Conservatism holds that society is not a machine to be redesigned from scratch but something formed over generations. Family, religion, local communities, laws and customs preserve a practical wisdom that no single individual can reproduce. Its core question is: what should we preserve, and how can we change without destroying what works? Conservatives do not reject all change, but they distrust projects that promise to remake society on the basis of an abstract theory.",
+   "As a modern tradition it began with Edmund Burke, who criticized the French Revolution in 1790. Joseph de Maistre defended authority and Catholic tradition against the revolutionary spirit. In the 20th century, Michael Oakeshott criticized rationalism in politics, Russell Kirk systematized American conservatism and Roger Scruton wrote about beauty, nation and belonging. Thomas Sowell analyzed worldviews and public policy. In Brazil, Gustavo Corção represented Catholic traditionalism, and in Colombia Nicolás Gómez Dávila defended tradition in aphorisms."
+  ],
+  "ideas": [
+   "Tradition holds wisdom accumulated over many generations.",
+   "Change should be gradual and build on what already exists.",
+   "Family, religion and community sustain a free and stable social life."
+  ]
+ },
+ "utilitarismo": {
+  "n": "Utilitarianism",
+  "short": "An ethical theory holding that the right action is the one that produces the greatest happiness for the greatest number.",
+  "text": [
+   "Utilitarianism says that the moral worth of an action depends on its consequences: what is right is what increases well-being and reduces suffering, counting the interests of everyone affected equally. Its core question is: which choice produces the best overall outcome? This simple idea has strong implications, because it demands impartiality, accepts weighing gains and losses across people and can lead to demanding moral duties, such as giving away a large share of what we have.",
+   "It arose in late 18th-century England with Jeremy Bentham, who wanted to reform laws and prisons by measuring pleasure and pain. John Stuart Mill refined the theory, distinguishing higher and lower pleasures, and defended individual liberty and the equality of women. Henry Sidgwick gave utilitarianism its most rigorous academic form. Today Peter Singer applies this reasoning to global poverty and the treatment of animals, influencing the effective altruism movement and debates in bioethics."
+  ],
+  "ideas": [
+   "What is right is what produces the most well-being and least suffering overall.",
+   "The interests of every affected being count equally.",
+   "The consequences of actions matter more than fixed rules."
+  ]
+ },
+ "idealismo-alemao": {
+  "n": "German idealism",
+  "short": "A German philosophical movement, from Kant to Hegel, that studied how mind and spirit shape the reality we know.",
+  "text": [
+   "German idealism asks what role the mind plays in building knowledge and reality. Kant argued that we do not see things as they are in themselves: space, time and causality are forms that our reason imposes on experience. The idealists who followed went further and tried to show that reason, nature, history and freedom form a single system. The underlying question is: how does the thinking subject relate to the world it knows?",
+   "The movement flourished in Germany between the late 18th and mid 19th centuries. Kant opened the way with his three Critiques. Fichte and Schelling developed his ideas, and Hegel built a vast system in which spirit realizes itself in history through contradictions and their overcoming, known as dialectic. Schopenhauer started from Kant but rejected Hegel and saw a blind will, not reason, at the bottom of the world. Marx, existentialism and phenomenology all arose in dialogue with this tradition."
+  ],
+  "ideas": [
+   "The mind actively shapes the way the world appears to us.",
+   "Reason, nature and history can be understood as a single system.",
+   "Human freedom is central to understanding morality and politics."
+  ]
+ },
+ "transcendentalismo": {
+  "n": "Transcendentalism",
+  "short": "A 19th-century American movement that sought truth in individual intuition, in nature and in one's own conscience.",
+  "text": [
+   "Transcendentalism holds that every person has direct access to moral and spiritual truths through intuition, without depending on churches, traditions or majority opinion. Nature is seen as a place of revelation and inner renewal. Its core question is: how can one live authentically, true to one's own conscience? From this come its praise of self-reliance, simple living and contact with nature, and its refusal to obey laws judged to be unjust.",
+   "The movement arose in New England, in the United States, around 1830, inspired by European Romanticism, by Kant and by religious texts from India. Ralph Waldo Emerson was its leading thinker, with essays such as Nature and Self-Reliance. Henry David Thoreau, his friend, lived for a little over two years in a cabin by Walden Pond and wrote Civil Disobedience, defending the peaceful refusal of unjust laws. Their ideas influenced Gandhi, Martin Luther King Jr. and modern environmentalism."
+  ],
+  "ideas": [
+   "Each person can reach truth through intuition and conscience.",
+   "Nature is a source of wisdom and spiritual renewal.",
+   "No one should obey a law their conscience judges to be unjust."
+  ]
+ },
+ "existencialismo": {
+  "n": "Existentialism",
+  "short": "A tradition that starts from each person's concrete existence: their freedom, their choices, anxiety and the search for meaning.",
+  "text": [
+   "Existentialism holds that human beings have no ready-made essence that defines in advance what they must be. Each person makes themselves through the choices they make, and is therefore responsible for them. Its core question is: how can we live meaningfully in a world that offers no guaranteed answers? Freedom, anxiety, death, the absurd, authenticity and solitude move to the center of reflection, always starting from lived experience rather than abstract systems.",
+   "Its forerunners were Kierkegaard, who in the 19th century defended personal choice and faith against grand systems, and Nietzsche, who announced the death of God and the challenge of creating values. The term became famous in France after the Second World War with Jean-Paul Sartre, for whom existence precedes essence. Albert Camus, who rejected the label, explored the absurd and revolt. In the Spanish-speaking world, Miguel de Unamuno wrote on the tragic sense of life, José Ortega y Gasset proposed vital reason and María Zambrano, poetic reason."
+  ],
+  "ideas": [
+   "Existence precedes essence: each of us is made by our own choices.",
+   "We are free and therefore responsible for what we do.",
+   "The meaning of life is not given: it must be embraced or created."
+  ]
+ },
+ "anarquismo": {
+  "n": "Anarchism",
+  "short": "A tradition that defends a society without the state or domination, organized through free cooperation and voluntary association.",
+  "text": [
+   "Anarchism holds that the state and other forms of imposed authority, such as economic exploitation, are neither necessary nor legitimate. People would be able to organize themselves, in communities, cooperatives and free federations. Its core question is: what power over others can be justified? For anarchists, every hierarchy must prove its legitimacy, and most cannot. Individual freedom and collective solidarity must go together.",
+   "William Godwin laid its foundations in the late 18th century, and Proudhon was the first to call himself an anarchist, in 1840. Max Stirner defended a radical individualism that shaped individualist anarchism, while Mikhail Bakunin joined anarchism to the workers' struggle and broke with Marx. Emma Goldman brought these ideas to the United States and tied them to women's freedom. In Brazil, José Oiticica took part in the early 20th-century labor movement. Today Noam Chomsky defends libertarian socialism, and the tradition inspires experiments in self-management."
+  ],
+  "ideas": [
+   "The state and imposed domination are neither legitimate nor necessary.",
+   "Every hierarchy must justify itself, and most cannot.",
+   "Society can organize itself through cooperation and voluntary association."
+  ]
+ },
+ "marxismo": {
+  "n": "Socialism and Marxism",
+  "short": "A tradition that criticizes capitalism and defends collective ownership of the means of production to overcome exploitation and classes.",
+  "text": [
+   "Socialism holds that the wealth produced by collective labor should serve everyone, not a property-owning minority. Marxism gives this idea a theory of history: the way a society produces and distributes wealth shapes its politics, law and culture, and history moves forward through conflicts between classes. Its core question is: why, under capitalism, do those who work create wealth that ends up with others, and how can this exploitation be overcome?",
+   "Early socialists such as Charles Fourier imagined cooperative communities in the early 19th century. Karl Marx, with Engels, called these projects utopian and wrote Capital, an analysis of how capitalism works. In the 20th century, Antonio Gramsci studied how culture sustains power, an idea taken up in Brazil by Carlos Nelson Coutinho. Roberto Schwarz applied Marxist criticism to Brazilian literature, José Carlos Mariátegui adapted it to Peru and C. L. R. James connected it to the anticolonial struggle. Slavoj Žižek combines it with psychoanalysis."
+  ],
+  "ideas": [
+   "The economy and labor shape politics, law and culture.",
+   "Under capitalism, workers produce value they do not get to keep.",
+   "The means of production should belong to the community as a whole."
+  ]
+ },
+ "positivismo": {
+  "n": "Positivism and scientism",
+  "short": "A tradition that takes science as the model for all reliable knowledge and wants to apply scientific method to society too.",
+  "text": [
+   "Positivism holds that we truly know only what can be observed, tested and organized into laws, as science does. Metaphysical speculation about ultimate causes would be useless. Its core question is: how can we gain secure knowledge and use it to improve human life? Scientism, in a broad sense, extends this confidence: philosophy should work alongside the sciences, using their results and their standards of rigor, instead of competing with them.",
+   "Auguste Comte created positivism in 19th-century France. He proposed the law of three stages, according to which thought moves from the religious to the metaphysical and finally to the scientific, and he helped found sociology. His ideas left a strong mark on Brazil: the motto Order and Progress on its flag comes from him. In the 20th century, the Argentine Mario Bunge criticized classical positivism but defended a scientific, realist and materialist philosophy, and fought what he considered pseudoscience."
+  ],
+  "ideas": [
+   "Reliable knowledge comes from observation and the scientific method.",
+   "Society, like nature, can be studied in terms of laws.",
+   "Philosophy should work alongside the sciences, not against them."
+  ]
+ },
+ "culturalismo": {
+  "n": "Recife School and culturalism",
+  "short": "A Brazilian tradition born in the Recife School that understands human beings and law in terms of culture and values.",
+  "text": [
+   "Culturalism holds that human beings cannot be explained by nature alone: they create culture, that is, language, law, art, morality and institutions, and it is in this world of values that they become fully human. Its core question is: how should we understand what humans build on top of nature? Applied to law, this view says that a legal norm is not just a text: it arises from social facts and expresses values that society wants to protect.",
+   "The Recife School emerged at the Recife Law School in the 1870s and 1880s, around Tobias Barreto, who spread German philosophy in Brazil, criticized positivism and defined culture as the antithesis of nature. In the 20th century, Miguel Reale took up this legacy and developed legal culturalism, with his three-dimensional theory of law, which joins fact, value and norm. Reale also chaired the commission that drafted Brazil's 2002 Civil Code. It is one of the most original traditions in Brazilian philosophy."
+  ],
+  "ideas": [
+   "Human beings make themselves through culture, which goes beyond nature.",
+   "Law joins fact, value and norm all at once.",
+   "Values are an essential part of human and social reality."
+  ]
+ },
+ "pragmatismo": {
+  "n": "Pragmatism",
+  "short": "An American tradition that judges ideas by their practical consequences: an idea is worth what it makes work in experience.",
+  "text": [
+   "Pragmatism proposes that the meaning and truth of an idea are tied to the practical differences it makes. Instead of seeking absolute certainty, we should treat beliefs as hypotheses, tested by experience and corrected when they fail. Its core question is: what difference does it make, in real life, to believe this or that? Thought is thus seen as a tool for solving problems, and democracy as a form of ongoing collective inquiry.",
+   "It arose in the United States in the late 19th century with Charles S. Peirce and William James, who made it widely known by applying it to psychology and religion. John Dewey brought it to education and politics, defending schools grounded in experience and democracy. Jane Addams joined pragmatism with social action at Hull House, in Chicago. In Brazil, Anísio Teixeira, who studied with Dewey, defended public schooling for all and was one of the leaders of the New School movement. Pragmatism remains alive in philosophy today."
+  ],
+  "ideas": [
+   "An idea is worth the practical consequences it produces.",
+   "Knowledge is fallible and must be tested by experience.",
+   "Education and democracy are forms of collective inquiry."
+  ]
+ },
+ "fenomenologia": {
+  "n": "Phenomenology and hermeneutics",
+  "short": "Describes how things appear in lived experience and how all understanding depends on interpretation.",
+  "text": [
+   "Phenomenology proposes a return to the things themselves: before building theories about the world, describe carefully how it shows up in lived experience, whether a perception, a memory or a feeling. Hermeneutics, which began as the art of interpreting texts, extends this idea: all understanding starts from assumptions, from a language and from a history. The core question is how meaning takes shape for us, beings who live in the world before we think about it.",
+   "The tradition arose in Germany in the early 20th century with Edmund Husserl, who wanted to make philosophy a rigorous science of consciousness. His student Heidegger shifted the question to human existence and the meaning of being, and Hans-Georg Gadamer placed interpretation at the center of philosophy. In Brazil, Vilém Flusser applied this approach to communication and technical images, and Benedito Nunes brought philosophy and poetry together. It remains influential in psychology, literature and the humanities."
+  ],
+  "ideas": [
+   "Philosophy should describe experience as it is lived, before any theory.",
+   "All understanding starts from assumptions, a language and a history.",
+   "Human beings always find themselves already thrown into a world full of meaning."
+  ]
+ },
+ "filosofia-analitica": {
+  "n": "Analytic philosophy",
+  "short": "A style of philosophy that seeks clarity, using logic and the analysis of language to solve problems.",
+  "text": [
+   "Analytic philosophy puts its trust in clarity: many philosophical problems arise from confusions in language and can be solved by carefully analyzing what we say. It uses formal logic as a tool, values precise arguments and works closely with mathematics and the sciences. Its core question is: what exactly does a statement mean, and under what conditions is it true? For this reason it tends to tackle well-defined problems, one at a time.",
+   "It emerged between the late 19th and early 20th centuries with Gottlob Frege, who created modern logic, and Bertrand Russell, who used it to analyze mathematics and ordinary language. Wittgenstein shaped two phases of the tradition: first he sought the logical structure of the world, then he studied the everyday uses of words. Karl Popper, a critic of part of the group, brought the same rigor to science, and the Brazilian Newton da Costa created paraconsistent logic. Today it is the dominant style in English-speaking universities."
+  ],
+  "ideas": [
+   "Many philosophical problems come from confusions in how we use language.",
+   "Formal logic is an essential tool for thinking clearly.",
+   "A statement needs a clear meaning and definite conditions for being true."
+  ]
+ },
+ "mente": {
+  "n": "Mind and human nature",
+  "short": "Thinkers who ask what the mind is and what is distinctive about human nature, from the body to inner life.",
+  "text": [
+   "This group brings together thinkers who ask what the mind is and what is distinctive about human nature. Are we complex biological machines, animals with instincts and emotions inherited from evolution, or also bearers of a deep inner life that escapes measurement? The question touches concrete issues: consciousness, free will, the relation between brain and thought, and the way we treat people who suffer from mental illness.",
+   "In the 18th century, La Mettrie scandalized Europe by describing the human being as a machine. Daniel Dennett revived materialism with cognitive science, explaining consciousness as a product of brain processes. Mary Midgley, also a naturalist, insisted that we are animals but criticized views that reduce the person to a mechanism. Nise da Silveira, a Brazilian psychiatrist inspired by Jung, revealed the richness of the unconscious through her patients' art. They disagree a great deal, but all take the body and inner life seriously."
+  ],
+  "ideas": [
+   "The human mind can be studied as part of nature.",
+   "We are animals, and our emotions and instincts shape how we think.",
+   "Explaining the mind requires care not to reduce the person to a mechanism."
+  ]
+ },
+ "metafisica": {
+  "n": "Systematic metaphysics",
+  "short": "Thinkers who build complete systems about being, spirit and the meaning of reality.",
+  "text": [
+   "Metaphysics asks about what is most fundamental: what being is, why there is something rather than nothing, and what place spirit and God have in the whole. The thinkers in this group believe that philosophy can and should build a system, that is, an ordered and complete view of reality, instead of limiting itself to analyzing isolated problems or to criticizing knowledge.",
+   "Authors from different periods share this ambition. Farias Brito, in early 20th century Brazil, defended a spiritualism against the materialism of his time. Mário Ferreira dos Santos created concrete philosophy, which aims to deduce truths from the thesis that something exists. Lima Vaz engaged with Hegel and the Christian tradition. The Spaniard Xavier Zubiri thought about reality from a human intelligence tied to the senses, and the Mexican José Vasconcelos proposed an aesthetic metaphysics. Their methods differ, but they keep the question of the whole alive."
+  ],
+  "ideas": [
+   "Philosophy can build an ordered and complete view of reality.",
+   "Being, spirit and the absolute are legitimate subjects for rational thought.",
+   "Answering ultimate questions requires rigor and system, not just criticism."
+  ]
+ },
+ "teoria-critica": {
+  "n": "Critical theory",
+  "short": "A tradition that analyzes society to reveal hidden forms of domination and point toward emancipation.",
+  "text": [
+   "Critical theory seeks to understand society in order to change it. It analyzes how the economy, mass culture, technology and institutions shape the way people think and can limit their freedom without their noticing. The core question is: why do forms of domination persist in a society that calls itself rational and free, and how can reason itself help to overcome them?",
+   "The tradition was born in the Frankfurt School, in Germany in the 1920s and 1930s, combining philosophy, sociology, psychoanalysis and a reading of Marx. Theodor Adorno criticized the culture industry, and Herbert Marcuse, in the United States, influenced the movements of the 1960s. Jürgen Habermas renewed the tradition by placing rational dialogue at the basis of democracy, a path the Spanish philosopher Adela Cortina develops in her discourse ethics. Byung-Chul Han, more distant from the school, criticizes the society of achievement and exhaustion."
+  ],
+  "ideas": [
+   "Social theory should help free people, not just describe society.",
+   "Mass culture and technology can produce conformity.",
+   "A just society depends on free dialogue among equal citizens."
+  ]
+ },
+ "estruturalismo": {
+  "n": "Structuralism and post-structuralism",
+  "short": "French traditions that explain meaning through relations within systems, and later question those systems.",
+  "text": [
+   "Structuralism holds that meaning does not come from isolated things but from the relations between them: just as a word means something only in contrast with other words, myths, kinship and customs form systems with rules that people follow without noticing. Post-structuralism questions the stability of these structures and shows how language, knowledge and power produce identities that seem natural. The core question is: what organizes us beneath what we think we choose?",
+   "The tradition flourished in France in the 1950s and 1960s, inspired by the linguistics of Ferdinand de Saussure. Claude Lévi-Strauss applied the method to anthropology, comparing the myths of many peoples. Later, Michel Foucault studied how prisons, hospitals and sciences shape individuals, Jacques Derrida took apart oppositions such as speech and writing through deconstruction, and Gilles Deleuze thought of reality as difference and flow. Their ideas remain present in cultural criticism, gender studies and the humanities."
+  ],
+  "ideas": [
+   "Meaning arises from relations within a system, not from isolated things.",
+   "Unconscious structures organize language, myths and customs.",
+   "Knowledge and power produce identities that seem natural."
+  ]
+ },
+ "feminismo": {
+  "n": "Feminism",
+  "short": "A tradition that examines and challenges inequality between women and men in society and in thought.",
+  "text": [
+   "Feminism asks why women were for so long excluded from education, politics and public life, and how this inequality can be overcome. It investigates whether differences in the roles of men and women come from nature or from society, and how gender intersects with race, class and culture. Its core question is: what does it mean to treat women as full and equal persons?",
+   "Its roots are old: Mary Astell in England and Sor Juana Inés de la Cruz in Mexico defended women's right to learning in the 17th century. Mary Wollstonecraft and Concepción Arenal tied this cause to reason and justice. In the 20th century, Simone de Beauvoir showed how society shapes the condition of women. Lélia Gonzalez, bell hooks and Gloria Anzaldúa brought together gender, race and cultural borders, and Judith Butler questioned the idea of a fixed gender. Its strands differ, but they share the pursuit of equality."
+  ],
+  "ideas": [
+   "Women and men have the same capacity for reason and the same rights.",
+   "Many gender roles are built by society, not by nature.",
+   "Gender oppression intersects with race, class and culture."
+  ]
+ },
+ "antirracismo": {
+  "n": "Anti-racist and anti-colonial thought",
+  "short": "Thought that analyzes racism, caste and colonialism and defends the dignity and freedom of oppressed peoples.",
+  "text": [
+   "This body of thought starts from the experience of peoples who were enslaved, colonized or excluded by race and caste, and asks how these hierarchies were created and how to undo them. It shows that racism and colonialism are not only individual prejudices but structures that shape laws, economies and even the way oppressed people see themselves. The core question is: how can dignity, equality and self-determination be won?",
+   "Frederick Douglass, who escaped slavery in the United States, made his own life an argument for freedom. W. E. B. Du Bois described the double consciousness of Black Americans, and B. R. Ambedkar fought the caste system in India. Martin Luther King Jr. led the civil rights struggle through nonviolence, while Frantz Fanon analyzed the psychological effects of colonization. In Brazil, Abdias do Nascimento proposed quilombismo, a model inspired by communities of escaped slaves. Their paths vary, but all join reflection with political action."
+  ],
+  "ideas": [
+   "Race and caste are hierarchies created by history, not by nature.",
+   "Colonialism leaves marks on the economy, the law and the minds of the colonized.",
+   "Liberation requires dignity, equal rights and collective action."
+  ]
+ },
+ "libertacao": {
+  "n": "Liberation philosophy and theology",
+  "short": "Latin American philosophy and theology that think from the standpoint of the poor and seek to overcome oppression.",
+  "text": [
+   "Liberation philosophy and theology think from the standpoint of the poor and excluded of Latin America. For them, it is not enough to reflect on justice in the abstract: one must start from the concrete reality of oppression and commit to overcoming it. The core question is: how can thought, education and faith help the oppressed become agents of their own history, rather than mere objects of other people's help?",
+   "The movement gained strength in the 1960s and 1970s, amid the inequalities and dictatorships of the continent and after the Second Vatican Council. Paulo Freire proposed a pedagogy in which learners grow by reading their own world critically. The Peruvian Gustavo Gutiérrez and the Brazilian Leonardo Boff formulated liberation theology, with its preferential option for the poor. The Argentine Enrique Dussel developed an ethics and a philosophy from the standpoint of victims and the world's periphery. Their ideas remain alive in education and social movements."
+  ],
+  "ideas": [
+   "Thought should start from the concrete reality of the poor and excluded.",
+   "To educate is to help people read their own world critically.",
+   "Faith and ethics demand a commitment to social justice."
+  ]
+ },
+ "latino-americano": {
+  "n": "Latin American identity",
+  "short": "Thinkers who seek a distinct identity for Latin America, between European, Indigenous and African heritages.",
+  "text": [
+   "This group brings together thinkers who ask what it means to be Latin American: are we a copy of Europe, heirs of Indigenous and African cultures, or something new, born of the mixture? They seek a distinct identity for the continent and discuss how to deal with the colonial legacy, the influence of the United States and the coexistence of diverse peoples. The core question is how to think in one's own voice, starting from one's own reality.",
+   "José Martí, in Cuba, urged the Americas to know themselves, and the Uruguayan José Enrique Rodó defended spiritual values against utilitarianism. In Brazil, Oswald de Andrade proposed cultural cannibalism, devouring foreign culture to create something new, and Gilberto Freyre interpreted the country's mixed formation. The Argentine Rodolfo Kusch valued popular and Indigenous thought, and the Mexican Octavio Paz explored solitude and Mexican identity. Their answers differ widely, but the question remains current."
+  ],
+  "ideas": [
+   "Latin America should think from its own reality.",
+   "The mixing of peoples and cultures is central to the continent's identity.",
+   "Foreign culture can be absorbed and transformed into something of one's own."
+  ]
+ },
+ "ecologia": {
+  "n": "Ecology and Indigenous thought",
+  "short": "Thought that sees human beings as part of nature and values Indigenous knowledge about the Earth.",
+  "text": [
+   "This group questions the idea that human beings are separate from nature and above it. Rivers, forests, animals and mountains would not be mere resources but part of a web of life with value of its own, to which we also belong. The core question is: how can we live on Earth without destroying it, and what can other cultures, especially Indigenous peoples, teach us about living together with it?",
+   "The Norwegian Arne Naess founded deep ecology in the 1970s, which recognizes value in every form of life and calls for changes in how we live, not just technical fixes. In Brazil, Ailton Krenak, a leader of the Krenak people, criticizes the idea of a humanity separate from the Earth. The anthropologist Eduardo Viveiros de Castro described Amerindian perspectivism, in which animals and spirits also see themselves as people. In the face of the climate crisis, these voices have drawn wide attention."
+  ],
+  "ideas": [
+   "Nature has value in itself, not only as a human resource.",
+   "Human beings are part of the Earth, not above it.",
+   "Indigenous knowledge offers other ways of understanding nature."
+  ]
+ },
+ "comunitarismo": {
+  "n": "Communitarianism and republicanism",
+  "short": "Traditions that stress community, virtue and civic participation in response to individualism.",
+  "text": [
+   "This tradition criticizes the image of the isolated individual who chooses everything alone. For it, we are formed by communities, languages, traditions and shared practices, and the good life depends on taking part in them. Republicanism adds that freedom is realized in public action, when citizens deliberate together about their common world. The core question is: what binds us to one another, and what do we owe to the political community?",
+   "Hannah Arendt, who lived through totalitarianism, defended politics as a space of action and speech among equals. In the 1980s, Alasdair MacIntyre and Charles Taylor criticized individualist liberalism: MacIntyre proposed reviving Aristotle's ethics of virtue within living traditions, and Taylor showed how identity depends on recognition by others. None of them accepted every label, but their ideas remain central to debates on citizenship, multiculturalism and social cohesion."
+  ],
+  "ideas": [
+   "Personal identity is formed within communities and traditions.",
+   "Freedom is realized through active participation in public life.",
+   "Virtues and common goods are essential to a good society."
+  ]
+ }
+}

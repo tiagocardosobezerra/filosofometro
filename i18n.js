@@ -75,6 +75,8 @@ if(typeof module!=="undefined"){module.exports=API;return}
 const pack=root.AgoraLang||null;
 const out=localize(root.AgoraData,root.AgoraSupport,pack);
 root.AgoraData=out.DATA;
+// Schools of thought keep their members and take the pack's name, summary, text and ideas.
+if(pack&&pack.correntes&&root.AgoraCorrentes)root.AgoraCorrentes=root.AgoraCorrentes.map(c=>({...c,...pack.correntes[c.id]}));
 if(out.SUP)root.AgoraSupport=out.SUP;
 root.AgoraI18n={...API,...make(pack)};
 document.documentElement.lang=root.AgoraI18n.html;
