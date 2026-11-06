@@ -159,7 +159,8 @@ ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replac
     : `<figure class="portrait noimg ${cls}" aria-hidden="true"><span class="sp-initials">${esc(initials(p.n))}</span></figure>`;
 
   const book = (p, i, title) => {
-    const cov = (COVERS[p.id] || [])[i];
+    const own = lang === "pt" ? undefined : (((COVERS.lang || {})[lang] || {})[p.id] || [])[i];
+    const cov = own !== undefined && own !== null ? own : (COVERS[p.id] || [])[i];
     return `<li><a href="${esc(S.bookURL(title, p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov ? `<img src="/covers/${cov}.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ""}</span><span><span class="t">${esc(title)}</span><span class="muted">${i ? "" : T.start}${T.amazon}</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`;
   };
 

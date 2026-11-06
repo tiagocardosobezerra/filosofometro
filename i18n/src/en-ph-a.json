@@ -60,7 +60,7 @@
   "n": "Democritus",
   "s": "Atomist",
   "q": "Nothing exists except atoms and empty space.",
-  "b": "Fragments",
+  "b": "Early Greek Philosophy (Jonathan Barnes)",
   "reading": [
    "The Presocratic Philosophers (Kirk, Raven and Schofield)",
    "The Atomists: Leucippus and Democritus (C. C. W. Taylor)"
@@ -177,7 +177,7 @@
   "b": "Lives of the Eminent Philosophers (Diogenes Laertius)",
   "reading": [
    "The Epistemology of the Cyrenaic School (Voula Tsouna)",
-   "The Hedonist Manifesto (Michel Onfray)"
+   "The Cyrenaics (Ugo Zilioli)"
   ],
   "place": "Cyrene, Libya, and Athens, Greece",
   "bio": "Aristippus was a student of Socrates, but drew conclusions very different from Plato's. A native of Cyrene in North Africa, he held that the pleasure of the present moment is the greatest good. He lived comfortably at the courts of tyrants, always trying to enjoy life without being ruled by it.",
@@ -196,7 +196,7 @@
   "b": "Outlines of Pyrrhonism (Sextus Empiricus)",
   "reading": [
    "Against the Professors (Sextus Empiricus)",
-   "The Skeptic Way (Benson Mates)"
+   "Pyrrho, His Antecedents, and His Legacy (Richard Bett)"
   ],
   "place": "Elis, Greece",
   "bio": "Pyrrho accompanied Alexander the Great on his expedition to India, where he is said to have met local sages. Back in Greece, he taught that we cannot know how things really are and that, for this reason, we should suspend judgment. He left no writings, but he gave his name to Pyrrhonian skepticism, which influenced Montaigne and Hume.",
@@ -328,7 +328,7 @@
   "q": "Truth does not contradict truth.",
   "b": "The Decisive Treatise",
   "reading": [
-   "On the Substance of the Orb",
+   "The Incoherence of the Incoherence",
    "Averroes: His Life, Works and Influence (Majid Fakhry)"
   ],
   "place": "Córdoba, al-Andalus (modern Spain)",
@@ -347,7 +347,7 @@
   "q": "Of God, we know only what He is not.",
   "b": "The Guide for the Perplexed",
   "reading": [
-   "Maimonides (Abraham Joshua Heschel)",
+   "Maimonides: A Biography (Abraham Joshua Heschel)",
    "Mishneh Torah"
   ],
   "place": "Córdoba, Spain, and Cairo, Egypt",
@@ -383,10 +383,10 @@
   "n": "William of Ockham",
   "s": "Nominalist",
   "q": "Entities must not be multiplied beyond necessity.",
-  "b": "Summa Logicae",
+  "b": "Philosophical Writings: A Selection",
   "reading": [
-   "Ockham's Theory of Terms (Summa Logicae, Part I)",
-   "A Short Discourse on Tyrannical Government (William of Ockham)"
+   "Ockham's Theory of Terms: Part I of the Summa Logicae",
+   "A Short Discourse on Tyrannical Government"
   ],
   "place": "Oxford, England, and Munich, Germany",
   "bio": "William of Ockham was an English Franciscan friar who studied at Oxford. He got into conflicts with the pope over the poverty of the Church and ended up taking refuge in Munich, under the emperor's protection. He is remembered for Ockham's razor, the principle that says not to multiply explanations without need.",
@@ -481,7 +481,7 @@
   "b": "Pensées",
   "reading": [
    "The Provincial Letters",
-   "On the Geometrical Spirit and the Art of Persuasion"
+   "Christianity for Modern Pagans (Peter Kreeft)"
   ],
   "place": "Paris, France",
   "bio": "Blaise Pascal was a precocious genius: he invented a mechanical calculator and contributed to probability theory and physics. After an intense religious experience, he devoted himself to defending Christianity. His Pensées, published after his death, show human greatness and wretchedness and the limits of reason.",
@@ -801,9 +801,9 @@
   "n": "Auguste Comte",
   "s": "Positivist",
   "q": "Love as a principle, order as the basis, progress as the goal.",
-  "b": "Discourse on the Positive Spirit",
+  "b": "Introduction to Positive Philosophy",
   "reading": [
-   "Course of Positive Philosophy",
+   "The Positive Philosophy of Auguste Comte (Harriet Martineau)",
    "Catechism of Positive Religion"
   ],
   "place": "Paris, France",
@@ -898,7 +898,7 @@
   "q": "Property is theft.",
   "b": "What Is Property?",
   "reading": [
-   "System of Economical Contradictions (Philosophy of Poverty)",
+   "System of Economical Contradictions: Or, The Philosophy of Misery",
    "The Principle of Federation"
   ],
   "place": "Besançon and Paris, France",

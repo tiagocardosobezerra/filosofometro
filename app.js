@@ -1181,7 +1181,9 @@ function readingHTML(p){
 }
 // One book row: cover (or the colored spine), title, a short line under it and the Amazon link.
 function bookItem(p,i,title,line){
-  const cov=((window.AgoraCovers||{})[p.id]||[])[i];
+  // English and Spanish lists have their own covers; null there means the same work as the Portuguese book.
+  const own=(((window.AgoraCoversLang||{})[I.lang]||{})[p.id]||[])[i];
+  const cov=I.lang!=="pt"&&own!==undefined&&own!==null?own:((window.AgoraCovers||{})[p.id]||[])[i];
   return `<li><a href="${esc(SUP.bookURL(title,p.n))}" target="_blank" rel="sponsored noopener"><span class="cover" aria-hidden="true">${cov?`<img src="/covers/${cov}.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:""}</span><span><span class="t">${esc(title)}</span><span class="muted">${line}</span></span><span class="pc" aria-hidden="true">↗</span></a></li>`;
 }
 function affNote(){

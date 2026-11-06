@@ -348,7 +348,7 @@
   "b": "Vigilar y castigar",
   "reading": [
    "Historia de la locura en la época clásica",
-   "Historia de la sexualidad 1: La voluntad de saber"
+   "Historia de la sexualidad 1: la voluntad de saber"
   ],
   "place": "París, Francia",
   "bio": "Filósofo e historiador francés que investigó cómo se ejerce el poder en lo cotidiano, en cárceles, hospitales, escuelas y en la propia idea de normalidad. Mostró que categorías como locura, crimen y sexualidad tienen una historia y fueron moldeadas por saberes e instituciones. Estuvo en Brasil varias veces y es uno de los autores más citados de las ciencias humanas.",
@@ -385,7 +385,7 @@
   "q": "Crear es resistir.",
   "b": "Mil mesetas (Deleuze y Guattari)",
   "reading": [
-   "El Anti Edipo",
+   "El Anti Edipo (Deleuze y Guattari)",
    "Diferencia y repetición"
   ],
   "place": "París, Francia",
@@ -424,7 +424,7 @@
   "b": "Anarquía, Estado y utopía",
   "reading": [
    "Meditaciones sobre la vida",
-   "The Nature of Rationality (en inglés)"
+   "La naturaleza de la racionalidad"
   ],
   "place": "Harvard, Massachusetts, EE. UU.",
   "bio": "Filósofo estadounidense, colega de Rawls en Harvard, que respondió a la teoría de la justicia de este con Anarquía, Estado y utopía. Defendió que los individuos tienen derechos fuertes, que el Estado no puede violar ni siquiera para redistribuir la riqueza. Era un pensador inquieto, que también escribió sobre el conocimiento, la identidad personal y el sentido de la vida.",
@@ -459,10 +459,10 @@
   "n": "Roger Scruton",
   "s": "Conservador contemporáneo",
   "q": "Destruir es rápido; construir y conservar es lento.",
-  "b": "Cómo ser un conservador",
+  "b": "Cómo ser conservador",
   "reading": [
-   "Fools, Frauds and Firebrands (en inglés)",
-   "Beauty (en inglés)"
+   "Pensadores de la nueva izquierda",
+   "La belleza: una breve introducción"
   ],
   "place": "Inglaterra",
   "bio": "Filósofo inglés que escribió sobre estética, música, arquitectura y política, siempre defendiendo el valor de la tradición. Para él, las instituciones, las costumbres y la belleza que heredamos son frágiles y merecen cuidado. Actuó también como disidente cultural, ayudando a intelectuales perseguidos en la Europa comunista en los años 1980.",
@@ -535,10 +535,10 @@
   "n": "Arne Naess",
   "s": "Ecología profunda",
   "q": "La vida no humana tiene valor en sí misma.",
-  "b": "Ecology, Community and Lifestyle (en inglés)",
+  "b": "Ecología, comunidad y estilo de vida: esbozos de una ecosofía",
   "reading": [
    "The Ecology of Wisdom (en inglés)",
-   "Deep Ecology: Living as if Nature Mattered (Bill Devall y George Sessions, en inglés)"
+   "Ecología profunda y autorrealización (Andrea Speranza)"
   ],
   "place": "Oslo, Noruega",
   "bio": "Filósofo noruego y gran alpinista, acuñó la expresión ecología profunda en los años 1970. Defendió que la naturaleza no debe protegerse solo por ser útil para nosotros, sino porque toda forma de vida tiene valor propio. Vivió buena parte del tiempo en una cabaña aislada en las montañas, practicando la sencillez que predicaba.",
@@ -573,10 +573,10 @@
   "n": "Mário Ferreira dos Santos",
   "s": "Filosofía concreta",
   "q": "Algo hay, y la nada absoluta no existe.",
-  "b": "Filosofia Concreta (Filosofía concreta)",
+  "b": "Filosofia concreta (en portugués)",
   "reading": [
-   "Invasão Vertical dos Bárbaros (Invasión vertical de los bárbaros)",
-   "Filosofia e Cosmovisão (Filosofía y cosmovisión)"
+   "Invasão vertical dos bárbaros (en portugués)",
+   "Filosofia e cosmovisão (en portugués)"
   ],
   "place": "São Paulo, Brasil",
   "bio": "Filósofo, traductor y editor de São Paulo nacido en Tietê, autor de una obra inmensa publicada en decenas de volúmenes. Buscó construir una filosofía rigurosa, demostrada paso a paso como las matemáticas, uniendo tradiciones griegas, medievales y modernas. Poco conocido en vida fuera de su círculo, fue redescubierto y pasó a tener lectores en Brasil.",
@@ -592,10 +592,10 @@
   "n": "Marilena Chauí",
   "s": "Spinozismo político",
   "q": "La democracia es la creación continua de nuevos derechos.",
-  "b": "Convite à Filosofia (Invitación a la filosofía)",
+  "b": "Convite à filosofia (en portugués)",
   "reading": [
-   "O que é Ideologia (Qué es la ideología)",
-   "Cultura e Democracia (Cultura y democracia)"
+   "O que é ideologia (en portugués)",
+   "Cultura e democracia (en portugués)"
   ],
   "place": "São Paulo, Brasil",
   "bio": "Filósofa de São Paulo, profesora emérita de la Universidad de São Paulo y una de las mayores especialistas del mundo en la obra de Spinoza. Su libro Convite à Filosofia formó a generaciones de estudiantes brasileños. Es también una intelectual pública activa, que escribe sobre democracia, ideología, autoritarismo y cultura en Brasil.",
@@ -727,8 +727,8 @@
   "q": "No hagas a los demás lo que no quieras para ti.",
   "b": "Analectas",
   "reading": [
-   "El gran aprendizaje",
-   "La doctrina del medio"
+   "Gran estudio, doctrina del justo medio y Mencio",
+   "Los cuatro libros"
   ],
   "place": "Estado de Lu, China",
   "bio": "Kong Fuzi, conocido en Occidente como Confucio, fue un maestro chino que vivió en una época de guerras y desorden. Enseñó que la armonía social depende de la virtud personal, del respeto a los rituales y de las buenas relaciones entre padres e hijos, gobernantes y súbditos. Sus ideas moldearon la cultura china y del este de Asia durante más de dos mil años.",
@@ -763,7 +763,7 @@
   "n": "Shankara",
   "s": "Advaita Vedanta",
   "q": "Brahman es real; el mundo es apariencia.",
-  "b": "Upadesa Sahasri (Mil enseñanzas)",
+  "b": "Upadesa Sahasri: las mil enseñanzas",
   "reading": [
    "Vivekachudamani: la joya suprema del discernimiento",
    "Comentario a los Brahma Sutras"
@@ -784,7 +784,7 @@
   "q": "A tantos males pudo inducir la religión.",
   "b": "De la naturaleza de las cosas",
   "reading": [
-   "El giro: cómo un manuscrito olvidado contribuyó a crear el mundo moderno (Stephen Greenblatt)",
+   "El giro: de cómo un manuscrito olvidado contribuyó a crear el mundo moderno (Stephen Greenblatt)",
    "Carta a Meneceo (Epicuro)"
   ],
   "place": "Roma, República romana",
@@ -918,7 +918,7 @@
   "b": "La mentalidad conservadora",
   "reading": [
    "The Politics of Prudence (en inglés)",
-   "Edmund Burke: A Genius Reconsidered (en inglés)"
+   "Edmund Burke: redescubriendo a un genio"
   ],
   "place": "Plymouth, Míchigan, Estados Unidos",
   "bio": "Historiador y ensayista estadounidense, Kirk ayudó a fundar el conservadurismo moderno en Estados Unidos con un libro de 1953 sobre la herencia de Edmund Burke. Vivió en un pequeño pueblo de Míchigan, lejos de los centros académicos. Defendió un orden moral trascendente, las costumbres heredadas y las comunidades locales.",

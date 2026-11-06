@@ -8,7 +8,8 @@ const COVERS = require(path.join(ROOT, "covers.js"));
 const dir = path.join(ROOT, "covers");
 fs.mkdirSync(dir, { recursive: true });
 
-const ids = [...new Set(Object.values(COVERS).flat().filter(Boolean))];
+// Portuguese covers plus the English and Spanish ones (COVERS.lang).
+const ids = [...new Set([...Object.values(COVERS), ...Object.values(COVERS.lang || {}).flatMap(Object.values)].flat().filter(Boolean))];
 (async () => {
   let got = 0, failed = [];
   for (const id of ids) {
