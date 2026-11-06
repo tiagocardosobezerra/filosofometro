@@ -1061,3 +1061,13 @@ body.rv-open{overflow:hidden}
 /* The archetype name lands after the mandala has drawn itself. */
 .rv-sigil+.rv-arch,.rv-sigil~.rv-traits,.rv-sigil~.rv-small{animation:rvin .6s cubic-bezier(.2,.7,.2,1) 1.1s both}
 @media (prefers-reduced-motion:reduce){.rv-sigil+.rv-arch,.rv-sigil~.rv-traits,.rv-sigil~.rv-small{animation:none}}
+/* Level choice on phones: the three levels fit closer to one screen. What each level unlocks stays;
+   the precision line and the long description step back. */
+@media (max-width:600px){
+  .levels{gap:10px}
+  .level{padding:16px 18px;gap:6px}
+  .level .lv-desc{display:none}
+  .level .lv-meta{font-size:12px}
+  .level .lv-bars{display:none}
+  .lv-lede{display:none}
+}

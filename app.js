@@ -218,12 +218,12 @@ function renderHome(){
     <div>
       <span class="eyebrow">${L`Teste filosófico`}</span>
       <h1 class="display"><span class="line"><span>${L`Qual filósofo`}</span></span><span class="line"><span>${L`pensa como`}</span></span><span class="line"><span><em class="it accent">${L`você?`}</em></span></span></h1>
-      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder, em três níveis de profundidade. Descubra seu par entre ${PH.length+BR.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.`}</p>
+      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder. Descubra seu arquétipo filosófico, seu par entre ${PH.length+BR.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.`}</p>
       <div class="cta-row">
         <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?L`Continuar de onde parei · ${done}/${saved.answers.length}`:L`Começar o teste`} ${icon.arrow}</a>
         ${resume?`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Recomeçar`}</a>`:`<a class="btn ghost" href="#/metodo">${L`Como funciona`}</a>`}
       </div>
-      <div class="facts"><span>${L`<b>3</b> níveis: ${E.LEVELS.map(l=>l.n).join(", ")} afirmações`}</span><span>${L`<b>11</b> eixos`}</span><span>${L`<b>${PH.length+BR.length}</b> pensadores`}</span><span>${L`Sem cadastro`}</span></div>
+      <div class="facts"><span>${L`<b>3</b> níveis: ${E.LEVELS.map(l=>l.n).join(", ")} afirmações`}</span><span>${L`<b>11</b> eixos`}</span><span>${L`<b>462</b> arquétipos`}</span><span>${L`<b>${PH.length+BR.length}</b> pensadores`}</span><span>${L`Sem cadastro`}</span></div>
     </div>
     <div class="hero-art">
       <div class="duo hero-duo">
@@ -336,7 +336,7 @@ function discoverHTML(){
     <div class="bento">
       <article class="bt bt-par">
         <div class="bt-art">${portrait(a,{cls:"bt-pic"})}<div class="bt-sigil"></div><span class="bt-who"><b>${esc(a.n)}</b> · ${esc(a.s)}</span></div>
-        <div><span class="bt-k">${L`01 · Seu par`}</span><h3>${L`O pensador com o formato mais parecido com o seu`}</h3><p>${L`Com percentual de compatibilidade, biografia, ideias centrais e onde vocês concordam e divergem.`}</p></div>
+        <div><span class="bt-k">${L`01 · Seu par e seu arquétipo`}</span><h3>${L`O pensador com o formato mais parecido com o seu`}</h3><p>${L`Com percentual de compatibilidade, um nome para o seu jeito de pensar, sua contradição e uma carta do seu filósofo.`}</p></div>
       </article>
       <article class="bt bt-opp">
         <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}<span class="bt-reveal">${L`${esc(shortName(b.n))} e ${esc(shortName(opp.n))} concordam em ${AXES.filter((_,i)=>Math.sign(b.v[i])===Math.sign(opp.v[i])).length} de ${AXES.length} eixos`}</span></div>
@@ -442,7 +442,7 @@ function renderLevelPick(){
   <section class="wrap section" style="padding-top:clamp(28px,6vh,64px)">
     <span class="eyebrow">${vs?L`Desafio aceito`:L`Antes de começar`}</span>
     <h1 class="h2" style="font-size:clamp(44px,min(7vw,10vh),96px)">${L`Quanto você quer <em class="it accent">ir fundo?</em>`}</h1>
-    <p class="lede" style="margin-top:14px;max-width:56ch">${L`Os três níveis usam os mesmos 11 eixos. Quanto mais afirmações, mais preciso fica o resultado. Dá para começar no Rápido e aprofundar depois, sem perder nada.`}</p>
+    <p class="lede lv-lede" style="margin-top:14px;max-width:56ch">${L`Os três níveis usam os mesmos 11 eixos. Quanto mais afirmações, mais preciso fica o resultado. Dá para começar no Rápido e aprofundar depois, sem perder nada.`}</p>
     <div class="levels">${E.LEVELS.map(l=>{const i=LEVEL_INFO[l.id];return `<a class="level ${l.id===2?"rec":""}" href="#/teste/${l.id}">
       <span class="lv-tag">${esc(i.tag)}</span>
       <span class="lv-name">${esc(t(l.name))}</span>
