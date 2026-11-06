@@ -819,7 +819,7 @@ function openRevealSlides(r,slides,skip=false){
   document.addEventListener("keydown",key);
   d.addEventListener("click",e=>{
     const a=e.target.closest("[data-a]");
-    if(a){close();if(a.dataset.a==="deeper")return;if(a.dataset.a==="share")shareFlow(r);else if(a.dataset.a==="challenge")challenge(r);return}
+    if(a){close();if(a.dataset.a==="deeper")return;if(a.dataset.a==="share2"){track("/evento/v2-revelacao-fim");shareV2(r);return}if(a.dataset.a==="close"&&skip)track(i<slides.length-1?"/evento/v2-revelacao-pulou":"/evento/v2-revelacao-fim");if(a.dataset.a==="share")shareFlow(r);else if(a.dataset.a==="challenge")challenge(r);return}
     if(e.target.closest(".rv-x")){close();return}
     if(e.target.closest(".rv-prev")){show(i-1);return}
     if(e.target.closest("a"))return;
@@ -1633,6 +1633,9 @@ function renderVerify(code){
    A side-by-side test of the council's spec. It does not replace #/r/; nothing links here yet.
    Portuguese only while it is a prototype. */
 const V2_LEVEL=["rascunho","boa","alta"];
+// Proposed neutral nouns for three archetype words that can sound like a judgment (prototype only).
+const V2_WORDS={Fatalista:"Determinista",Legalista:"Institucionalista",Asceta:"Eudemonista"};
+const v2Name=n=>n.split(" ").map(w=>V2_WORDS[w]||w).join(" ");
 // Sharpness of the portrait: the level, minus a point when the 2nd thinker is within 3 points,
 // minus a point when fewer than 60% of the themes have answers pointing mostly one way.
 function sharpness(r){
@@ -1678,13 +1681,14 @@ function renderResultV2(code){
   const answers=E.decode(code||"");
   if(!answers){renderNotFound("Faça o teste primeiro para ver o protótipo da nova tela.");return}
   const r=E.evaluate(answers),top=r.top,p=top.p,second=r.ranking[1],flat=r.directionless,userV=r.scores;
-  const arch=archetype(userV),sr=selfReading(r),sh=sharpness(r),ff=faceToFace(r),ten=tensionV2(r);
+  const arch={...archetype(userV)};arch.name=v2Name(arch.name);const sr=selfReading(r),sh=sharpness(r),ff=faceToFace(r),ten=tensionV2(r);
   const pair=arch.poles.map(([ax,s])=>s?AXES[ax].r:AXES[ax].l);
   const nameLines=p.n.split(" ").length>2?[p.n.split(" ").slice(0,-1).join(" "),p.n.split(" ").slice(-1)[0]]:[p.n];
   const ans=q=>esc(t(SCALE[q.answer].label));
-  const item=x=>`<li class="ff-item"><p class="ff-q">“${esc(QS[x.q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(x.q)}</p><p class="ff-them"><b>${esc(shortName(p.n))}:</b> ${x.quoted?`“${esc(x.line)}” <small>(paráfrase)</small>`:`${x.agree===(x.q.value>0)?"tenderia a concordar":"tenderia a discordar"} <small>(pela posição no catálogo)</small>`}</p></li>`;
+  let ideaN=0;const idea=()=>{const list=p.ideas||[];const it=list[ideaN++%Math.max(1,list.length)]||"";return it.replace(/[.;]\s*$/,"")};
+  const item=x=>`<li class="ff-item"><p class="ff-q">“${esc(QS[x.q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(x.q)}</p><p class="ff-them"><b>${esc(shortName(p.n))}:</b> ${x.quoted?`“${esc(x.line)}” <small>(paráfrase)</small>`:`${x.agree===(x.q.value>0)?"tenderia a concordar":"tenderia a discordar"}. Uma ideia central: ${esc(idea())}. <small>(posição pelo catálogo)</small>`}</p></li>`;
   const nextN=nextLevel(r.answers.length);
-  const shText=sh.level===1?`${esc(shortName(second.p.n))} está a ${sh.gap} pontos e pode passar à frente.${nextN?` Responda mais ${nextN.n-r.answers.length} frases para ver.`:""}`:sh.level===2?`${nextN?`Mais ${nextN.n-r.answers.length} frases deixam tudo mais firme.`:""}`:"";
+  const shText=sh.level===1?`${esc(shortName(second.p.n))} está a ${sh.gap} pontos e pode passar à frente.${nextN?` Responda mais ${nextN.n-r.answers.length} frases para ver.`:""}`:sh.level===2?`${nextN?`Mais ${nextN.n-r.answers.length} frases deixam tudo mais firme.`:`O 2º colocado está a ${sh.gap} pontos.`}`:`Seu resultado é estável: o 2º colocado está a ${sh.gap} pontos.`;
   // Themes: the current axis bars (you in orange, the match as a tick), each with who stands on each side.
   const order=AXES.map((a,i)=>({a,i,x:userV[i]})).sort((u,v)=>Math.abs(v.x)-Math.abs(u.x));
   const topThree=new Set(order.slice(0,3).map(s=>s.i));
@@ -1706,9 +1710,9 @@ function renderResultV2(code){
       <div class="res-name v2-name">${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</div>
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
       ${flat?"":`<p class="v2-pct"><b><span id="pctNum">${reduceMotion?top.pct:0}</span>%</b> de afinidade <span class="v2-second">· em 2º: ${esc(second.p.n)}, ${second.pct}%</span></p>`}
-      ${sr.strong.length?`<div class="traits">${sr.strong.map((s,i)=>`<span class="trait" style="--i:${i}"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")}</div>`:""}
-      <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Nitidez do retrato: ${V2_LEVEL[sh.level-1]}.</b> ${shText}</span>${nextN?`<a class="btn ghost sm" href="#/teste/aprofundar">Responder mais ${nextN.n-r.answers.length}</a>`:""}</div>
       <div class="res-actions"><button class="btn accent" type="button" id="v2Share">${icon.share} Compartilhar no story</button><button class="btn ghost" type="button" id="v2Challenge">${icon.link} Desafiar um amigo</button></div>
+      ${sr.strong.length?`<div class="traits">${sr.strong.map((s,i)=>`<span class="trait" style="--i:${i}"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")}</div>`:""}
+      <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Nitidez do retrato: ${V2_LEVEL[sh.level-1]}.</b> ${shText}</span>${nextN?`<a class="btn ghost sm" href="#/teste/aprofundar" id="v2Deeper">Responder mais ${nextN.n-r.answers.length}</a>`:""}</div>
     </div>
     ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`})}
   </section>
@@ -1776,7 +1780,8 @@ function renderResultV2(code){
   }
   wireTips(app,{user:userV,r,p});wireTimeline();wireInvite(r);
   ["v2Challenge","v2Challenge2"].forEach(id=>document.getElementById(id).addEventListener("click",()=>challenge(r)));
-  document.getElementById("v2Share").addEventListener("click",()=>shareFlow(r));
+  document.getElementById("v2Share").addEventListener("click",()=>shareV2(r));
+  const dp=document.getElementById("v2Deeper");if(dp)dp.addEventListener("click",()=>track(`/evento/v2-aprofundar-${V2_LEVEL[sh.level-1]}`));
   document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
   app.querySelectorAll("[data-j]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:reduceMotion?"auto":"smooth"})}));
   v2Cards(r,ff);
@@ -1784,45 +1789,99 @@ function renderResultV2(code){
 }
 // The proposed reveal: at most 6 cards, skip always visible.
 function revealV2(r){
-  const p=r.top.p,arch=archetype(r.scores),sr=selfReading(r),{conv}=revealFacts(r),ten=tensionV2(r);
+  const p=r.top.p,arch={name:v2Name(archetype(r.scores).name)},sr=selfReading(r),{conv}=revealFacts(r),ten=tensionV2(r);
   const slides=[];
   slides.push(`<span class="rv-k">Seu jeito de pensar</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><p class="rv-p rv-small">${sr.kin.length} dos ${PH.length} pensadores do site têm esses traços.</p>`);
   if(conv)slides.push(`<span class="rv-k">O que você defende com mais força</span><blockquote class="rv-q">“${esc(QS[conv.i][0])}”<cite>${esc(t(SCALE[conv.answer].label))}</cite></blockquote><p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
   if(ten){const a=sideWith(ten.a),b=sideWith(ten.b);slides.push(`<span class="rv-k">Onde você puxa para dois lados</span><h2 class="rv-h">${esc(cap(AXES[ten.ax].name))}</h2><p class="rv-p">Numa frase você ficou com <b>${esc(a.name)}</b>; em outra, com <b>${esc(b.name)}</b>.</p>`)}
   if(p.place&&p.born!==undefined)slides.push(`<span class="rv-k">Uma pista</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">Viveu por volta de ${yearText(p.born+35)}.</p>`);
   slides.push(`<span class="rv-k">Você pensa parecido com…</span>${portrait(p,{cls:"rv-pic",eager:true})}<h2 class="rv-h">${esc(p.n)}</h2>${r.directionless?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div><p class="rv-p rv-small">de afinidade</p>`}`);
-  slides.push(`<span class="rv-k">Mostre seu jeito de pensar</span><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="close">Compartilhar no story</button><button type="button" class="btn ghost" data-a="close">Ver meu resultado</button></div>`);
+  slides.push(`<span class="rv-k">Mostre seu jeito de pensar</span><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="share2">Compartilhar no story</button><button type="button" class="btn ghost" data-a="close">Ver meu resultado</button></div>`);
   openRevealSlides(r,slides,true);
 }
-// Story card previews for the three proposed models, drawn on the page as images.
-async function v2Cards(r,ff){
+// Story cards of the prototype: "Tipo" (default, with the portrait and the mandala), "Duelo" and "Temas".
+async function v2Canvases(r,ff){
   await document.fonts.ready;
-  const p=r.top.p,arch=archetype(r.scores),{conv}=revealFacts(r),host=document.getElementById("v2Cards");if(!host)return;
+  const p=r.top.p,arch={name:v2Name(archetype(r.scores).name)},{conv}=revealFacts(r);
   const W=1080,H=1920,ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
-  const base=()=>{const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,760,60,W/2,760,860);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);x.textAlign="center";return [c,x]};
-  const foot=x=>{x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";x.fillText("E você, pensa parecido com quem?",W/2,1560);x.font="600 34px 'Inter Tight'";x.fillStyle=accent;x.fillText(`filosofometro.com.br${I.prefix}`,W/2,1620)};
-  const wheel=(x,cx,cy,S)=>{[.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=2;x.stroke()});x.beginPath();pts(r.scores).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.fillStyle="rgba(240,106,67,.24)";x.fill();x.strokeStyle=accent;x.lineWidth=6;x.lineJoin="round";x.stroke()};
-  const cards=[];
-  // 1. Tipo
-  {const [c,x]=base();x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("M E U   J E I T O   D E   P E N S A R",W/2,330);
-   wheel(x,W/2,620,2.2);
-   x.fillStyle=accent;x.font="italic 400 96px 'Instrument Serif'";const [a1,...a2]=arch.name.split(" ");x.fillText(a1,W/2,960);x.fillText(a2.join(" "),W/2,1060);
-   x.fillStyle=ink;x.font="400 52px 'Instrument Serif'";x.fillText(`Penso parecido com ${shortName(p.n)}${r.directionless?"":` · ${r.top.pct}%`}`,W/2,1190);
-   if(conv){x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.fillText("O  QUE  EU  DEFENDO  COM  MAIS  FORÇA",W/2,1300);x.fillStyle=ink;x.font="italic 400 40px 'Instrument Serif'";wrapText(x,`“${QS[conv.i][0]}”`,W/2,1360,880,50)}
-   foot(x);cards.push(["Tipo",c])}
-  // 2. Duelo
-  {const it=(ff.agree.find(i=>i.quoted)||ff.agree[0]);const [c,x]=base();x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("E U   E   " + spaced(shortName(p.n).toUpperCase()),W/2,330);
-   if(it){x.fillStyle=ink;x.font="400 64px 'Instrument Serif'";let y=wrapText(x,`“${QS[it.q.i][0]}”`,W/2,520,900,74);
-    x.fillStyle=accent;x.font="600 34px 'Inter Tight'";x.fillText(`EU: ${t(SCALE[it.q.answer].label).toUpperCase()}`,W/2,y+120);
-    x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";y=wrapText(x,it.quoted?`${shortName(p.n)}: “${it.line}”`:`${shortName(p.n)} também pensava assim.`,W/2,y+240,880,62);
+  const base=()=>{const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,700,60,W/2,700,860);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);x.textAlign="center";return [c,x]};
+  const foot=x=>{x.textAlign="center";x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";x.fillText("E você, pensa parecido com quem?",W/2,1560);x.font="600 34px 'Inter Tight'";const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,1620);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1620);x.textAlign="center"};
+  const label=(x,s,y)=>{x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(s.toUpperCase()),W/2,y)};
+  const poly=(x,cx,cy,S,v,fill,stroke,dash,lw=5)=>{x.beginPath();pts(v).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=lw;x.lineJoin="round";x.stroke();x.setLineDash([])};
+  const badge=(x,cx,cy,S)=>{x.beginPath();x.arc(cx,cy,R*S+22,0,Math.PI*2);x.fillStyle="rgba(21,19,15,.92)";x.fill();x.strokeStyle=line;x.lineWidth=2;x.stroke();[.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});poly(x,cx,cy,S,p.v,null,"rgba(241,234,220,.8)",[8,9],3.5);poly(x,cx,cy,S,r.scores,"rgba(240,106,67,.22)",accent,null,4)};
+  const out=[];
+  const pic=p.img?await loadImage(p.img):null;
+  // 1. Tipo: the current identity (arch portrait with the mandala) under the archetype.
+  {const [c,x]=base();label(x,"Meu jeito de pensar",300);
+   x.fillStyle=accent;x.font="italic 400 92px 'Instrument Serif'";const words=arch.name.split(" ");const l1=words[0],l2=words.slice(1).join(" ");x.fillText(l1,W/2,410);x.fillText(l2,W/2,500);
+   const aw=330,ah=420,ax=(W-aw)/2-60,ay=560,rad=aw/2;
+   const archP=()=>{x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-24);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-24,ay+ah);x.lineTo(ax+24,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-24);x.closePath()};
+   x.save();archP();x.clip();if(pic){const sc=Math.max(aw/pic.width,ah/pic.height),dw=pic.width*sc,dh=pic.height*sc;x.filter="grayscale(1) sepia(.22) contrast(1.08) brightness(.97)";x.drawImage(pic,ax+(aw-dw)/2,ay+(ah-dh)*.2,dw,dh);x.filter="none";const tint=x.createLinearGradient(0,ay+ah*.45,0,ay+ah);tint.addColorStop(0,"rgba(240,106,67,0)");tint.addColorStop(1,"rgba(240,106,67,.45)");x.globalCompositeOperation="multiply";x.fillStyle=tint;x.fillRect(ax,ay,aw,ah);x.globalCompositeOperation="source-over"}else{x.fillStyle="#1D1A16";x.fillRect(ax,ay,aw,ah)}x.restore();x.strokeStyle=line;x.lineWidth=2;archP();x.stroke();
+   badge(x,ax+aw+40,ay+ah-130,1.25);
+   x.fillStyle=ink;x.font="400 54px 'Instrument Serif'";x.fillText(`Penso parecido com ${shortName(p.n)}${r.directionless?"":` · ${r.top.pct}%`}`,W/2,1080);
+   if(conv){label(x,"O que eu defendo com mais força",1180);x.fillStyle=ink;x.font="italic 400 44px 'Instrument Serif'";wrapText(x,`“${QS[conv.i][0]}”`,W/2,1250,880,54)}
+   foot(x);out.push(["Tipo",c])}
+  // 2. Duelo: one statement where the person agrees with the match, in the match's words when the quiz quotes them.
+  {const it=(ff.agree.find(i=>i.quoted)||ff.agree[0]);const [c,x]=base();label(x,`Eu e ${shortName(p.n)}`,300);
+   if(it){x.fillStyle=ink;x.font="400 66px 'Instrument Serif'";let y=wrapText(x,`“${QS[it.q.i][0]}”`,W/2,480,900,78);
+    x.fillStyle=accent;x.font="600 34px 'Inter Tight'";x.fillText(`EU: ${t(SCALE[it.q.answer].label).toUpperCase()}`,W/2,y+110);
+    x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";y=wrapText(x,it.quoted?`${shortName(p.n)}: “${it.line}”`:`${shortName(p.n)} pensava parecido.`,W/2,y+230,880,62);
     if(it.quoted){x.fillStyle=muted;x.font="500 28px 'Inter Tight'";x.fillText("(paráfrase)",W/2,y+56)}}
-   x.fillStyle=accent;x.font="italic 400 60px 'Instrument Serif'";x.fillText(arch.name,W/2,1400);foot(x);cards.push(["Duelo",c])}
-  // 3. Temas
-  {const [c,x]=base();x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText("M E U S   T E M A S   M A I S   F O R T E S",W/2,330);
+   badge(x,W/2,1300,1.05);x.fillStyle=accent;x.font="italic 400 56px 'Instrument Serif'";x.fillText(arch.name,W/2,1470);foot(x);out.push(["Duelo",c])}
+  // 3. Temas: the three strongest themes as rulers, you in orange and the match as a ring.
+  {const [c,x]=base();label(x,"Meus temas mais fortes",300);
    const st=AXES.map((a,i)=>({a,i,s:Math.abs(r.scores[i])})).sort((m,n)=>n.s-m.s).slice(0,3),bx0=360,bx1=720,pos=v=>bx0+(Math.max(-1,Math.min(1,v))+1)/2*(bx1-bx0);
-   st.forEach(({a,i},k)=>{const by=560+k*190,me=r.scores[i];x.textAlign="center";x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(a.name.toUpperCase(),W/2,by-50);x.font="600 40px 'Inter Tight'";x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-30,by+14);x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+30,by+14);x.fillStyle=line;x.fillRect(bx0,by-2,bx1-bx0,4);x.beginPath();x.arc(pos(me),by,18,0,Math.PI*2);x.fillStyle=accent;x.fill()});
-   x.textAlign="center";x.fillStyle=accent;x.font="italic 400 70px 'Instrument Serif'";x.fillText(arch.name,W/2,1260);x.fillStyle=ink;x.font="400 46px 'Instrument Serif'";x.fillText(`Penso parecido com ${shortName(p.n)}`,W/2,1350);foot(x);cards.push(["Temas",c])}
+   st.forEach(({a,i},k)=>{const by=520+k*180,me=r.scores[i];x.textAlign="center";x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(a.name.toUpperCase(),W/2,by-50);x.font="600 40px 'Inter Tight'";x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-30,by+14);x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+30,by+14);x.fillStyle=line;x.fillRect(bx0,by-2,bx1-bx0,4);x.beginPath();x.arc(pos(p.v[i]),by,17,0,Math.PI*2);x.strokeStyle=ink;x.lineWidth=4;x.stroke();x.beginPath();x.arc(pos(me),by,16,0,Math.PI*2);x.fillStyle=accent;x.fill()});
+   x.textAlign="center";badge(x,W/2,1170,1);x.fillStyle=accent;x.font="italic 400 64px 'Instrument Serif'";x.fillText(arch.name,W/2,1390);x.fillStyle=ink;x.font="400 44px 'Instrument Serif'";x.fillText(`Penso parecido com ${shortName(p.n)}`,W/2,1460);foot(x);out.push(["Temas",c])}
+  return out;
+}
+// Comparison card of the prototype: no percentage; how many themes match and the biggest argument.
+function v2CompareCanvas(a,b,nameA,nameB){
+  const W=1080,H=1920,ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
+  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);
+  const g=x.createRadialGradient(W/2,760,60,W/2,760,820);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);x.textAlign="center";
+  const same=AXES.filter((_,i)=>Math.sign(a.scores[i])===Math.sign(b.scores[i])&&Math.abs(a.scores[i])>=.13&&Math.abs(b.scores[i])>=.13).length;
+  const far=AXES.map((ax,i)=>({ax,d:Math.abs(a.scores[i]-b.scores[i])})).sort((u,v)=>v.d-u.d)[0].ax;
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced("NOSSOS JEITOS DE PENSAR"),W/2,300);
+  x.fillStyle=ink;x.font="400 80px 'Instrument Serif'";x.fillText(`${nameA} & ${nameB}`,W/2,400);
+  const cx=W/2,cy=740,S=2.3;[.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=2;x.stroke()});
+  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([u,w],i)=>i?x.lineTo(cx+u*S,cy+w*S):x.moveTo(cx+u*S,cy+w*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=5;x.lineJoin="round";x.stroke();x.setLineDash([])};
+  poly(b.scores,null,"rgba(241,234,220,.85)",[14,12]);poly(a.scores,"rgba(240,106,67,.24)",accent);
+  x.fillStyle=accent;x.font="400 120px 'Instrument Serif'";x.fillText(`${same} de 11`,W/2,1150);
+  x.fillStyle=ink;x.font="400 50px 'Instrument Serif'";x.fillText("temas em que concordamos",W/2,1220);
+  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced("NOSSA MAIOR BRIGA"),W/2,1320);
+  x.fillStyle=ink;x.font="italic 400 56px 'Instrument Serif'";x.fillText(`${far.l} × ${far.r}`,W/2,1390);
+  x.fillStyle=accent;x.font="italic 400 38px 'Instrument Serif'";x.fillText(`${v2Name(archetype(a.scores).name)}  ·  ${v2Name(archetype(b.scores).name)}`,W/2,1470);
+  x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";x.fillText("Faça o teste e compare",W/2,1570);
+  x.font="600 34px 'Inter Tight'";x.fillStyle=accent;x.fillText(`filosofometro.com.br${I.prefix}`,W/2,1630);
+  return c;
+}
+async function v2Cards(r,ff){
+  const host=document.getElementById("v2Cards");if(!host)return;
+  const cards=await v2Canvases(r,ff);
+  // A sample friend for the comparison card preview: the same answers mirrored on every other theme.
+  const friend=E.evaluate(r.answers.map((v,i)=>QS[i][1]%2?4-v:v));
+  cards.push(["Comparação (exemplo)",v2CompareCanvas(r,friend,"Você","Ana")]);
   host.innerHTML=cards.map(([n,c])=>`<figure><img src="${c.toDataURL("image/jpeg",.85)}" alt="Card ${n}" loading="lazy"><figcaption>${n}</figcaption></figure>`).join("");
+}
+// Share flow of the prototype: pick a card, then share or save it.
+async function shareV2(r){
+  track("/evento/v2-compartilhar");
+  const ff=faceToFace(r),cards=await v2Canvases(r,ff);
+  const d=document.createElement("div");d.className="story-modal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label","Escolha o card");
+  d.innerHTML=`<div class="sm-card v2-pick"><h2 class="serif">Escolha o card</h2><div class="v2-pick-row">${cards.map(([n,c],i)=>`<button type="button" class="v2-pick-b${i?"":" on"}" data-i="${i}"><img src="${c.toDataURL("image/jpeg",.7)}" alt="Card ${n}"><span>${n}</span></button>`).join("")}</div><div class="sm-actions"><button type="button" class="btn accent" data-a="go">${icon.share} Compartilhar</button><button type="button" class="btn ghost" data-a="x">Fechar</button></div></div>`;
+  document.body.appendChild(d);let pick=0;
+  d.addEventListener("click",async e=>{
+    if(e.target===d){d.remove();return}
+    const b=e.target.closest(".v2-pick-b");if(b){pick=+b.dataset.i;d.querySelectorAll(".v2-pick-b").forEach(x=>x.classList.toggle("on",x===b));return}
+    const a=e.target.closest("[data-a]");if(!a)return;
+    if(a.dataset.a==="x"){d.remove();return}
+    const [name,c]=cards[pick];track(`/evento/v2-card-${name.toLowerCase()}`);
+    const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.92));const file=new File([blob],`filosofometro-${name.toLowerCase()}.jpg`,{type:"image/jpeg"});
+    d.remove();
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(err){if(err.name==="AbortError")return}}
+    storyModal(c,blob,file,challengeText(r),inviteURL(r));
+  });
 }
 
 function renderNotFound(msg=L`Esta página não existe.`){

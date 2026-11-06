@@ -1145,3 +1145,11 @@ body.rv-open{overflow:hidden}
 .v2-anchor{scroll-margin-top:130px}
 .v2-about{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
 .v2-themes .th .axis-row{margin:6px 0 2px}
+/* Prototype card picker. */
+.v2-pick{max-width:720px}
+.v2-pick-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.v2-pick-b{padding:0;border:2px solid transparent;border-radius:12px;background:none;cursor:pointer;color:var(--ink);display:grid;gap:6px;font-size:13px}
+.v2-pick-b img{width:100%;border-radius:10px;display:block}
+.v2-pick-b.on{border-color:var(--accent)}
+.v2-cards{grid-template-columns:repeat(4,1fr)}
+@media (max-width:600px){.v2-cards{grid-template-columns:repeat(2,1fr)}}
