@@ -634,6 +634,7 @@ function renderResult(code,mode){
       ${flat?"":`<div class="res-pct" aria-hidden="true"><span id="pctNum">${reduceMotion?top.pct:0}</span>%</div>`}
       <h1 class="res-name">${flat?"":`<span class="sr">${L`${top.pct}% de compatibilidade com `}</span>`}${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</h1>
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
+      ${flat?"":`<div class="res-arch">${visitor?L`Arquétipo:`:L`Seu arquétipo:`} <b>${esc(archetype(userV).name)}</b></div>`}
       ${r.level?`<div class="lvl-line"><span class="lv-chip">${L`Nível ${esc(t(r.level.name))}`}</span><span>${L`${r.level.n} afirmações · precisão ${esc(LEVEL_INFO[r.level.id].precision.toLowerCase())}`}</span>${!visitor&&nextLevel(r.level.n)?`<a class="lvl-up" href="#/teste/aprofundar">${L`Aprofundar com mais ${nextLevel(r.level.n).n-r.level.n}`} ${icon.arrow}</a>`:""}</div>`:""}
       ${strongest.length?`<div class="traits" aria-label="${L`Traços mais fortes`}">${strongest.map((t,i)=>`<span class="trait" style="--i:${i}"><small>${esc(t.a.name)}</small>${esc(t.x<0?t.a.l:t.a.r)}</span>`).join("")}</div>`:""}
       ${flat?`<div class="note" role="note">${icon.info}<span>${flatNote}</span></div>`:r.note&&!visitor?`<div class="note" role="note">${icon.info}<span>${esc(r.note.message)}</span></div>`:""}
@@ -772,6 +773,10 @@ function openReveal(r){
     const rare=sr.kin.length<=Math.round(PH.length*.08);
     slides.push(`<span class="rv-k">${rare?L`Combinação rara`:L`Sua combinação`}</span><div class="rv-big">${sr.kin.length}<small>/${PH.length}</small></div><p class="rv-p">${L`pensadores da história reúnem os seus ${sr.strong.length} traços.`}</p>${sr.kin.length?`<div class="rv-faces">${sr.kin.slice(0,5).map(x=>portrait(x,{cls:"rv-av"})).join("")}</div>`:""}`);
   }
+  if(!flat){
+    const arch=archetype(r.scores),ak=archKin(arch),near=ak.length?ak:PH.filter(x=>{const tp=topPoles(x.v)[0];return tp&&arch.poles[0]&&tp[0]===arch.poles[0][0]&&tp[1]===arch.poles[0][1]}).slice(0,5);
+    slides.push(`<span class="rv-k">${L`Seu arquétipo`}</span><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><p class="rv-p">${L`Um dos 462 arquétipos possíveis.`} ${ak.length?L`Na história, também são assim:`:L`Nenhum pensador do catálogo tem exatamente esse arquétipo. Os mais próximos:`}</p>${near.length?`<div class="rv-faces">${near.slice(0,5).map(x=>portrait(x,{cls:"rv-av"})).join("")}</div><p class="rv-p rv-names">${near.slice(0,3).map(x=>esc(x.n)).join(", ")}</p>`:""}`);
+  }
   if(p.born!==undefined&&p.place)slides.push(`<span class="rv-k">${L`Onde você estaria em casa`}</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">${L`por volta de ${yearText(p.born+35)}, conversando com quem pensa como você.`}</p>`);
   if(opp)slides.push(`<span class="rv-k">${L`Seu oposto`}</span>${portrait(opp,{cls:"rv-pic sm"})}<h2 class="rv-h">${esc(opp.n)}</h2><p class="rv-p rv-quote">“${esc(opp.q)}”</p><p class="rv-p">${L`Vocês discordariam em quase tudo.`}</p>`);
   slides.push(`<span class="rv-k">${flat?L`Quem fica mais perto de você`:L`Seu par filosófico`}</span>${portrait(p,{cls:"rv-pic",eager:true})}${flat?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div>`}<h2 class="rv-h">${esc(p.n)}</h2><p class="rv-p rv-quote">“${esc(p.q)}”</p>`);
@@ -825,6 +830,28 @@ const POLE_TEXT=[
   [L`Diante da dor, você busca paz em aceitar o que não depende de você.`,L`Diante da injustiça, você prefere lutar a se conformar.`],
   [L`Você acredita que a ordem precisa de hierarquia e de alguém que decida.`,L`Você desconfia de quem manda e quer cada pessoa decidindo por si.`],
 ];
+// Archetype: the strongest pole names the person and the second one qualifies it ("Empirista da Resistência").
+// Every noun is the same for any gender, so the name fits everyone without asking.
+const ARCH_NOUN=[
+  [L`Racionalista`,L`Empirista`],[L`Fatalista`,L`Voluntarista`],[L`Essencialista`,L`Existencialista`],[L`Deontologista`,L`Pragmatista`],
+  [L`Individualista`,L`Comunitarista`],[L`Hedonista`,L`Asceta`],[L`Materialista`,L`Espiritualista`],[L`Realista`,L`Relativista`],
+  [L`Tradicionalista`,L`Reformista`],[L`Quietista`,L`Ativista`],[L`Legalista`,L`Autonomista`],
+];
+const ARCH_OF=[
+  [L`da Razão`,L`da Experiência`],[L`do Destino`,L`da Liberdade`],[L`do Sentido`,L`da Criação`],[L`do Dever`,L`das Consequências`],
+  [L`do Indivíduo`,L`da Comunidade`],[L`do Prazer`,L`da Virtude`],[L`da Matéria`,L`do Espírito`],[L`da Certeza`,L`da Dúvida`],
+  [L`da Tradição`,L`da Ruptura`],[L`da Aceitação`,L`da Resistência`],[L`da Ordem`,L`da Autonomia`],
+];
+// The two strongest poles of a profile, as [axis, side] pairs (side 0 = left pole).
+const topPoles=v=>v.map((x,i)=>({i,x})).filter(s=>Math.abs(s.x)>=.13).sort((a,b)=>Math.abs(b.x)-Math.abs(a.x)||a.i-b.i).slice(0,2).map(s=>[s.i,s.x<0?0:1]);
+function archetype(v){
+  const t2=topPoles(v);
+  if(t2.length<2)return {name:L`Equilibrista`,key:"",poles:t2};
+  const [[a,sa],[b,sb]]=t2;
+  return {name:L`${ARCH_NOUN[a][sa]} ${ARCH_OF[b][sb]}`,key:[`${a}${sa}`,`${b}${sb}`].sort().join("-"),poles:t2};
+}
+// Thinkers who share the archetype's two poles, in either order.
+const archKin=arch=>arch.key?PH.filter(p=>archetype(p.v).key===arch.key):[];
 // The traits that define the person, how many thinkers share all of them, and the axis they are still torn on.
 function selfReading(r){
   const v=r.scores;
@@ -839,8 +866,9 @@ function selfHTML(r){
   const rare=kin.length<=Math.round(PH.length*.08);
   const names=kin.slice(0,3).map(p=>`<a href="#/p/${p.id}">${esc(p.n)}</a>`).join(", ");
   return `<div class="panel self">
-    <span class="eyebrow">${L`Seu retrato`}</span>
-    <h2 class="self-title">${strong.map(s=>`<span>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join(`<i aria-hidden="true">·</i>`)}</h2>
+    <span class="eyebrow">${L`Seu arquétipo`}</span>
+    <h2 class="self-title">${esc(archetype(r.scores).name)}</h2>
+    <p class="self-traits">${strong.map(s=>`<span>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join(`<i aria-hidden="true">·</i>`)} · ${L`um dos 462 arquétipos possíveis`}</p>
     <ul class="self-list">${strong.map(s=>`<li><b>${esc(cap(s.a.name))}</b><span>${esc(POLE_TEXT[s.i][s.x<0?0:1])}</span></li>`).join("")}</ul>
     <div class="self-facts">
       <p class="self-rare${rare?" on":""}">${rare?`<b>${L`Combinação rara.`}</b> `:""}${kin.length?(rare?L`Só ${kin.length} de ${PH.length} pensadores reúnem esses ${strong.length} traços:`:L`${kin.length} de ${PH.length} pensadores reúnem esses ${strong.length} traços:`)+` ${names}${kin.length>3?L` e mais ${kin.length-3}`:""}.`:L`Nenhum dos ${PH.length} pensadores reúne esses ${strong.length} traços. Seu jeito de pensar não tem precedente no catálogo.`}</p>
@@ -874,7 +902,7 @@ function answersFromLink(t){
 const PREVIEW=location.protocol==="https:"&&!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
 const inviteURL=r=>{const nm=encName(store.get("name")||""),tail=`${E.encode(r.answers)}${nm?`/${nm}`:""}`;return PREVIEW?`${location.origin}${I.prefix}/s/${tail}`:`${location.href.split("#")[0]}#/vs/${tail}`};
 const compareURL=(a,b,nA,nB)=>{const tail=`${a}/${b}${nA||nB?`/${encName(nA)}/${encName(nB)}`:""}`;return PREVIEW?`${location.origin}${I.prefix}/c/${tail}`:`${location.href.split("#")[0]}#/comparar/${tail}`};
-const challengeText=r=>r.directionless?L`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:L`Fiz o Filosofômetro e deu ${r.top.pct}% ${r.top.p.n}. Faz o teste e vê quanto a gente pensa parecido:`;
+const challengeText=r=>r.directionless?L`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:L`Sou ${archetype(r.scores).name} e meu par filosófico é ${r.top.p.n} (${r.top.pct}%). Faz o teste e vê quanto a gente pensa parecido:`;
 // Native share sheet on phones; copy to clipboard elsewhere.
 async function challenge(r){
   track("/evento/convite");
@@ -1565,8 +1593,8 @@ async function shareCard(r,usePic=true){
   const x=c.getContext("2d"),p=r.top.p;
   const bg="#0F0E0C",ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
   const near=r.ranking.slice(1,4);
-  const pics=usePic?await Promise.all([p,...near.map(n=>n.p)].map(t=>t.img?loadImage(t.img):Promise.resolve(null))):[];
-  const [pic,...nearPics]=pics;
+  const pics=usePic?await Promise.all([p].map(t=>t.img?loadImage(t.img):Promise.resolve(null))):[];
+  const [pic]=pics;
   // Background: deep ink with a warm glow behind the portrait.
   x.fillStyle=bg;x.fillRect(0,0,W,H);
   const g=x.createRadialGradient(W/2,640,60,W/2,640,860);g.addColorStop(0,"rgba(240,106,67,.30)");g.addColorStop(1,"rgba(240,106,67,0)");
@@ -1574,14 +1602,15 @@ async function shareCard(r,usePic=true){
   x.textAlign="center";
   const flat=r.directionless;
   // Instagram covers about the top and bottom 250px of a story, so everything that matters stays between 270 and 1650.
-  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(flat?L`MEU PAR MAIS PRÓXIMO`:L`MEU PAR FILOSÓFICO`),W/2,308);
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(flat?L`MEU PAR MAIS PRÓXIMO`:L`MEU ARQUÉTIPO`),W/2,300);
+  if(!flat){x.fillStyle=accent;x.font="italic 400 58px 'Instrument Serif'";const an=archetype(r.scores).name;if(x.measureText(an).width>960)x.font="italic 400 46px 'Instrument Serif'";x.fillText(an,W/2,366)}
   // Portrait arch with the sigil badge over its corner.
   // A name that wraps to two lines takes the room from the portrait, so the axis rulers still fit.
   x.font="400 86px 'Instrument Serif'";const nameLines=lineCount(x,p.n,960);
   // A rare combination of traits earns one more line under the rulers; the portrait gives up the room.
   const sr=selfReading(r),rare=!flat&&sr.strong.length===3&&sr.kin.length<=Math.round(PH.length*.08);
   const rareText=rare?(sr.kin.length?L`Só ${sr.kin.length} de ${PH.length} pensadores pensam como eu nesses 3 eixos`:L`Nenhum dos ${PH.length} pensadores pensa como eu nesses 3 eixos`):"";
-  const aw=380,ax=(W-aw)/2,ay=336,ah=(nameLines>1?300:350)-(rare?66:0),rad=aw/2;
+  const aw=380,ax=(W-aw)/2,ay=flat?336:400,ah=(nameLines>1?300:350)-(flat&&rare?66:0),rad=aw/2;
   const arch=()=>{x.beginPath();x.moveTo(ax,ay+rad);x.arc(ax+rad,ay+rad,rad,Math.PI,0);x.lineTo(ax+aw,ay+ah-26);x.quadraticCurveTo(ax+aw,ay+ah,ax+aw-26,ay+ah);x.lineTo(ax+26,ay+ah);x.quadraticCurveTo(ax,ay+ah,ax,ay+ah-26);x.closePath()};
   x.save();arch();x.clip();
   if(pic){
@@ -1634,14 +1663,13 @@ async function shareCard(r,usePic=true){
   // Also think like: three runner-ups with portraits.
   const nl=ry+84+2*74+70+(rare?66:0);
   x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced(L`TAMBÉM PENSO COMO`),W/2,nl);
-  near.forEach((n,i)=>{
-    const nx=W/2+(i-1)*300,ny=nl+60;
-    circlePic(x,nearPics[i],n.p,nx,ny,42,line);
-    x.fillStyle=ink;x.font="400 38px 'Instrument Serif'";x.fillText(shortName(n.p.n),nx,ny+80);
-    if(n.pct!==null){x.fillStyle=accent;x.font="600 30px 'Inter Tight'";x.fillText(`${n.pct}%`,nx,ny+112)}
-  });
+  // One line of names keeps room for the portrait, the archetype and the rarity line.
+  x.font="400 40px 'Instrument Serif'";
+  const nearText=near.map(n=>`${shortName(n.p.n)}${n.pct!==null?` ${n.pct}%`:""}`).join("  ·  ");
+  if(x.measureText(nearText).width>980)x.font="400 32px 'Instrument Serif'";
+  x.fillStyle=ink;x.fillText(nearText,W/2,nl+56);
   // Sign-off: the question in the display serif, then the address with the brand dot in accent.
-  const sy=Math.min(nl+60+112+84,1570);
+  const sy=Math.min(nl+150,1574);
   x.fillStyle=ink;x.font="italic 400 56px 'Instrument Serif'";x.fillText(L`Qual filósofo pensa como você?`,W/2,sy);
   x.font="600 36px 'Inter Tight'";
   const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;

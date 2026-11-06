@@ -1020,3 +1020,11 @@ body.rv-open{overflow:hidden}
 .rv-pic.sm{width:min(32vw,150px)}
 .rv-actions{display:grid;gap:10px;width:min(340px,100%);pointer-events:auto}
 @media (prefers-reduced-motion:reduce){.rv-slide,.rv-bars i.now b{animation:none}}
+/* Archetype name: under the match in the hero, as the title of "Seu arquétipo", and on its reveal card. */
+.res-arch{margin-top:10px;font-size:16px;color:var(--ink2)}
+.res-arch b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.45em;color:var(--accent)}
+.self-title{font-style:italic;color:var(--accent)}
+.self-traits{margin:-10px 0 20px;font:600 12px/1.6 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;flex-wrap:wrap;gap:.2em .5em}
+.self-traits i{font-style:normal;color:var(--accent)}
+.rv-arch{font-style:italic;color:#F06A43}
+.rv-names{font-size:15px;color:#9C9283}
