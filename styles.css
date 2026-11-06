@@ -1079,3 +1079,13 @@ body.rv-open{overflow:hidden}
 .q-near.pop span{animation:qnpop .5s cubic-bezier(.2,.7,.2,1)}
 @keyframes qnpop{from{opacity:0;transform:translateY(4px)}}
 @media (prefers-reduced-motion:reduce){.q-near.pop span{animation:none}}
+/* The 11 axis bars sit behind one button: the mandala above already shows them, the bars give the numbers. */
+.ax-more{margin-top:14px}
+.ax-more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--line2);border-radius:999px;font-weight:600;font-size:14px}
+.ax-more>summary::-webkit-details-marker{display:none}
+.ax-more>summary::after{content:"+";color:var(--accent);font-size:18px;line-height:1}
+.ax-more[open]>summary::after{content:"−"}
+.ax-more[open]>summary{margin-bottom:12px}
+/* Locked rewards on phones: title and the unlock button, no long description. */
+@media (max-width:600px){.rw-lock p{display:none}.rw-lock{gap:8px;padding:16px 18px}.rw-lock h3{font-size:22px}}
+.ax-more .axis-row.rv{opacity:1;transform:none}

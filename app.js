@@ -666,7 +666,7 @@ function renderResult(code,mode){
         <h2>${T.axes}</h2>
         <p class="sub">${L`Cada raio é um eixo: o primeiro polo fica no centro e o segundo, na borda. Laranja: ${T.you}. Tracejado na mandala e traço nas barras: ${esc(p.n)}. A porcentagem compara o formato das duas mandalas.`}</p>
         <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:L`Perfil de ${T.you} nos 11 eixos comparado ao de ${p.n}`})}</div><p class="tip-hint">${L`<span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada eixo para ver o que ele mede e por que ficou ali.`}</p>
-        ${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],T.you,p.n)).join("")}
+        <details class="ax-more"><summary>${L`Ver os 11 eixos em barras`}</summary>${AXES.map((a,i)=>axisRow(a,userV[i],p.v[i],T.you,p.n)).join("")}</details>
       </div>
       <div style="display:grid;gap:20px;align-content:start">
         <div class="panel">
