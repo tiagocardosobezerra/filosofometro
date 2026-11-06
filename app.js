@@ -803,6 +803,7 @@ function openReveal(r){
     if(i===slides.length-1)track("/evento/revelacao-fim");
     // The match's percentage counts up when its card arrives.
     const pc=stage.querySelector(".rv-pct");cancelAnimationFrame(raf);
+    if(pc&&TOUCH&&navigator.vibrate)try{navigator.vibrate([18,60,28])}catch(e){}
     if(pc){const to=+pc.dataset.to,t0=performance.now();const step=now=>{const x=reduceMotion?1:Math.min(1,(now-t0)/1400);pc.textContent=Math.round(to*(1-Math.pow(1-x,3)))+"%";if(x<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
   };
   const key=e=>{if(e.key==="Escape")close();else if(e.key==="ArrowRight"||e.key===" "||e.key==="Enter"){if(!e.target.closest("button")||e.target.classList.contains("rv-nav")){e.preventDefault();show(i+1)}}else if(e.key==="ArrowLeft")show(i-1)};
@@ -950,9 +951,9 @@ async function wallpaper(r){
   x.fillStyle=muted;x.font="400 40px 'Instrument Serif'";x.fillText(r.directionless?r.top.p.n:`${r.top.p.n} · ${r.top.pct}%`,W/2,2150);
   x.font="600 28px 'Inter Tight'";const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
   x.textAlign="left";x.fillStyle=muted;x.fillText(host,W/2-(hw+tw)/2,2330);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,2330);
-  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/png"));
+  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/jpeg",.92));
   if(!blob){toast(L`Não foi possível gerar a imagem`);return}
-  const file=new File([blob],"filosofometro-papel-de-parede.png",{type:"image/png"});
+  const file=new File([blob],"filosofometro-papel-de-parede.jpg",{type:"image/jpeg"});
   storyModal(c,blob,file,challengeText(r),inviteURL(r));
 }
 
@@ -1755,9 +1756,9 @@ async function shareCard(r,usePic=true){
   x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,sy+58);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,sy+58);x.textAlign="center";
   // A portrait served without CORS taints the canvas; redraw without images rather than fail.
   let blob;
-  try{blob=await new Promise((res,rej)=>{try{c.toBlob(b=>b?res(b):rej(new Error("empty")),"image/png")}catch(e){rej(e)}})}
+  try{blob=await new Promise((res,rej)=>{try{c.toBlob(b=>b?res(b):rej(new Error("empty")),"image/jpeg",.92)}catch(e){rej(e)}})}
   catch(e){if(usePic)return shareCard(r,false);toast(L`Não foi possível gerar a imagem`);return}
-  const file=new File([blob],`filosofometro-${p.id}.png`,{type:"image/png"});
+  const file=new File([blob],`filosofometro-${p.id}.jpg`,{type:"image/jpeg"});
   if(navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(e){if(e.name==="AbortError")return}
   }
@@ -1813,9 +1814,9 @@ async function compareCard(cmp,nameA,nameB,close,far,verdict,url){
   x.font="600 34px 'Inter Tight'";
   const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
   x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,1644);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1644);x.textAlign="center";
-  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/png"));
+  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/jpeg",.92));
   if(!blob){toast(L`Não foi possível gerar a imagem`);return}
-  const file=new File([blob],"filosofometro-comparacao.png",{type:"image/png"});
+  const file=new File([blob],"filosofometro-comparacao.jpg",{type:"image/jpeg"});
   const text=cmp.pct===null?L`Comparamos nosso jeito de pensar no Filosofômetro. Faz o teste e compara com a gente:`:L`Deu ${cmp.pct}% de compatibilidade filosófica no Filosofômetro. Faz o teste e vê quanto você pensa como a gente:`;
   if(navigator.canShare&&navigator.canShare({files:[file]})){
     try{await navigator.share({files:[file],text,url});return}catch(e){if(e.name==="AbortError")return}
@@ -1864,7 +1865,8 @@ function storyModal(c,blob,file,text,url){
     const a=e.target.closest("button");if(!a)return;
     if(a.dataset.a==="x")close();
     else if(a.dataset.a==="dl"){const l=document.createElement("a");l.href=URL.createObjectURL(blob);l.download=file.name;l.click();setTimeout(()=>URL.revokeObjectURL(l.href),2000);toast(L`Imagem salva. Poste no story e cole o link do convite!`)}
-    else if(a.dataset.a==="img"){try{await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);toast(L`Imagem copiada`)}catch(err){toast(L`Não foi possível copiar a imagem`)}}
+    else if(a.dataset.a==="img"){try{// The clipboard takes PNG only; the shared file is a lighter JPEG.
+      const png=await new Promise(res=>c.toBlob(b=>res(b),"image/png"));await navigator.clipboard.write([new ClipboardItem({"image/png":png})]);toast(L`Imagem copiada`)}catch(err){toast(L`Não foi possível copiar a imagem`)}}
     else if(a.dataset.a==="link"){try{await navigator.clipboard.writeText(`${text} ${url}`);toast(L`Convite copiado. Agora é só mandar!`)}catch(err){prompt(L`Copie o convite:`,url)}}
   });
   document.body.appendChild(d);
