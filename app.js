@@ -806,7 +806,8 @@ function openReveal(r){
     if(pc&&TOUCH&&navigator.vibrate)try{navigator.vibrate([18,60,28])}catch(e){}
     if(pc){const to=+pc.dataset.to,t0=performance.now();const step=now=>{const x=reduceMotion?1:Math.min(1,(now-t0)/1400);pc.textContent=Math.round(to*(1-Math.pow(1-x,3)))+"%";if(x<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
   };
-  const key=e=>{if(e.key==="Escape")close();else if(e.key==="ArrowRight"||e.key===" "||e.key==="Enter"){if(!e.target.closest("button")||e.target.classList.contains("rv-nav")){e.preventDefault();show(i+1)}}else if(e.key==="ArrowLeft")show(i-1)};
+  const key=e=>{if(e.key==="Tab"){const f=[...d.querySelectorAll("button,a[href]")].filter(x=>x.offsetParent!==null);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}else if(!d.contains(document.activeElement)){e.preventDefault();first.focus()}return}
+    if(e.key==="Escape")close();else if(e.key==="ArrowRight"||e.key===" "||e.key==="Enter"){if(!e.target.closest("button")||e.target.classList.contains("rv-nav")){e.preventDefault();show(i+1)}}else if(e.key==="ArrowLeft")show(i-1)};
   document.addEventListener("keydown",key);
   d.addEventListener("click",e=>{
     const a=e.target.closest("[data-a]");
