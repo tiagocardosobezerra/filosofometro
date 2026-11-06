@@ -1711,10 +1711,9 @@ function renderResultV2(code){
       <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
       ${flat?"":`<p class="v2-pct"><b><span id="pctNum">${reduceMotion?top.pct:0}</span>%</b> de afinidade <span class="v2-second">· em 2º: ${esc(second.p.n)}, ${second.pct}%</span></p>`}
       <div class="res-actions"><button class="btn accent" type="button" id="v2Share">${icon.share} Compartilhar no story</button><button class="btn ghost" type="button" id="v2Challenge">${icon.link} Desafiar um amigo</button></div>
-      ${sr.strong.length?`<div class="traits">${sr.strong.map((s,i)=>`<span class="trait" style="--i:${i}"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")}</div>`:""}
       <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Nitidez do retrato: ${V2_LEVEL[sh.level-1]}.</b> ${shText}</span>${nextN?`<a class="btn ghost sm" href="#/teste/aprofundar" id="v2Deeper">Responder mais ${nextN.n-r.answers.length}</a>`:""}</div>
     </div>
-    ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`})}
+    ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`}).replace("Passe o mouse nos eixos","Passe o mouse nos temas").replace("Toque nos eixos","Toque nos temas")}
   </section>
   <section class="wrap" style="padding-bottom:24px">
     ${chapter("Seu retrato")}
@@ -1726,10 +1725,20 @@ function renderResultV2(code){
       </div>
     </div>
 
+    ${ten?`${chapter("Onde você puxa para dois lados")}<div class="panel">
+      ${[ten.a,ten.b].map(q=>{const w=sideWith(q);return `<div class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(q)}</p><p class="ff-them">Aqui você fica com <b>${esc(w.name)}</b>: “${esc(w.line)}” <small>(paráfrase)</small></p></div>`}).join("")}
+      <p class="sub" style="margin-top:12px">As duas respostas puxam <b>${esc(AXES[ten.ax].name)}</b> para lados opostos. Muitos filósofos discutiram exatamente isso.</p></div>`:""}
+
     ${chapter(`Você e ${esc(shortName(p.n))}, frente a frente`)}
     <div class="grid2">
       <div class="panel agree"><h2>Aqui vocês concordam</h2><ul class="ff">${ff.agree.map(item).join("")}</ul></div>
       <div class="panel agree"><h2>Aqui vocês discutiriam</h2><ul class="ff">${ff.disagree.map(item).join("")}</ul></div>
+    </div>
+
+    ${chapter(`Quem foi ${esc(shortName(p.n))}`)}
+    <div class="grid2">
+      ${aboutHTML(p,{title:"Vida e ideias"})}
+      <div class="panel"><h2>Por onde começar a ler</h2><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol>${affNote()}</div>
     </div>
 
     ${chapter("Seus 11 temas")}
@@ -1742,18 +1751,8 @@ function renderResultV2(code){
       <div class="panel"><h2>Quem está do seu lado</h2><p class="sub">Os 3 temas em que você é mais firme já estão abertos.</p>${themes}</div>
     </div>
 
-    ${ten?`${chapter("Onde você puxa para dois lados")}<div class="panel">
-      ${[ten.a,ten.b].map(q=>{const w=sideWith(q);return `<div class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(q)}</p><p class="ff-them">Aqui você fica com <b>${esc(w.name)}</b>: “${esc(w.line)}” <small>(paráfrase)</small></p></div>`}).join("")}
-      <p class="sub" style="margin-top:12px">As duas respostas puxam <b>${esc(AXES[ten.ax].name)}</b> para lados opostos. Muitos filósofos discutiram exatamente isso.</p></div>`:""}
-
-    ${chapter(`Quem foi ${esc(shortName(p.n))}`)}
-    <div class="grid2">
-      ${aboutHTML(p,{title:"Vida e ideias"})}
-      <div class="panel"><h2>Por onde começar a ler</h2><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol>${affNote()}</div>
-    </div>
-
     ${chapter("Na história")}
-    ${timelineHTML(r)}
+    ${timelineHTML(r).replace(/class="tl-tag">Seu par/g,"class=\"tl-tag\">Mais parecido").replace(/class="tl-tag">Oposto/g,"class=\"tl-tag\">Discordaria").replace("Destaque para o seu par, os 5 mais parecidos e o seu oposto.","Destaque para quem pensa mais parecido com você, os 5 seguintes e quem mais discordaria.")}
     <div class="grid2" style="margin-top:20px">
       <div class="panel"><h2>Pensam parecido com você</h2><ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul></div>
       <div style="display:grid;gap:20px;align-content:start">
@@ -1762,18 +1761,24 @@ function renderResultV2(code){
       </div>
     </div>
 
-
-    <div style="margin-top:20px">${invitePanelHTML(r)}</div>
-
-    <div class="panel v2-sec" style="margin-top:20px"><span class="eyebrow">Prévia dos cards de story</span><p class="sub">O padrão continua com o retrato e a mandala; Duelo e Temas viram opções.</p><div class="v2-cards" id="v2Cards"><p class="muted">Gerando…</p></div></div>
-
     <div class="finale">
       ${portrait(p,{cls:"finale-pic"})}
       <blockquote class="finale-quote">“${esc(p.q)}”</blockquote>
       <p class="finale-by">${esc(p.n)}</p>
-      <p class="finale-lede">Agora descubra qual dos seus amigos pensa parecido com você.</p>
-      <div class="cta-row" style="justify-content:center"><button class="btn accent" id="v2Challenge2" type="button">${icon.link} Desafiar um amigo</button></div>
     </div>
+
+    <div style="margin-top:20px">${invitePanelHTML(r).replace("onde pensam igual, onde divergem e quanto são compatíveis","em quantos temas concordam e onde vão discutir")}</div>
+
+    <div class="panel v2-sec" style="margin-top:20px"><span class="eyebrow">Prévia dos cards de story</span><p class="sub">O padrão continua com o retrato e a mandala; Duelo e Temas viram opções.</p><div class="v2-cards" id="v2Cards"><p class="muted">Gerando…</p></div></div>
+
+
+
+
+
+
+
+
+
     <p class="v2-foot"><a href="#/metodo">Como calculamos</a> · <button type="button" class="link-btn" onclick="print()">Versão para imprimir</button></p>
   </section>`,`Protótipo · ${p.n}`);
   if(!flat&&!reduceMotion){
@@ -1782,7 +1787,7 @@ function renderResultV2(code){
     requestAnimationFrame(step);const done=setTimeout(()=>{el.textContent=top.pct},1500);onLeave(()=>{live=false;clearTimeout(done)});
   }
   wireTips(app,{user:userV,r,p});wireTimeline();wireInvite(r);
-  ["v2Challenge","v2Challenge2"].forEach(id=>document.getElementById(id).addEventListener("click",()=>challenge(r)));
+  document.getElementById("v2Challenge").addEventListener("click",()=>challenge(r));
   document.getElementById("v2Share").addEventListener("click",()=>shareV2(r));
   const dp=document.getElementById("v2Deeper");if(dp)dp.addEventListener("click",()=>track(`/evento/v2-aprofundar-${V2_LEVEL[sh.level-1]}`));
   document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
