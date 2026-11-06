@@ -10,6 +10,7 @@ const ROOT = path.join(__dirname, "..");
 const DATA = require(path.join(ROOT, "data.js"));
 const SUP = require(path.join(ROOT, "support.js"));
 const I18N = require(path.join(ROOT, "i18n.js"));
+const PREVIEW = require(path.join(ROOT, "api", "_preview.js"));
 let COVERS = {};
 try { COVERS = require(path.join(ROOT, "covers.js")); } catch (e) {}
 
@@ -21,7 +22,7 @@ const initials = n => n.split(" ").filter(w => /^[A-ZÀ-Ý]/.test(w)).slice(0, 2
 
 // Everything the static pages say, per language.
 const LANGS = {
-  pt: { html: "pt-BR", app: "/", dir: "pensadores", og: "og.png", dec: ",",
+  pt: { html: "pt-BR", app: "/", arch: "Arquétipo:", dir: "pensadores", og: "og.png", dec: ",",
     bc: "a.C.", to: "a", balance: "Equilíbrio", strong: ", forte", home: "Filosofômetro, página inicial", nav: "Principal",
     thinkers: "Pensadores", method: "Método", take: "Fazer o teste", takeSm: "Teste", credit: "Criado por", creditTail: "teste gratuito, motor auditável",
     how: "Como calculamos", all: "Todos os pensadores", support: "Apoie o projeto", portrait: n => `Retrato de ${n}`,
@@ -37,7 +38,7 @@ const LANGS = {
     library: "Biblioteca", count: total => `${total} pensadores`,
     idxLede: "Vida, ideias centrais, posição nos 11 eixos e três livros de cada um. Quer saber com qual deles você mais se parece? <a href=\"/#/teste\">Faça o teste</a>.",
     affiliate: "Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você." },
-  en: { html: "en", app: "/en/", dir: "en/thinkers", og: "og-en.png", dec: ".",
+  en: { html: "en", app: "/en/", arch: "Archetype:", dir: "en/thinkers", og: "og-en.png", dec: ".",
     bc: "BC", to: "to", balance: "Balanced", strong: ", strong", home: "Filosofômetro, home", nav: "Main",
     thinkers: "Thinkers", method: "Method", take: "Take the test", takeSm: "Test", credit: "Made by", creditTail: "free test, auditable engine",
     how: "How we calculate", all: "All thinkers", support: "", portrait: n => `Portrait of ${n}`,
@@ -53,7 +54,7 @@ const LANGS = {
     library: "Library", count: total => `${total} thinkers`,
     idxLede: "Life, core ideas, position on the 11 axes and three books for each one. Want to know which one you resemble most? <a href=\"/en/#/teste\">Take the test</a>.",
     affiliate: "" },
-  es: { html: "es", app: "/es/", dir: "es/pensadores", og: "og-es.png", dec: ",",
+  es: { html: "es", app: "/es/", arch: "Arquetipo:", dir: "es/pensadores", og: "og-es.png", dec: ",",
     bc: "a. C.", to: "a", balance: "Equilibrio", strong: ", fuerte", home: "Filosofômetro, inicio", nav: "Principal",
     thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test", credit: "Creado por", creditTail: "test gratuito, motor auditable",
     how: "Cómo calculamos", all: "Todos los pensadores", support: "", portrait: n => `Retrato de ${n}`,
@@ -192,6 +193,7 @@ ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replac
     <div>
       <span class="eyebrow">${esc(p.s)} · ${esc(p.era)}</span>
       <h1 class="h2 sp-name">${esc(p.n)}</h1>
+      <p class="sp-arch">${esc(T.arch)} <b>${esc(PREVIEW.archName(p.v, lang))}</b></p>
       <p class="sp-life">${esc(life(p))}${p.place ? ` · ${esc(p.place)}` : ""}</p>
       ${p.q ? `<p class="serif it sp-quote">“${esc(p.q)}”</p>` : ""}
       <div class="sp-cta">

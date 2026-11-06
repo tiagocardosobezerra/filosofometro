@@ -1444,6 +1444,7 @@ function renderThinker(id){
       <a class="back" href="#/pensadores">${icon.back} ${L`Todos os pensadores`}</a>
       <h1 class="res-name" style="margin-top:18px"><span class="line"><span>${esc(p.n)}</span></span></h1>
       <div class="res-school">${esc(p.s)} · ${esc(p.era)}</div>
+      <div class="res-arch">${L`Arquétipo:`} <b>${esc(archetype(p.v).name)}</b></div>
       <blockquote class="res-quote">“${esc(p.q)}”</blockquote>
       <div class="res-actions">${mine?`<span class="btn ghost" style="cursor:default">${mine.pct===null?"":L`${mine.pct}% com você · `}${L`${mine.rank}º de ${ofN}`}</span>`:`<a class="btn accent" href="#/teste">${L`Ver minha compatibilidade`} ${icon.arrow}</a>`}</div>
     </div>

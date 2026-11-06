@@ -206,4 +206,4 @@ async function homeSVG(lang = "pt") {
   return frame(b);
 }
 
-module.exports = { E, inviteInfo, compareInfo, sharePage, inviteSVG, compareSVG, homeSVG, rasterize, cleanName };
+module.exports = { E, archName, inviteInfo, compareInfo, sharePage, inviteSVG, compareSVG, homeSVG, rasterize, cleanName };

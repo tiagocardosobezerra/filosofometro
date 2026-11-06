@@ -27,3 +27,4 @@
   .sp-hero{grid-template-columns:1fr;align-items:start}
   .sp-pic{width:min(220px,60%)}
 }
+.sp-arch{margin:6px 0 0;color:var(--ink2)}.sp-arch b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.4em;color:var(--accent)}
