@@ -725,14 +725,7 @@ function renderResult(code,mode){
   wireTips(app,{user:userV,r,p});wireTimeline();wireAudit(r);
   // The themes mandala and list point at each other: hovering or opening a theme lights its spoke,
   // tapping a spoke or a ranked theme opens it in the list.
-  {const map=app.querySelector(".v2-map");if(map){
-    const spokes=[...map.querySelectorAll(".sg-spoke")],lbls=[...map.querySelectorAll(".sg-lbl")],rows=[...app.querySelectorAll(".v2-rank button")];
-    const light=ax=>{spokes.forEach((e,k)=>e.classList.toggle("on",k===ax));lbls.forEach((e,k)=>e.classList.toggle("on",k===ax));rows.forEach(b=>b.classList.toggle("on",+b.dataset.ax===ax))};
-    const openTheme=ax=>{const d=app.querySelector(`.th[data-ax="${ax}"]`);if(!d)return;d.open=true;light(ax);d.scrollIntoView({block:"nearest",behavior:reduceMotion?"auto":"smooth"})};
-    app.querySelectorAll(".th").forEach(d=>{const ax=+d.dataset.ax;d.addEventListener("mouseenter",()=>light(ax));d.addEventListener("toggle",()=>{if(d.open)light(ax)})});
-    rows.forEach(b=>{b.addEventListener("mouseenter",()=>light(+b.dataset.ax));b.addEventListener("click",()=>openTheme(+b.dataset.ax))});
-    map.querySelectorAll(".sg-hit").forEach(h=>h.addEventListener("click",()=>openTheme(+h.dataset.ax)));
-  }}
+  wireThemeMap();
   if(!visitor){
     document.getElementById("shareBtn").addEventListener("click",()=>shareResult(r));
     document.getElementById("challengeBtn").addEventListener("click",()=>challenge(r));
@@ -742,6 +735,18 @@ function renderResult(code,mode){
     wireInvite(r);
     // Right after the quiz, the result opens with the reveal.
     if(store.get("reveal")===code){store.del("reveal");openReveal(r)}
+  }
+}
+// The themes mandala and list point at each other: hovering or opening a theme lights its spoke,
+// tapping a spoke or a ranked theme opens it in the list. Used by the result and the comparison.
+function wireThemeMap(){
+  const map=app.querySelector(".v2-map");if(map){
+    const spokes=[...map.querySelectorAll(".sg-spoke")],lbls=[...map.querySelectorAll(".sg-lbl")],rows=[...app.querySelectorAll(".v2-rank button")];
+    const light=ax=>{spokes.forEach((e,k)=>e.classList.toggle("on",k===ax));lbls.forEach((e,k)=>e.classList.toggle("on",k===ax));rows.forEach(b=>b.classList.toggle("on",+b.dataset.ax===ax))};
+    const openTheme=ax=>{const d=app.querySelector(`.th[data-ax="${ax}"]`);if(!d)return;d.open=true;light(ax);d.scrollIntoView({block:"nearest",behavior:reduceMotion?"auto":"smooth"})};
+    app.querySelectorAll(".th").forEach(d=>{const ax=+d.dataset.ax;d.addEventListener("mouseenter",()=>light(ax));d.addEventListener("toggle",()=>{if(d.open)light(ax)})});
+    rows.forEach(b=>{b.addEventListener("mouseenter",()=>light(+b.dataset.ax));b.addEventListener("click",()=>openTheme(+b.dataset.ax))});
+    map.querySelectorAll(".sg-hit").forEach(h=>h.addEventListener("click",()=>openTheme(+h.dataset.ax)));
   }
 }
 // The reveal: at most 6 cards, the skip button always visible.
@@ -967,8 +972,8 @@ function renderInvite(code,rawName){
   wireTips(app,{p});
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
 }
-// Two people side by side: how many themes they share, where they will argue, statement by statement,
-// theme by theme, who thinks like each, who sits in the middle, and a question to talk about.
+// Two people side by side, told like the result: who each one is, where they meet and split, theme by
+// theme on one mandala, who sits in the middle, and a question to talk about to close.
 function renderCompare(codeA,codeB,rawA,rawB){
   const a=E.decode(codeA),b=E.decode(codeB);
   if(!a||!b){renderNotFound(L`Este link de comparação está incompleto.`);return}
@@ -978,7 +983,6 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const both=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.y!=null);
   const splits=both.map(q=>({...q,gap:Math.abs(SCALE[q.x].value-SCALE[q.y].value)})).filter(q=>q.gap>=2).sort((u,v)=>v.gap-u.gap||u.i-v.i);
   const agrees=both.filter(q=>q.x===q.y&&q.x!==2).sort((u,v)=>Math.abs(SCALE[v.x].value)-Math.abs(SCALE[u.x].value)||u.i-v.i);
-  const sameAnswers=agrees.length;
   const topA=new Set(ra.ranking.slice(0,10).map(x=>x.p.id));
   const shared=rb.ranking.slice(0,10).filter(x=>topA.has(x.p.id)).slice(0,4).map(x=>x.p);
   // The thinker closest to the point halfway between both profiles: who could mediate the conversation.
@@ -986,59 +990,84 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const mediator=PH.map(p=>({p,d:p.v.reduce((t,v,i)=>t+Math.abs(v-mid[i]),0)})).sort((x,y)=>x.d-y.d)[0].p;
   const ans=code=>esc(t(SCALE[code].label));
   const stmt=q=>`<li class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>${esc(nameB)}:</b> ${ans(q.y)}</p><p class="ff-them"><b>${esc(nameA)}:</b> ${ans(q.x)}</p></li>`;
-  const person=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span>${r.directionless?"":`<span class="cmp-arch">${esc(archetype(r.scores).name)}</span>`}<span class="sc">${L`Pensa parecido com ${esc(r.top.p.n)}`}</span></a>`;
-  const rows=AXES.map((ax,i)=>({ax,i,A:ra.scores[i],B:rb.scores[i],d:Math.abs(ra.scores[i]-rb.scores[i])})).sort((u,v)=>u.d-v.d);
-  const tag=x=>Math.abs(x.A)<.13||Math.abs(x.B)<.13?L`um de vocês no meio`:Math.sign(x.A)===Math.sign(x.B)?L`concordam`:L`vão discutir`;
-  const q0=splits[0],ex=q0?{pro:QS[q0.i][3],con:QS[q0.i][4]}:null;
+  const q0=splits[0];
   const isMine=store.get("last")===codeB;
+  const archOf=r=>r.directionless?L`Equilibrista`:archetype(r.scores).name;
+  // Who each one is: archetype, who they think like, their three traits and their strongest conviction.
+  const who=(nm,r,code)=>{const sr=selfReading(r),{conv}=revealFacts(r);
+    return `<div class="panel cmp-who-card"><span class="eyebrow">${esc(nm)}</span><p class="v2-arch v2-arch-sm">${esc(archOf(r))}</p>
+      <a class="cmp-like" href="#/r/${E.encode(r.answers)}${store.get("last")===code?"":"/ver"}">${portrait(r.top.p,{cls:"avatar"})}<span>${L`Pensa parecido com <b>${esc(r.top.p.n)}</b>`}${r.top.pct!==null?` · ${r.top.pct}%`:""}</span></a>
+      ${sr.strong.length?`<div class="traits">${sr.strong.map((s,i)=>`<span class="trait" style="--i:${i}"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")}</div>`:""}
+      ${conv?`<p class="cmp-conv"><small>${L`Defende com mais força`}</small>“${esc(QS[conv.i][0])}” <b>${ans(conv.answer)}</b></p>`:""}
+    </div>`};
+  // Theme by theme: the mandala with both shapes stays in view; each theme shows both marks and what each one thinks.
+  const rows=AXES.map((ax,i)=>({ax,i,A:ra.scores[i],B:rb.scores[i],d:Math.abs(ra.scores[i]-rb.scores[i])})).sort((u,v)=>u.d-v.d);
+  const tagOf=x=>Math.abs(x.A)<.13&&Math.abs(x.B)<.13?L`os dois no meio`:Math.abs(x.A)<.13||Math.abs(x.B)<.13?L`um de vocês no meio`:Math.sign(x.A)===Math.sign(x.B)?L`concordam`:L`vão discutir`;
+  const view=(nm,x,ax)=>{const m=Math.abs(x),pole=esc(x<0?ax.l:ax.r);return `<p class="cmp-view"><b>${esc(nm)}:</b> ${m<.13?L`entre ${esc(ax.l)} e ${esc(ax.r)}`:m>=.45?L`puxa forte para ${pole}`:L`pende para ${pole}`}</p>`};
+  const themes=rows.map((x,k)=>`<details class="th" data-ax="${x.i}"${k<3?" open":""}><summary><span class="th-n">${esc(cap(x.ax.name))}</span><span class="th-pole cmp-tag-${Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13&&Math.abs(x.B)>=.13?"ok":"no"}">${tagOf(x)}</span></summary>
+      ${axisRow(x.ax,x.B,x.A,nameB,nameA,{named:false})}
+      ${view(nameB,x.B,x.ax)}${view(nameA,x.A,x.ax)}
+    </details>`).join("");
   let ch=0;const chapter=title=>`<h2 class="chapter"><span>${++ch}</span>${title}</h2>`;
   mount(`
   <section class="wrap res-hero cmp-hero">
     <div>
       <div class="res-kicker"><span class="eyebrow">${L`Comparação`}</span></div>
-      <h1 class="res-name v2-name"><span class="line"><span>${esc(nameB)} & ${esc(nameA)}</span></span></h1>
+      <h1 class="res-name v2-name cmp-names"><span class="line"><span>${esc(nameB)}</span></span><span class="line"><span><em class="it accent">&</em> ${esc(nameA)}</span></span></h1>
       <p class="cmp-score"><b>${same}</b> ${L`de 11 temas em comum`}</p>
       <p class="lede">${esc(verdict)}</p>
       <p class="v2-pct">${L`Maior briga:`} <b class="cmp-far">${esc(far.a.l)} × ${esc(far.a.r)}</b></p>
       <div class="res-actions"><button class="btn accent" id="cmpStory" type="button">${icon.share} ${L`Compartilhar no story`}</button><button class="btn ghost" id="cmpCopy" type="button">${icon.link} ${L`Copiar link`}</button></div>
     </div>
-    <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:L`${nameB} e ${nameA} nos 11 temas`})}
-      <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div></div>
+    <div class="cmp-duo">
+      <figure class="cmp-side l">${portrait(rb.top.p,{cls:"cmp-arch-pic",eager:true})}<figcaption><b>${esc(nameB)}</b> · ${esc(shortName(rb.top.p.n))}</figcaption></figure>
+      <figure class="cmp-side r">${portrait(ra.top.p,{cls:"cmp-arch-pic",eager:true})}<figcaption><b>${esc(nameA)}</b> · ${esc(shortName(ra.top.p.n))}</figcaption></figure>
+      <div class="sigil-badge cmp-badge">${sigil(rb.scores,{compare:ra.scores,cls:"sg-user",draw:true,tips:true,title:L`${nameB} e ${nameA} nos 11 temas`})}</div>
+      <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div>
+    </div>
   </section>
   <section class="wrap" style="padding-bottom:24px">
+    ${chapter(L`Quem é cada um`)}
+    <div class="grid2">${who(nameB,rb,codeB)}${who(nameA,ra,codeA)}</div>
     ${chapter(L`Frente a frente`)}
     <div class="grid2">
-      <div class="panel agree"><h2>${L`Onde vocês concordam`}</h2><p class="sub">${L`Deram a mesma resposta em ${sameAnswers} das ${both.length} frases que os dois responderam.`}</p>${agrees.length?`<ul class="ff">${agrees.slice(0,3).map(stmt).join("")}</ul>`:`<p class="muted">${L`Nenhuma resposta firme igual. Raro.`}</p>`}</div>
+      <div class="panel agree"><h2>${L`Onde vocês concordam`}</h2><p class="sub">${L`Deram a mesma resposta em ${agrees.length} das ${both.length} frases que os dois responderam.`}</p>${agrees.length?`<ul class="ff">${agrees.slice(0,3).map(stmt).join("")}</ul>`:`<p class="muted">${L`Nenhuma resposta firme igual. Raro.`}</p>`}</div>
       <div class="panel agree"><h2>${L`Onde vocês vão discutir`}</h2><p class="sub">${L`As frases que mais separaram vocês.`}</p>${splits.length?`<ul class="ff">${splits.slice(0,3).map(stmt).join("")}</ul>`:`<p class="muted">${L`Nenhuma afirmação separou vocês por mais de um passo. Raro.`}</p>`}</div>
     </div>
     ${chapter(L`Tema por tema`)}
-    <div class="panel cmp-axes">
-      <p class="sub">${L`Laranja: ${esc(nameB)}. Traço: ${esc(nameA)}. Do tema em que vocês mais se parecem ao que mais separa.`}</p>
-      ${rows.map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(x.ax.name))} <small class="cmp-tag">${tag(x)}</small></span>${axisRow(x.ax,x.B,x.A,nameB,nameA,{named:false})}</div>`).join("")}
+    <div class="grid2 v2-themes">
+      <div class="panel v2-map">
+        <p class="sub">${L`Laranja: ${esc(nameB)}. Tracejado: ${esc(nameA)}. Cada raio é um tema.`}</p>
+        <div class="panel-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",tips:true,title:L`${nameB} e ${nameA} nos 11 temas`})}</div>
+        <h3 class="v2-h">${L`Do mais parecido ao mais distante`}</h3>
+        <ol class="v2-rank">${rows.map(x=>`<li><button type="button" data-ax="${x.i}"><span class="rk-n">${esc(cap(x.ax.name))}</span><span class="rk-bar"><i style="width:${Math.round(Math.max(0,1-x.d/2)*100)}%"></i></span><span class="rk-l">${tagOf(x)}</span></button></li>`).join("")}</ol>
+      </div>
+      <div class="panel"><h2>${L`O que cada um pensa`}</h2><p class="sub">${L`Os 3 temas em que vocês mais se parecem já estão abertos.`}</p>${themes}</div>
     </div>
-    ${chapter(L`Quem pensa como cada um`)}
-    <div class="cmp-grid cmp-grid-2">${person(nameB,rb)}${person(nameA,ra)}</div>
-    <div class="grid2" style="margin-top:20px">
+    ${chapter(L`Entre vocês dois`)}
+    <div class="grid2">
       <div class="panel mediator"><h2>${L`Quem fica no meio`}</h2><p class="sub">${L`O pensador mais perto do ponto entre vocês dois. Um bom juiz para a próxima discussão.`}</p>
         <a class="opp" href="#/p/${mediator.id}" style="text-decoration:none">${portrait(mediator,{cls:"opp-pic"})}<span><span class="nm">${esc(mediator.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(mediator.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(mediator.q)}”</span></span></a></div>
-      <div class="panel"><h2>${L`Pensadores em comum`}</h2><p class="sub">${L`Aparecem entre os 10 mais parecidos com os dois.`}</p>
-        ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.`}</p>`}</div>
+      <div style="display:grid;gap:20px;align-content:start">
+        <div class="panel"><h2>${L`Pensadores em comum`}</h2><p class="sub">${L`Aparecem entre os 10 mais parecidos com os dois.`}</p>
+          ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.`}</p>`}</div>
+        <div class="panel"><h2>${L`Para ler juntos`}</h2><ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,L`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,L`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,L`Para ler juntos · ${esc(mediator.n)}`)}</ol>${affNote()}</div>
+      </div>
     </div>
-    ${chapter(L`Para conversar`)}
-    <div class="grid2">
-      ${q0?`<div class="panel"><h2>${L`Uma pergunta para vocês`}</h2><p class="cmp-q">“${esc(QS[q0.i][0])}”</p>
-        <p class="ff-them"><b>${L`A favor:`}</b> ${esc(ex.pro)} <small>${L`(paráfrase)`}</small></p>
-        <p class="ff-them"><b>${L`Contra:`}</b> ${esc(ex.con)} <small>${L`(paráfrase)`}</small></p>
-        <p class="sub" style="margin-top:10px">${L`${esc(nameB)} respondeu “${ans(q0.y)}”; ${esc(nameA)}, “${ans(q0.x)}”. Quem convence quem?`}</p></div>`:""}
-      <div class="panel"><h2>${L`Para ler juntos`}</h2><p class="sub">${L`Um livro para cada um entender o outro, e um para os dois.`}</p>
-        <ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,L`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,L`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,L`Para ler juntos · ${esc(mediator.n)}`)}</ol>${affNote()}</div>
-    </div>
+    ${q0?`<div class="finale cmp-finale">
+      <span class="eyebrow">${L`Uma pergunta para vocês`}</span>
+      <blockquote class="finale-quote">“${esc(QS[q0.i][0])}”</blockquote>
+      <p class="finale-by">${L`${esc(nameB)}: ${ans(q0.y)} · ${esc(nameA)}: ${ans(q0.x)}`}</p>
+      <div class="cmp-args"><p><b>${L`A favor`}</b>${esc(QS[q0.i][3])} <small>${L`(paráfrase)`}</small></p><p><b>${L`Contra`}</b>${esc(QS[q0.i][4])} <small>${L`(paráfrase)`}</small></p></div>
+      <p class="finale-lede">${L`Quem convence quem?`}</p>
+    </div>`:""}
     <div class="res-actions" style="justify-content:center;margin-top:28px">
       ${isMine?`<a class="btn accent" href="#/r/${codeB}">${L`Ver meu resultado completo`} ${icon.arrow}</a><button class="btn ghost" id="cmpChallenge" type="button">${icon.link} ${L`Desafiar outra pessoa`}</button>`:`<a class="btn accent" href="#/teste" data-fresh="1">${L`Fazer o teste`} ${icon.arrow}</a>`}
     </div>
     <p class="cmp-foot">${L`Um tema conta como “em comum” quando os dois pendem para o mesmo lado. Mesma conta do resultado.`} <a href="#/metodo">${L`Como calculamos`}</a></p>
   </section>`,L`${nameB} & ${nameA}: ${same} de 11 temas em comum`);
   wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
+  wireThemeMap();
   const url=compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB));
   document.getElementById("cmpStory").addEventListener("click",async e=>{
     const bt=e.currentTarget;if(bt.disabled)return;const keep=bt.innerHTML;bt.disabled=true;bt.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`;

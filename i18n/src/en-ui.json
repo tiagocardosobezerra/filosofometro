@@ -593,5 +593,21 @@
  "Faça o teste e compare com a gente": "Take the test and compare with us",
  "Concordamos em {0} de 11 temas no Filosofômetro. Faz o teste e vê quanto você pensa como a gente:": "We agree on {0} of 11 themes on Filosofômetro. Take the test and see how much you think like us:",
  "Passe o mouse nos temas": "Hover over the themes",
- "Toque nos temas": "Tap the themes"
+ "Toque nos temas": "Tap the themes",
+ "Pensa parecido com <b>{0}</b>": "Thinks like <b>{0}</b>",
+ "Defende com mais força": "Defends most strongly",
+ "os dois no meio": "both in the middle",
+ "entre {0} e {1}": "between {0} and {1}",
+ "puxa forte para {0}": "pulls hard toward {0}",
+ "pende para {0}": "leans toward {0}",
+ "Quem é cada um": "Who each of you is",
+ "Laranja: {0}. Tracejado: {1}. Cada raio é um tema.": "Orange: {0}. Dashed: {1}. Each spoke is a theme.",
+ "Do mais parecido ao mais distante": "From most alike to furthest apart",
+ "O que cada um pensa": "What each of you thinks",
+ "Os 3 temas em que vocês mais se parecem já estão abertos.": "The 3 themes where you are most alike are already open.",
+ "Entre vocês dois": "Between you two",
+ "{0}: {1} · {2}: {3}": "{0}: {1} · {2}: {3}",
+ "A favor": "For",
+ "Contra": "Against",
+ "Quem convence quem?": "Who convinces whom?"
 }
