@@ -1693,11 +1693,12 @@ function renderResultV2(code){
   const order=AXES.map((a,i)=>({a,i,x:userV[i]})).sort((u,v)=>Math.abs(v.x)-Math.abs(u.x));
   const topThree=new Set(order.slice(0,3).map(s=>s.i));
   const themes=order.map(({a,i,x})=>{const al=alliesOn(i,x),balanced=Math.abs(x)<.13;
-    return `<details class="th"${topThree.has(i)?" open":""}><summary><span class="th-n">${esc(cap(a.name))}</span><span class="th-pole">${balanced?"no meio":esc(x<0?a.l:a.r)}</span></summary>
+    return `<details class="th" data-ax="${i}"${topThree.has(i)?" open":""}><summary><span class="th-n">${esc(cap(a.name))}</span><span class="th-pole">${balanced?"no meio":esc(x<0?a.l:a.r)}</span></summary>
       ${axisRow(a,x,p.v[i],"você",p.n,{named:false})}
       <p>${balanced?`Você está entre ${esc(a.l)} e ${esc(a.r)}.`:esc(POLE_TEXT[i][x<0?0:1])}</p>
       ${balanced?"":`<div class="th-who"><span class="th-k">Do seu lado</span>${al.mine.map(m=>`<a href="#/p/${m.id}">${portrait(m,{cls:"th-av"})}<span>${esc(m.n)}</span></a>`).join("")}<span class="th-k">Do outro lado</span>${al.other?`<a href="#/p/${al.other.id}">${portrait(al.other,{cls:"th-av"})}<span>${esc(al.other.n)}</span></a>`:""}</div>`}
     </details>`}).join("");
+  const rare=AXES.map((a,i)=>({a,i,x:userV[i]})).filter(o=>Math.abs(o.x)>=.13).map(o=>({...o,n:PH.filter(q=>Math.sign(q.v[o.i])===Math.sign(o.x)&&Math.abs(q.v[o.i])>=.2).length})).sort((u,v)=>u.n-v.n)[0]||null;
   let ch=0;const chapter=title=>`<h2 class="chapter"><span>${++ch}</span>${title}</h2>`;
   mount(`
   <div class="v2-banner"><div class="wrap"><b>Protótipo</b> da nova tela de resultado (versão mesclada). A tela atual continua em <a href="#/r/${code}">#/r/…</a>. <button type="button" class="link-btn" id="v2Reveal">Ver a revelação nova</button></div></div>
@@ -1743,10 +1744,13 @@ function renderResultV2(code){
 
     ${chapter("Seus 11 temas")}
     <div class="grid2 v2-themes">
-      <div class="panel">
+      <div class="panel v2-map">
         <p class="sub">Cada raio é um tema: o primeiro polo fica no centro e o segundo, na borda. Laranja: você. Tracejado: ${esc(p.n)}.</p>
         <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Seu perfil nos 11 temas comparado ao de ${p.n}`})}</div>
-        <p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada tema para ver o que ele mede e por que você ficou ali.</p>
+        <p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> num tema da mandala ou da lista para ver os dois juntos.</p>
+        <h3 class="v2-h">Do mais firme ao mais aberto</h3>
+        <ol class="v2-rank">${order.map(({a,i,x})=>{const m=Math.abs(x),lvl=m>=.6?"muito firme":m>=.3?"firme":m>=.13?"leve":"em aberto";return `<li><button type="button" data-ax="${i}"><span class="rk-n">${esc(cap(a.name))}</span><span class="rk-bar"><i style="width:${Math.round(m*100)}%"></i></span><span class="rk-l">${lvl}</span></button></li>`}).join("")}</ol>
+        ${rare?`<p class="v2-rare"><b>${rare.n<=Math.round(PH.length*.15)?"Seu tema mais raro":"Seu tema menos comum"}: ${esc(rare.a.name)}.</b> ${rare.n<=Math.round(PH.length*.15)?"Só ":""}${rare.n} dos ${PH.length} pensadores estão do seu lado (${esc(rare.x<0?rare.a.l:rare.a.r)}).</p>`:""}
       </div>
       <div class="panel"><h2>Quem está do seu lado</h2><p class="sub">Os 3 temas em que você é mais firme já estão abertos.</p>${themes}</div>
     </div>
@@ -1791,6 +1795,14 @@ function renderResultV2(code){
   document.getElementById("v2Share").addEventListener("click",()=>shareV2(r));
   const dp=document.getElementById("v2Deeper");if(dp)dp.addEventListener("click",()=>track(`/evento/v2-aprofundar-${V2_LEVEL[sh.level-1]}`));
   document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
+  {const map=app.querySelector(".v2-map");if(map){
+    const spokes=[...map.querySelectorAll(".sg-spoke")],lbls=[...map.querySelectorAll(".sg-lbl")],rows=[...app.querySelectorAll(".v2-rank button")];
+    const light=ax=>{spokes.forEach((e,k)=>e.classList.toggle("on",k===ax));lbls.forEach((e,k)=>e.classList.toggle("on",k===ax));rows.forEach(b=>b.classList.toggle("on",+b.dataset.ax===ax))};
+    const openTheme=ax=>{const d=app.querySelector(`.th[data-ax="${ax}"]`);if(!d)return;d.open=true;light(ax);d.scrollIntoView({block:"nearest",behavior:reduceMotion?"auto":"smooth"})};
+    app.querySelectorAll(".th").forEach(d=>{const ax=+d.dataset.ax;d.addEventListener("mouseenter",()=>light(ax));d.addEventListener("toggle",()=>{if(d.open)light(ax)})});
+    rows.forEach(b=>{b.addEventListener("mouseenter",()=>light(+b.dataset.ax));b.addEventListener("click",()=>openTheme(+b.dataset.ax))});
+    map.querySelectorAll(".sg-hit").forEach(h=>h.addEventListener("click",()=>openTheme(+h.dataset.ax)));
+  }}
   v2Cards(r,ff);
   if(store.get("protoReveal")===code){store.del("protoReveal");revealV2(r)}
 }
