@@ -490,6 +490,7 @@ function renderQuiz(arg){
       <a class="link-btn" href="#/">${L`Sair <span class="sr">do teste (seu progresso fica salvo)</span>`}</a>
     </div>
     <div class="progress ${total>44?"dense":""}" style="grid-template-columns:repeat(${total},1fr)" aria-hidden="true">${order.map(()=>"<i></i>").join("")}</div>
+    <p class="q-near" id="qNear" aria-live="off"></p>
     <div class="quiz-body">
     <div class="q-stage">
       <div class="q-anim" id="qAnim">
@@ -526,6 +527,9 @@ function renderQuiz(arg){
     const sum=AXES.map(()=>0),n=AXES.map(()=>0);
     answers.forEach((a,i)=>{if(a===null)return;const q=QS[i];sum[q[1]]+=SCALE[a].value*q[2];n[q[1]]++});
     const v=sum.map((x,i)=>n[i]?x/(2*n[i]):0);
+    // A live hint of where the answers are heading: the closest thinker so far, after a few answers.
+    const answered=answers.filter(a=>a!==null).length,near=document.getElementById("qNear");
+    if(near&&answered>=6){const top=E.rank(v).rows[0].p;if(near.dataset.id!==top.id){near.dataset.id=top.id;near.innerHTML=`${portrait(top,{cls:"qn-pic"})}<span>${L`Mais perto agora:`} <b>${esc(top.n)}</b></span>`;near.classList.remove("pop");void near.offsetWidth;near.classList.add("pop","on")}}
     qaPath.setAttribute("d",path(v));qaMini.setAttribute("d",path(v));
     pts(v).forEach(([x,y],i)=>{qaDots[i].setAttribute("cx",x.toFixed(1));qaDots[i].setAttribute("cy",y.toFixed(1))});
     qaLbls.forEach((t,i)=>t.classList.toggle("on",i===ax));qaSpokes.forEach((t,i)=>t.classList.toggle("on",i===ax));

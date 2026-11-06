@@ -1071,3 +1071,11 @@ body.rv-open{overflow:hidden}
   .level .lv-bars{display:none}
   .lv-lede{display:none}
 }
+/* Quiz: the thinker closest to the answers so far, updated as the person answers. */
+.q-near{display:flex;align-items:center;gap:8px;min-height:30px;margin:10px 0 0;font-size:13px;color:var(--muted);opacity:0;transition:opacity .4s}
+.q-near.on{opacity:1}
+.q-near b{color:var(--ink);font-weight:600}
+.q-near .qn-pic{width:26px;height:26px;border-radius:50%;overflow:hidden;flex:none}
+.q-near.pop span{animation:qnpop .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes qnpop{from{opacity:0;transform:translateY(4px)}}
+@media (prefers-reduced-motion:reduce){.q-near.pop span{animation:none}}
