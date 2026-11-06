@@ -187,7 +187,7 @@ async function homeSVG(lang = "pt") {
   let b = brand(70, 120);
   b += `<text x="70" y="270" font-family="${serif}" font-size="104" fill="${C.ink}">${esc(T.q0)}</text>`;
   b += `<text x="70" y="370" font-family="${serif}" font-size="104" fill="${C.ink}">${esc(T.q2)}<tspan font-style="italic" fill="${C.accent}">${esc(T.you)}</tspan></text>`;
-  b += `<text x="70" y="450" font-family="${sans}" font-size="26" fill="${C.muted}">${T.tagline(DATA.PH.length + DATA.BR.length)}</text>`;
+  b += `<text x="70" y="450" font-family="${sans}" font-size="26" fill="${C.muted}">${T.tagline(engineFor(langOf(lang)).PH.length + engineFor(langOf(lang)).BRAZIL.length - engineFor(langOf(lang)).PH.filter(x => x.br).length)}</text>`;
   // Three arches, each with its own clip path, overlapping slightly.
   ps.forEach((p, i) => { b += archSVG(760 + i * 120, 120 + (i % 2) * 60, 210, 330, imgs[i], p).replace(/id="arch"/, `id="arch${i}"`).replace(/url\(#arch\)/, `url(#arch${i})`); });
   return frame(b);

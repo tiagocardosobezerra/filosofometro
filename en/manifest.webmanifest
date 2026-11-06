@@ -1,7 +1,7 @@
 {
   "name": "Filosofômetro: which philosopher thinks like you?",
   "short_name": "Filosofômetro",
-  "description": "Free philosophy test: 11 axes, 128 thinkers and an auditable engine.",
+  "description": "Free philosophy test: 11 axes, 130 thinkers and an auditable engine.",
   "lang": "en",
   "start_url": "/en/?source=app",
   "scope": "/en/",

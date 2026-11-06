@@ -61,11 +61,11 @@ PASS pt: every one of the 27 regional thinkers wins the regional ranking for the
      pt: most frequent regional matches Gilberto Freyre 8.8%, José Guilherme Merquior 8.4%, Nise da Silveira 7.4% · least Tobias Barreto 0.5%, Paulo Freire 0.4%
 PASS pt: every regional thinker comes up for someone (27/27)
 PASS pt: no regional thinker takes more than 4× a fair share (highest 8.8% = 2.4×)
-PASS en: every one of the 24 regional thinkers wins the regional ranking for their own profile 
-     en: most frequent regional matches Thomas Sowell 12.7%, Mary Astell 11.0%, Elizabeth Anscombe 9.2% · least W. E. B. Du Bois 0.8%, Thomas Paine 0.5%
-PASS en: every regional thinker comes up for someone (24/24)
-PASS en: no regional thinker takes more than 4× a fair share (highest 12.7% = 3.0×)
-PASS es: every one of the 24 regional thinkers wins the regional ranking for their own profile 
-     es: most frequent regional matches Jorge Luis Borges 13.2%, Domingo F. Sarmiento 8.0%, Rodolfo Kusch 8.0% · least José Martí 0.7%, Gabriela Mistral 0.6%
-PASS es: every regional thinker comes up for someone (24/24)
-PASS es: no regional thinker takes more than 4× a fair share (highest 13.2% = 3.2×)
+PASS en: every one of the 26 regional thinkers wins the regional ranking for their own profile 
+     en: most frequent regional matches Thomas Sowell 12.1%, Ralph Waldo Emerson 8.8%, Alan Watts 6.9% · least W. E. B. Du Bois 0.8%, Thomas Paine 0.4%
+PASS en: every regional thinker comes up for someone (26/26)
+PASS en: no regional thinker takes more than 4× a fair share (highest 12.1% = 3.1×)
+PASS es: every one of the 26 regional thinkers wins the regional ranking for their own profile 
+     es: most frequent regional matches Jorge Luis Borges 10.7%, Baltasar Gracián 10.0%, Domingo F. Sarmiento 7.1% · least José Martí 0.6%, Gabriela Mistral 0.5%
+PASS es: every regional thinker comes up for someone (26/26)
+PASS es: no regional thinker takes more than 4× a fair share (highest 10.7% = 2.8×)

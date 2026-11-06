@@ -910,5 +910,81 @@
    "Moral revolutions often happen when honor and shame change their targets"
   ],
   "line": "Cosmopolitan liberalism defends both individual freedom and a moral concern that crosses borders. Appiah is its leading contemporary voice, shaped by his life between Africa and the West."
+ },
+ {
+  "id": "ralph-cudworth",
+  "n": "Ralph Cudworth",
+  "s": "Cambridge Platonism",
+  "era": "English-speaking world",
+  "v": [
+   -0.9,
+   0.6,
+   -0.8,
+   -0.8,
+   0.2,
+   0.7,
+   0.9,
+   -0.7,
+   -0.4,
+   -0.2,
+   -0.1
+  ],
+  "q": "Good and evil are not made by anyone's will: they are as eternal and unchangeable as the truths of geometry.",
+  "b": "A Treatise Concerning Eternal and Immutable Morality",
+  "reading": [
+   "The True Intellectual System of the Universe",
+   "A Treatise of Freewill"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/0/05/Ralph_Cudworth.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/Ralph_Cudworth",
+  "born": 1617,
+  "died": 1688,
+  "approx": false,
+  "place": "Aller, Somerset (England)",
+  "bio": "Master of Christ's College, Cambridge, he led the Cambridge Platonists, a circle that defended reason as a gift of God in the middle of England's religious wars. Against Hobbes and the materialists of his day, he wrote a huge defense of a spiritual, intelligible universe, and argued that right and wrong are fixed by the nature of things, not by power or command.",
+  "ideas": [
+   "Moral truths are eternal and unchangeable, like the truths of mathematics.",
+   "The universe is the work of a mind, not the blind clash of atoms.",
+   "Human freedom is real: we can direct ourselves toward the good."
+  ],
+  "line": "Cambridge Platonism joined Christian faith with the reason of Plato and Plotinus in 17th century England. Cudworth was its most systematic thinker."
+ },
+ {
+  "id": "john-henry-newman",
+  "n": "John Henry Newman",
+  "s": "Catholic theology",
+  "era": "English-speaking world",
+  "v": [
+   -0.3,
+   0.4,
+   -0.9,
+   -0.6,
+   0.5,
+   0.8,
+   0.9,
+   -0.6,
+   -0.8,
+   -0.3,
+   -0.7
+  ],
+  "q": "Ten thousand difficulties do not make one doubt.",
+  "b": "Apologia Pro Vita Sua",
+  "reading": [
+   "An Essay in Aid of a Grammar of Assent",
+   "The Idea of a University"
+  ],
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/John_Henry_Newman_1887_Portrait_Photograph_%283x4_cropped%29.jpg/500px-John_Henry_Newman_1887_Portrait_Photograph_%283x4_cropped%29.jpg",
+  "wiki": "https://en.wikipedia.org/wiki/John_Henry_Newman",
+  "born": 1801,
+  "died": 1890,
+  "approx": false,
+  "place": "London (England)",
+  "bio": "An Anglican priest at Oxford and leader of the Oxford Movement, he became a Catholic in 1845, a decision that shook Victorian England. He explained how we can be certain without strict proof, defended a university that forms the whole person, and was made a cardinal and, in 2019, a saint.",
+  "ideas": [
+   "Real certainty comes from many converging reasons, not from a single proof.",
+   "Conscience is the voice of God inside each person.",
+   "Education should form the whole mind, not only train for a job."
+  ],
+  "line": "Catholic theology seeks to understand the faith through reason and tradition. Newman renewed it with his study of how doctrine develops and how people come to believe."
  }
 ]

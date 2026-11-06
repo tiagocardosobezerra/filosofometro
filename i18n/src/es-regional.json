@@ -910,5 +910,81 @@
    "Desconfiar del Estado y de los fanatismos es una forma de cortesía y de libertad."
   ],
   "line": "El escepticismo idealista duda de toda certeza y sospecha que el mundo puede ser una construcción de la mente. Borges lo practicó como ensayista, más cerca de Hume y Berkeley que de cualquier escuela."
+ },
+ {
+  "id": "baltasar-gracian",
+  "n": "Baltasar Gracián",
+  "s": "Moral de la prudencia",
+  "era": "Iberoamérica",
+  "v": [
+   0.3,
+   0.3,
+   -0.4,
+   0.5,
+   -0.6,
+   0.5,
+   0.6,
+   0.4,
+   -0.3,
+   -0.6,
+   -0.3
+  ],
+  "q": "Lo bueno, si breve, dos veces bueno.",
+  "b": "Oráculo manual y arte de prudencia",
+  "reading": [
+   "El Criticón",
+   "El héroe"
+  ],
+  "img": "https://upload.wikimedia.org/wikipedia/commons/2/21/Graci%C3%A1n_Graus.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Baltasar_Graci%C3%A1n",
+  "born": 1601,
+  "died": 1658,
+  "approx": false,
+  "place": "Belmonte de Gracián, Aragón (España)",
+  "bio": "Jesuita aragonés y maestro del conceptismo barroco, escribió aforismos breves y afilados sobre cómo vivir con sensatez en un mundo de apariencias y engaños. Publicó casi siempre sin permiso de su orden, que terminó castigándolo. Su Oráculo manual fue admirado por Schopenhauer y Nietzsche.",
+  "ideas": [
+   "El mundo está hecho de apariencias: hay que saber leerlas sin dejarse engañar.",
+   "La prudencia vale más que la fuerza: conviene medir cada palabra y cada gesto.",
+   "La vida es un camino de desengaño, en que se aprende a ver las cosas como son."
+  ],
+  "line": "La moral de la prudencia enseña a vivir con juicio en medio del engaño del mundo. Gracián es su gran maestro en lengua española."
+ },
+ {
+  "id": "juan-de-mariana",
+  "n": "Juan de Mariana",
+  "s": "Escuela de Salamanca",
+  "era": "Iberoamérica",
+  "v": [
+   -0.3,
+   0.6,
+   -0.8,
+   -0.5,
+   0.3,
+   0.7,
+   0.8,
+   -0.5,
+   -0.2,
+   0.6,
+   0.6
+  ],
+  "q": "El rey que altera la moneda sin consentimiento del pueblo le quita sus bienes como un ladrón.",
+  "b": "Tratado y discurso sobre la moneda de vellón",
+  "reading": [
+   "Historia general de España",
+   "La dignidad real y la educación del rey"
+  ],
+  "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/El_padre_Juan_de_Mariana_%28Museo_del_Prado%29.jpg/500px-El_padre_Juan_de_Mariana_%28Museo_del_Prado%29.jpg",
+  "wiki": "https://es.wikipedia.org/wiki/Juan_de_Mariana",
+  "born": 1536,
+  "died": 1624,
+  "approx": false,
+  "place": "Talavera de la Reina, Toledo (España)",
+  "bio": "Jesuita e historiador, escribió la primera gran historia de España en castellano. Defendió que el poder del rey viene del pueblo y que un tirano puede ser resistido, y denunció la devaluación de la moneda como un robo, lo que le costó la cárcel. Es una figura central de la Escuela de Salamanca.",
+  "ideas": [
+   "El poder del rey viene del pueblo, y el tirano pierde su derecho a gobernar.",
+   "Alterar la moneda sin consentimiento es un impuesto encubierto que empobrece a todos.",
+   "Los impuestos y las leyes necesitan el acuerdo de quienes los pagan y obedecen."
+  ],
+  "line": "La Escuela de Salamanca reunió a teólogos españoles del siglo XVI que pensaron el derecho, la economía y el poder. Mariana llevó sus ideas sobre la moneda y la tiranía hasta el final."
  }
 ]

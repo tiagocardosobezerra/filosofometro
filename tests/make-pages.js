@@ -278,7 +278,9 @@ const APP_PAGE = {
     install: "Instalar la app", app: "Test filosófico gratuito: 11 ejes, 128 pensadores y un motor auditable.", noscript: "Filosofômetro necesita JavaScript para funcionar.", support: "Apoya el proyecto" },
 };
 function appPage(lang) {
-  const A = APP_PAGE[lang], T = LANGS[lang];
+  // The thinker count follows the catalog of each language (the regional lists differ in size).
+  const total = String(CATALOG[lang].ALL.length);
+  const A = Object.fromEntries(Object.entries(APP_PAGE[lang]).map(([k, v]) => [k, v.replace(/128/g, total)])), T = LANGS[lang];
   let s = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
   const swap = (from, to) => { if (!s.includes(from)) throw new Error(`index.html changed, cannot find: ${from}`); s = s.split(from).join(to); };
   swap('<html lang="pt-BR">', `<html lang="${T.html}">`);
