@@ -77,7 +77,7 @@ function write(pt, langs) {
   const pt = { ...OLD }, langs = JSON.parse(JSON.stringify(OLD.lang || { en: {}, es: {} }));
   const rows = [];
   for (const p of listFor(lang)) {
-    const out = lang === "pt" ? pt[p.id] = (pt[p.id] || [0, 0, 0]).slice() : (langs[lang][p.id] = [null, null, null]);
+    const out = lang === "pt" ? pt[p.id] = (pt[p.id] || [0, 0, 0]).slice() : (langs[lang][p.id] = only && langs[lang][p.id] ? langs[lang][p.id].slice() : [null, null, null]);
     for (const [i, b] of p.books.entries()) {
       const key = `${p.id}/${i}`;
       if (only && !only.has(key)) continue;
@@ -92,7 +92,8 @@ function write(pt, langs) {
   delete require.cache[require.resolve(path.join(ROOT, "covers.js"))];
   const cur = require(path.join(ROOT, "covers.js")), curLang = JSON.parse(JSON.stringify(cur.lang || { en: {}, es: {} }));
   if (lang === "pt") write({ ...cur, ...Object.fromEntries(Object.entries(pt).filter(([id]) => only ? [...only].some(k => k.startsWith(id + "/")) : true)) }, curLang);
-  else { curLang[lang] = langs[lang]; write({ ...cur }, curLang); }
+  // With chosen keys, only those thinkers change; every other cover of the language stays as it was.
+  else { curLang[lang] = only ? { ...curLang[lang], ...Object.fromEntries(Object.entries(langs[lang]).filter(([id]) => [...only].some(k => k.startsWith(id + "/")))) } : langs[lang]; write({ ...cur }, curLang); }
   const report = path.join(__dirname, `covers-report-${lang}.md`);
   fs.writeFileSync(report, `# Capas (${lang})\n\n| Livro | Título | Capa | Encontrado |\n|---|---|---|---|\n${rows.join("\n")}\n`);
   console.log(`\n${rows.filter(r => !/sem capa|capa do PT/.test(r)).length}/${rows.length} covers found, report in ${path.basename(report)}`);
