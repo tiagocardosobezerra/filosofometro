@@ -451,7 +451,7 @@ section("Prévias de link (api/)");
   const P = require(path.join(ROOT, "api", "_preview.js"));
   const code = E.encode(noisy(PH[20].v)), other = E.encode(noisy(PH[60].v)), r = E.evaluate(E.decode(code));
   const inv = P.inviteInfo(code, "Ana%20Clara");
-  ok(inv && inv.title.includes(`${r.top.pct}% ${r.top.p.n}`) && inv.hash === `#/vs/${code}/Ana%20Clara`, "invite preview uses the engine result and points to the invite page");
+  ok(inv && inv.title.includes(`${r.top.pct}% de afinidade com ${r.top.p.n}`) && inv.hash === `#/vs/${code}/Ana%20Clara`, "invite preview uses the engine result and points to the invite page");
   ok(P.inviteInfo("123", "") === null && P.inviteInfo(code + "0", "") === null && P.compareInfo(code, "x") === null, "invalid codes give no preview");
   const evil = P.inviteInfo(code, encodeURIComponent('<script>alert(1)</script>"'));
   ok(!/[<>"]/.test(evil.name) && !P.sharePage(evil, "https://x.test", "code=" + code).includes("<script>alert"), "names are cleaned and the share page escapes everything it prints");

@@ -15,21 +15,21 @@ const LANGS = ["pt", "en", "es"];
 const langOf = l => (LANGS.includes(l) ? l : "pt");
 // Every sentence the previews say, per language.
 const TXT = {
-  pt: { html: "pt-BR", someone: "Alguém", bc: "a.C.", to: "a", dared: w => `${w} te desafiou no ${SITE}`, got: (w, pct, n) => `${w} deu ${pct}% ${n}. E você?`,
-    descFlat: "Qual filósofo pensa como você? Faça o teste e compare, eixo por eixo.", desc: (n, s) => `Par filosófico: ${n} (${s}). Faça o teste e descubra quanto vocês pensam parecido.`,
-    two: "Duas pessoas", and: "e", friend: " e um amigo", in: "no", compat: "compatíveis", common: "de 11 temas em comum", agreeOn: n => `concordam em ${n} de 11 temas`, cmpDesc: "Onde pensam igual, onde divergem e quais filósofos têm em comum. Faça o teste e compare também.",
-    open: "Abrir o", daredCaps: w => `${w} TE DESAFIOU`, mine: "MEU PAR FILOSÓFICO", balanced: "Perfil equilibrado", q1: "Qual filósofo pensa como ", you: "você?",
-    comparison: "COMPARAÇÃO", noDir: "Sem direção", p1: "Pessoa 1", p2: "Pessoa 2", tagline: n => `11 eixos · ${n} pensadores · teste gratuito`, q0: "Qual filósofo", q2: "pensa como " },
-  en: { html: "en", someone: "Someone", bc: "BC", to: "to", dared: w => `${w} challenged you on ${SITE}`, got: (w, pct, n) => `${w} got ${pct}% ${n}. What about you?`,
-    descFlat: "Which philosopher thinks like you? Take the test and compare, axis by axis.", desc: (n, s) => `Philosophical match: ${n} (${s}). Take the test and see how alike you think.`,
-    two: "Two people", and: "and", friend: " and a friend", in: "on", compat: "compatible", common: "of 11 themes in common", agreeOn: n => `agree on ${n} of 11 themes`, cmpDesc: "Where they agree, where they split and which philosophers they share. Take the test and compare too.",
-    open: "Open", daredCaps: w => `${w} CHALLENGED YOU`, mine: "MY PHILOSOPHICAL MATCH", balanced: "Balanced profile", q1: "Which philosopher thinks like ", you: "you?",
-    comparison: "COMPARISON", noDir: "No direction", p1: "Person 1", p2: "Person 2", tagline: n => `11 axes · ${n} thinkers · free test`, q0: "Which philosopher", q2: "thinks like " },
-  es: { html: "es", someone: "Alguien", bc: "a. C.", to: "a", dared: w => `${w} te desafió en ${SITE}`, got: (w, pct, n) => `${w} sacó ${pct}% ${n}. ¿Y tú?`,
-    descFlat: "¿Qué filósofo piensa como tú? Haz el test y compara, eje por eje.", desc: (n, s) => `Par filosófico: ${n} (${s}). Haz el test y descubre cuánto se parecen.`,
-    two: "Dos personas", and: "y", friend: " y un amigo", in: "en", compat: "compatibles", common: "de 11 temas en común", agreeOn: n => `coinciden en ${n} de 11 temas`, cmpDesc: "Dónde piensan igual, dónde difieren y qué filósofos comparten. Haz el test y compara tú también.",
-    open: "Abrir", daredCaps: w => `${w} TE DESAFIÓ`, mine: "MI PAR FILOSÓFICO", balanced: "Perfil equilibrado", q1: "¿Qué filósofo piensa como ", you: "tú?",
-    comparison: "COMPARACIÓN", noDir: "Sin dirección", p1: "Persona 1", p2: "Persona 2", tagline: n => `11 ejes · ${n} pensadores · test gratuito`, q0: "¿Qué filósofo", q2: "piensa como " },
+  pt: { html: "pt-BR", someone: "Alguém", bc: "a.C.", to: "a", dared: w => `${w} te desafiou no ${SITE}`, got: (w, pct, n) => `${w} tem ${pct}% de afinidade com ${n}. E você?`,
+    descFlat: "Qual filósofo pensa como você? Faça o teste e compare, tema por tema.", desc: (n, s) => `Pensa parecido com ${n} (${s}). Faça o teste e descubra em quantos dos 11 temas vocês concordam.`,
+    two: "Duas pessoas", and: "e", friend: " e um amigo", in: "no", common: "de 11 temas em comum", agreeOn: n => `concordam em ${n} de 11 temas`, cmpDesc: "Onde pensam igual, onde divergem e quais filósofos têm em comum. Faça o teste e compare também.",
+    open: "Abrir o", daredCaps: w => `${w} TE DESAFIOU`, mine: "PENSO PARECIDO COM", balanced: "Perfil equilibrado", q1: "Qual filósofo pensa como ", you: "você?",
+    comparison: "COMPARAÇÃO", noDir: "Sem direção", p1: "Pessoa 1", p2: "Pessoa 2", tagline: n => `11 temas · ${n} pensadores · teste gratuito`, q0: "Qual filósofo", q2: "pensa como " },
+  en: { html: "en", someone: "Someone", bc: "BC", to: "to", dared: w => `${w} challenged you on ${SITE}`, got: (w, pct, n) => `${w} has ${pct}% affinity with ${n}. What about you?`,
+    descFlat: "Which philosopher thinks like you? Take the test and compare, theme by theme.", desc: (n, s) => `Thinks like ${n} (${s}). Take the test and find out on how many of the 11 themes you agree.`,
+    two: "Two people", and: "and", friend: " and a friend", in: "on", common: "of 11 themes in common", agreeOn: n => `agree on ${n} of 11 themes`, cmpDesc: "Where they agree, where they split and which philosophers they share. Take the test and compare too.",
+    open: "Open", daredCaps: w => `${w} CHALLENGED YOU`, mine: "I THINK LIKE", balanced: "Balanced profile", q1: "Which philosopher thinks like ", you: "you?",
+    comparison: "COMPARISON", noDir: "No direction", p1: "Person 1", p2: "Person 2", tagline: n => `11 themes · ${n} thinkers · free test`, q0: "Which philosopher", q2: "thinks like " },
+  es: { html: "es", someone: "Alguien", bc: "a. C.", to: "a", dared: w => `${w} te desafió en ${SITE}`, got: (w, pct, n) => `${w} tiene ${pct}% de afinidad con ${n}. ¿Y tú?`,
+    descFlat: "¿Qué filósofo piensa como tú? Haz el test y compara, tema por tema.", desc: (n, s) => `Piensa parecido a ${n} (${s}). Haz el test y descubre en cuántos de los 11 temas coinciden.`,
+    two: "Dos personas", and: "y", friend: " y un amigo", in: "en", common: "de 11 temas en común", agreeOn: n => `coinciden en ${n} de 11 temas`, cmpDesc: "Dónde piensan igual, dónde difieren y qué filósofos comparten. Haz el test y compara tú también.",
+    open: "Abrir", daredCaps: w => `${w} TE DESAFIÓ`, mine: "PIENSO PARECIDO A", balanced: "Perfil equilibrado", q1: "¿Qué filósofo piensa como ", you: "tú?",
+    comparison: "COMPARACIÓN", noDir: "Sin dirección", p1: "Persona 1", p2: "Persona 2", tagline: n => `11 temas · ${n} pensadores · test gratuito`, q0: "¿Qué filósofo", q2: "piensa como " },
 };
 
 const SITE = "Filosofômetro";

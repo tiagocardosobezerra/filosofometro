@@ -1,7 +1,7 @@
 {
   "name": "Filosofômetro: qual filósofo pensa como você?",
   "short_name": "Filosofômetro",
-  "description": "Teste filosófico gratuito: 11 eixos, 128 pensadores e um motor auditável.",
+  "description": "Teste filosófico gratuito: 11 temas, 128 pensadores e um motor auditável.",
   "lang": "pt-BR",
   "start_url": "/?source=app",
   "scope": "/",

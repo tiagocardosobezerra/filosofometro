@@ -29,14 +29,14 @@ const LANGS = {
     start: "Comece por este · ", amazon: "Ver na Amazon", here: "Você está em",
     title: n => `${n}: vida, ideias e livros | Filosofômetro`,
     cta: (n, total) => `Você pensa como ${n}? Responda de 44 a 132 afirmações e descubra quem, entre ${total} pensadores, tem o formato de pensamento mais parecido com o seu.`,
-    free: "Fazer o teste grátis", profile: "Ver o perfil interativo", who: n => `Quem foi ${n}`, ideas: "Ideias centrais", line: s => `A linha: ${s}`,
+    free: "Fazer o teste grátis", profile: "Ver o perfil interativo", who: (n, alive) => alive ? `Quem é ${n}` : `Quem foi ${n}`, ideas: "Ideias centrais", line: s => `A linha: ${s}`,
     same: "Na mesma linha:", source: "Fonte para saber mais:", wiki: "Wikipédia", books: n => `Livros de ${n}`, booksSub: "Três portas de entrada. Comece pelo primeiro.",
-    axesH: n => `Onde ${n} fica nos 11 eixos`, axesSub: "Cada eixo vai do primeiro polo (−1) ao segundo (+1). São essas posições que o teste compara com as suas respostas.",
+    axesH: n => `Onde ${n} fica nos 11 temas`, axesSub: "Cada tema vai do primeiro polo (−1) ao segundo (+1). São essas posições que o teste compara com as suas respostas.",
     kinH: n => `Pensadores parecidos com ${n}`, endQ: "Qual filósofo<br><em class=\"it accent\">pensa como você?</em>", begin: "Começar o teste",
     idxTitle: total => `Pensadores: ${total} filósofos, vidas, ideias e livros | Filosofômetro`,
     idxDesc: (total, nr) => `Vida, ideias centrais, posições e livros de ${total} pensadores, de Pitágoras a Byung-Chul Han, com ${nr} brasileiros. Descubra qual deles pensa como você.`,
     library: "Biblioteca", count: total => `${total} pensadores`,
-    idxLede: "Vida, ideias centrais, posição nos 11 eixos e três livros de cada um. Quer saber com qual deles você mais se parece? <a href=\"/#/teste\">Faça o teste</a>.",
+    idxLede: "Vida, ideias centrais, posição nos 11 temas e três livros de cada um. Quer saber com qual deles você mais se parece? <a href=\"/#/teste\">Faça o teste</a>.",
     affiliate: "Como associado da Amazon, o Filosofômetro ganha com compras qualificadas, sem custo a mais para você." },
   en: { html: "en", app: "/en/", arch: "Archetype:", dir: "en/thinkers", og: "og-en.png", dec: ".",
     bc: "BC", to: "to", balance: "Balanced", strong: ", strong", home: "Filosofômetro, home", nav: "Main",
@@ -45,14 +45,14 @@ const LANGS = {
     start: "Start here · ", amazon: "See on Amazon", here: "You are in",
     title: n => `${n}: life, ideas and books | Filosofômetro`,
     cta: (n, total) => `Do you think like ${n}? Answer 44 to 132 statements and find out who, among ${total} thinkers, has the way of thinking closest to yours.`,
-    free: "Take the free test", profile: "See the interactive profile", who: n => `Who was ${n}`, ideas: "Core ideas", line: s => `The tradition: ${s}`,
+    free: "Take the free test", profile: "See the interactive profile", who: (n, alive) => alive ? `Who is ${n}` : `Who was ${n}`, ideas: "Core ideas", line: s => `The tradition: ${s}`,
     same: "In the same tradition:", source: "Learn more:", wiki: "Wikipedia", books: n => `Books by ${n}`, booksSub: "Three ways in. Start with the first.",
-    axesH: n => `Where ${n} stands on the 11 axes`, axesSub: "Each axis runs from the first pole (−1) to the second (+1). These are the positions the test compares with your answers.",
+    axesH: n => `Where ${n} stands on the 11 themes`, axesSub: "Each theme runs from the first pole (−1) to the second (+1). These are the positions the test compares with your answers.",
     kinH: n => `Thinkers similar to ${n}`, endQ: "Which philosopher<br><em class=\"it accent\">thinks like you?</em>", begin: "Start the test",
     idxTitle: total => `Thinkers: ${total} philosophers, lives, ideas and books | Filosofômetro`,
     idxDesc: (total, nr) => `Life, core ideas, positions and books of ${total} thinkers, from Pythagoras to Byung-Chul Han, including ${nr} from the English-speaking world. Find out which one thinks like you.`,
     library: "Library", count: total => `${total} thinkers`,
-    idxLede: "Life, core ideas, position on the 11 axes and three books for each one. Want to know which one you resemble most? <a href=\"/en/#/teste\">Take the test</a>.",
+    idxLede: "Life, core ideas, position on the 11 themes and three books for each one. Want to know which one you resemble most? <a href=\"/en/#/teste\">Take the test</a>.",
     affiliate: "" },
   es: { html: "es", app: "/es/", arch: "Arquetipo:", dir: "es/pensadores", og: "og-es.png", dec: ",",
     bc: "a. C.", to: "a", balance: "Equilibrio", strong: ", fuerte", home: "Filosofômetro, inicio", nav: "Principal",
@@ -61,14 +61,14 @@ const LANGS = {
     start: "Empieza por este · ", amazon: "Ver en Amazon", here: "Estás en",
     title: n => `${n}: vida, ideas y libros | Filosofômetro`,
     cta: (n, total) => `¿Piensas como ${n}? Responde de 44 a 132 afirmaciones y descubre quién, entre ${total} pensadores, tiene la forma de pensar más parecida a la tuya.`,
-    free: "Hacer el test gratis", profile: "Ver el perfil interactivo", who: n => `Quién fue ${n}`, ideas: "Ideas centrales", line: s => `La corriente: ${s}`,
+    free: "Hacer el test gratis", profile: "Ver el perfil interactivo", who: (n, alive) => alive ? `Quién es ${n}` : `Quién fue ${n}`, ideas: "Ideas centrales", line: s => `La corriente: ${s}`,
     same: "En la misma corriente:", source: "Para saber más:", wiki: "Wikipedia", books: n => `Libros de ${n}`, booksSub: "Tres puertas de entrada. Empieza por la primera.",
-    axesH: n => `Dónde se ubica ${n} en los 11 ejes`, axesSub: "Cada eje va del primer polo (−1) al segundo (+1). Son estas posiciones las que el test compara con tus respuestas.",
+    axesH: n => `Dónde se ubica ${n} en los 11 temas`, axesSub: "Cada tema va del primer polo (−1) al segundo (+1). Son estas posiciones las que el test compara con tus respuestas.",
     kinH: n => `Pensadores parecidos a ${n}`, endQ: "¿Qué filósofo<br><em class=\"it accent\">piensa como tú?</em>", begin: "Empezar el test",
     idxTitle: total => `Pensadores: ${total} filósofos, vidas, ideas y libros | Filosofômetro`,
     idxDesc: (total, nr) => `Vida, ideas centrales, posiciones y libros de ${total} pensadores, de Pitágoras a Byung-Chul Han, con ${nr} de Iberoamérica. Descubre cuál piensa como tú.`,
     library: "Biblioteca", count: total => `${total} pensadores`,
-    idxLede: "Vida, ideas centrales, posición en los 11 ejes y tres libros de cada uno. ¿Quieres saber a cuál te pareces más? <a href=\"/es/#/teste\">Haz el test</a>.",
+    idxLede: "Vida, ideas centrales, posición en los 11 temas y tres libros de cada uno. ¿Quieres saber a cuál te pareces más? <a href=\"/es/#/teste\">Haz el test</a>.",
     affiliate: "" },
 };
 
@@ -205,7 +205,7 @@ ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replac
 
   <div class="grid2 sp-grid">
     <div class="panel about">
-      <h2>${esc(T.who(p.n))}</h2>
+      <h2>${esc(T.who(p.n, p.died === null))}</h2>
       ${p.bio ? `<p class="about-bio">${esc(p.bio)}</p>` : ""}
       ${p.ideas && p.ideas.length ? `<h3 class="about-h">${T.ideas}</h3><ul class="about-ideas">${p.ideas.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : ""}
       ${p.line ? `<h3 class="about-h">${esc(T.line(p.s))}</h3><p class="about-line">${esc(p.line)}</p>` : ""}
@@ -267,17 +267,17 @@ ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replac
 // translated, plus the language pack loaded before i18n.js.
 const APP_PAGE = {
   en: { title: "Filosofômetro: which philosopher thinks like you?",
-    desc: "Free philosophy test: 44 to 132 statements, 11 axes, 128 thinkers. Find your philosophical match, your tradition and your opposite, with the whole calculation open for audit.",
-    ogDesc: "44 to 132 statements, 11 axes, 128 thinkers. Your philosophical match, your tradition and your opposite.",
+    desc: "Free philosophy test: 44 to 132 statements, 11 themes, 128 thinkers. Find your archetype, who thinks like you and who would disagree most, with the whole calculation open for audit.",
+    ogDesc: "44 to 132 statements, 11 themes, 128 thinkers. Your archetype, who thinks like you and who would disagree most.",
     skip: "Skip to content", home: "Filosofômetro, home", nav: "Main", thinkers: "Thinkers", method: "Method", take: "Take the test", takeSm: "Test",
     theme: "Toggle light and dark theme", lang: "Language: English", credit: "Made by", tail: "free test, auditable engine", how: "How we calculate", all: "All thinkers",
-    install: "Install the app", app: "Free philosophy test: 11 axes, 128 thinkers and an auditable engine.", noscript: "Filosofômetro needs JavaScript to work.", support: "Support the project" },
+    install: "Install the app", app: "Free philosophy test: 11 themes, 128 thinkers and an auditable engine.", noscript: "Filosofômetro needs JavaScript to work.", support: "Support the project" },
   es: { title: "Filosofômetro: ¿qué filósofo piensa como tú?",
-    desc: "Test filosófico gratuito: de 44 a 132 afirmaciones, 11 ejes, 128 pensadores. Descubre tu par filosófico, tu corriente y tu opuesto, con todo el cálculo abierto para auditoría.",
-    ogDesc: "De 44 a 132 afirmaciones, 11 ejes, 128 pensadores. Tu par filosófico, tu corriente y tu opuesto.",
+    desc: "Test filosófico gratuito: de 44 a 132 afirmaciones, 11 temas, 128 pensadores. Descubre tu arquetipo, a quién te pareces y quién más discreparía de ti, con todo el cálculo abierto para auditoría.",
+    ogDesc: "De 44 a 132 afirmaciones, 11 temas, 128 pensadores. Tu arquetipo, a quién te pareces y quién más discreparía de ti.",
     skip: "Saltar al contenido", home: "Filosofômetro, inicio", nav: "Principal", thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test",
     theme: "Cambiar entre tema claro y oscuro", lang: "Idioma: español", credit: "Creado por", tail: "test gratuito, motor auditable", how: "Cómo calculamos", all: "Todos los pensadores",
-    install: "Instalar la app", app: "Test filosófico gratuito: 11 ejes, 128 pensadores y un motor auditable.", noscript: "Filosofômetro necesita JavaScript para funcionar.", support: "Apoya el proyecto" },
+    install: "Instalar la app", app: "Test filosófico gratuito: 11 temas, 128 pensadores y un motor auditable.", noscript: "Filosofômetro necesita JavaScript para funcionar.", support: "Apoya el proyecto" },
 };
 function appPage(lang) {
   // The thinker count follows the catalog of each language (the regional lists differ in size).
@@ -287,9 +287,9 @@ function appPage(lang) {
   const swap = (from, to) => { if (!s.includes(from)) throw new Error(`index.html changed, cannot find: ${from}`); s = s.split(from).join(to); };
   swap('<html lang="pt-BR">', `<html lang="${T.html}">`);
   swap("<title>Filosofômetro: qual filósofo pensa como você?</title>", `<title>${esc(A.title)}</title>`);
-  swap('content="Teste filosófico gratuito: de 44 a 132 afirmações, 11 eixos, 128 pensadores. Descubra seu par filosófico, sua corrente e seu oposto, com o cálculo inteiro aberto para auditoria."', `content="${esc(A.desc)}"`);
+  swap('content="Teste filosófico gratuito: de 44 a 132 afirmações, 11 temas, 128 pensadores. Descubra seu arquétipo, quem pensa parecido com você e quem mais discordaria, com o cálculo inteiro aberto para auditoria."', `content="${esc(A.desc)}"`);
   swap('<meta property="og:title" content="Filosofômetro: qual filósofo pensa como você?">', `<meta property="og:title" content="${esc(A.title)}">`);
-  swap('content="De 44 a 132 afirmações, 11 eixos, 128 pensadores. Seu par filosófico, sua corrente e seu oposto."', `content="${esc(A.ogDesc)}"`);
+  swap('content="De 44 a 132 afirmações, 11 temas, 128 pensadores. Seu arquétipo, quem pensa parecido com você e quem mais discordaria."', `content="${esc(A.ogDesc)}"`);
   swap("https://filosofometro.com.br/og.png", `${SITE}/${T.og}`);
   swap('<meta property="og:url" content="https://filosofometro.com.br/">', `<meta property="og:url" content="${SITE}${T.app}">`);
   swap('<link rel="canonical" href="https://filosofometro.com.br/">', `<link rel="canonical" href="${SITE}${T.app}">`);
