@@ -1716,9 +1716,8 @@ function renderResultV2(code){
     </div>
     ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`})}
   </section>
-  <nav class="v2-jump" aria-label="Atalhos"><span class="v2-jump-sig" aria-hidden="true">${sigil(userV,{cls:"sg-user",decorative:true})}</span><a href="#v2-retrato" data-j>Retrato</a><a href="#v2-ff" data-j>Frente a frente</a><a href="#v2-temas" data-j>Temas</a><a href="#v2-tempo" data-j>Linhagem</a><a href="#v2-ler" data-j>Ler</a><a href="#v2-comparar" data-j>Comparar</a></nav>
   <section class="wrap" style="padding-bottom:24px">
-    <div id="v2-retrato" class="v2-anchor">${chapter("Seu retrato")}</div>
+    ${chapter("Seu retrato")}
     <div class="panel self">
       <ul class="self-list">${sr.strong.map(s=>`<li><b>${esc(cap(s.a.name))}</b><span>${esc(POLE_TEXT[s.i][s.x<0?0:1])}</span></li>`).join("")}</ul>
       <div class="self-facts">
@@ -1727,13 +1726,13 @@ function renderResultV2(code){
       </div>
     </div>
 
-    <div id="v2-ff" class="v2-anchor">${chapter(`Você e ${esc(shortName(p.n))}, frente a frente`)}</div>
+    ${chapter(`Você e ${esc(shortName(p.n))}, frente a frente`)}
     <div class="grid2">
       <div class="panel agree"><h2>Aqui vocês concordam</h2><ul class="ff">${ff.agree.map(item).join("")}</ul></div>
-      <div class="panel agree"><h2>Aqui vocês discutiriam</h2><ul class="ff">${ff.disagree.map(item).join("")}</ul>${aboutHTML(p,{title:`Quem foi ${p.n}`}).replace('class="panel about"','class="about v2-about"')}</div>
+      <div class="panel agree"><h2>Aqui vocês discutiriam</h2><ul class="ff">${ff.disagree.map(item).join("")}</ul></div>
     </div>
 
-    <div id="v2-temas" class="v2-anchor">${chapter("Seus 11 temas")}</div>
+    ${chapter("Seus 11 temas")}
     <div class="grid2 v2-themes">
       <div class="panel">
         <p class="sub">Cada raio é um tema: o primeiro polo fica no centro e o segundo, na borda. Laranja: você. Tracejado: ${esc(p.n)}.</p>
@@ -1747,7 +1746,13 @@ function renderResultV2(code){
       ${[ten.a,ten.b].map(q=>{const w=sideWith(q);return `<div class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(q)}</p><p class="ff-them">Aqui você fica com <b>${esc(w.name)}</b>: “${esc(w.line)}” <small>(paráfrase)</small></p></div>`}).join("")}
       <p class="sub" style="margin-top:12px">As duas respostas puxam <b>${esc(AXES[ten.ax].name)}</b> para lados opostos. Muitos filósofos discutiram exatamente isso.</p></div>`:""}
 
-    <div id="v2-tempo" class="v2-anchor">${chapter("Sua linhagem no tempo")}</div>
+    ${chapter(`Quem foi ${esc(shortName(p.n))}`)}
+    <div class="grid2">
+      ${aboutHTML(p,{title:"Vida e ideias"})}
+      <div class="panel"><h2>Por onde começar a ler</h2><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol>${affNote()}</div>
+    </div>
+
+    ${chapter("Na história")}
     ${timelineHTML(r)}
     <div class="grid2" style="margin-top:20px">
       <div class="panel"><h2>Pensam parecido com você</h2><ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul></div>
@@ -1757,10 +1762,8 @@ function renderResultV2(code){
       </div>
     </div>
 
-    <div id="v2-ler" class="v2-anchor">${chapter("Por onde começar a ler")}</div>
-    <div class="panel"><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol>${affNote()}</div>
 
-    <div id="v2-comparar" class="v2-anchor" style="margin-top:20px">${invitePanelHTML(r)}</div>
+    <div style="margin-top:20px">${invitePanelHTML(r)}</div>
 
     <div class="panel v2-sec" style="margin-top:20px"><span class="eyebrow">Prévia dos cards de story</span><p class="sub">O padrão continua com o retrato e a mandala; Duelo e Temas viram opções.</p><div class="v2-cards" id="v2Cards"><p class="muted">Gerando…</p></div></div>
 
@@ -1783,7 +1786,6 @@ function renderResultV2(code){
   document.getElementById("v2Share").addEventListener("click",()=>shareV2(r));
   const dp=document.getElementById("v2Deeper");if(dp)dp.addEventListener("click",()=>track(`/evento/v2-aprofundar-${V2_LEVEL[sh.level-1]}`));
   document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
-  app.querySelectorAll("[data-j]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:reduceMotion?"auto":"smooth"})}));
   v2Cards(r,ff);
   if(store.get("protoReveal")===code){store.del("protoReveal");revealV2(r)}
 }
