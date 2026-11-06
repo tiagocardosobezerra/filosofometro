@@ -609,5 +609,21 @@
  "{0}: {1} · {2}: {3}": "{0}: {1} · {2}: {3}",
  "A favor": "For",
  "Contra": "Against",
- "Quem convence quem?": "Who convinces whom?"
+ "Quem convence quem?": "Who convinces whom?",
+ "Seu arquétipo": "Your archetype",
+ "Frente a frente com {0}": "Face to face with {0}",
+ "Mais perto, na sua região: <b>{0}</b>.": "Closest in your region: <b>{0}</b>.",
+ "Quem mais discordaria: <b>{0}</b>.": "Who would disagree most: <b>{0}</b>.",
+ "Um resultado de verdade": "A real result",
+ "O que você <em class=\"it\">leva</em> depois do teste": "What you <em class=\"it\">take home</em> after the test",
+ "Este é o resultado real de uma pessoa que respondeu as {0} frases. Tudo abaixo foi calculado pelo mesmo motor que vai ler as suas respostas.": "This is the real result of a person who answered all {0} statements. Everything below was computed by the same engine that will read your answers.",
+ "Exemplo": "Example",
+ "Abrir este resultado inteiro": "Open this whole result",
+ "E ainda: a revelação passo a passo, 3 cards para o story, a comparação com amigos e a conta inteira, frase por frase.": "Plus: the step-by-step reveal, 3 story cards, the comparison with friends and the whole calculation, statement by statement.",
+ "Responda afirmações sobre verdade, liberdade, moral e poder. Leve um retrato do seu jeito de pensar: seu arquétipo, o pensador mais parecido com você entre {0}, onde você puxa para dois lados e os 11 temas desenhados na sua mandala.": "Answer statements about truth, freedom, morality and power. Take home a portrait of your way of thinking: your archetype, the thinker most like you among {0}, where you pull two ways and the 11 themes drawn on your mandala.",
+ "Tudo o que <em class=\"it\">vem junto</em>": "Everything that <em class=\"it\">comes with it</em>",
+ "Cada parte do resultado, com dados reais do catálogo. Passe o mouse ou toque para ver.": "Each part of the result, with real catalog data. Hover or tap to see.",
+ "Com a afinidade em porcentagem, um nome para o seu jeito de pensar, a nitidez do retrato e onde vocês concordam e discutiriam.": "With the affinity as a percentage, a name for your way of thinking, the portrait's sharpness and where you would agree and argue.",
+ "Mande o link e descubram em quantos dos 11 temas concordam e onde vão brigar": "Send the link and find out on how many of the 11 themes you agree and where you will argue",
+ "Três cards prontos para postar": "Three cards ready to post"
 }

@@ -609,5 +609,21 @@
  "{0}: {1} · {2}: {3}": "{0}: {1} · {2}: {3}",
  "A favor": "A favor",
  "Contra": "En contra",
- "Quem convence quem?": "¿Quién convence a quién?"
+ "Quem convence quem?": "¿Quién convence a quién?",
+ "Seu arquétipo": "Tu arquetipo",
+ "Frente a frente com {0}": "Cara a cara con {0}",
+ "Mais perto, na sua região: <b>{0}</b>.": "Más cerca, en tu región: <b>{0}</b>.",
+ "Quem mais discordaria: <b>{0}</b>.": "Quién discreparía más: <b>{0}</b>.",
+ "Um resultado de verdade": "Un resultado de verdad",
+ "O que você <em class=\"it\">leva</em> depois do teste": "Lo que te <em class=\"it\">llevas</em> después del test",
+ "Este é o resultado real de uma pessoa que respondeu as {0} frases. Tudo abaixo foi calculado pelo mesmo motor que vai ler as suas respostas.": "Este es el resultado real de una persona que respondió las {0} frases. Todo lo de abajo lo calculó el mismo motor que leerá tus respuestas.",
+ "Exemplo": "Ejemplo",
+ "Abrir este resultado inteiro": "Abrir este resultado completo",
+ "E ainda: a revelação passo a passo, 3 cards para o story, a comparação com amigos e a conta inteira, frase por frase.": "Y además: la revelación paso a paso, 3 tarjetas para historias, la comparación con amigos y la cuenta entera, frase por frase.",
+ "Responda afirmações sobre verdade, liberdade, moral e poder. Leve um retrato do seu jeito de pensar: seu arquétipo, o pensador mais parecido com você entre {0}, onde você puxa para dois lados e os 11 temas desenhados na sua mandala.": "Responde afirmaciones sobre verdad, libertad, moral y poder. Llévate un retrato de tu forma de pensar: tu arquetipo, el pensador más parecido a ti entre {0}, donde tiras hacia dos lados y los 11 temas dibujados en tu mandala.",
+ "Tudo o que <em class=\"it\">vem junto</em>": "Todo lo que <em class=\"it\">viene incluido</em>",
+ "Cada parte do resultado, com dados reais do catálogo. Passe o mouse ou toque para ver.": "Cada parte del resultado, con datos reales del catálogo. Pasa el mouse o toca para ver.",
+ "Com a afinidade em porcentagem, um nome para o seu jeito de pensar, a nitidez do retrato e onde vocês concordam e discutiriam.": "Con la afinidad en porcentaje, un nombre para tu forma de pensar, la nitidez del retrato y dónde coincidirían y discutirían.",
+ "Mande o link e descubram em quantos dos 11 temas concordam e onde vão brigar": "Manda el enlace y descubran en cuántos de los 11 temas coinciden y dónde van a discutir",
+ "Três cards prontos para postar": "Tres tarjetas listas para publicar"
 }

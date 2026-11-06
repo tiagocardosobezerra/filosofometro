@@ -205,6 +205,42 @@ addEventListener("hashchange",()=>{route();focusHeading()});
 document.querySelector(".brand").addEventListener("click",e=>{if((location.hash||"#/")==="#/"){e.preventDefault();scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"})}});
 
 /* ---------- Home ---------- */
+// A real result on the home page: one person's 132 answers run through the same engine, so the page shows
+// what someone takes home after the test instead of promising it. Every line below is computed, not written.
+const SAMPLE_CODE="121340302411040333334002101131213230320104221413204112220404220103424313331233122140142333034020222240404141040122222231032420130323";
+function sampleHTML(){
+  const ans=E.decode(SAMPLE_CODE);if(!ans)return "";
+  const r=E.evaluate(ans),p=r.top.p,arch=archetype(r.scores),sr=selfReading(r),{conv}=revealFacts(r),ten=tensionV2(r),sh=sharpness(r),ff=faceToFace(r);
+  const rare=AXES.map((a,i)=>({a,i,x:r.scores[i]})).filter(o=>Math.abs(o.x)>=.13).map(o=>({...o,n:PH.filter(q=>Math.sign(q.v[o.i])===Math.sign(o.x)&&Math.abs(q.v[o.i])>=.2).length})).sort((u,v)=>u.n-v.n)[0];
+  const ag=ff.agree[0],reg=r.brazil[0];
+  const items=[
+    [L`Seu retrato`,`${sr.strong.map(s=>`<span class="trait"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")} <span class="smp-note">${L`${sr.kin.length} dos ${PH.length} pensadores do site têm esses ${sr.strong.length} traços`}.</span>`],
+    conv&&[L`O que você defende com mais força`,`“${esc(QS[conv.i][0])}” <b>${esc(t(SCALE[conv.answer].label))}</b>`],
+    ten&&[L`Onde você puxa para dois lados`,L`Numa frase você ficou com <b>${esc(sideWith(ten.a).name)}</b>; em outra, com <b>${esc(sideWith(ten.b).name)}</b>.`],
+    ag&&[L`Frente a frente com ${esc(shortName(p.n))}`,`“${esc(QS[ag.q.i][0])}” ${ag.quoted?`<span class="smp-note">${esc(shortName(p.n))}: “${esc(ag.line)}” ${L`(paráfrase)`}</span>`:""}`],
+    rare&&[L`Os 11 temas`,(rare.n<=Math.round(PH.length*.15)?L`Tema mais raro: ${esc(rare.a.name)}.`:L`Tema menos comum: ${esc(rare.a.name)}.`)+` <span class="smp-note">${rare.n<=Math.round(PH.length*.15)?L`Só ${rare.n} dos ${PH.length} pensadores estão do mesmo lado (${esc(rare.x<0?rare.a.l:rare.a.r)}).`:L`${rare.n} dos ${PH.length} pensadores estão do mesmo lado (${esc(rare.x<0?rare.a.l:rare.a.r)}).`}</span>`],
+    [L`Na história`,`${reg?L`Mais perto, na sua região: <b>${esc(reg.p.n)}</b>.`:""} ${r.opposite?L`Quem mais discordaria: <b>${esc(r.opposite.p.n)}</b>.`:""}`],
+    [L`Por onde começar a ler`,`<i>${esc(p.b)}</i>`],
+  ].filter(Boolean);
+  return `<section class="wrap section sample">
+    <div class="section-head">
+      <div><span class="eyebrow">${L`Um resultado de verdade`}</span><h2 class="h2">${L`O que você <em class="it">leva</em> depois do teste`}</h2></div>
+      <p>${L`Este é o resultado real de uma pessoa que respondeu as ${ans.filter(a=>a!==null).length} frases. Tudo abaixo foi calculado pelo mesmo motor que vai ler as suas respostas.`}</p>
+    </div>
+    <div class="smp">
+      <a class="smp-card" href="#/r/${SAMPLE_CODE}/ver">
+        <span class="eyebrow">${L`Exemplo`}</span>
+        <span class="smp-big">${esc(arch.name)}</span>
+        <span class="smp-like">${portrait(p,{cls:"avatar"})}<span>${L`Pensa parecido com <b>${esc(p.n)}</b>`}${r.top.pct!==null?` · ${r.top.pct}%`:""}</span></span>
+        <span class="smp-sigil">${sigil(r.scores,{compare:p.v,cls:"sg-user",decorative:true})}</span>
+        <span class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span>${L`Nitidez do retrato: ${SHARP[sh.level-1]}.`}</span></span>
+        <span class="smp-open">${L`Abrir este resultado inteiro`} ${icon.arrow}</span>
+      </a>
+      <ol class="smp-list">${items.map(([k,v],i)=>`<li><span class="smp-n">${pad(i+1)}</span><div><span class="bt-k">${k}</span><p>${v}</p></div></li>`).join("")}</ol>
+    </div>
+    <p class="smp-foot">${L`E ainda: a revelação passo a passo, 3 cards para o story, a comparação com amigos e a conta inteira, frase por frase.`}</p>
+  </section>`;
+}
 function renderHome(){
   const saved=store.get("progress");
   const resume=saved&&saved.answers&&saved.answers.some(a=>a!==null)&&saved.answers.some(a=>a===null);
@@ -215,7 +251,7 @@ function renderHome(){
     <div>
       <span class="eyebrow">${L`Teste filosófico`}</span>
       <h1 class="display"><span class="line"><span>${L`Qual filósofo`}</span></span><span class="line"><span>${L`pensa como`}</span></span><span class="line"><span><em class="it accent">${L`você?`}</em></span></span></h1>
-      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder. Descubra seu arquétipo filosófico, seu par entre ${PH.length+BR.length} pensadores, quem pensa como você no Brasil e quem mais discordaria de você.`}</p>
+      <p class="lede">${L`Responda afirmações sobre verdade, liberdade, moral e poder. Leve um retrato do seu jeito de pensar: seu arquétipo, o pensador mais parecido com você entre ${PH.length+BR.length}, onde você puxa para dois lados e os 11 temas desenhados na sua mandala.`}</p>
       <div class="cta-row">
         <a class="btn accent" href="#/teste" ${resume?"":'data-fresh="1"'}>${resume?L`Continuar de onde parei · ${done}/${saved.answers.length}`:L`Começar o teste`} ${icon.arrow}</a>
         ${resume?`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Recomeçar`}</a>`:`<a class="btn ghost" href="#/metodo">${L`Como funciona`}</a>`}
@@ -231,6 +267,7 @@ function renderHome(){
     </div>
   </section>
   <div class="marquee" aria-hidden="true"><div class="track">${names}${names}</div></div>
+  ${sampleHTML()}
   ${discoverHTML()}
   <section class="wrap section" style="padding-top:0">
     <div class="section-head">
@@ -327,13 +364,13 @@ function discoverHTML(){
   const dots=PH.map(p=>`<i style="left:${((p.born-min)/span*100).toFixed(1)}%"></i>`).join("");
   return `<section class="wrap section discover">
     <div class="section-head">
-      <div><span class="eyebrow">${L`O resultado`}</span><h2 class="h2">${L`O que você <em class="it">descobre</em>`}</h2></div>
-      <p>${L`Não é só um nome. É um retrato do seu jeito de pensar, com gente de verdade dos dois lados, e uma conversa pronta para começar com os amigos.`}</p>
+      <div><span class="eyebrow">${L`O resultado`}</span><h2 class="h2">${L`Tudo o que <em class="it">vem junto</em>`}</h2></div>
+      <p>${L`Cada parte do resultado, com dados reais do catálogo. Passe o mouse ou toque para ver.`}</p>
     </div>
     <div class="bento">
       <article class="bt bt-par">
         <div class="bt-art">${portrait(a,{cls:"bt-pic"})}<div class="bt-sigil"></div><span class="bt-who"><b>${esc(a.n)}</b> · ${esc(a.s)}</span></div>
-        <div><span class="bt-k">${L`01 · Seu par e seu arquétipo`}</span><h3>${L`O pensador com o formato mais parecido com o seu`}</h3><p>${L`Com percentual de compatibilidade, um nome para o seu jeito de pensar, sua contradição e uma carta do seu filósofo.`}</p></div>
+        <div><span class="bt-k">${L`01 · Seu par e seu arquétipo`}</span><h3>${L`O pensador com o formato mais parecido com o seu`}</h3><p>${L`Com a afinidade em porcentagem, um nome para o seu jeito de pensar, a nitidez do retrato e onde vocês concordam e discutiriam.`}</p></div>
       </article>
       <article class="bt bt-opp">
         <div class="bt-vs">${portrait(b,{cls:"bt-av"})}<span>vs</span>${portrait(opp,{cls:"bt-av"})}<span class="bt-reveal">${L`${esc(shortName(b.n))} e ${esc(shortName(opp.n))} concordam em ${AXES.filter((_,i)=>Math.sign(b.v[i])===Math.sign(opp.v[i])).length} de ${AXES.length} eixos`}</span></div>
@@ -350,11 +387,11 @@ function discoverHTML(){
       </article>
       <article class="bt bt-vsf">
         <div class="bt-duo">${sigil(a.v,{compare:b.v,cls:"sg-user",tips:true,title:L`${a.n} e ${b.n} nos 11 eixos`})}</div>
-        <span class="bt-k">${L`05 · Desafie um amigo`}</span><h3>${L`Mande o link e vejam, eixo por eixo, quanto são compatíveis`}</h3>
+        <span class="bt-k">${L`05 · Desafie um amigo`}</span><h3>${L`Mande o link e descubram em quantos dos 11 temas concordam e onde vão brigar`}</h3>
       </article>
       <article class="bt bt-story">
         <div class="bt-phone" aria-hidden="true"><span class="ph-pct">94%</span><span class="ph-nm">${esc(shortName(a.n))}</span><span class="ph-bar"></span></div>
-        <span class="bt-k">${L`06 · Story`}</span><h3>${L`Um card pronto para postar`}</h3>
+        <span class="bt-k">${L`06 · Story`}</span><h3>${L`Três cards prontos para postar`}</h3>
       </article>
     </div>
   </section>`;
