@@ -1674,66 +1674,106 @@ function alliesOn(ax,x){
 function renderResultV2(code){
   const answers=E.decode(code||"");
   if(!answers){renderNotFound("Faça o teste primeiro para ver o protótipo da nova tela.");return}
-  const r=E.evaluate(answers),p=r.top.p,second=r.ranking[1].p,flat=r.directionless;
-  const arch=archetype(r.scores),sr=selfReading(r),sh=sharpness(r),ff=faceToFace(r),ten=tensionV2(r);
+  const r=E.evaluate(answers),top=r.top,p=top.p,second=r.ranking[1],flat=r.directionless,userV=r.scores;
+  const arch=archetype(userV),sr=selfReading(r),sh=sharpness(r),ff=faceToFace(r),ten=tensionV2(r);
   const pair=arch.poles.map(([ax,s])=>s?AXES[ax].r:AXES[ax].l);
+  const nameLines=p.n.split(" ").length>2?[p.n.split(" ").slice(0,-1).join(" "),p.n.split(" ").slice(-1)[0]]:[p.n];
   const ans=q=>esc(t(SCALE[q.answer].label));
   const item=x=>`<li class="ff-item"><p class="ff-q">“${esc(QS[x.q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(x.q)}</p><p class="ff-them"><b>${esc(shortName(p.n))}:</b> ${x.quoted?`“${esc(x.line)}” <small>(paráfrase)</small>`:`${x.agree===(x.q.value>0)?"tenderia a concordar":"tenderia a discordar"} <small>(pela posição no catálogo)</small>`}</p></li>`;
   const nextN=nextLevel(r.answers.length);
-  const shText=sh.level===1?`${esc(shortName(second.n))} está a ${sh.gap} pontos e pode passar à frente.${nextN?` Responda mais ${nextN.n-r.answers.length} frases para ver.`:""}`:sh.level===2?`${nextN?`Mais ${nextN.n-r.answers.length} frases deixam tudo mais firme.`:""}`:"";
-  const strongOrder=AXES.map((a,i)=>({a,i,x:r.scores[i]})).sort((u,v)=>Math.abs(v.x)-Math.abs(u.x));
-  const topThree=new Set(strongOrder.slice(0,3).map(s=>s.i));
-  const themes=strongOrder.map(({a,i,x})=>{const al=alliesOn(i,x);const balanced=Math.abs(x)<.13;
+  const shText=sh.level===1?`${esc(shortName(second.p.n))} está a ${sh.gap} pontos e pode passar à frente.${nextN?` Responda mais ${nextN.n-r.answers.length} frases para ver.`:""}`:sh.level===2?`${nextN?`Mais ${nextN.n-r.answers.length} frases deixam tudo mais firme.`:""}`:"";
+  // Themes: the current axis bars (you in orange, the match as a tick), each with who stands on each side.
+  const order=AXES.map((a,i)=>({a,i,x:userV[i]})).sort((u,v)=>Math.abs(v.x)-Math.abs(u.x));
+  const topThree=new Set(order.slice(0,3).map(s=>s.i));
+  const themes=order.map(({a,i,x})=>{const al=alliesOn(i,x),balanced=Math.abs(x)<.13;
     return `<details class="th"${topThree.has(i)?" open":""}><summary><span class="th-n">${esc(cap(a.name))}</span><span class="th-pole">${balanced?"no meio":esc(x<0?a.l:a.r)}</span></summary>
+      ${axisRow(a,x,p.v[i],"você",p.n,{named:false})}
       <p>${balanced?`Você está entre ${esc(a.l)} e ${esc(a.r)}.`:esc(POLE_TEXT[i][x<0?0:1])}</p>
       ${balanced?"":`<div class="th-who"><span class="th-k">Do seu lado</span>${al.mine.map(m=>`<a href="#/p/${m.id}">${portrait(m,{cls:"th-av"})}<span>${esc(m.n)}</span></a>`).join("")}<span class="th-k">Do outro lado</span>${al.other?`<a href="#/p/${al.other.id}">${portrait(al.other,{cls:"th-av"})}<span>${esc(al.other.n)}</span></a>`:""}</div>`}
     </details>`}).join("");
+  let ch=0;const chapter=title=>`<h2 class="chapter"><span>${++ch}</span>${title}</h2>`;
   mount(`
-  <div class="v2-banner"><div class="wrap"><b>Protótipo</b> da nova tela de resultado. A tela atual continua em <a href="#/r/${code}">#/r/…</a>. <button type="button" class="link-btn" id="v2Reveal">Ver a revelação nova</button></div></div>
-  <section class="wrap v2-hero">
-    <div class="v2-top">
-      ${portrait(p,{cls:"v2-pic",eager:true})}
-      <div>
-        <span class="eyebrow">Seu jeito de pensar</span>
-        <h1 class="v2-arch">${esc(arch.name)}</h1>
-        <p class="v2-why">Nome criado a partir dos seus 2 traços mais fortes: ${pair.map(esc).join(" e ")}.</p>
-        <p class="v2-match">Você pensa parecido com <b>${esc(p.n)}</b></p>
-        ${flat?"":`<p class="v2-pct"><b>${r.top.pct}%</b> de afinidade · em 2º: ${esc(second.n)}, ${r.ranking[1].pct}%</p>`}
-        <div class="res-actions"><button class="btn accent" type="button" id="v2Share">${icon.share} Compartilhar no story</button><button class="btn ghost" type="button" id="v2Challenge">${icon.link} Desafiar um amigo</button></div>
+  <div class="v2-banner"><div class="wrap"><b>Protótipo</b> da nova tela de resultado (versão mesclada). A tela atual continua em <a href="#/r/${code}">#/r/…</a>. <button type="button" class="link-btn" id="v2Reveal">Ver a revelação nova</button></div></div>
+  <section class="wrap res-hero">
+    <div>
+      <div class="res-kicker"><span class="eyebrow">Seu jeito de pensar</span></div>
+      <h1 class="v2-arch">${esc(flat?L`Equilibrista`:arch.name)}</h1>
+      <p class="v2-why">${flat?"Suas respostas ficaram perto do centro em todos os temas.":`Nome criado a partir dos seus 2 traços mais fortes: ${pair.map(esc).join(" e ")}.`}</p>
+      <p class="v2-match-k">Você pensa parecido com</p>
+      <div class="res-name v2-name">${nameLines.map(l=>`<span class="line"><span>${esc(l)}</span></span>`).join("")}</div>
+      <div class="res-school">${esc(p.s)} · ${esc(lifeText(p))}</div>
+      ${flat?"":`<p class="v2-pct"><b><span id="pctNum">${reduceMotion?top.pct:0}</span>%</b> de afinidade <span class="v2-second">· em 2º: ${esc(second.p.n)}, ${second.pct}%</span></p>`}
+      ${sr.strong.length?`<div class="traits">${sr.strong.map((s,i)=>`<span class="trait" style="--i:${i}"><small>${esc(s.a.name)}</small>${esc(s.x<0?s.a.l:s.a.r)}</span>`).join("")}</div>`:""}
+      <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Nitidez do retrato: ${V2_LEVEL[sh.level-1]}.</b> ${shText}</span>${nextN?`<a class="btn ghost sm" href="#/teste/aprofundar">Responder mais ${nextN.n-r.answers.length}</a>`:""}</div>
+      <div class="res-actions"><button class="btn accent" type="button" id="v2Share">${icon.share} Compartilhar no story</button><button class="btn ghost" type="button" id="v2Challenge">${icon.link} Desafiar um amigo</button></div>
+    </div>
+    ${duo(p,{user:userV,title:`Seu perfil comparado ao de ${p.n}`})}
+  </section>
+  <nav class="v2-jump" aria-label="Atalhos"><span class="v2-jump-sig" aria-hidden="true">${sigil(userV,{cls:"sg-user",decorative:true})}</span><a href="#v2-retrato" data-j>Retrato</a><a href="#v2-ff" data-j>Frente a frente</a><a href="#v2-temas" data-j>Temas</a><a href="#v2-tempo" data-j>Linhagem</a><a href="#v2-ler" data-j>Ler</a><a href="#v2-comparar" data-j>Comparar</a></nav>
+  <section class="wrap" style="padding-bottom:24px">
+    <div id="v2-retrato" class="v2-anchor">${chapter("Seu retrato")}</div>
+    <div class="panel self">
+      <ul class="self-list">${sr.strong.map(s=>`<li><b>${esc(cap(s.a.name))}</b><span>${esc(POLE_TEXT[s.i][s.x<0?0:1])}</span></li>`).join("")}</ul>
+      <div class="self-facts">
+        <p class="self-rare${sr.kin.length<=Math.round(PH.length*.08)?" on":""}">${sr.kin.length<=Math.round(PH.length*.08)?"<b>Combinação rara.</b> ":""}${sr.kin.length} dos ${PH.length} pensadores do site têm esses ${sr.strong.length} traços${sr.kin.length?`: ${sr.kin.slice(0,3).map(k=>`<a href="#/p/${k.id}">${esc(k.n)}</a>`).join(", ")}${sr.kin.length>3?` e mais ${sr.kin.length-3}`:""}`:""}.</p>
+        <p>Onde você ainda está dividido: <b>${esc(sr.torn.a.name)}</b>, entre ${esc(sr.torn.a.l)} e ${esc(sr.torn.a.r)}.</p>
       </div>
     </div>
-    <div class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Nitidez do retrato: ${V2_LEVEL[sh.level-1]}.</b> ${shText}</span>${nextN?`<a class="btn ghost sm" href="#/teste/aprofundar">Responder mais ${nextN.n-r.answers.length}</a>`:""}</div>
-  </section>
-  <nav class="v2-jump" aria-label="Atalhos"><a href="#v2-retrato" data-j>Retrato</a><a href="#v2-ff" data-j>Frente a frente</a><a href="#v2-temas" data-j>Temas</a><a href="#v2-ler" data-j>Ler</a><a href="#v2-comparar" data-j>Comparar</a></nav>
-  <section class="wrap v2-body">
-    <div class="panel v2-sec" id="v2-retrato">
-      <span class="eyebrow">Seu retrato</span>
-      <ul class="self-list">${sr.strong.map(s=>`<li><b>${esc(cap(s.a.name))}</b><span>${esc(POLE_TEXT[s.i][s.x<0?0:1])}</span></li>`).join("")}</ul>
-      <p class="v2-p">${sr.kin.length} dos ${PH.length} pensadores do site têm esses ${sr.strong.length} traços${sr.kin.length?`: ${sr.kin.slice(0,3).map(k=>esc(k.n)).join(", ")}${sr.kin.length>3?` e mais ${sr.kin.length-3}`:""}`:""}.</p>
-      <p class="v2-p">Onde você ainda está dividido: <b>${esc(sr.torn.a.name)}</b>, entre ${esc(sr.torn.a.l)} e ${esc(sr.torn.a.r)}.</p>
+
+    <div id="v2-ff" class="v2-anchor">${chapter(`Você e ${esc(shortName(p.n))}, frente a frente`)}</div>
+    <div class="grid2">
+      <div class="panel agree"><h2>Aqui vocês concordam</h2><ul class="ff">${ff.agree.map(item).join("")}</ul></div>
+      <div class="panel agree"><h2>Aqui vocês discutiriam</h2><ul class="ff">${ff.disagree.map(item).join("")}</ul>${aboutHTML(p,{title:`Quem foi ${p.n}`}).replace('class="panel about"','class="about v2-about"')}</div>
     </div>
-    <div class="panel v2-sec" id="v2-ff">
-      <span class="eyebrow">Você e ${esc(shortName(p.n))}, frente a frente</span>
-      ${ff.agree.length?`<h3 class="v2-h">Aqui vocês concordam</h3><ul class="ff">${ff.agree.map(item).join("")}</ul>`:""}
-      ${ff.disagree.length?`<h3 class="v2-h">Aqui vocês discutiriam</h3><ul class="ff">${ff.disagree.map(item).join("")}</ul>`:""}
-      <p class="v2-p v2-small">Livro principal de ${esc(p.n)}: <i>${esc(p.b)}</i></p>
+
+    <div id="v2-temas" class="v2-anchor">${chapter("Seus 11 temas")}</div>
+    <div class="grid2 v2-themes">
+      <div class="panel">
+        <p class="sub">Cada raio é um tema: o primeiro polo fica no centro e o segundo, na borda. Laranja: você. Tracejado: ${esc(p.n)}.</p>
+        <div class="panel-sigil">${sigil(userV,{compare:p.v,labels:true,cls:"sg-user",draw:true,tips:true,title:`Seu perfil nos 11 temas comparado ao de ${p.n}`})}</div>
+        <p class="tip-hint"><span class="on-hover">Passe o mouse</span><span class="on-touch">Toque</span> em cada tema para ver o que ele mede e por que você ficou ali.</p>
+      </div>
+      <div class="panel"><h2>Quem está do seu lado</h2><p class="sub">Os 3 temas em que você é mais firme já estão abertos.</p>${themes}</div>
     </div>
-    ${ten?`<div class="panel v2-sec"><span class="eyebrow">Onde você puxa para dois lados</span>
+
+    ${ten?`${chapter("Onde você puxa para dois lados")}<div class="panel">
       ${[ten.a,ten.b].map(q=>{const w=sideWith(q);return `<div class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>Você:</b> ${ans(q)}</p><p class="ff-them">Aqui você fica com <b>${esc(w.name)}</b>: “${esc(w.line)}” <small>(paráfrase)</small></p></div>`}).join("")}
-      <p class="v2-p">As duas respostas puxam <b>${esc(AXES[ten.ax].name)}</b> para lados opostos. Muitos filósofos discutiram exatamente isso.</p></div>`:""}
-    <div class="panel v2-sec" id="v2-temas"><span class="eyebrow">Quem está do seu lado em cada tema</span><div class="v2-mandala">${sigil(r.scores,{labels:true,cls:"sg-user",tips:true,title:"Seu perfil nos 11 temas"})}</div>${themes}</div>
-    <div class="grid2">${aboutHTML(p,{title:`Quem foi ${p.n}`})}<div class="panel"><h2>Pensam parecido com você</h2><ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul></div></div>
-    ${brazilHTML(r,"No Brasil, quem pensa parecido")}
+      <p class="sub" style="margin-top:12px">As duas respostas puxam <b>${esc(AXES[ten.ax].name)}</b> para lados opostos. Muitos filósofos discutiram exatamente isso.</p></div>`:""}
+
+    <div id="v2-tempo" class="v2-anchor">${chapter("Sua linhagem no tempo")}</div>
     ${timelineHTML(r)}
-    ${r.opposite?`<div class="panel v2-sec"><span class="eyebrow">Quem mais discordaria de você</span><a class="opp" href="#/p/${r.opposite.p.id}" style="text-decoration:none">${portrait(r.opposite.p,{cls:"opp-pic"})}<span><span class="nm">${esc(r.opposite.p.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(r.opposite.p.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px">“${esc(r.opposite.p.q)}”</span></span></a></div>`:""}
-    <div class="panel v2-sec" id="v2-ler"><span class="eyebrow">Por onde começar a ler</span><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol></div>
-    <div id="v2-comparar">${invitePanelHTML(r)}</div>
-    <div class="panel v2-sec"><span class="eyebrow">Prévia dos cards de story</span><p class="v2-p v2-small">Os três modelos propostos. Os cards atuais continuam na tela antiga.</p><div class="v2-cards" id="v2Cards"><p class="muted">Gerando…</p></div></div>
+    <div class="grid2" style="margin-top:20px">
+      <div class="panel"><h2>Pensam parecido com você</h2><ul class="match-list">${r.ranking.slice(1,6).map(x=>`<li><a href="#/p/${x.p.id}">${portrait(x.p,{cls:"avatar"})}<span><span class="nm">${esc(x.p.n)}</span><span class="sc">${esc(x.p.s)}</span></span><span class="pc">${pctText(x.pct)}</span></a></li>`).join("")}</ul></div>
+      <div style="display:grid;gap:20px;align-content:start">
+        ${brazilHTML(r,"No Brasil, quem pensa parecido")}
+        ${r.opposite?`<div class="panel"><h2>Quem mais discordaria de você</h2><a class="opp" href="#/p/${r.opposite.p.id}" style="text-decoration:none">${portrait(r.opposite.p,{cls:"opp-pic"})}<span><span class="nm">${esc(r.opposite.p.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(r.opposite.p.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(r.opposite.p.q)}”</span></span></a></div>`:""}
+      </div>
+    </div>
+
+    <div id="v2-ler" class="v2-anchor">${chapter("Por onde começar a ler")}</div>
+    <div class="panel"><ol class="reads">${bookItem(p,0,p.b,"Para começar")}${(SUP.READING[p.id]||[])[0]?bookItem(p,1,SUP.READING[p.id][0],"Para ir mais fundo"):""}</ol>${affNote()}</div>
+
+    <div id="v2-comparar" class="v2-anchor" style="margin-top:20px">${invitePanelHTML(r)}</div>
+
+    <div class="panel v2-sec" style="margin-top:20px"><span class="eyebrow">Prévia dos cards de story</span><p class="sub">O padrão continua com o retrato e a mandala; Duelo e Temas viram opções.</p><div class="v2-cards" id="v2Cards"><p class="muted">Gerando…</p></div></div>
+
+    <div class="finale">
+      ${portrait(p,{cls:"finale-pic"})}
+      <blockquote class="finale-quote">“${esc(p.q)}”</blockquote>
+      <p class="finale-by">${esc(p.n)}</p>
+      <p class="finale-lede">Agora descubra qual dos seus amigos pensa parecido com você.</p>
+      <div class="cta-row" style="justify-content:center"><button class="btn accent" id="v2Challenge2" type="button">${icon.link} Desafiar um amigo</button></div>
+    </div>
     <p class="v2-foot"><a href="#/metodo">Como calculamos</a> · <button type="button" class="link-btn" onclick="print()">Versão para imprimir</button></p>
   </section>`,`Protótipo · ${p.n}`);
-  wireTips(app,{user:r.scores,r,p});wireTimeline();wireInvite(r);
-  document.getElementById("v2Challenge").addEventListener("click",()=>challenge(r));
-  document.getElementById("v2Share").addEventListener("click",()=>document.getElementById("v2Cards").scrollIntoView({behavior:"smooth"}));
+  if(!flat&&!reduceMotion){
+    const el=document.getElementById("pctNum"),t0=performance.now();let live=true;
+    const step=now=>{if(!live)return;const x=Math.min(1,(now-t0)/1300);el.textContent=Math.round(top.pct*(1-Math.pow(1-x,3)));if(x<1)requestAnimationFrame(step)};
+    requestAnimationFrame(step);const done=setTimeout(()=>{el.textContent=top.pct},1500);onLeave(()=>{live=false;clearTimeout(done)});
+  }
+  wireTips(app,{user:userV,r,p});wireTimeline();wireInvite(r);
+  ["v2Challenge","v2Challenge2"].forEach(id=>document.getElementById(id).addEventListener("click",()=>challenge(r)));
+  document.getElementById("v2Share").addEventListener("click",()=>shareFlow(r));
   document.getElementById("v2Reveal").addEventListener("click",()=>revealV2(r));
   app.querySelectorAll("[data-j]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(a.getAttribute("href")).scrollIntoView({behavior:reduceMotion?"auto":"smooth"})}));
   v2Cards(r,ff);

@@ -1134,3 +1134,14 @@ body.rv-open{overflow:hidden}
 .rv-skip{position:absolute;bottom:18px;right:16px;z-index:3;padding:10px 16px;border:1px solid rgba(241,234,220,.3);border-radius:999px;background:none;color:#F1EADC;font-weight:600;cursor:pointer}
 @media (max-width:600px){.v2-top{grid-template-columns:110px 1fr;align-items:start}.v2-cards{grid-template-columns:repeat(3,1fr);gap:6px}.v2-top .res-actions{grid-column:1/-1}}
 @media print{.bar,.v2-banner,.v2-jump,footer,.res-actions,.v2-cards,.btn{display:none!important}body{background:#fff;color:#000}}
+/* Merged prototype: current hero and chapters, new hierarchy. */
+.res-hero .v2-arch{font-size:clamp(40px,6.4vw,84px);margin:6px 0 6px}
+.v2-match-k{margin:14px 0 0;font-size:15px;color:var(--muted);letter-spacing:.02em}
+.v2-name{font-size:clamp(44px,6.4vw,92px)!important;margin-top:2px}
+.v2-second{color:var(--muted);font-size:.9em}
+.res-hero .v2-sharp{margin:14px 0 4px}
+.v2-jump-sig{width:30px;height:30px;flex:none;align-self:center}
+.v2-jump{align-items:center}
+.v2-anchor{scroll-margin-top:130px}
+.v2-about{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.v2-themes .th .axis-row{margin:6px 0 2px}
