@@ -983,3 +983,40 @@ html[lang="es"] .br-flag{background:linear-gradient(90deg,#c60b1e 0 18%,#ffc400 
 .self-facts p{margin:0}
 .self-facts b{color:var(--ink)}
 .self-rare.on b{color:var(--accent)}
+
+/* The reveal: full-screen story cards shown once after the quiz. Always dark, like the share card. */
+body.rv-open{overflow:hidden}
+.reveal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:56px 20px 32px;color:#F1EADC;
+  background:radial-gradient(70% 55% at 50% 42%,rgba(240,106,67,.22),transparent 70%),#0F0E0C;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.rv-bars{position:absolute;top:14px;left:16px;right:60px;display:flex;gap:5px}
+.rv-bars i{flex:1;height:3px;border-radius:3px;background:rgba(241,234,220,.18);overflow:hidden}
+.rv-bars i b{display:block;height:100%;width:0;background:#F1EADC}
+.rv-bars i.done b{width:100%}
+.rv-bars i.now b{width:100%;animation:rvbar .5s ease-out}
+@keyframes rvbar{from{width:0}}
+.rv-x{position:absolute;top:4px;right:10px;width:44px;height:44px;border:0;background:none;color:#F1EADC;font-size:28px;cursor:pointer;z-index:2}
+.rv-nav{position:absolute;top:0;bottom:0;width:30%;border:0;background:none;padding:0;cursor:pointer;z-index:1}
+.rv-prev{left:0;width:22%}.rv-next{right:0;width:22%}
+.rv-nav:focus-visible{outline:2px solid #F06A43;outline-offset:-6px}
+.rv-stage{position:relative;z-index:2;pointer-events:none;width:min(560px,100%)}
+.rv-slide{display:grid;justify-items:center;gap:18px;text-align:center;animation:rvin .55s cubic-bezier(.2,.7,.2,1)}
+@keyframes rvin{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.rv-k{font:600 13px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:#9C9283}
+.rv-h{font-family:var(--serif);font-weight:400;font-size:clamp(40px,9vw,72px);line-height:1;letter-spacing:-.02em;margin:0}
+.rv-h em{font-style:italic;color:#F06A43}
+.rv-traits{font-size:clamp(32px,7.5vw,56px);color:#F06A43}
+.rv-p{margin:0;font-size:clamp(17px,4.4vw,20px);line-height:1.45;color:#CBC2B2;max-width:34ch}
+.rv-p b{color:#F1EADC}
+.rv-quote{font-family:var(--serif);font-style:italic;font-size:clamp(22px,5.6vw,28px);color:#F1EADC}
+.rv-q{margin:0;font-family:var(--serif);font-size:clamp(22px,5.4vw,32px);line-height:1.15;color:#F1EADC;max-width:22ch}
+.rv-q cite{display:block;margin-top:10px;font:600 13px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;font-style:normal;color:#F06A43}
+.rv-sigil{width:min(78vw,380px)}
+.rv-sigil .sg-lbl{fill:#CBC2B2}
+.rv-big{font-family:var(--serif);font-size:clamp(96px,26vw,160px);line-height:.9;color:#F06A43}
+.rv-big small{font-size:.35em;color:#9C9283}
+.rv-faces{display:flex;justify-content:center}
+.rv-faces .rv-av{width:56px;height:56px;border-radius:50%;margin-left:-10px;border:3px solid #0F0E0C;overflow:hidden}
+.rv-pic{width:min(46vw,220px);aspect-ratio:3/3.85;border-radius:999px 999px 18px 18px;overflow:hidden}
+.rv-pic.sm{width:min(32vw,150px)}
+.rv-actions{display:grid;gap:10px;width:min(340px,100%);pointer-events:auto}
+@media (prefers-reduced-motion:reduce){.rv-slide,.rv-bars i.now b{animation:none}}

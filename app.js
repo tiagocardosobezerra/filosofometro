@@ -407,6 +407,7 @@ function finishQuiz(answers){
   track("/evento/teste-concluido");
   const code=E.encode(answers),vs=store.get("vs");
   store.set("last",code);
+  store.set("reveal",code);
   if(vs&&E.decode(vs.code)){store.del("vs");location.replace(`#/comparar/${vs.code}/${code}${vs.name?`/${encName(vs.name)}`:""}`);return}
   location.replace("#/r/"+code);
 }
@@ -641,6 +642,7 @@ function renderResult(code,mode){
         ${flat&&r.level&&nextLevel(r.level.n)?`<a class="btn accent" href="#/teste/aprofundar">${L`Aprofundar para desempatar`} ${icon.arrow}</a>`:""}
         <button class="btn ${flat&&r.level&&nextLevel(r.level.n)?"ghost":"accent"}" id="shareBtn" type="button">${icon.share} ${L`Compartilhar no story`}</button>
         <button class="btn ghost" id="challengeBtn" type="button">${icon.link} ${L`Desafiar um amigo`}</button>
+        <button class="btn ghost" id="revealBtn" type="button">${L`Rever a revelação`}</button>
         <a class="btn ghost" href="#/teste" id="redoBtn">${L`Refazer`}</a>`}
       </div>
     </div>
@@ -719,10 +721,93 @@ function renderResult(code,mode){
     ["challengeBtn","challengeBtn2"].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener("click",()=>challenge(r))});
     document.getElementById("redoBtn").addEventListener("click",()=>store.del("progress"));
     wireInvite(r);
+    const rb=document.getElementById("revealBtn");if(rb)rb.addEventListener("click",()=>openReveal(r));
+    // Right after the quiz, the result opens with the reveal; afterwards it can be replayed from the button.
+    if(store.get("reveal")===code){store.del("reveal");openReveal(r)}
   }
   wireTips(app,{user:userV,r,p});
   wireTimeline();
   wireAudit(r);
+}
+
+/* ---------- The reveal ---------- */
+// A sequence of full-screen cards, like stories, shown once right after the quiz: the shape of the
+// thought, the strongest conviction, an inner contradiction, how rare the profile is, the place and time
+// that would feel like home, the opposite, and finally the match. Every card comes from the person's own answers.
+function revealFacts(r){
+  const qs=r.perQuestion.filter(q=>q.contribution!==0);
+  const sr=selfReading(r);
+  const axisOrder=sr.strong.map(s=>s.i);
+  // Strongest conviction: a "totalmente" answer on the strongest axis, pulling the way the person leans.
+  const conv=qs.filter(q=>Math.abs(q.value)===2).sort((a,b)=>{
+    const ra=axisOrder.indexOf(a.axis),rb=axisOrder.indexOf(b.axis);
+    const sa=Math.sign(a.contribution)===Math.sign(r.scores[a.axis])?0:1,sb=Math.sign(b.contribution)===Math.sign(r.scores[b.axis])?0:1;
+    return sa-sb||(ra<0?9:ra)-(rb<0?9:rb)||a.i-b.i;
+  })[0]||null;
+  // Inner contradiction: two firm answers on the same axis that pull to opposite poles.
+  let contra=null;
+  AXES.forEach((_,ax)=>{
+    const on=qs.filter(q=>q.axis===ax&&Math.abs(q.value)>=1);
+    for(const a of on)for(const b of on){
+      if(a.i>=b.i||Math.sign(a.contribution)===Math.sign(b.contribution))continue;
+      const w=Math.abs(a.contribution)+Math.abs(b.contribution);
+      if(!contra||w>contra.w)contra={a,b,ax,w};
+    }
+  });
+  return {sr,conv,contra};
+}
+function openReveal(r){
+  track("/evento/revelacao");
+  const p=r.top.p,opp=r.opposite&&r.opposite.p,flat=r.directionless,{sr,conv,contra}=revealFacts(r);
+  const ans=q=>esc(t(SCALE[q.answer].label));
+  const said=q=>`<blockquote class="rv-q">“${esc(QS[q.i][0])}”<cite>${ans(q)}</cite></blockquote>`;
+  const slides=[];
+  slides.push(`<span class="rv-k">${L`${r.answers.length} respostas depois`}</span><h2 class="rv-h">${L`Vamos ver como <em>você</em> pensa.`}</h2><p class="rv-p">${L`Toque para continuar`}</p>`);
+  slides.push(`<span class="rv-k">${L`O formato do seu pensamento`}</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div>${sr.strong.length?`<h2 class="rv-h rv-traits">${sr.strong.map(s=>esc(s.x<0?s.a.l:s.a.r)).join(" · ")}</h2>`:`<h2 class="rv-h">${L`Equilíbrio`}</h2>`}`);
+  if(conv)slides.push(`<span class="rv-k">${L`Sua convicção mais forte`}</span>${said(conv)}<p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
+  slides.push(contra
+    ?`<span class="rv-k">${L`Sua contradição`}</span>${said(contra.a)}${said(contra.b)}<p class="rv-p">${L`Essas duas respostas puxam o eixo <b>${esc(AXES[contra.ax].name)}</b> para lados opostos. Todo pensamento vivo tem uma tensão assim.`}</p>`
+    :`<span class="rv-k">${L`Sua coerência`}</span><h2 class="rv-h">${L`Nenhuma contradição.`}</h2><p class="rv-p">${L`Em nenhum dos 11 eixos suas respostas firmes puxaram para lados opostos. Isso é raro.`}</p>`);
+  if(sr.strong.length){
+    const rare=sr.kin.length<=Math.round(PH.length*.08);
+    slides.push(`<span class="rv-k">${rare?L`Combinação rara`:L`Sua combinação`}</span><div class="rv-big">${sr.kin.length}<small>/${PH.length}</small></div><p class="rv-p">${L`pensadores da história reúnem os seus ${sr.strong.length} traços.`}</p>${sr.kin.length?`<div class="rv-faces">${sr.kin.slice(0,5).map(x=>portrait(x,{cls:"rv-av"})).join("")}</div>`:""}`);
+  }
+  if(p.born!==undefined&&p.place)slides.push(`<span class="rv-k">${L`Onde você estaria em casa`}</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">${L`por volta de ${yearText(p.born+35)}, conversando com quem pensa como você.`}</p>`);
+  if(opp)slides.push(`<span class="rv-k">${L`Seu oposto`}</span>${portrait(opp,{cls:"rv-pic sm"})}<h2 class="rv-h">${esc(opp.n)}</h2><p class="rv-p rv-quote">“${esc(opp.q)}”</p><p class="rv-p">${L`Vocês discordariam em quase tudo.`}</p>`);
+  slides.push(`<span class="rv-k">${flat?L`Quem fica mais perto de você`:L`Seu par filosófico`}</span>${portrait(p,{cls:"rv-pic",eager:true})}${flat?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div>`}<h2 class="rv-h">${esc(p.n)}</h2><p class="rv-p rv-quote">“${esc(p.q)}”</p>`);
+  slides.push(`<span class="rv-k">${L`Agora é com você`}</span><h2 class="rv-h">${L`Quem dos seus amigos pensa como você?`}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="share">${icon.share} ${L`Compartilhar no story`}</button><button type="button" class="btn ghost" data-a="challenge">${icon.link} ${L`Desafiar um amigo`}</button><button type="button" class="btn ghost" data-a="close">${L`Ver resultado completo`}</button></div>`);
+  const prev=document.activeElement,d=document.createElement("div");
+  d.className="reveal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label",L`Seu resultado, passo a passo`);
+  d.innerHTML=`<div class="rv-bars">${slides.map(()=>"<i><b></b></i>").join("")}</div><button type="button" class="rv-x" aria-label="${L`Fechar`}">×</button><div class="rv-stage" aria-live="polite"></div><button type="button" class="rv-nav rv-prev" aria-label="${L`Anterior`}"></button><button type="button" class="rv-nav rv-next" aria-label="${L`Próximo`}"></button>`;
+  document.body.appendChild(d);document.body.classList.add("rv-open");
+  const stage=d.querySelector(".rv-stage"),bars=[...d.querySelectorAll(".rv-bars i")];
+  let i=-1,raf=0;
+  const close=()=>{cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.body.classList.remove("rv-open");d.remove();if(prev&&prev.focus)prev.focus()};
+  const show=n=>{
+    if(n<0)return;if(n>=slides.length){close();return}
+    i=n;stage.innerHTML=`<div class="rv-slide">${slides[i]}</div>`;
+    bars.forEach((b,k)=>b.className=k<i?"done":k===i?"now":"");
+    if(i===slides.length-1)track("/evento/revelacao-fim");
+    // The match's percentage counts up when its card arrives.
+    const pc=stage.querySelector(".rv-pct");cancelAnimationFrame(raf);
+    if(pc){const to=+pc.dataset.to,t0=performance.now();const step=now=>{const x=reduceMotion?1:Math.min(1,(now-t0)/1400);pc.textContent=Math.round(to*(1-Math.pow(1-x,3)))+"%";if(x<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
+  };
+  const key=e=>{if(e.key==="Escape")close();else if(e.key==="ArrowRight"||e.key===" "||e.key==="Enter"){if(!e.target.closest("button")||e.target.classList.contains("rv-nav")){e.preventDefault();show(i+1)}}else if(e.key==="ArrowLeft")show(i-1)};
+  document.addEventListener("keydown",key);
+  d.addEventListener("click",e=>{
+    const a=e.target.closest("[data-a]");
+    if(a){close();if(a.dataset.a==="share")shareFlow(r);else if(a.dataset.a==="challenge")challenge(r);return}
+    if(e.target.closest(".rv-x")){close();return}
+    if(e.target.closest(".rv-prev")){show(i-1);return}
+    if(e.target.closest("a"))return;
+    show(i+1);
+  });
+  // Swipe left or right, like stories.
+  let sx=null;
+  d.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+  d.addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(dx)>60){e.preventDefault();show(dx<0?i+1:i-1)}});
+  show(0);
+  d.querySelector(".rv-next").focus({preventScroll:true});
 }
 
 /* ---------- The person's own reading ---------- */
