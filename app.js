@@ -1036,6 +1036,7 @@ function renderInvite(code,rawName){
       <span class="eyebrow">${L`Desafio filosófico`}</span>
       <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${L`${esc(who)} te desafiou`}</span></span></h1>
       <p class="lede">${L`${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?L`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Escolha um nível (de 6 a 18 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.`}</p>
+      ${r.directionless?"":`<p class="res-arch">${L`Arquétipo de ${esc(who)}:`} <b>${esc(archetype(r.scores).name)}</b>. ${L`Qual será o seu?`}</p>`}
       <div class="cta-row">
         <a class="btn accent" href="#/teste/1" data-fresh="1">${hasMine?L`Fazer o teste de novo e comparar`:L`Aceitar o desafio`} ${icon.arrow}</a>
         <a class="btn ghost" href="#/teste" data-fresh="1">${L`Escolher o nível`}</a>
@@ -1065,7 +1066,7 @@ function renderCompare(codeA,codeB,rawA,rawB){
   const same=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.x===q.y&&q.x!==2).length;
   const answered=a.filter((x,i)=>x!=null&&b[i]!=null).length;
   const verdict=c.pct===null?L`Um dos perfis ficou sem direção, então não dá para medir compatibilidade.`:c.pct>=80?L`Almas filosóficas gêmeas.`:c.pct>=60?L`Bastante em comum, com boas brigas pela frente.`:c.pct>=40?L`Concordam em algumas coisas e discordam com vontade em outras.`:L`Pensam quase ao contrário. Rende uma ótima conversa.`;
-  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span><span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?L`perfil sem direção`:`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
+  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span>${r.directionless?"":`<span class="cmp-arch">${esc(archetype(r.scores).name)}</span>`}<span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?L`perfil sem direção`:`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
   const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?L`Os dois tendem a <b>${esc(x.A<0?ax.l:ax.r)}</b>.`:diffText(ax,nameA,x.A,nameB,x.B)}</span></li>`};
   mount(`
   <section class="wrap section" style="padding-top:clamp(24px,5vh,56px)">

@@ -1089,3 +1089,4 @@ body.rv-open{overflow:hidden}
 /* Locked rewards on phones: title and the unlock button, no long description. */
 @media (max-width:600px){.rw-lock p{display:none}.rw-lock{gap:8px;padding:16px 18px}.rw-lock h3{font-size:22px}}
 .ax-more .axis-row.rv{opacity:1;transform:none}
+.cmp-arch{display:block;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--accent);margin:2px 0 4px}
