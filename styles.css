@@ -1267,3 +1267,7 @@ body.rv-open{overflow:hidden}
 .school-link:hover{color:var(--accent);border-color:var(--accent)}
 .about-corr{margin-top:16px}
 @media (max-width:600px){.ccards{grid-template-columns:1fr}.tcard .ccard-art .mini{width:80px;height:80px}.tcard .ccard-art .mini{position:static}}
+/* Very narrow screens (small phones, or large display zoom): the header keeps only the logo mark, so the
+   menu never pushes the page sideways. */
+@media (max-width:350px){.brand{font-size:0;gap:0}.brand svg{width:26px;height:26px}}
+html{overflow-x:clip}
