@@ -143,6 +143,17 @@ const frame = body => `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" heig
 <text x="1120" y="590" text-anchor="end" font-family="${sans}" font-size="22" fill="${C.muted}">filosofometro.com.br</text></svg>`;
 const brand = (x, y) => `<path d="M${x + 14} ${y - 22}L${x + 28} ${y + 4}L${x} ${y + 4}Z" fill="none" stroke="${C.ink}" stroke-width="2" stroke-linejoin="round"/><circle cx="${x + 14}" cy="${y - 4}" r="3.6" fill="${C.accent}"/><text x="${x + 42}" y="${y + 2}" font-family="${serif}" font-size="34" fill="${C.ink}">${SITE}</text>`;
 
+// The archetype, the same rule as archetype() in app.js: the strongest pole gives the noun and the second
+// qualifies it. The words are the Portuguese keys of the interface; packs translate them.
+const ARCH_NOUN = [["Racionalista","Empirista"],["Fatalista","Voluntarista"],["Essencialista","Existencialista"],["Deontologista","Pragmatista"],["Individualista","Comunitarista"],["Hedonista","Asceta"],["Materialista","Espiritualista"],["Realista","Relativista"],["Tradicionalista","Reformista"],["Quietista","Ativista"],["Legalista","Autonomista"]];
+const ARCH_OF = [["da Razão","da Experiência"],["do Destino","da Liberdade"],["do Sentido","da Criação"],["do Dever","das Consequências"],["do Indivíduo","da Comunidade"],["do Prazer","da Virtude"],["da Matéria","do Espírito"],["da Certeza","da Dúvida"],["da Tradição","da Ruptura"],["da Aceitação","da Resistência"],["da Ordem","da Autonomia"]];
+function archName(v, lang) {
+  const ui = (lang && lang !== "pt" ? PACKS[lang]().ui : null) || {}, tr = k => ui[k] || k;
+  const t2 = v.map((x, i) => ({ i, x })).filter(o => Math.abs(o.x) >= 0.13).sort((a, b) => Math.abs(b.x) - Math.abs(a.x) || a.i - b.i).slice(0, 2);
+  if (t2.length < 2) return tr("Equilibrista");
+  const side = o => (o.x < 0 ? 0 : 1);
+  return `${tr(ARCH_NOUN[t2[0].i][side(t2[0])])} ${tr(ARCH_OF[t2[1].i][side(t2[1])])}`;
+}
 async function inviteSVG(info) {
   const { r, name, T } = info, p = r.top.p, img = await portraitData(p);
   const X = 500, colW = 630;
@@ -152,9 +163,11 @@ async function inviteSVG(info) {
   if (r.directionless) {
     b += `<text x="${X}" y="330" font-family="${serif}" font-size="96" fill="${C.ink}">${T.balanced}</text>`;
   } else {
-    b += `<text x="${X}" y="318" font-family="${serif}" font-size="140" fill="${C.accent}">${r.top.pct}%</text>`;
-    b += `<text x="${X}" y="420" font-family="${serif}" font-size="${fitSize(p.n, 104, colW, 0.44)}" fill="${C.ink}">${esc(p.n)}</text>`;
-    b += `<text x="${X}" y="468" font-family="${sans}" font-size="22" letter-spacing="2" fill="${C.muted}">${esc(`${p.s} · ${lifeText(p, T)}`.toUpperCase())}</text>`;
+    const an = archName(r.scores, info.lang);
+    b += `<text x="${X}" y="248" font-family="${serif}" font-style="italic" font-size="${fitSize(an, 46, colW, 0.4)}" fill="${C.accent}">${esc(an)}</text>`;
+    b += `<text x="${X}" y="360" font-family="${serif}" font-size="112" fill="${C.accent}">${r.top.pct}%</text>`;
+    b += `<text x="${X}" y="438" font-family="${serif}" font-size="${fitSize(p.n, 84, colW, 0.44)}" fill="${C.ink}">${esc(p.n)}</text>`;
+    b += `<text x="${X}" y="480" font-family="${sans}" font-size="22" letter-spacing="2" fill="${C.muted}">${esc(`${p.s} · ${lifeText(p, T)}`.toUpperCase())}</text>`;
   }
   b += `<text x="${X}" y="540" font-family="${serif}" font-style="italic" font-size="40" fill="${C.ink}">${esc(T.q1)}<tspan fill="${C.accent}">${esc(T.you)}</tspan></text>`;
   return frame(b);

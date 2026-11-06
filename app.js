@@ -766,25 +766,24 @@ function openReveal(r){
   const ans=q=>esc(t(SCALE[q.answer].label));
   const said=q=>`<blockquote class="rv-q">“${esc(QS[q.i][0])}”<cite>${ans(q)}</cite></blockquote>`;
   const slides=[];
-  slides.push(`<span class="rv-k">${L`${r.answers.length} respostas depois`}</span><h2 class="rv-h">${L`Vamos ver como <em>você</em> pensa.`}</h2><p class="rv-p">${L`Toque para continuar`}</p>`);
-  slides.push(`<span class="rv-k">${L`O formato do seu pensamento`}</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div>${sr.strong.length?`<h2 class="rv-h rv-traits">${sr.strong.map(s=>esc(s.x<0?s.a.l:s.a.r)).join(" · ")}</h2>`:`<h2 class="rv-h">${L`Equilíbrio`}</h2>`}`);
-  if(conv)slides.push(`<span class="rv-k">${L`Sua convicção mais forte`}</span>${said(conv)}<p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
-  if((r.level?r.level.id:1)>=2)slides.push(contra
+  // The order tells a story: who you are, what moves you, your tension, your company in history,
+  // a clue about the match, the opposite, and then the match itself.
+  slides.push(`<span class="rv-k">${L`${r.answers.length} respostas depois`}</span><h2 class="rv-h">${L`Vamos ver como <em>você</em> pensa.`}</h2><p class="rv-p rv-hint"><span class="on-touch">${L`Toque para continuar`}</span><span class="on-hover">${L`Clique ou use as setas para continuar`}</span></p>`);
+  const arch=archetype(r.scores);
+  slides.push(`<span class="rv-k">${L`Seu arquétipo`}</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div><h2 class="rv-h rv-arch">${esc(arch.name)}</h2>${sr.strong.length?`<p class="rv-traits">${sr.strong.map(s=>esc(s.x<0?s.a.l:s.a.r)).join(" · ")}</p>`:`<p class="rv-p">${L`Suas respostas ficaram perto do centro em todos os eixos.`}</p>`}<p class="rv-p rv-small">${L`Um dos 462 arquétipos possíveis.`}</p>`);
+  if(conv)slides.push(`<span class="rv-k">${L`O que mais move você`}</span>${said(conv)}<p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
+  if(levelId(r)>=2)slides.push(contra
     ?`<span class="rv-k">${L`Sua contradição`}</span>${said(contra.a)}${said(contra.b)}<p class="rv-p">${L`Essas duas respostas puxam o eixo <b>${esc(AXES[contra.ax].name)}</b> para lados opostos. Todo pensamento vivo tem uma tensão assim.`}</p>`
     :`<span class="rv-k">${L`Sua coerência`}</span><h2 class="rv-h">${L`Nenhuma contradição.`}</h2><p class="rv-p">${L`Em nenhum dos 11 eixos suas respostas firmes puxaram para lados opostos. Isso é raro.`}</p>`);
   if(sr.strong.length){
     const rare=sr.kin.length<=Math.round(PH.length*.08);
-    slides.push(`<span class="rv-k">${rare?L`Combinação rara`:L`Sua combinação`}</span><div class="rv-big">${sr.kin.length}<small>/${PH.length}</small></div><p class="rv-p">${L`pensadores da história reúnem os seus ${sr.strong.length} traços.`}</p>${sr.kin.length?`<div class="rv-faces">${sr.kin.slice(0,5).map(x=>portrait(x,{cls:"rv-av"})).join("")}</div>`:""}`);
+    slides.push(`<span class="rv-k">${rare?L`Combinação rara`:L`Sua companhia na história`}</span><div class="rv-big">${sr.kin.length}<small>/${PH.length}</small></div><p class="rv-p">${sr.kin.length?L`pensadores da história reúnem os seus ${sr.strong.length} traços.`:L`Nenhum pensador da história reúne os seus ${sr.strong.length} traços.`}</p>${sr.kin.length?`<div class="rv-faces">${sr.kin.slice(0,5).map(x=>portrait(x,{cls:"rv-av"})).join("")}</div><p class="rv-p rv-small">${sr.kin.slice(0,3).map(x=>esc(x.n)).join(", ")}${sr.kin.length>3?L` e mais ${sr.kin.length-3}`:""}</p>`:""}`);
   }
-  if(!flat){
-    const arch=archetype(r.scores),ak=archKin(arch),near=ak.length?ak:PH.filter(x=>{const tp=topPoles(x.v)[0];return tp&&arch.poles[0]&&tp[0]===arch.poles[0][0]&&tp[1]===arch.poles[0][1]}).slice(0,5);
-    slides.push(`<span class="rv-k">${L`Seu arquétipo`}</span><h2 class="rv-h rv-arch">${esc(arch.name)}</h2><p class="rv-p">${L`Um dos 462 arquétipos possíveis.`} ${ak.length?L`Na história, também são assim:`:L`Nenhum pensador do catálogo tem exatamente esse arquétipo. Os mais próximos:`}</p>${near.length?`<div class="rv-faces">${near.slice(0,5).map(x=>portrait(x,{cls:"rv-av"})).join("")}</div><p class="rv-p rv-names">${near.slice(0,3).map(x=>esc(x.n)).join(", ")}</p>`:""}`);
-  }
-  if(p.born!==undefined&&p.place)slides.push(`<span class="rv-k">${L`Onde você estaria em casa`}</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">${L`por volta de ${yearText(p.born+35)}, conversando com quem pensa como você.`}</p>`);
-  if(opp)slides.push(`<span class="rv-k">${L`Seu oposto`}</span>${portrait(opp,{cls:"rv-pic sm"})}<h2 class="rv-h">${esc(opp.n)}</h2><p class="rv-p rv-quote">“${esc(opp.q)}”</p><p class="rv-p">${L`Vocês discordariam em quase tudo.`}</p>`);
-  slides.push(`<span class="rv-k">${flat?L`Quem fica mais perto de você`:L`Seu par filosófico`}</span>${portrait(p,{cls:"rv-pic",eager:true})}${flat?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div>`}<h2 class="rv-h">${esc(p.n)}</h2><p class="rv-p rv-quote">“${esc(p.q)}”</p>`);
+  if(p.born!==undefined&&p.place)slides.push(`<span class="rv-k">${L`Uma pista sobre o seu par`}</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">${L`por volta de ${yearText(p.born+35)}. Foi lá que viveu quem pensa mais parecido com você.`}</p>`);
+  if(opp)slides.push(`<span class="rv-k">${L`Antes, o seu oposto`}</span>${portrait(opp,{cls:"rv-pic sm"})}<h2 class="rv-h">${esc(opp.n)}</h2><p class="rv-p rv-quote">“${esc(opp.q)}”</p><p class="rv-p">${L`Vocês discordariam em quase tudo.`}</p>`);
+  slides.push(`<span class="rv-k">${flat?L`Quem fica mais perto de você`:L`Seu par filosófico`}</span>${portrait(p,{cls:"rv-pic",eager:true})}${flat?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div>`}<h2 class="rv-h">${esc(p.n)}</h2><p class="rv-traits">${esc(p.s)} · ${esc(lifeText(p))}</p><p class="rv-p rv-quote">“${esc(p.q)}”</p>`);
   const nx=r.level&&nextLevel(r.level.n);
-  if(nx){const u=LEVEL_INFO[nx.id].unlock.slice(1);slides.push(`<span class="rv-k">${L`Ainda há mais`}</span><h2 class="rv-h">${L`No nível ${esc(t(nx.name))}`}</h2><ul class="rv-unlock">${u.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="rv-p">${L`Mais ${nx.n-r.level.n} afirmações. Suas respostas de agora ficam guardadas.`}</p>`)}
+  if(nx){const u=LEVEL_INFO[nx.id].unlock.slice(1);slides.push(`<span class="rv-k">${L`Ainda há mais`}</span><h2 class="rv-h">${L`No nível ${esc(t(nx.name))}`}</h2><ul class="rv-unlock">${u.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="rv-p">${L`Mais ${nx.n-r.level.n} afirmações. Suas respostas de agora ficam guardadas.`}</p><div class="rv-actions"><a class="btn ghost" href="#/teste/aprofundar" data-a="deeper">${L`Aprofundar agora`} ${icon.arrow}</a></div>`)}
   slides.push(`<span class="rv-k">${L`Agora é com você`}</span><h2 class="rv-h">${L`Quem dos seus amigos pensa como você?`}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="share">${icon.share} ${L`Compartilhar no story`}</button><button type="button" class="btn ghost" data-a="challenge">${icon.link} ${L`Desafiar um amigo`}</button><button type="button" class="btn ghost" data-a="close">${L`Ver resultado completo`}</button></div>`);
   const prev=document.activeElement,d=document.createElement("div");
   d.className="reveal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label",L`Seu resultado, passo a passo`);
@@ -806,7 +805,7 @@ function openReveal(r){
   document.addEventListener("keydown",key);
   d.addEventListener("click",e=>{
     const a=e.target.closest("[data-a]");
-    if(a){close();if(a.dataset.a==="share")shareFlow(r);else if(a.dataset.a==="challenge")challenge(r);return}
+    if(a){close();if(a.dataset.a==="deeper")return;if(a.dataset.a==="share")shareFlow(r);else if(a.dataset.a==="challenge")challenge(r);return}
     if(e.target.closest(".rv-x")){close();return}
     if(e.target.closest(".rv-prev")){show(i-1);return}
     if(e.target.closest("a"))return;
@@ -1716,7 +1715,7 @@ async function shareCard(r,usePic=true){
   // the person's mark (filled, accent) and the match's mark (ring), so the card explains itself.
   const strong=AXES.map((a,i)=>({a,i,s:Math.abs(r.scores[i])})).sort((m,n)=>n.s-m.s).slice(0,3);
   const ry=y+66;
-  x.font="500 28px 'Inter Tight'";
+  x.font="500 30px 'Inter Tight'";
   const me0=L`eu`,youW=x.measureText(me0).width,parName=shortName(p.n),parW=x.measureText(parName).width;
   const legW=22+10+youW+40+22+10+parW;let lx=W/2-legW/2;
   x.beginPath();x.arc(lx+11,ry-9,10,0,Math.PI*2);x.fillStyle=accent;x.fill();
@@ -1726,8 +1725,8 @@ async function shareCard(r,usePic=true){
   const bx0=380,bx1=700,pos=v=>bx0+(Math.max(-1,Math.min(1,v))+1)/2*(bx1-bx0);
   strong.forEach(({a,i},k)=>{
     const by=ry+84+k*74,me=r.scores[i],par=p.v[i];
-    x.textAlign="center";x.fillStyle=muted;x.font="600 22px 'Inter Tight'";x.fillText(spaced(a.name.toUpperCase()),W/2,by-26);
-    x.font="600 32px 'Inter Tight'";
+    x.textAlign="center";x.fillStyle=muted;x.font="600 25px 'Inter Tight'";x.fillText(spaced(a.name.toUpperCase()),W/2,by-28);
+    x.font="600 35px 'Inter Tight'";
     x.textAlign="right";x.fillStyle=me<0?ink:muted;x.fillText(a.l,bx0-26,by+11);
     x.textAlign="left";x.fillStyle=me>0?ink:muted;x.fillText(a.r,bx1+26,by+11);
     x.fillStyle=line;x.fillRect(bx0,by-1,bx1-bx0,3);x.fillRect(W/2-1,by-10,3,21);
