@@ -456,7 +456,9 @@ section("Prévias de link (api/)");
   const evil = P.inviteInfo(code, encodeURIComponent('<script>alert(1)</script>"'));
   ok(!/[<>"]/.test(evil.name) && !P.sharePage(evil, "https://x.test", "code=" + code).includes("<script>alert"), "names are cleaned and the share page escapes everything it prints");
   const cmp = P.compareInfo(code, other, "Ana", "Bia");
-  ok(cmp.title.includes(`${E.comparePeople(E.decode(code), E.decode(other)).pct}%`) && cmp.hash === `#/comparar/${code}/${other}/Ana/Bia`, "comparison preview uses the engine's compatibility and points to the comparison");
+  // Themes in common: both lean the same way (|position| ≥ 0.13) on that theme, counted from the engine's scores.
+  const cp = E.comparePeople(E.decode(code), E.decode(other)), common = cp.b.scores.filter((x, i) => Math.sign(x) === Math.sign(cp.a.scores[i]) && Math.abs(x) >= 0.13 && Math.abs(cp.a.scores[i]) >= 0.13).length;
+  ok(cmp.title.includes(`${common} de 11 temas`) && !cmp.title.includes("%") && cmp.hash === `#/comparar/${code}/${other}/Ana/Bia`, "comparison preview counts the themes in common (no percentage) and points to the comparison");
 }
 
 section("Apoio (support.js)");

@@ -17,17 +17,17 @@ const langOf = l => (LANGS.includes(l) ? l : "pt");
 const TXT = {
   pt: { html: "pt-BR", someone: "Alguém", bc: "a.C.", to: "a", dared: w => `${w} te desafiou no ${SITE}`, got: (w, pct, n) => `${w} deu ${pct}% ${n}. E você?`,
     descFlat: "Qual filósofo pensa como você? Faça o teste e compare, eixo por eixo.", desc: (n, s) => `Par filosófico: ${n} (${s}). Faça o teste e descubra quanto vocês pensam parecido.`,
-    two: "Duas pessoas", and: "e", friend: " e um amigo", in: "no", compat: "compatíveis", cmpDesc: "Onde pensam igual, onde divergem e quais filósofos têm em comum. Faça o teste e compare também.",
+    two: "Duas pessoas", and: "e", friend: " e um amigo", in: "no", compat: "compatíveis", common: "de 11 temas em comum", agreeOn: n => `concordam em ${n} de 11 temas`, cmpDesc: "Onde pensam igual, onde divergem e quais filósofos têm em comum. Faça o teste e compare também.",
     open: "Abrir o", daredCaps: w => `${w} TE DESAFIOU`, mine: "MEU PAR FILOSÓFICO", balanced: "Perfil equilibrado", q1: "Qual filósofo pensa como ", you: "você?",
     comparison: "COMPARAÇÃO", noDir: "Sem direção", p1: "Pessoa 1", p2: "Pessoa 2", tagline: n => `11 eixos · ${n} pensadores · teste gratuito`, q0: "Qual filósofo", q2: "pensa como " },
   en: { html: "en", someone: "Someone", bc: "BC", to: "to", dared: w => `${w} challenged you on ${SITE}`, got: (w, pct, n) => `${w} got ${pct}% ${n}. What about you?`,
     descFlat: "Which philosopher thinks like you? Take the test and compare, axis by axis.", desc: (n, s) => `Philosophical match: ${n} (${s}). Take the test and see how alike you think.`,
-    two: "Two people", and: "and", friend: " and a friend", in: "on", compat: "compatible", cmpDesc: "Where they agree, where they split and which philosophers they share. Take the test and compare too.",
+    two: "Two people", and: "and", friend: " and a friend", in: "on", compat: "compatible", common: "of 11 themes in common", agreeOn: n => `agree on ${n} of 11 themes`, cmpDesc: "Where they agree, where they split and which philosophers they share. Take the test and compare too.",
     open: "Open", daredCaps: w => `${w} CHALLENGED YOU`, mine: "MY PHILOSOPHICAL MATCH", balanced: "Balanced profile", q1: "Which philosopher thinks like ", you: "you?",
     comparison: "COMPARISON", noDir: "No direction", p1: "Person 1", p2: "Person 2", tagline: n => `11 axes · ${n} thinkers · free test`, q0: "Which philosopher", q2: "thinks like " },
   es: { html: "es", someone: "Alguien", bc: "a. C.", to: "a", dared: w => `${w} te desafió en ${SITE}`, got: (w, pct, n) => `${w} sacó ${pct}% ${n}. ¿Y tú?`,
     descFlat: "¿Qué filósofo piensa como tú? Haz el test y compara, eje por eje.", desc: (n, s) => `Par filosófico: ${n} (${s}). Haz el test y descubre cuánto se parecen.`,
-    two: "Dos personas", and: "y", friend: " y un amigo", in: "en", compat: "compatibles", cmpDesc: "Dónde piensan igual, dónde difieren y qué filósofos comparten. Haz el test y compara tú también.",
+    two: "Dos personas", and: "y", friend: " y un amigo", in: "en", compat: "compatibles", common: "de 11 temas en común", agreeOn: n => `coinciden en ${n} de 11 temas`, cmpDesc: "Dónde piensan igual, dónde difieren y qué filósofos comparten. Haz el test y compara tú también.",
     open: "Abrir", daredCaps: w => `${w} TE DESAFIÓ`, mine: "MI PAR FILOSÓFICO", balanced: "Perfil equilibrado", q1: "¿Qué filósofo piensa como ", you: "tú?",
     comparison: "COMPARACIÓN", noDir: "Sin dirección", p1: "Persona 1", p2: "Persona 2", tagline: n => `11 ejes · ${n} pensadores · test gratuito`, q0: "¿Qué filósofo", q2: "piensa como " },
 };
@@ -51,16 +51,18 @@ function inviteInfo(code, rawName, rawLang) {
   const hash = `#/vs/${code}${name ? `/${encodeURIComponent(name)}` : ""}`;
   return { kind: "invite", lang, T, r, name, title, description, hash };
 }
+const themesInCommon = (sa, sb) => sa.filter((x, i) => Math.sign(x) === Math.sign(sb[i]) && Math.abs(x) >= 0.13 && Math.abs(sb[i]) >= 0.13).length;
 function compareInfo(codeA, codeB, rawA, rawB, rawLang) {
   const a = decode(codeA), b = decode(codeB);
   if (!a || !b) return null;
   const lang = langOf(rawLang), T = TXT[lang];
   const c = engineFor(lang).comparePeople(a, b), nA = cleanName(rawA), nB = cleanName(rawB);
   const pair = `${nA || T.two}${nB ? ` ${T.and} ${nB}` : nA ? T.friend : ""}`;
-  const title = c.pct === null ? `${pair} ${T.in} ${SITE}` : `${pair}: ${c.pct}% ${T.compat}`;
+  const same = themesInCommon(c.b.scores, c.a.scores);
+  const title = `${pair}: ${T.agreeOn(same)}`;
   const description = T.cmpDesc;
   const hash = `#/comparar/${codeA}/${codeB}${nA || nB ? `/${encodeURIComponent(nA)}/${encodeURIComponent(nB)}` : ""}`;
-  return { kind: "compare", lang, T, c, nA, nB, title, description, hash };
+  return { kind: "compare", lang, T, c, nA, nB, same, title, description, hash };
 }
 
 /* ---------- The share page: metadata for crawlers, an instant redirect for people ---------- */
@@ -173,12 +175,12 @@ async function inviteSVG(info) {
   return frame(b);
 }
 async function compareSVG(info) {
-  const { c, nA, nB, T } = info, a = c.a, b = c.b;
+  const { c, nA, nB, T, same } = info, a = c.a, b = c.b;
   let g = sigilSVG(300, 315, 2.05, b.scores, a.scores);
   g += brand(600, 120);
   g += `<text x="600" y="196" font-family="${sans}" font-size="22" letter-spacing="4" fill="${C.muted}">${T.comparison}</text>`;
-  g += `<text x="600" y="330" font-family="${serif}" font-size="${c.pct === null ? 90 : 150}" fill="${C.accent}">${c.pct === null ? T.noDir : `${c.pct}%`}</text>`;
-  g += `<text x="600" y="392" font-family="${serif}" font-size="48" fill="${C.ink}">${T.compat}</text>`;
+  g += `<text x="600" y="330" font-family="${serif}" font-size="150" fill="${C.accent}">${same}</text>`;
+  g += `<text x="600" y="392" font-family="${serif}" font-size="44" fill="${C.ink}">${esc(T.common)}</text>`;
   const who = (n, r, y, dashed) => `<line x1="600" y1="${y - 9}" x2="640" y2="${y - 9}" stroke="${dashed ? C.ink : C.accent}" stroke-width="4" ${dashed ? 'stroke-dasharray="7 6"' : ""}/><text x="656" y="${y}" font-family="${sans}" font-size="26" fill="${C.ink}">${esc(n)}<tspan fill="${C.muted}"> · ${esc(r.top.p.n)}</tspan></text>`;
   g += who(nB || T.p2, b, 462, false) + who(nA || T.p1, a, 508, true);
   return frame(g);

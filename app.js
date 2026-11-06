@@ -72,12 +72,6 @@ function sigil(v,{compare=null,labels=false,cls="sg-solo",draw=false,title="",de
 /* ---------- Sigil explanations ---------- */
 const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
 const lean=(a,x)=>Math.abs(x)<.13?L`Equilíbrio`:`${x<0?a.l:a.r}${Math.abs(x)>=.6?L`, forte`:""}`;
-// How two people differ on one axis. On the same side it is a difference of strength, not of direction.
-function diffText(a,n1,v1,n2,v2){
-  if(Math.sign(v1)===Math.sign(v2)&&Math.abs(v1)>=.13&&Math.abs(v2)>=.13)
-    return L`Os dois tendem a <b>${esc(v1<0?a.l:a.r)}</b>, mas ${esc(Math.abs(v1)>Math.abs(v2)?n1:n2)} com mais força.`;
-  return `${esc(n1)}: <b>${esc(lean(a,v1))}</b>. ${esc(n2)}: <b>${esc(lean(a,v2))}</b>.`;
-}
 const num2=x=>(x>=0?"+":"−")+Math.abs(x).toFixed(2).replace(".",I.dec);
 // Why the user sits where they do on one axis: the answers that pulled hardest in that direction.
 function whyUser(r,ax){
@@ -937,6 +931,14 @@ function wireInvite(r){
   document.getElementById("theirLink").addEventListener("keydown",e=>{if(e.key==="Enter")go()});
 }
 // Landing for an invite link: show who invited and start the test; the comparison opens after it.
+// Themes where two profiles lean the same way, and the theme where they are furthest apart.
+function themesInCommon(sa,sb){
+  const same=AXES.filter((_,i)=>Math.sign(sa[i])===Math.sign(sb[i])&&Math.abs(sa[i])>=.13&&Math.abs(sb[i])>=.13).length;
+  const far=AXES.map((a,i)=>({a,i,d:Math.abs(sa[i]-sb[i])})).sort((u,v)=>v.d-u.d)[0];
+  return {same,far};
+}
+const compareVerdict=n=>n>=9?L`Almas filosóficas gêmeas.`:n>=7?L`Bastante em comum, com boas brigas pela frente.`:n>=4?L`Concordam em algumas coisas e discordam com vontade em outras.`:L`Pensam quase ao contrário. Rende uma ótima conversa.`;
+// The invite: who challenged you, their way of thinking, and one step to accept.
 function renderInvite(code,rawName){
   const a=E.decode(code);
   if(!a){renderNotFound(L`Este convite está incompleto ou é de uma versão antiga do teste.`);return}
@@ -944,20 +946,20 @@ function renderInvite(code,rawName){
   // Opening your own invite link (another device, or testing it) goes straight to your result.
   if(store.get("last")===code){location.replace(`#/r/${code}`);return}
   store.set("vs",{code,name:named});
-  const mineCode=store.get("last");
-  const hasMine=mineCode&&E.decode(mineCode)&&mineCode!==code;
+  const mineCode=store.get("last"),hasMine=mineCode&&E.decode(mineCode)&&mineCode!==code;
+  const arch=archetype(r.scores);
   mount(`
   <section class="wrap res-hero">
     <div>
-      <span class="eyebrow">${L`Desafio filosófico`}</span>
-      <h1 class="res-name" style="font-size:clamp(44px,min(7vw,10vh),104px)"><span class="line"><span>${L`${esc(who)} te desafiou`}</span></span></h1>
-      <p class="lede">${L`${esc(who)} fez o Filosofômetro e deu <b>${r.directionless?L`mais perto de ${esc(p.n)}`:`${r.top.pct}% ${esc(p.n)}`}</b>. Escolha um nível (de 6 a 18 minutos) e descubra quanto vocês pensam parecido, eixo por eixo.`}</p>
-      ${r.directionless?"":`<p class="res-arch">${L`Arquétipo de ${esc(who)}:`} <b>${esc(archetype(r.scores).name)}</b>. ${L`Qual será o seu?`}</p>`}
+      <div class="res-kicker"><span class="eyebrow">${L`Desafio filosófico`}</span></div>
+      <h1 class="res-name v2-name"><span class="line"><span>${L`${esc(who)} te desafiou`}</span></span></h1>
+      ${r.directionless?"":`<p class="v2-match-k">${L`O jeito de pensar de ${esc(who)}:`}</p><p class="v2-arch v2-arch-sm">${esc(arch.name)}</p>`}
+      <p class="lede">${L`Pensa parecido com <b>${esc(p.n)}</b>. Faça o teste e descubram em quantos dos 11 temas vocês concordam, e onde vão discutir.`}</p>
       <div class="cta-row">
         <a class="btn accent" href="#/teste/1" data-fresh="1">${hasMine?L`Fazer o teste de novo e comparar`:L`Aceitar o desafio`} ${icon.arrow}</a>
-        <a class="btn ghost" href="#/teste" data-fresh="1">${L`Escolher o nível`}</a>
-        ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">${L`Comparar com meu resultado`}</a>`:""}
+        ${hasMine?`<a class="btn ghost" href="#/comparar/${code}/${mineCode}/${encName(named)}">${L`Comparar com meu resultado`}</a>`:`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Escolher o nível`}</a>`}
       </div>
+      <p class="v2-why">${L`Rápido: 44 frases, uns 6 minutos. Sem cadastro.`}</p>
       <p class="invite-peek"><a href="#/r/${code}/ver">${L`Ver o resultado completo de ${esc(named||L`quem te convidou`)}`}</a></p>
     </div>
     ${duo(p,{title:L`Perfil de ${p.n}`})}
@@ -965,99 +967,120 @@ function renderInvite(code,rawName){
   wireTips(app,{p});
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
 }
+// Two people side by side: how many themes they share, where they will argue, statement by statement,
+// theme by theme, who thinks like each, who sits in the middle, and a question to talk about.
 function renderCompare(codeA,codeB,rawA,rawB){
   const a=E.decode(codeA),b=E.decode(codeB);
   if(!a||!b){renderNotFound(L`Este link de comparação está incompleto.`);return}
   const c=E.comparePeople(a,b),ra=c.a,rb=c.b;
   const nameA=cleanName(rawA)||L`Seu amigo`,nameB=cleanName(rawB)||L`Você`;
-  const rows=c.perAxis.map(x=>({ax:x.axis,diff:x.diff,A:ra.scores[x.axis],B:rb.scores[x.axis]}));
-  const close=rows.slice().sort((x,y)=>x.diff-y.diff).slice(0,3),far=rows.slice().sort((x,y)=>y.diff-x.diff).slice(0,3);
+  const {same,far}=themesInCommon(rb.scores,ra.scores),verdict=compareVerdict(same);
+  const both=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.y!=null);
+  const splits=both.map(q=>({...q,gap:Math.abs(SCALE[q.x].value-SCALE[q.y].value)})).filter(q=>q.gap>=2).sort((u,v)=>v.gap-u.gap||u.i-v.i);
+  const agrees=both.filter(q=>q.x===q.y&&q.x!==2).sort((u,v)=>Math.abs(SCALE[v.x].value)-Math.abs(SCALE[u.x].value)||u.i-v.i);
+  const sameAnswers=agrees.length;
   const topA=new Set(ra.ranking.slice(0,10).map(x=>x.p.id));
   const shared=rb.ranking.slice(0,10).filter(x=>topA.has(x.p.id)).slice(0,4).map(x=>x.p);
   // The thinker closest to the point halfway between both profiles: who could mediate the conversation.
   const mid=ra.scores.map((x,i)=>(x+rb.scores[i])/2);
   const mediator=PH.map(p=>({p,d:p.v.reduce((t,v,i)=>t+Math.abs(v-mid[i]),0)})).sort((x,y)=>x.d-y.d)[0].p;
-  // Statements both answered where they landed furthest apart: the best openers for a conversation.
-  const split=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.y!=null).map(q=>({...q,gap:Math.abs(SCALE[q.x].value-SCALE[q.y].value)})).filter(q=>q.gap>=2).sort((p,q)=>q.gap-p.gap||p.i-q.i).slice(0,3);
-  const same=a.map((x,i)=>({i,x,y:b[i]})).filter(q=>q.x!=null&&q.x===q.y&&q.x!==2).length;
-  const answered=a.filter((x,i)=>x!=null&&b[i]!=null).length;
-  const verdict=c.pct===null?L`Um dos perfis ficou sem direção, então não dá para medir compatibilidade.`:c.pct>=80?L`Almas filosóficas gêmeas.`:c.pct>=60?L`Bastante em comum, com boas brigas pela frente.`:c.pct>=40?L`Concordam em algumas coisas e discordam com vontade em outras.`:L`Pensam quase ao contrário. Rende uma ótima conversa.`;
-  const card=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span>${r.directionless?"":`<span class="cmp-arch">${esc(archetype(r.scores).name)}</span>`}<span class="nm">${esc(r.top.p.n)}</span><span class="sc">${r.top.pct===null?L`perfil sem direção`:`${r.top.pct}% · ${esc(r.top.p.s)}`}</span></a>`;
-  const item=(x,kind)=>{const ax=AXES[x.ax];return `<li><span class="ag-axis">${esc(cap(ax.name))}</span><span>${kind==="close"&&Math.sign(x.A)===Math.sign(x.B)&&Math.abs(x.A)>=.13?L`Os dois tendem a <b>${esc(x.A<0?ax.l:ax.r)}</b>.`:diffText(ax,nameA,x.A,nameB,x.B)}</span></li>`};
+  const ans=code=>esc(t(SCALE[code].label));
+  const stmt=q=>`<li class="ff-item"><p class="ff-q">“${esc(QS[q.i][0])}”</p><p class="ff-you"><b>${esc(nameB)}:</b> ${ans(q.y)}</p><p class="ff-them"><b>${esc(nameA)}:</b> ${ans(q.x)}</p></li>`;
+  const person=(nm,r)=>`<a class="cmp-person" href="#/r/${E.encode(r.answers)}${store.get("last")===E.encode(r.answers)?"":"/ver"}">${portrait(r.top.p,{cls:"cmp-pic"})}<span class="cmp-who">${esc(nm)}</span>${r.directionless?"":`<span class="cmp-arch">${esc(archetype(r.scores).name)}</span>`}<span class="sc">${L`Pensa parecido com ${esc(r.top.p.n)}`}</span></a>`;
+  const rows=AXES.map((ax,i)=>({ax,i,A:ra.scores[i],B:rb.scores[i],d:Math.abs(ra.scores[i]-rb.scores[i])})).sort((u,v)=>u.d-v.d);
+  const tag=x=>Math.abs(x.A)<.13||Math.abs(x.B)<.13?L`um de vocês no meio`:Math.sign(x.A)===Math.sign(x.B)?L`concordam`:L`vão discutir`;
+  const q0=splits[0],ex=q0?{pro:QS[q0.i][3],con:QS[q0.i][4]}:null;
+  const isMine=store.get("last")===codeB;
+  let ch=0;const chapter=title=>`<h2 class="chapter"><span>${++ch}</span>${title}</h2>`;
   mount(`
-  <section class="wrap section" style="padding-top:clamp(24px,5vh,56px)">
-    <span class="eyebrow">${L`Comparação`}</span>
-    <h1 class="res-name" style="font-size:clamp(44px,min(8vw,11vh),120px)"><span class="line"><span>${c.pct===null?L`Sem direção`:L`${c.pct}% compatíveis`}</span></span></h1>
-    <p class="lede" style="margin-top:6px">${esc(verdict)}</p>
-    <div class="res-actions" style="margin-top:18px"><button class="btn accent" id="cmpStory" type="button">${icon.share} ${L`Compartilhar no story`}</button></div>
-    <div class="cmp-grid">
-      ${card(nameA,ra)}
-      <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:L`${nameB} e ${nameA} nos 11 eixos`})}
-        <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div></div>
-      ${card(nameB,rb)}
+  <section class="wrap res-hero cmp-hero">
+    <div>
+      <div class="res-kicker"><span class="eyebrow">${L`Comparação`}</span></div>
+      <h1 class="res-name v2-name"><span class="line"><span>${esc(nameB)} & ${esc(nameA)}</span></span></h1>
+      <p class="cmp-score"><b>${same}</b> ${L`de 11 temas em comum`}</p>
+      <p class="lede">${esc(verdict)}</p>
+      <p class="v2-pct">${L`Maior briga:`} <b class="cmp-far">${esc(far.a.l)} × ${esc(far.a.r)}</b></p>
+      <div class="res-actions"><button class="btn accent" id="cmpStory" type="button">${icon.share} ${L`Compartilhar no story`}</button><button class="btn ghost" id="cmpCopy" type="button">${icon.link} ${L`Copiar link`}</button></div>
     </div>
-    <div class="grid2" style="margin-top:24px">
-      <div class="panel agree">
-        <h2>${L`Onde vocês se encontram`}</h2>
-        <p class="sub">${L`Os eixos com o formato de pensamento mais parecido entre vocês.`}</p>
-        <ul class="ag-list">${close.map(x=>item(x,"close")).join("")}</ul>
-        <h3 class="about-h ag-no">${L`Onde vocês mais se afastam`}</h3>
-        <ul class="ag-list">${far.map(x=>item(x,"far")).join("")}</ul>
-      </div>
-      <div style="display:grid;gap:20px;align-content:start">
-        <div class="panel mediator">
-          <h2>${L`Quem fica no meio`}</h2>
-          <p class="sub">${L`O pensador mais perto do ponto entre vocês dois. Um bom juiz para a próxima discussão.`}</p>
-          <a class="opp" href="#/p/${mediator.id}" style="text-decoration:none">${portrait(mediator,{cls:"opp-pic"})}<span><span class="nm">${esc(mediator.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(mediator.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(mediator.q)}”</span></span></a>
-        </div>
-        <div class="panel">
-          <h2>${L`Pensadores em comum`}</h2>
-          <p class="sub">${L`Aparecem entre os 10 mais parecidos com os dois.`}</p>
-          ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.`}</p>`}
-        </div>
-      </div>
-    </div>
-
-    <h2 class="chapter"><span>1</span>${L`Eixo por eixo`}</h2>
-    <div class="panel cmp-axes">
-      <p class="sub">${L`Bolinha laranja: ${esc(nameB)}. Traço: ${esc(nameA)}. Do eixo onde vocês mais se parecem ao que mais separa.`}</p>
-      ${rows.slice().sort((x,y)=>x.diff-y.diff).map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(AXES[x.ax].name))}</span>${axisRow(AXES[x.ax],x.B,x.A,nameB,nameA,{named:false})}</div>`).join("")}
-    </div>
-
-    <h2 class="chapter"><span>2</span>${L`Para conversar`}</h2>
+    <div class="cmp-sigil">${sigil(rb.scores,{compare:ra.scores,labels:true,cls:"sg-user",draw:true,tips:true,title:L`${nameB} e ${nameA} nos 11 temas`})}
+      <div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(nameB)}</span><span><i class="dash"></i>${esc(nameA)}</span></div></div>
+  </section>
+  <section class="wrap" style="padding-bottom:24px">
+    ${chapter(L`Frente a frente`)}
     <div class="grid2">
-      <div class="panel">
-        <h2>${L`Onde vocês mais se dividiram`}</h2>
-        <p class="sub">${answered?L`Das ${answered} afirmações que os dois responderam, deram a mesma resposta em ${same}.`:""} ${L`Estas foram as que mais separaram vocês.`}</p>
-        ${split.length?`<ul class="split-list">${split.map(q=>`<li><p class="serif">“${esc(QS[q.i][0])}”</p><span><b>${esc(nameA)}:</b> ${esc(t(SCALE[q.x].label))}</span><span><b>${esc(nameB)}:</b> ${esc(t(SCALE[q.y].label))}</span></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhuma afirmação separou vocês por mais de um passo. Raro.`}</p>`}
-      </div>
-      <div class="panel">
-        <h2>${L`Para ler`}</h2>
-        <p class="sub">${L`Um livro para cada um entender o outro, e um para ler juntos.`}</p>
-        <ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,L`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,L`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,L`Para ler juntos · ${esc(mediator.n)}`)}</ol>
-        ${affNote()}
-      </div>
+      <div class="panel agree"><h2>${L`Onde vocês concordam`}</h2><p class="sub">${L`Deram a mesma resposta em ${sameAnswers} das ${both.length} frases que os dois responderam.`}</p>${agrees.length?`<ul class="ff">${agrees.slice(0,3).map(stmt).join("")}</ul>`:`<p class="muted">${L`Nenhuma resposta firme igual. Raro.`}</p>`}</div>
+      <div class="panel agree"><h2>${L`Onde vocês vão discutir`}</h2><p class="sub">${L`As frases que mais separaram vocês.`}</p>${splits.length?`<ul class="ff">${splits.slice(0,3).map(stmt).join("")}</ul>`:`<p class="muted">${L`Nenhuma afirmação separou vocês por mais de um passo. Raro.`}</p>`}</div>
+    </div>
+    ${chapter(L`Tema por tema`)}
+    <div class="panel cmp-axes">
+      <p class="sub">${L`Laranja: ${esc(nameB)}. Traço: ${esc(nameA)}. Do tema em que vocês mais se parecem ao que mais separa.`}</p>
+      ${rows.map(x=>`<div class="cmp-ax"><span class="ag-axis">${esc(cap(x.ax.name))} <small class="cmp-tag">${tag(x)}</small></span>${axisRow(x.ax,x.B,x.A,nameB,nameA,{named:false})}</div>`).join("")}
+    </div>
+    ${chapter(L`Quem pensa como cada um`)}
+    <div class="cmp-grid cmp-grid-2">${person(nameB,rb)}${person(nameA,ra)}</div>
+    <div class="grid2" style="margin-top:20px">
+      <div class="panel mediator"><h2>${L`Quem fica no meio`}</h2><p class="sub">${L`O pensador mais perto do ponto entre vocês dois. Um bom juiz para a próxima discussão.`}</p>
+        <a class="opp" href="#/p/${mediator.id}" style="text-decoration:none">${portrait(mediator,{cls:"opp-pic"})}<span><span class="nm">${esc(mediator.n)}</span><span class="sc muted" style="display:block;margin-top:6px">${esc(mediator.s)}</span><span class="serif it" style="display:block;font-size:20px;margin-top:10px;color:var(--ink2)">“${esc(mediator.q)}”</span></span></a></div>
+      <div class="panel"><h2>${L`Pensadores em comum`}</h2><p class="sub">${L`Aparecem entre os 10 mais parecidos com os dois.`}</p>
+        ${shared.length?`<ul class="match-list">${shared.map(p=>`<li><a href="#/p/${p.id}">${portrait(p,{cls:"avatar"})}<span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)}</span></span><span class="pc" aria-hidden="true">→</span></a></li>`).join("")}</ul>`:`<p class="muted" style="margin:0">${L`Nenhum em comum no top 10. Vocês vêm de tradições bem diferentes.`}</p>`}</div>
+    </div>
+    ${chapter(L`Para conversar`)}
+    <div class="grid2">
+      ${q0?`<div class="panel"><h2>${L`Uma pergunta para vocês`}</h2><p class="cmp-q">“${esc(QS[q0.i][0])}”</p>
+        <p class="ff-them"><b>${L`A favor:`}</b> ${esc(ex.pro)} <small>${L`(paráfrase)`}</small></p>
+        <p class="ff-them"><b>${L`Contra:`}</b> ${esc(ex.con)} <small>${L`(paráfrase)`}</small></p>
+        <p class="sub" style="margin-top:10px">${L`${esc(nameB)} respondeu “${ans(q0.y)}”; ${esc(nameA)}, “${ans(q0.x)}”. Quem convence quem?`}</p></div>`:""}
+      <div class="panel"><h2>${L`Para ler juntos`}</h2><p class="sub">${L`Um livro para cada um entender o outro, e um para os dois.`}</p>
+        <ol class="reads">${bookItem(ra.top.p,0,ra.top.p.b,L`Para entender ${esc(nameA)} · ${esc(ra.top.p.n)}`)}${rb.top.p.id!==ra.top.p.id?bookItem(rb.top.p,0,rb.top.p.b,L`Para entender ${esc(nameB)} · ${esc(rb.top.p.n)}`):""}${[ra.top.p.id,rb.top.p.id].includes(mediator.id)?"":bookItem(mediator,0,mediator.b,L`Para ler juntos · ${esc(mediator.n)}`)}</ol>${affNote()}</div>
     </div>
     <div class="res-actions" style="justify-content:center;margin-top:28px">
-      ${store.get("last")===codeB?`<a class="btn accent" href="#/r/${codeB}">${L`Ver meu resultado completo`} ${icon.arrow}</a>
-      <button class="btn ghost" id="cmpChallenge" type="button">${icon.link} ${L`Desafiar outra pessoa`}</button>`:""}
-      <button class="btn ${store.get("last")===codeB?"ghost":"accent"}" id="cmpCopy" type="button">${icon.link} ${L`Copiar esta comparação`}</button>
-      ${store.get("last")===codeB?"":`<a class="btn ghost" href="#/teste" data-fresh="1">${L`Fazer o teste`}</a>`}
+      ${isMine?`<a class="btn accent" href="#/r/${codeB}">${L`Ver meu resultado completo`} ${icon.arrow}</a><button class="btn ghost" id="cmpChallenge" type="button">${icon.link} ${L`Desafiar outra pessoa`}</button>`:`<a class="btn accent" href="#/teste" data-fresh="1">${L`Fazer o teste`} ${icon.arrow}</a>`}
     </div>
-    <p class="cmp-foot">${L`Mesma regra do resultado: distância média de ${num(c.distance,3)} nos 11 eixos.`} <a href="#/metodo">${L`Como calculamos`}</a></p>
-  </section>`,c.pct===null?L`Comparação`:L`${c.pct}% compatíveis`);
+    <p class="cmp-foot">${L`Um tema conta como “em comum” quando os dois pendem para o mesmo lado. Mesma conta do resultado.`} <a href="#/metodo">${L`Como calculamos`}</a></p>
+  </section>`,L`${nameB} & ${nameA}: ${same} de 11 temas em comum`);
   wireTips(app,{user:rb.scores,you:nameB,p:{n:nameA,v:ra.scores}});
+  const url=compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB));
   document.getElementById("cmpStory").addEventListener("click",async e=>{
-    const b=e.currentTarget;if(b.disabled)return;const keep=b.innerHTML;b.disabled=true;b.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`;
-    try{await compareCard(c,nameA,nameB,close,far,verdict,compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB)))}finally{b.disabled=false;b.innerHTML=keep}
+    const bt=e.currentTarget;if(bt.disabled)return;const keep=bt.innerHTML;bt.disabled=true;bt.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`;
+    try{await shareCompare(ra,rb,nameA,nameB,url)}finally{bt.disabled=false;bt.innerHTML=keep}
   });
-  document.getElementById("cmpCopy").addEventListener("click",async()=>{
-    const url=compareURL(codeA,codeB,cleanName(rawA),cleanName(rawB));
-    try{await navigator.clipboard.writeText(url);toast(L`Link copiado`)}catch(e){prompt(L`Copie o link:`,url)}
-  });
+  document.getElementById("cmpCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(url);toast(L`Link copiado`)}catch(e){prompt(L`Copie o link:`,url)}});
   const cc=document.getElementById("cmpChallenge");if(cc)cc.addEventListener("click",()=>challenge(rb));
   app.querySelectorAll("[data-fresh]").forEach(x=>x.addEventListener("click",()=>store.del("progress")));
   store.del("vs");
+}
+// The comparison story card: both names, both shapes on one wheel, themes in common, the biggest argument
+// and both archetypes. No percentage.
+async function shareCompare(ra,rb,nameA,nameB,url){
+  track("/evento/story-comparacao");
+  await document.fonts.ready;
+  const W=1080,H=1920,ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
+  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,760,60,W/2,760,820);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);x.textAlign="center";
+  const {same,far}=themesInCommon(rb.scores,ra.scores);
+  const fit=(txt,font,size,max)=>{let s=size;x.font=`${font} ${s}px 'Instrument Serif'`;while(x.measureText(txt).width>max&&s>28){s-=4;x.font=`${font} ${s}px 'Instrument Serif'`}};
+  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(L`NOSSOS JEITOS DE PENSAR`),W/2,300);
+  x.fillStyle=ink;const pair=`${nameB} & ${nameA}`;fit(pair,"400",80,960);x.fillText(pair,W/2,400);
+  const cx=W/2,cy=730,S=2.3;[.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=2;x.stroke()});
+  AXES.forEach((_,i)=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(angle(i))*R*S,cy+Math.sin(angle(i))*R*S);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
+  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([u,w],i)=>i?x.lineTo(cx+u*S,cy+w*S):x.moveTo(cx+u*S,cy+w*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=5;x.lineJoin="round";x.stroke();x.setLineDash([])};
+  poly(ra.scores,null,"rgba(241,234,220,.85)",[14,12]);poly(rb.scores,"rgba(240,106,67,.24)",accent);
+  x.font="500 30px 'Inter Tight'";const wB=x.measureText(nameB).width,wA=x.measureText(nameA).width;let lx=W/2-(44+14+wB+48+44+14+wA)/2;const ly=1030;
+  x.fillStyle=accent;x.fillRect(lx,ly-12,44,6);x.textAlign="left";x.fillStyle=ink;x.fillText(nameB,lx+58,ly);lx+=58+wB+48;
+  x.setLineDash([10,8]);x.beginPath();x.moveTo(lx,ly-9);x.lineTo(lx+44,ly-9);x.strokeStyle=ink;x.lineWidth=5;x.stroke();x.setLineDash([]);x.fillText(nameA,lx+58,ly);x.textAlign="center";
+  x.fillStyle=accent;x.font="400 130px 'Instrument Serif'";x.fillText(L`${same} de 11`,W/2,1190);
+  x.fillStyle=ink;x.font="400 48px 'Instrument Serif'";x.fillText(L`temas em comum`,W/2,1255);
+  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced(L`NOSSA MAIOR BRIGA`),W/2,1345);
+  x.fillStyle=ink;fit(`${far.a.l} × ${far.a.r}`,"italic 400",56,960);x.fillText(`${far.a.l} × ${far.a.r}`,W/2,1410);
+  x.fillStyle=accent;[[nameB,rb],[nameA,ra]].forEach(([nm,rr],k)=>{const line=`${nm}: ${rr.directionless?L`Equilibrista`:archetype(rr.scores).name}`;fit(line,"italic 400",38,960);x.fillText(line,W/2,1470+k*48)});
+  x.fillStyle=ink;fit(L`Faça o teste e compare com a gente`,"italic 400",48,960);x.fillText(L`Faça o teste e compare com a gente`,W/2,1590);
+  x.font="600 34px 'Inter Tight'";const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,1645);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1645);
+  const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.92));
+  if(!blob){toast(L`Não foi possível gerar a imagem`);return}
+  const file=new File([blob],"filosofometro-comparacao.jpg",{type:"image/jpeg"});
+  const text=L`Concordamos em ${same} de 11 temas no Filosofômetro. Faz o teste e vê quanto você pensa como a gente:`;
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text,url});return}catch(e){if(e.name==="AbortError")return}}
+  storyModal(c,blob,file,text,url);
 }
 
 /* ---------- Brazil ---------- */
@@ -1109,7 +1132,7 @@ function duo(p,{user=null,title="",thinkerFirst=false}={}){
   const mainName=user&&!thinkerFirst?L`Você`:p.n,otherName=thinkerFirst?L`Você`:p.n;
   return `<div class="duo">
     ${portrait(p,{eager:true})}
-    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||L`Perfil de ${p.n}`})}<span class="badge-hint" aria-hidden="true"><span class="on-hover">${L`Passe o mouse nos eixos`}</span><span class="on-touch">${L`Toque nos eixos`}</span></span></div>
+    <div class="sigil-badge">${sigil(main,{compare:other,cls:"sg-user",draw:true,tips:true,title:title||L`Perfil de ${p.n}`})}<span class="badge-hint" aria-hidden="true"><span class="on-hover">${L`Passe o mouse nos temas`}</span><span class="on-touch">${L`Toque nos temas`}</span></span></div>
     ${user?`<div class="legend" aria-hidden="true"><span><i style="background:var(--accent)"></i>${esc(mainName)}</span><span><i class="dash"></i>${esc(otherName)}</span></div>`:""}
     ${credit(p)}
   </div>`;
@@ -1623,27 +1646,6 @@ async function shareResult(r){
   });
 }
 
-// Comparison card of the prototype: no percentage; how many themes match and the biggest argument.
-function v2CompareCanvas(a,b,nameA,nameB){
-  const W=1080,H=1920,ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
-  const c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);
-  const g=x.createRadialGradient(W/2,760,60,W/2,760,820);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);x.textAlign="center";
-  const same=AXES.filter((_,i)=>Math.sign(a.scores[i])===Math.sign(b.scores[i])&&Math.abs(a.scores[i])>=.13&&Math.abs(b.scores[i])>=.13).length;
-  const far=AXES.map((ax,i)=>({ax,d:Math.abs(a.scores[i]-b.scores[i])})).sort((u,v)=>v.d-u.d)[0].ax;
-  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced("NOSSOS JEITOS DE PENSAR"),W/2,300);
-  x.fillStyle=ink;x.font="400 80px 'Instrument Serif'";x.fillText(`${nameA} & ${nameB}`,W/2,400);
-  const cx=W/2,cy=740,S=2.3;[.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=2;x.stroke()});
-  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([u,w],i)=>i?x.lineTo(cx+u*S,cy+w*S):x.moveTo(cx+u*S,cy+w*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=5;x.lineJoin="round";x.stroke();x.setLineDash([])};
-  poly(b.scores,null,"rgba(241,234,220,.85)",[14,12]);poly(a.scores,"rgba(240,106,67,.24)",accent);
-  x.fillStyle=accent;x.font="400 120px 'Instrument Serif'";x.fillText(`${same} de 11`,W/2,1150);
-  x.fillStyle=ink;x.font="400 50px 'Instrument Serif'";x.fillText("temas em que concordamos",W/2,1220);
-  x.fillStyle=muted;x.font="600 26px 'Inter Tight'";x.fillText(spaced("NOSSA MAIOR BRIGA"),W/2,1320);
-  x.fillStyle=ink;x.font="italic 400 56px 'Instrument Serif'";x.fillText(`${far.l} × ${far.r}`,W/2,1390);
-  x.fillStyle=accent;x.font="italic 400 38px 'Instrument Serif'";x.fillText(`${archetype(a.scores).name}  ·  ${archetype(b.scores).name}`,W/2,1470);
-  x.fillStyle=ink;x.font="italic 400 50px 'Instrument Serif'";x.fillText("Faça o teste e compare",W/2,1570);
-  x.font="600 34px 'Inter Tight'";x.fillStyle=accent;x.fillText(`filosofometro.com.br${I.prefix}`,W/2,1630);
-  return c;
-}
 
 function renderNotFound(msg=L`Esta página não existe.`){
   mount(`<section class="wrap section"><span class="eyebrow">${L`Ops`}</span><h1 class="h2">${esc(msg)}</h1><div class="cta-row" style="margin-top:32px"><a class="btn accent" href="#/">${L`Ir para o início`} ${icon.arrow}</a></div></section>`,L`Não encontrado`);
@@ -1692,64 +1694,6 @@ function toast(t,ms=2200){const el=document.getElementById("toast");el.textConte
 async function copyLink(){
   try{await navigator.clipboard.writeText(location.href);toast(L`Link copiado`)}
   catch(e){prompt(L`Copie o link:`,location.href)}
-}
-// The comparison as a story: both names, both mandalas on one wheel, the score, the verdict, and where
-// the two agree and will argue, so friends who see it want to measure their own pair.
-async function compareCard(cmp,nameA,nameB,close,far,verdict,url){
-  track("/evento/story-comparacao");
-  await document.fonts.ready;
-  const W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;
-  const x=c.getContext("2d");
-  const bg="#0F0E0C",ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.16)";
-  x.fillStyle=bg;x.fillRect(0,0,W,H);
-  const g=x.createRadialGradient(W/2,780,60,W/2,780,820);g.addColorStop(0,"rgba(240,106,67,.28)");g.addColorStop(1,"rgba(240,106,67,0)");
-  x.fillStyle=g;x.fillRect(0,0,W,H);
-  x.textAlign="center";
-  // Everything that matters stays between 270 and 1650, outside what Instagram covers.
-  x.fillStyle=muted;x.font="600 28px 'Inter Tight'";x.fillText(spaced(L`COMPATIBILIDADE FILOSÓFICA`),W/2,308);
-  x.fillStyle=ink;x.font="400 84px 'Instrument Serif'";
-  const pair=`${nameB} & ${nameA}`;
-  if(x.measureText(pair).width>960)x.font="400 64px 'Instrument Serif'";
-  x.fillText(pair,W/2,410);
-  // One wheel, two shapes: B in accent, A dashed.
-  const cx=W/2,cy=760,S=2.5;
-  x.beginPath();x.arc(cx,cy,R*S+26,0,Math.PI*2);x.fillStyle="rgba(21,19,15,.9)";x.fill();x.strokeStyle=line;x.lineWidth=2;x.stroke();
-  [.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
-  AXES.forEach((_,i)=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(angle(i))*R*S,cy+Math.sin(angle(i))*R*S);x.strokeStyle=line;x.lineWidth=1.5;x.stroke()});
-  const poly=(v,fill,stroke,dash)=>{x.beginPath();pts(v).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();x.setLineDash(dash||[]);if(fill){x.fillStyle=fill;x.fill()}x.strokeStyle=stroke;x.lineWidth=5;x.lineJoin="round";x.stroke();x.setLineDash([])};
-  poly(cmp.a.scores,null,"rgba(241,234,220,.85)",[14,12]);
-  poly(cmp.b.scores,"rgba(240,106,67,.24)",accent);
-  // Legend: who is which shape.
-  x.font="500 30px 'Inter Tight'";
-  const wB=x.measureText(nameB).width,wA=x.measureText(nameA).width,legW=44+14+wB+48+44+14+wA;let lx=W/2-legW/2;const ly=1080;
-  x.fillStyle=accent;x.fillRect(lx,ly-12,44,6);x.textAlign="left";x.fillStyle=ink;x.fillText(nameB,lx+58,ly);lx+=58+wB+48;
-  x.setLineDash([10,8]);x.beginPath();x.moveTo(lx,ly-9);x.lineTo(lx+44,ly-9);x.strokeStyle=ink;x.lineWidth=5;x.stroke();x.setLineDash([]);
-  x.fillText(nameA,lx+58,ly);x.textAlign="center";
-  // Score and verdict.
-  x.fillStyle=accent;
-  if(cmp.pct===null){x.font="italic 400 100px 'Instrument Serif'";x.fillText(L`Sem direção`,W/2,1230)}
-  else{x.font="400 150px 'Instrument Serif'";x.fillText(`${cmp.pct}%`,W/2,1240)}
-  x.fillStyle=ink;x.font="italic 400 44px 'Instrument Serif'";const vy=wrapText(x,verdict,W/2,1310,900,52);
-  // Where they meet and where they will argue: two columns of axis names.
-  const col=(title,rows,cxx,y0,pick)=>{x.fillStyle=muted;x.font="600 22px 'Inter Tight'";x.fillText(spaced(title),cxx,y0);
-    rows.slice(0,2).forEach((rw,k)=>{x.fillStyle=ink;x.font="400 44px 'Instrument Serif'";x.fillText(pick(rw),cxx,y0+58+k*52)})};
-  const ty=Math.max(vy+80,1410);
-  col(L`CONCORDAMOS EM`,close,W/2-240,ty,rw=>cap(AXES[rw.ax].name));
-  col(L`VAMOS DISCUTIR`,far,W/2+240,ty,rw=>cap(AXES[rw.ax].name));
-  x.fillStyle=line;x.fillRect(W/2-1,ty-24,2,140);
-  // Sign-off.
-  x.fillStyle=ink;x.font="italic 400 52px 'Instrument Serif'";x.fillText(L`Quanto você pensa como seus amigos?`,W/2,1592);
-  x.font="600 34px 'Inter Tight'";
-  const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
-  x.textAlign="left";x.fillStyle=ink;x.fillText(host,W/2-(hw+tw)/2,1644);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,1644);x.textAlign="center";
-  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/jpeg",.92));
-  if(!blob){toast(L`Não foi possível gerar a imagem`);return}
-  const file=new File([blob],"filosofometro-comparacao.jpg",{type:"image/jpeg"});
-  const text=cmp.pct===null?L`Comparamos nosso jeito de pensar no Filosofômetro. Faz o teste e compara com a gente:`:L`Deu ${cmp.pct}% de compatibilidade filosófica no Filosofômetro. Faz o teste e vê quanto você pensa como a gente:`;
-  if(navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],text,url});return}catch(e){if(e.name==="AbortError")return}
-  }
-  storyModal(c,blob,file,text,url);
 }
 function storyModal(c,blob,file,text,url){
   const prev=document.activeElement,d=document.createElement("div");
