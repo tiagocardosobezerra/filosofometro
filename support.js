@@ -7,6 +7,9 @@ const SUPPORT={
   pixName:"Tiago Cardoso Bezerra", // nome de quem recebe, até 25 letras, sem acento
   pixCity:"Brasil", // cidade de quem recebe, até 15 letras, sem acento
   amazonTag:"filosofometro-20", // ID de associado da Amazon, por exemplo "filosofometro-20"
+  // Each Amazon store has its own Associates program and its own tag: the Brazilian tag earns nothing on amazon.com.
+  // The English and Spanish versions link to amazon.com, so they need an Amazon Associates US tag.
+  amazonTags:{en:"",es:""}, // tags de associado para as versões em inglês e espanhol, quando existirem
 };
 
 // Two more works per thinker. Together with the book in data.js (field b) every thinker has three.

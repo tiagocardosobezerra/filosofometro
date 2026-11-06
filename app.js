@@ -115,7 +115,7 @@ function wireTips(root,ctx){
   };
   let lastTouch=0;
   hits.forEach(el=>{
-    const fill=()=>{document.body.classList.add("tips-seen");tip.innerHTML=tipHTML(+el.dataset.ax,typeof ctx==="function"?ctx():ctx);hits.forEach(h=>h.classList.toggle("on",h===el))};
+    const fill=()=>{document.body.classList.add("tips-seen");tip.innerHTML=tipHTML(+el.dataset.ax,typeof ctx==="function"?ctx(el):ctx);hits.forEach(h=>h.classList.toggle("on",h===el))};
     const showAt=(x,y)=>{fill();tip.classList.remove("sheet");tip.classList.add("show");place(x,y)};
     // On touch screens the explanation opens as a card at the bottom of the screen, readable with one hand.
     const sheet=()=>{fill();tip.classList.add("show","sheet");tip.style.left=tip.style.top=""};
@@ -126,7 +126,7 @@ function wireTips(root,ctx){
     el.addEventListener("focus",()=>{if(Date.now()-lastTouch<800)return;const b=el.getBoundingClientRect();showAt(b.left+b.width/2,b.top+b.height/2)});
     el.addEventListener("blur",()=>{if(!tip.classList.contains("sheet"))hide()});
     // Fallback for browsers that send only a click; skipped right after a touch already handled it.
-    el.addEventListener("click",e=>{if(Date.now()-lastTouch<800)return;if(matchMedia("(hover:none)").matches)sheet();else{const b=el.getBoundingClientRect();showAt(e.clientX||b.left,e.clientY||b.top)}});
+    el.addEventListener("click",e=>{if(el.closest("a")){e.preventDefault();e.stopPropagation()}if(Date.now()-lastTouch<800)return;if(matchMedia("(hover:none)").matches)sheet();else{const b=el.getBoundingClientRect();showAt(e.clientX||b.left,e.clientY||b.top)}});
     el.addEventListener("keydown",e=>{if(e.key==="Escape"){hide();el.blur()}});
   });
   const onDoc=e=>{if(!e.target.closest||!e.target.closest(".sg-hit,#tip"))hide()};
@@ -136,7 +136,9 @@ function wireTips(root,ctx){
   document.addEventListener("pointerdown",onDoc);
   addEventListener("scroll",onScroll,{passive:true});
   const obs=new MutationObserver(()=>{scrollAt=scrollY});obs.observe(tip,{attributes:true,attributeFilter:["class"]});
-  onLeave(()=>{document.removeEventListener("pointerdown",onDoc);removeEventListener("scroll",onScroll);obs.disconnect();hide()});
+  const off=()=>{document.removeEventListener("pointerdown",onDoc);removeEventListener("scroll",onScroll);obs.disconnect();hide()};
+  onLeave(off);
+  return off;
 }
 
 /* ---------- Routing ---------- */
@@ -229,14 +231,14 @@ function sampleHTML(){
       <p>${L`Este é o resultado real de uma pessoa que respondeu às ${ans.filter(a=>a!==null).length} afirmações. Tudo abaixo foi calculado pelo mesmo motor que vai ler as suas respostas.`}</p>
     </div>
     <div class="smp">
-      <a class="smp-card" href="#/r/${SAMPLE_CODE}/ver">
+      <div class="smp-card">
         <span class="eyebrow">${L`Exemplo`}</span>
         <span class="smp-big">${esc(arch.name)}</span>
         <span class="smp-like">${portrait(p,{cls:"avatar"})}<span>${L`Pensa parecido com <b>${esc(p.n)}</b>`}${r.top.pct!==null?` · ${r.top.pct}%`:""}</span></span>
-        <span class="smp-sigil">${sigil(r.scores,{compare:p.v,cls:"sg-user",decorative:true})}</span>
+        <span class="smp-sigil">${sigil(r.scores,{compare:p.v,labels:true,cls:"sg-user",tips:true,title:L`Perfil comparado ao de ${p.n}`})}</span><span class="sg-hint" aria-hidden="true"><span class="on-hover">${L`Passe o mouse nos temas`}</span><span class="on-touch">${L`Toque nos temas`}</span></span>
         <span class="v2-sharp v2-s${sh.level}"><span class="v2-meter" aria-hidden="true"><i></i><i></i><i></i></span><span>${L`Nitidez do retrato: ${SHARP[sh.level-1]}.`}</span></span>
-        <span class="smp-open">${L`Abrir este resultado inteiro`} ${icon.arrow}</span>
-      </a>
+        <a class="smp-open" href="#/r/${SAMPLE_CODE}/ver">${L`Abrir este resultado inteiro`} ${icon.arrow}</a>
+      </div>
       <ol class="smp-list">${items.map(([k,v],i)=>`<li><span class="smp-n">${pad(i+1)}</span><div><span class="bt-k">${k}</span><p>${v}</p></div></li>`).join("")}</ol>
     </div>
     <p class="smp-foot">${L`E ainda: a revelação passo a passo, três cards para o story, a comparação com amigos e a conta inteira, afirmação por afirmação.`}</p>
@@ -295,6 +297,7 @@ function renderHome(){
   app.querySelectorAll("[data-fresh]").forEach(a=>a.addEventListener("click",()=>store.del("progress")));
   heroAnimation();
   wireDiscover();
+  const smp=app.querySelector(".smp-sigil");if(smp){const sr=SAMPLE_R();wireTips(smp,{user:sr.scores,r:sr,p:sr.top.p,you:L`Esta pessoa`})}
 }
 
 // The "O que você descobre" tiles answer the pointer with real catalog data: profiles morph, axes explain
@@ -542,7 +545,7 @@ function renderQuiz(arg){
       </div>
     </div>
     <aside class="quiz-aside" aria-hidden="true">
-      <div class="qa-sigil" id="qaSigil">${sigil(AXES.map(()=>0),{cls:"sg-user",labels:true,decorative:true})}</div>
+      <div class="qa-sigil" id="qaSigil">${sigil(AXES.map(()=>0),{cls:"sg-user",labels:true,tips:true,title:L`Seu formato até agora`})}</div>
       <div class="qa-cap"><span class="eyebrow">${L`Seu formato até agora`}</span><p id="qaAxis"></p></div>
     </aside>
     </div>
@@ -558,10 +561,12 @@ function renderQuiz(arg){
   // Live sigil: the position on each axis from the statements answered so far (unanswered axes sit in the middle).
   const qaMini=app.querySelector(".qa-mini .sg-user"),qaPath=app.querySelector("#qaSigil .sg-user"),qaDots=[...app.querySelectorAll("#qaSigil .sg-dot")];
   const qaLbls=[...app.querySelectorAll("#qaSigil .sg-lbl")],qaSpokes=[...app.querySelectorAll("#qaSigil .sg-spoke")];
+  let liveV=AXES.map(()=>0);
+  wireTips(document.getElementById("qaSigil"),()=>({user:liveV}));
   function paintAside(ax){
     const sum=AXES.map(()=>0),n=AXES.map(()=>0);
     answers.forEach((a,i)=>{if(a===null)return;const q=QS[i];sum[q[1]]+=SCALE[a].value*q[2];n[q[1]]++});
-    const v=sum.map((x,i)=>n[i]?x/(2*n[i]):0);
+    const v=sum.map((x,i)=>n[i]?x/(2*n[i]):0);liveV=v;
     // A live hint of where the answers are heading: the closest thinker so far, after a few answers.
     const answered=answers.filter(a=>a!==null).length,near=document.getElementById("qNear");
     if(near&&answered>=6){const top=E.rank(v).rows[0].p;if(near.dataset.id!==top.id){near.dataset.id=top.id;near.innerHTML=`${portrait(top,{cls:"qn-pic"})}<span>${L`Mais perto agora:`} <b>${esc(top.n)}</b></span>`;near.classList.remove("pop");void near.offsetWidth;near.classList.add("pop","on")}}
@@ -793,7 +798,7 @@ function openReveal(r){
   track("/evento/revelacao");
   const p=r.top.p,arch=archetype(r.scores),sr=selfReading(r),{conv}=revealFacts(r),ten=tensionV2(r);
   const slides=[];
-  slides.push(`<span class="rv-k">${L`Seu jeito de pensar`}</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div><h2 class="rv-h rv-arch">${esc(r.directionless?L`Equilibrista`:arch.name)}</h2>${sr.strong.length?`<p class="rv-p rv-small">${L`${sr.kin.length} dos ${PH.length} pensadores do ranking principal têm esses traços.`}</p>`:""}`);
+  slides.push(`<span class="rv-k">${L`Seu jeito de pensar`}</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,tips:true,title:L`Perfil nos 11 temas`})}</div><h2 class="rv-h rv-arch">${esc(r.directionless?L`Equilibrista`:arch.name)}</h2>${sr.strong.length?`<p class="rv-p rv-small">${L`${sr.kin.length} dos ${PH.length} pensadores do ranking principal têm esses traços.`}</p>`:""}`);
   if(conv)slides.push(`<span class="rv-k">${L`O que você defende com mais força`}</span><blockquote class="rv-q">“${esc(QS[conv.i][0])}”<cite>${esc(t(SCALE[conv.answer].label))}</cite></blockquote><p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
   if(ten){const a=sideWith(ten.a),b=sideWith(ten.b);slides.push(`<span class="rv-k">${L`Onde você puxa para dois lados`}</span><h2 class="rv-h">${esc(cap(AXES[ten.ax].name))}</h2><p class="rv-p">${L`Numa afirmação você ficou com <b>${esc(a.name)}</b>; em outra, com <b>${esc(b.name)}</b>.`}</p>`)}
   if(p.place&&p.born!==undefined)slides.push(`<span class="rv-k">${L`Uma pista`}</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">${p.died===null?L`Nasceu em ${yearText(p.born)}.`:L`Viveu por volta de ${yearText(p.born+35)}.`}</p>`);
@@ -835,11 +840,12 @@ function openRevealSlides(r,slides,skip=false){
   d.innerHTML=`<div class="rv-bars">${slides.map(()=>"<i><b></b></i>").join("")}</div><button type="button" class="rv-x" aria-label="${L`Fechar`}">×</button>${skip?`<button type="button" class="rv-skip" data-a="close">${L`Pular`}</button>`:""}<div class="rv-stage" aria-live="polite"></div><button type="button" class="rv-nav rv-prev" aria-label="${L`Anterior`}"></button><button type="button" class="rv-nav rv-next" aria-label="${L`Próximo`}"></button>`;
   document.body.appendChild(d);document.body.classList.add("rv-open");
   const stage=d.querySelector(".rv-stage"),bars=[...d.querySelectorAll(".rv-bars i")];
-  let i=-1,raf=0;
-  const close=()=>{cancelAnimationFrame(raf);document.removeEventListener("keydown",key);document.body.classList.remove("rv-open");d.remove();if(prev&&prev.focus)prev.focus()};
+  let i=-1,raf=0,offTips=null;
+  const close=()=>{cancelAnimationFrame(raf);if(offTips)offTips();document.removeEventListener("keydown",key);document.body.classList.remove("rv-open");d.remove();if(prev&&prev.focus)prev.focus()};
   const show=n=>{
     if(n<0)return;if(n>=slides.length){close();return}
     i=n;stage.innerHTML=`<div class="rv-slide">${slides[i]}</div>`;
+    if(offTips)offTips();offTips=stage.querySelector(".sg-hit")?wireTips(stage,{user:r.scores,r}):null;
     bars.forEach((b,k)=>b.className=k<i?"done":k===i?"now":"");
     if(i===slides.length-1)track("/evento/revelacao-fim");
     // The match's percentage counts up when its card arrives.
@@ -853,6 +859,7 @@ function openRevealSlides(r,slides,skip=false){
   d.addEventListener("click",e=>{
     const a=e.target.closest("[data-a]");
     if(a){close();if(a.dataset.a==="deeper")return;if(a.dataset.a==="close"&&skip&&i<slides.length-1)track("/evento/revelacao-pulou");if(a.dataset.a==="share")shareResult(r);else if(a.dataset.a==="challenge")challenge(r);return}
+    if(e.target.closest(".sg-hit,#tip"))return;
     if(e.target.closest(".rv-x")){close();return}
     if(e.target.closest(".rv-prev")){show(i-1);return}
     if(e.target.closest("a"))return;
@@ -1400,13 +1407,15 @@ function renderCatalog(){
     <div class="cards" id="cards"></div>
   </section>`,L`Pensadores`);
   const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  let offTips=null;
   const draw=()=>{
     const list=ALL.filter(p=>(!era||p.era===era)&&(!q||norm(p.n+" "+p.s).includes(norm(q))));
     if(sort==="az")list.sort((a,b)=>a.n.localeCompare(b.n,I.html));
     // Main and Brazilian thinkers share one scale (same normalized distance), so they sort together.
     if(sort==="match")list.sort((a,b)=>rankOf[a.id].distance-rankOf[b.id].distance||(a.id<b.id?-1:1));
     document.getElementById("count").textContent=L`${list.length} pensadores`;
-    document.getElementById("cards").innerHTML=list.length?list.map(p=>`<a class="tcard" href="#/p/${p.id}"><span class="tcard-art">${portrait(p)}<span class="mini">${sigil(p.v,{decorative:true,cls:"sg-user"})}</span></span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(p.era)}</span>${lastR?`<span class="pc">${hasPct?L`${pctOf(p.id)}% de afinidade`:""}${p.regional?"":`${hasPct?" · ":""}${rankOf[p.id].rank}º`}</span>`:""}</a>`).join(""):`<p class="empty">${L`Nenhum pensador encontrado.`}</p>`;
+    document.getElementById("cards").innerHTML=list.length?list.map(p=>`<a class="tcard" href="#/p/${p.id}"><span class="tcard-art">${portrait(p)}<span class="mini" data-id="${p.id}">${sigil(p.v,{cls:"sg-user",tips:true,title:L`Perfil de ${p.n} nos 11 temas`})}</span></span><span class="nm">${esc(p.n)}</span><span class="sc">${esc(p.s)} · ${esc(p.era)}</span>${lastR?`<span class="pc">${hasPct?L`${pctOf(p.id)}% de afinidade`:""}${p.regional?"":`${hasPct?" · ":""}${rankOf[p.id].rank}º`}</span>`:""}</a>`).join(""):`<p class="empty">${L`Nenhum pensador encontrado.`}</p>`;
+    if(offTips)offTips();offTips=wireTips(document.getElementById("cards"),el=>{const p=byId[el.closest(".mini").dataset.id];return lastR?{p,user:lastR.scores}:{p}});
   };
   document.getElementById("q").addEventListener("input",e=>{q=e.target.value;draw()});
   document.getElementById("sortSel").addEventListener("change",e=>{sort=e.target.value;draw()});

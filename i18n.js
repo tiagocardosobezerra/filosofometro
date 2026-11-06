@@ -59,11 +59,12 @@ function localize(DATA,SUP,pack){
   for(const p of pack.regional||[])READING[p.id]=p.reading||[];
   const meta=META[pack.lang];
   const S=SUP?{...SUP,
-    SUPPORT:{...SUP.SUPPORT,pixKey:"",amazonTag:""},
+    SUPPORT:{...SUP.SUPPORT,pixKey:"",amazonTag:(SUP.SUPPORT.amazonTags||{})[pack.lang]||""},
     READING,
     bookURL(title,author){
       const q=/\(/.test(title)?title.replace(/[()]/g,""):`${title} ${author}`;
-      return `${meta.amazon}/s?k=${encodeURIComponent(q)}&i=stripbooks`;
+      const tag=(SUP.SUPPORT.amazonTags||{})[pack.lang];
+      return `${meta.amazon}/s?k=${encodeURIComponent(q)}&i=stripbooks${tag?`&tag=${encodeURIComponent(tag)}`:""}`;
     }}:null;
   return {DATA:{...DATA,AXES,QS,PH,BR},SUP:S};
 }

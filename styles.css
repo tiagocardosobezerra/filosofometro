@@ -1241,3 +1241,7 @@ body.rv-open{overflow:hidden}
 }
 @media (max-width:380px){.brand{font-size:18px}.brand svg{width:20px;height:20px}.nav a{font-size:12.5px}}
 @media (max-width:360px){.icon-btn{width:30px!important}.nav a.nav-cta{padding:0 8px}.nav a[data-nav="pensadores"]{padding:0 4px}.bar .wrap{gap:4px}.nav{gap:0}}
+/* Explanations above the reveal; the hint under mandalas that explain themselves */
+.tip{z-index:250}
+.sg-hint{display:block;text-align:center;font-size:12px;color:var(--muted);margin-top:2px}
+.tcard .mini .sg-hit{cursor:help}

@@ -53,7 +53,7 @@ const LANGS = {
     idxDesc: (total, nr) => `Life, core ideas, positions and books of ${total} thinkers, from Pythagoras to Byung-Chul Han, including ${nr} from the English-speaking world. Find out which one thinks like you.`,
     library: "Library", count: total => `${total} thinkers`,
     idxLede: "Life, core ideas, position on the 11 themes and three books for each one. Want to know which one you resemble most? <a href=\"/en/#/teste\">Take the test</a>.",
-    affiliate: "" },
+    affiliate: "As an Amazon Associate, Filosofômetro earns from qualifying purchases, at no extra cost to you." },
   es: { html: "es", app: "/es/", arch: "Arquetipo:", dir: "es/pensadores", og: "og-es.png", dec: ",",
     bc: "a. C.", to: "a", balance: "Equilibrio", strong: ", fuerte", home: "Filosofômetro, inicio", nav: "Principal",
     thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test", credit: "Creado por", creditTail: "test gratuito, motor auditable",
@@ -69,7 +69,7 @@ const LANGS = {
     idxDesc: (total, nr) => `Vida, ideas centrales, posiciones y libros de ${total} pensadores, de Pitágoras a Byung-Chul Han, con ${nr} de Iberoamérica. Descubre cuál piensa como tú.`,
     library: "Biblioteca", count: total => `${total} pensadores`,
     idxLede: "Vida, ideas centrales, posición en los 11 temas y tres libros de cada uno. ¿Quieres saber a cuál te pareces más? <a href=\"/es/#/teste\">Haz el test</a>.",
-    affiliate: "" },
+    affiliate: "Como afiliado de Amazon, Filosofômetro gana con las compras que califican, sin costo extra para ti." },
 };
 
 // The catalog of each language: same ids and positions, translated text, its own regional list.
@@ -97,7 +97,7 @@ function build(lang) {
     for (const s of (p.bio || "").split(/(?<=\.)\s+/)) { if ((out.join(" ") + " " + s).length > 155 && out.length) break; out.push(s); }
     return out.join(" ") || `${p.n}, ${p.s}.`;
   };
-  const amazonNote = lang === "pt" && S.SUPPORT.amazonTag ? T.affiliate : "";
+  const amazonNote = S.SUPPORT.amazonTag ? T.affiliate : "";
 
   const head = ({ title, description, url, image, jsonld, id }) => `<!doctype html>
 <html lang="${T.html}">
