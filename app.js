@@ -425,9 +425,9 @@ function citation(ex){
 }
 // What a simulated retest shows for each level (tests/levels in the method page): accuracy grows with statements.
 const LEVEL_INFO={
-  1:{tag:L`Para começar`,precision:L`Boa`,retest:"55%",desc:L`Seu par e seus eixos mais fortes em poucos minutos. Dá para aprofundar depois.`},
-  2:{tag:L`Recomendado`,precision:L`Alta`,retest:"83%",desc:L`Resultado bem mais estável. Inclui as 44 do Rápido.`},
-  3:{tag:L`Para quem quer ir fundo`,precision:L`Muito alta`,retest:"94%",desc:L`O retrato mais fiel. Inclui as 88 do Completo.`},
+  1:{tag:L`Para começar`,precision:L`Boa`,retest:"55%",desc:L`Seu par e seus eixos mais fortes em poucos minutos. Dá para aprofundar depois.`,unlock:[L`Seu par e seu arquétipo`,L`A revelação, passo a passo`,L`O card para o story`]},
+  2:{tag:L`Recomendado`,precision:L`Alta`,retest:"83%",desc:L`Resultado bem mais estável. Inclui as 44 do Rápido.`,unlock:[L`Tudo do Rápido`,L`Sua contradição interna`,L`Uma carta do seu filósofo para você`]},
+  3:{tag:L`Para quem quer ir fundo`,precision:L`Muito alta`,retest:"94%",desc:L`O retrato mais fiel. Inclui as 88 do Completo.`,unlock:[L`Tudo do Completo`,L`Seu manifesto nos 11 eixos`,L`Papel de parede com a sua mandala`]},
 };
 const levelBy=id=>E.LEVELS.find(l=>l.id===id);
 const nextLevel=n=>E.LEVELS.find(l=>l.n>n)||null;
@@ -449,6 +449,7 @@ function renderLevelPick(){
       <span class="lv-n">${L`<b>${l.n}</b> afirmações · ≈ ${l.minutes} min`}</span>
       <span class="lv-bars" aria-hidden="true">${[1,2,3].map(k=>`<i class="${k<=l.id?"on":""}"></i>`).join("")}</span>
       <span class="lv-desc">${esc(i.desc)}</span>
+      <ul class="lv-unlock" aria-label="${L`O que este nível libera`}">${i.unlock.map(u=>`<li>${esc(u)}</li>`).join("")}</ul>
       <span class="lv-meta">${L`Precisão ${esc(i.precision).toLowerCase()} · mesmo par ao refazer em ${i.retest} das vezes`}</span>
       <span class="btn ${l.id===2?"accent":"ghost"} sm">${L`Começar`} ${icon.arrow}</span>
     </a>`}).join("")}</div>
@@ -651,6 +652,7 @@ function renderResult(code,mode){
   </section>
   <section class="wrap" style="padding-bottom:24px">
     ${visitor?"":selfHTML(r)}
+    ${visitor?"":rewardsHTML(r)}
     <h2 class="chapter"><span>1</span>${visitor?L`Quem é o par desta pessoa`:L`Quem é o seu par`}</h2>
     ${p.bio||!flat?`<div class="grid2">${aboutHTML(p)}${agreementHTML(r,top)}</div>`:""}
 
@@ -723,6 +725,7 @@ function renderResult(code,mode){
     document.getElementById("redoBtn").addEventListener("click",()=>store.del("progress"));
     wireInvite(r);
     const rb=document.getElementById("revealBtn");if(rb)rb.addEventListener("click",()=>openReveal(r));
+    const wb=document.getElementById("wallBtn");if(wb)wb.addEventListener("click",async()=>{if(wb.disabled)return;const keep=wb.innerHTML;wb.disabled=true;wb.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`;try{await wallpaper(r)}finally{wb.disabled=false;wb.innerHTML=keep}});
     // Right after the quiz, the result opens with the reveal; afterwards it can be replayed from the button.
     if(store.get("reveal")===code){store.del("reveal");openReveal(r)}
   }
@@ -766,7 +769,7 @@ function openReveal(r){
   slides.push(`<span class="rv-k">${L`${r.answers.length} respostas depois`}</span><h2 class="rv-h">${L`Vamos ver como <em>você</em> pensa.`}</h2><p class="rv-p">${L`Toque para continuar`}</p>`);
   slides.push(`<span class="rv-k">${L`O formato do seu pensamento`}</span><div class="rv-sigil">${sigil(r.scores,{cls:"sg-user",labels:true,draw:true,decorative:true})}</div>${sr.strong.length?`<h2 class="rv-h rv-traits">${sr.strong.map(s=>esc(s.x<0?s.a.l:s.a.r)).join(" · ")}</h2>`:`<h2 class="rv-h">${L`Equilíbrio`}</h2>`}`);
   if(conv)slides.push(`<span class="rv-k">${L`Sua convicção mais forte`}</span>${said(conv)}<p class="rv-p">${esc(POLE_TEXT[conv.axis][conv.contribution<0?0:1])}</p>`);
-  slides.push(contra
+  if((r.level?r.level.id:1)>=2)slides.push(contra
     ?`<span class="rv-k">${L`Sua contradição`}</span>${said(contra.a)}${said(contra.b)}<p class="rv-p">${L`Essas duas respostas puxam o eixo <b>${esc(AXES[contra.ax].name)}</b> para lados opostos. Todo pensamento vivo tem uma tensão assim.`}</p>`
     :`<span class="rv-k">${L`Sua coerência`}</span><h2 class="rv-h">${L`Nenhuma contradição.`}</h2><p class="rv-p">${L`Em nenhum dos 11 eixos suas respostas firmes puxaram para lados opostos. Isso é raro.`}</p>`);
   if(sr.strong.length){
@@ -780,6 +783,8 @@ function openReveal(r){
   if(p.born!==undefined&&p.place)slides.push(`<span class="rv-k">${L`Onde você estaria em casa`}</span><h2 class="rv-h">${esc(p.place)}</h2><p class="rv-p">${L`por volta de ${yearText(p.born+35)}, conversando com quem pensa como você.`}</p>`);
   if(opp)slides.push(`<span class="rv-k">${L`Seu oposto`}</span>${portrait(opp,{cls:"rv-pic sm"})}<h2 class="rv-h">${esc(opp.n)}</h2><p class="rv-p rv-quote">“${esc(opp.q)}”</p><p class="rv-p">${L`Vocês discordariam em quase tudo.`}</p>`);
   slides.push(`<span class="rv-k">${flat?L`Quem fica mais perto de você`:L`Seu par filosófico`}</span>${portrait(p,{cls:"rv-pic",eager:true})}${flat?"":`<div class="rv-big rv-pct" data-to="${r.top.pct}">0%</div>`}<h2 class="rv-h">${esc(p.n)}</h2><p class="rv-p rv-quote">“${esc(p.q)}”</p>`);
+  const nx=r.level&&nextLevel(r.level.n);
+  if(nx){const u=LEVEL_INFO[nx.id].unlock.slice(1);slides.push(`<span class="rv-k">${L`Ainda há mais`}</span><h2 class="rv-h">${L`No nível ${esc(t(nx.name))}`}</h2><ul class="rv-unlock">${u.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="rv-p">${L`Mais ${nx.n-r.level.n} afirmações. Suas respostas de agora ficam guardadas.`}</p>`)}
   slides.push(`<span class="rv-k">${L`Agora é com você`}</span><h2 class="rv-h">${L`Quem dos seus amigos pensa como você?`}</h2><div class="rv-actions"><button type="button" class="btn accent" data-a="share">${icon.share} ${L`Compartilhar no story`}</button><button type="button" class="btn ghost" data-a="challenge">${icon.link} ${L`Desafiar um amigo`}</button><button type="button" class="btn ghost" data-a="close">${L`Ver resultado completo`}</button></div>`);
   const prev=document.activeElement,d=document.createElement("div");
   d.className="reveal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-label",L`Seu resultado, passo a passo`);
@@ -875,6 +880,77 @@ function selfHTML(r){
       <p>${L`Onde você ainda está em aberto: <b>${esc(torn.a.name)}</b>, entre ${esc(torn.a.l)} e ${esc(torn.a.r)}.`}</p>
     </div>
   </div>`;
+}
+
+/* ---------- Rewards by level ---------- */
+// Deeper levels unlock more about the person: the inner contradiction and a letter from the match at
+// Completo, the manifesto on all 11 axes and a phone wallpaper of the mandala at Profundo.
+const levelId=r=>r.level?r.level.id:1;
+function lockedHTML(r,need,title,desc){
+  const lv=levelBy(need),missing=lv.n-r.answers.length;
+  return `<div class="rw rw-lock"><span class="rw-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><h3>${esc(title)}</h3><p>${esc(desc)}</p>
+    <a class="btn ghost sm" href="#/teste/aprofundar">${L`Liberar no nível ${esc(t(lv.name))} · mais ${missing}`} ${icon.arrow}</a></div>`;
+}
+function letterHTML(r){
+  const p=r.top.p,rows=r.top.perAxis.slice().sort((a,b)=>a.diff-b.diff);
+  const near=rows.slice(0,2).map(x=>AXES[x.axis].name),far=AXES[rows[rows.length-1].axis].name;
+  const idea=(p.ideas&&p.ideas[0]||"").replace(/[.;]\s*$/,"");
+  return `<div class="letter">
+    <p class="lt-to">${L`Para você, de ${esc(p.n)}`}</p>
+    <p>${L`Li as suas ${r.answers.length} respostas e reconheci nelas muito do que pensei.`} ${L`Concordamos sobretudo em ${esc(near[0])} e ${esc(near[1])}.`}</p>
+    ${idea?`<p>${L`Eu diria assim: ${esc(idea.charAt(0).toLowerCase()+idea.slice(1))}.`}</p>`:""}
+    <p>${L`Mas em ${esc(far)} você segue outro caminho, e eu gostaria de discutir isso com você.`} ${L`Se quiser continuar a conversa, comece por <i>${esc(p.b)}</i>.`}</p>
+    <p class="lt-q">“${esc(p.q)}”</p>
+    <p class="lt-sign">${L`Com estima,`}<br><b>${esc(p.n)}</b></p>
+  </div>`;
+}
+function manifestoHTML(r){
+  return `<ol class="manifesto">${AXES.map((a,i)=>{const x=r.scores[i];return `<li><b>${esc(cap(a.name))}</b><span>${Math.abs(x)<.13?L`Você ainda está entre ${esc(a.l)} e ${esc(a.r)}, e isso também é uma posição.`:esc(POLE_TEXT[i][x<0?0:1])}</span></li>`}).join("")}</ol>`;
+}
+function rewardsHTML(r){
+  if(r.directionless)return "";
+  const lv=levelId(r),{contra}=revealFacts(r),ans=q=>esc(t(SCALE[q.answer].label));
+  const contraHTML=contra?`<blockquote class="rw-q">“${esc(QS[contra.a.i][0])}”<cite>${ans(contra.a)}</cite></blockquote><blockquote class="rw-q">“${esc(QS[contra.b.i][0])}”<cite>${ans(contra.b)}</cite></blockquote><p>${L`Essas duas respostas puxam o eixo <b>${esc(AXES[contra.ax].name)}</b> para lados opostos. Todo pensamento vivo tem uma tensão assim.`}</p>`
+    :`<p>${L`Em nenhum dos 11 eixos suas respostas firmes puxaram para lados opostos. Isso é raro.`}</p>`;
+  return `<div class="rewards">
+    <h2 class="chapter rw-head">${L`Suas recompensas`}<small>${L`Nível ${esc(t(r.level?r.level.name:E.LEVELS[0].name))}`}</small></h2>
+    <div class="rw-grid">
+      ${lv>=2?`<div class="rw"><span class="rw-k">${L`Sua contradição`}</span>${contraHTML}</div>`:lockedHTML(r,2,L`Sua contradição`,L`As duas respostas suas que mais puxam em sentidos opostos.`)}
+      ${lv>=2?`<div class="rw rw-letter"><span class="rw-k">${L`Uma carta para você`}</span>${letterHTML(r)}</div>`:lockedHTML(r,2,L`Uma carta para você`,L`${r.top.p.n} escreve para você sobre o que vocês têm em comum e onde discordam.`)}
+      ${lv>=3?`<div class="rw rw-wide"><span class="rw-k">${L`Seu manifesto`}</span>${manifestoHTML(r)}</div>`:lockedHTML(r,3,L`Seu manifesto`,L`O que você pensa, em uma frase, em cada um dos 11 eixos.`)}
+      ${lv>=3?`<div class="rw"><span class="rw-k">${L`Papel de parede`}</span><p>${L`Sua mandala e seu arquétipo, no tamanho da tela do celular.`}</p><button type="button" class="btn accent sm" id="wallBtn">${L`Baixar papel de parede`}</button></div>`:lockedHTML(r,3,L`Papel de parede`,L`Sua mandala e seu arquétipo, no tamanho da tela do celular.`)}
+    </div>
+  </div>`;
+}
+// Phone wallpaper (1170 × 2532): the top stays free for the clock; the mandala fills the middle.
+async function wallpaper(r){
+  track("/evento/papel-de-parede");
+  await document.fonts.ready;
+  const W=1170,H=2532,c=document.createElement("canvas");c.width=W;c.height=H;
+  const x=c.getContext("2d"),ink="#F1EADC",muted="#9C9283",accent="#F06A43",line="rgba(241,234,220,.14)";
+  x.fillStyle="#0F0E0C";x.fillRect(0,0,W,H);
+  const g=x.createRadialGradient(W/2,1330,80,W/2,1330,900);g.addColorStop(0,"rgba(240,106,67,.26)");g.addColorStop(1,"rgba(240,106,67,0)");x.fillStyle=g;x.fillRect(0,0,W,H);
+  const cx=W/2,cy=1330,S=3.4;
+  [.33,.66,1].forEach(f=>{x.beginPath();x.arc(cx,cy,R*(.16+.84*f)*S,0,Math.PI*2);x.strokeStyle=line;x.lineWidth=2;x.stroke()});
+  AXES.forEach((a,i)=>{
+    x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(angle(i))*R*S,cy+Math.sin(angle(i))*R*S);x.strokeStyle=line;x.lineWidth=2;x.stroke();
+    const lx=cx+Math.cos(angle(i))*(R*S+46),ly=cy+Math.sin(angle(i))*(R*S+46)+10;
+    x.fillStyle=muted;x.font="600 24px 'Inter Tight'";x.textAlign=Math.abs(lx-cx)<20?"center":lx>cx?"left":"right";x.fillText(a.name.toUpperCase(),lx,ly);
+  });
+  x.beginPath();pts(r.scores).forEach(([a,b],i)=>i?x.lineTo(cx+a*S,cy+b*S):x.moveTo(cx+a*S,cy+b*S));x.closePath();
+  x.fillStyle="rgba(240,106,67,.22)";x.fill();x.strokeStyle=accent;x.lineWidth=7;x.lineJoin="round";x.stroke();
+  pts(r.scores).forEach(([a,b])=>{x.beginPath();x.arc(cx+a*S,cy+b*S,9,0,Math.PI*2);x.fillStyle=accent;x.fill()});
+  x.textAlign="center";
+  x.fillStyle=accent;x.font="italic 400 86px 'Instrument Serif'";const an=archetype(r.scores).name;if(x.measureText(an).width>1050)x.font="italic 400 68px 'Instrument Serif'";x.fillText(an,W/2,1990);
+  const sr=selfReading(r);
+  x.fillStyle=ink;x.font="600 30px 'Inter Tight'";x.fillText(spaced(sr.strong.map(s=>(s.x<0?s.a.l:s.a.r).toUpperCase()).join("  ·  ")),W/2,2070);
+  x.fillStyle=muted;x.font="400 40px 'Instrument Serif'";x.fillText(r.directionless?r.top.p.n:`${r.top.p.n} · ${r.top.pct}%`,W/2,2150);
+  x.font="600 28px 'Inter Tight'";const host="filosofometro",tld=`.com.br${I.prefix}`,hw=x.measureText(host).width,tw=x.measureText(tld).width;
+  x.textAlign="left";x.fillStyle=muted;x.fillText(host,W/2-(hw+tw)/2,2330);x.fillStyle=accent;x.fillText(tld,W/2-(hw+tw)/2+hw,2330);
+  const blob=await new Promise(res=>c.toBlob(b=>res(b),"image/png"));
+  if(!blob){toast(L`Não foi possível gerar a imagem`);return}
+  const file=new File([blob],"filosofometro-papel-de-parede.png",{type:"image/png"});
+  storyModal(c,blob,file,challengeText(r),inviteURL(r));
 }
 
 /* ---------- Portraits ---------- */

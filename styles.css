@@ -1028,3 +1028,32 @@ body.rv-open{overflow:hidden}
 .self-traits i{font-style:normal;color:var(--accent)}
 .rv-arch{font-style:italic;color:#F06A43}
 .rv-names{font-size:15px;color:#9C9283}
+
+/* Rewards by level: what this level unlocked, and what the next one would. */
+.lv-unlock{list-style:none;margin:2px 0 0;padding:0;display:grid;gap:4px;font-size:14px;color:var(--ink2)}
+.lv-unlock li::before{content:"+ ";color:var(--accent);font-weight:700}
+.rv-unlock{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-family:var(--serif);font-size:clamp(24px,6vw,32px);color:#F1EADC}
+.rv-unlock li::before{content:"+ ";color:#F06A43}
+.rewards{margin:8px 0 16px}
+.rw-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.rw-head small{font:600 12px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.rw-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.rw{position:relative;display:grid;gap:12px;align-content:start;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--card)}
+.rw-wide{grid-column:1/-1}
+.rw-k{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.rw p{margin:0;color:var(--ink2);line-height:1.5}
+.rw h3{margin:0;font-family:var(--serif);font-weight:400;font-size:26px}
+.rw-lock{background:repeating-linear-gradient(135deg,transparent 0 14px,color-mix(in srgb,var(--ink) 3%,transparent) 14px 28px),var(--card)}
+.rw-lock .rw-ic{color:var(--muted)}
+.rw-lock .btn{justify-self:start}
+.rw-q{margin:0;font-family:var(--serif);font-size:21px;line-height:1.25;color:var(--ink)}
+.rw-q cite{display:block;margin-top:6px;font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;font-style:normal;color:var(--accent)}
+.letter{font-family:var(--serif);font-size:20px;line-height:1.45;color:var(--ink);display:grid;gap:10px}
+.letter p{color:var(--ink)}
+.lt-to{font-style:italic;color:var(--muted)!important}
+.lt-q{font-style:italic;color:var(--accent)!important}
+.lt-sign b{font-weight:400;font-size:26px}
+.manifesto{margin:0;padding:0;list-style:none;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.manifesto li{display:grid;gap:4px;padding:12px 14px;border-radius:12px;background:var(--bg)}
+.manifesto b{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.manifesto span{font-size:16px;line-height:1.4}
