@@ -1653,7 +1653,7 @@ ${L`distância bruta = média de |sua posição − posição do pensador|, sem 
       <h2>${L`9. Limites honestos`}</h2>
       <p>${L`As posições dos pensadores são uma leitura acadêmica resumida, revisada mas discutível: filósofos reais não cabem em 11 números. As frases de autores modernos são paráfrases curtas. Use o resultado como porta de entrada para ler, não como diagnóstico.`}</p>
       <h2>${L`10. Quem fez`}</h2>
-      <p>${L`O Filosofômetro foi criado por <a href="https://github.com/tiagocardosobezerra" target="_blank" rel="noopener author">Tiago Cardoso Bezerra</a>. É gratuito, sem anúncios e sem cadastro, e suas respostas ficam só no seu navegador.`}</p>
+      <p>${L`O Filosofômetro foi desenvolvido pela <a href="https://errantes.com.br/" target="_blank" rel="noopener">Errantes</a>. É gratuito, sem anúncios e sem cadastro, e suas respostas ficam só no seu navegador.`}</p>
     </div>
   </section>`,L`Método`);
   document.getElementById("dlCatalog").addEventListener("click",()=>{

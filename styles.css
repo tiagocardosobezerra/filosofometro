@@ -474,11 +474,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   .duo{max-width:min(520px,78vh)}
 }
 
-/* Author credit in the footer */
-.credit-line{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px}
-footer a.author{display:inline-flex;align-items:center;gap:6px;color:var(--ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--line2);padding-bottom:1px;transition:color .2s,border-color .2s}
-footer a.author:hover{color:var(--accent);border-color:var(--accent)}
-footer a.author svg{width:15px;height:15px}
+/* "Desenvolvido por Errantes" under the footer links: the animated logo, black on light, yellow on dark */
+footer .made-by{display:flex;align-items:center;justify-content:center;gap:8px;margin:28px auto 0;padding:0 var(--gutter);font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--muted)}
+footer a.errantes{display:inline-flex;align-items:center;padding:4px 2px;border-radius:4px;opacity:.9;transition:opacity .2s var(--ease),transform .2s var(--ease)}
+footer a.errantes:hover{opacity:1;transform:translateY(-1px)}
+footer a.errantes:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+footer a.errantes img{display:block;height:15px;width:auto}
+footer .logo-dark{display:none!important}
+:root[data-theme="dark"] footer .logo-light{display:none!important}
+:root[data-theme="dark"] footer .logo-dark{display:block!important}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) footer .logo-light{display:none!important}
+  :root:not([data-theme="light"]) footer .logo-dark{display:block!important}
+}
 
 /* Sigil explanations */
 .sg-hit{fill:transparent;cursor:help;outline:none;transition:fill .2s}
@@ -939,6 +947,8 @@ html[lang="es"] .br-flag{background:linear-gradient(90deg,#c60b1e 0 18%,#ffc400 
   /* tap targets */
   .quiz-top .link-btn{padding:12px 0 12px 12px;margin:-12px 0}
   footer a{display:inline-block;padding:11px 2px}
+  footer a.errantes{display:inline-flex;padding:14px 2px}
+  footer .made-by{margin-top:14px}
   .bar .cta{min-height:44px}
 }
 

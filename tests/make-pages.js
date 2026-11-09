@@ -27,7 +27,7 @@ const initials = n => n.split(" ").filter(w => /^[A-ZÀ-Ý]/.test(w)).slice(0, 2
 const LANGS = {
   pt: { html: "pt-BR", app: "/", arch: "Arquétipo:", dir: "pensadores", og: "og.png", dec: ",",
     bc: "a.C.", to: "a", balance: "Equilíbrio", strong: ", forte", home: "Filosofômetro, página inicial", nav: "Principal",
-    thinkers: "Pensadores", method: "Método", take: "Fazer o teste", takeSm: "Teste", credit: "Criado por", creditTail: "teste gratuito, motor auditável",
+    thinkers: "Pensadores", method: "Método", take: "Fazer o teste", takeSm: "Teste", credit: "Desenvolvido por", creditTail: "Teste gratuito, motor auditável",
     how: "Como calculamos", all: "Todos os pensadores", support: "Apoie o projeto", portrait: n => `Retrato de ${n}`,
     start: "Comece por este · ", amazon: "Ver na Amazon", here: "Você está em",
     title: n => `${n}: vida, ideias e livros | Filosofômetro`,
@@ -52,7 +52,7 @@ const LANGS = {
     cCount: k => `${k} correntes`, cIdxLede: "Escolas e tradições de pensamento, da Grécia antiga a hoje, com ideias centrais, pensadores e livros para começar. Quer saber de qual você está mais perto? <a href=\"/#/teste\">Faça o teste</a>." },
   en: { html: "en", app: "/en/", arch: "Archetype:", dir: "en/thinkers", og: "og-en.png", dec: ".",
     bc: "BC", to: "to", balance: "Balanced", strong: ", strong", home: "Filosofômetro, home", nav: "Main",
-    thinkers: "Thinkers", method: "Method", take: "Take the test", takeSm: "Test", credit: "Made by", creditTail: "free test, auditable engine",
+    thinkers: "Thinkers", method: "Method", take: "Take the test", takeSm: "Test", credit: "Built by", creditTail: "Free test, auditable engine",
     how: "How we calculate", all: "All thinkers", support: "", portrait: n => `Portrait of ${n}`,
     start: "Start here · ", amazon: "See on Amazon", here: "You are in",
     title: n => `${n}: life, ideas and books | Filosofômetro`,
@@ -77,7 +77,7 @@ const LANGS = {
     cCount: k => `${k} schools of thought`, cIdxLede: "Schools and traditions of thought, from ancient Greece to today, with core ideas, thinkers and books to start with. Want to know which one you are closest to? <a href=\"/en/#/teste\">Take the test</a>." },
   es: { html: "es", app: "/es/", arch: "Arquetipo:", dir: "es/pensadores", og: "og-es.png", dec: ",",
     bc: "a. C.", to: "a", balance: "Equilibrio", strong: ", fuerte", home: "Filosofômetro, inicio", nav: "Principal",
-    thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test", credit: "Creado por", creditTail: "test gratuito, motor auditable",
+    thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test", credit: "Desarrollado por", creditTail: "Test gratuito, motor auditable",
     how: "Cómo calculamos", all: "Todos los pensadores", support: "", portrait: n => `Retrato de ${n}`,
     start: "Empieza por este · ", amazon: "Ver en Amazon", here: "Estás en",
     title: n => `${n}: vida, ideas y libros | Filosofômetro`,
@@ -183,9 +183,10 @@ ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replac
   const foot = (id, kind) => `</main>
 <footer>
   <div class="wrap">
-    <span class="credit-line">${T.credit} <a class="author" href="https://github.com/tiagocardosobezerra" target="_blank" rel="noopener author">Tiago Cardoso Bezerra</a> · ${T.creditTail}</span>
+    <span class="foot-tag">${T.creditTail}</span>
     <span><a href="${T.app}#/metodo">${T.how}</a> · <a href="${dir}">${T.all}</a> · <a href="${cdir}">${T.allSchools}</a>${lang === "pt" && S.SUPPORT.pixKey ? ` · <a href="/#/apoie">${T.support}</a>` : ""} · ${Object.keys(LANGS).filter(l => l !== lang && has(l, id, kind)).map(l => `<a href="${urlOf(l, id, kind).replace(SITE, "")}" hreflang="${LANGS[l].html}" lang="${LANGS[l].html}">${{ pt: "Português", en: "English", es: "Español" }[l]}</a>`).join(" · ")}</span>
   </div>
+  <p class="made-by">${T.credit} <a class="errantes" href="https://errantes.com.br/" target="_blank" rel="noopener" aria-label="Errantes"><img class="logo-light" src="/marca/errantes-logo-animado-preto.svg" alt="" width="115" height="15"><img class="logo-dark" src="/marca/errantes-logo-animado-amarelo.svg" alt="" width="115" height="15"></a></p>
 </footer>
 </body>
 </html>
@@ -392,13 +393,13 @@ const APP_PAGE = {
     desc: "Free philosophy test: 44 to 132 statements, 11 themes, 128 thinkers. Find your archetype, who thinks like you and who would disagree most, with the whole calculation open for audit.",
     ogDesc: "44 to 132 statements, 11 themes, 128 thinkers. Your archetype, who thinks like you and who would disagree most.",
     skip: "Skip to content", home: "Filosofômetro, home", nav: "Main", thinkers: "Thinkers", method: "Method", take: "Take the test", takeSm: "Test",
-    theme: "Toggle light and dark theme", lang: "Language: English", credit: "Made by", tail: "free test, auditable engine", how: "How we calculate", all: "All thinkers",
+    theme: "Toggle light and dark theme", lang: "Language: English", credit: "Built by", tail: "Free test, auditable engine", how: "How we calculate", all: "All thinkers",
     install: "Install the app", app: "Free philosophy test: 11 themes, 128 thinkers and an auditable engine.", noscript: "Filosofômetro needs JavaScript to work.", support: "Support the project" },
   es: { title: "Filosofômetro: ¿qué filósofo piensa como tú?",
     desc: "Test filosófico gratuito: de 44 a 132 afirmaciones, 11 temas, 128 pensadores. Descubre tu arquetipo, a quién te pareces y quién más discreparía de ti, con todo el cálculo abierto para auditoría.",
     ogDesc: "De 44 a 132 afirmaciones, 11 temas, 128 pensadores. Tu arquetipo, a quién te pareces y quién más discreparía de ti.",
     skip: "Saltar al contenido", home: "Filosofômetro, inicio", nav: "Principal", thinkers: "Pensadores", method: "Método", take: "Hacer el test", takeSm: "Test",
-    theme: "Cambiar entre tema claro y oscuro", lang: "Idioma: español", credit: "Creado por", tail: "test gratuito, motor auditable", how: "Cómo calculamos", all: "Todos los pensadores",
+    theme: "Cambiar entre tema claro y oscuro", lang: "Idioma: español", credit: "Desarrollado por", tail: "Test gratuito, motor auditable", how: "Cómo calculamos", all: "Todos los pensadores",
     install: "Instalar la app", app: "Test filosófico gratuito: 11 temas, 128 pensadores y un motor auditable.", noscript: "Filosofômetro necesita JavaScript para funcionar.", support: "Apoya el proyecto" },
 };
 function appPage(lang) {
@@ -423,8 +424,8 @@ function appPage(lang) {
   swap('<span class="cta-lg">Fazer o teste</span><span class="cta-sm">Teste</span>', `<span class="cta-lg">${A.take}</span><span class="cta-sm">${A.takeSm}</span>`);
   swap('aria-label="Idioma: português">PT<', `aria-label="${esc(A.lang)}">${lang.toUpperCase()}<`);
   swap('aria-label="Alternar tema claro e escuro"', `aria-label="${esc(A.theme)}"`);
-  swap('<span class="credit-line">Criado por ', `<span class="credit-line">${A.credit} `);
-  swap("Tiago Cardoso Bezerra</a> · teste gratuito, motor auditável", `Tiago Cardoso Bezerra</a> · ${A.tail}`);
+  swap('<span class="foot-tag">Teste gratuito, motor auditável<', `<span class="foot-tag">${A.tail}<`);
+  swap('<p class="made-by">Desenvolvido por ', `<p class="made-by">${A.credit} `);
   swap('<a href="#/metodo">Como calculamos</a> · <a href="/pensadores/">Todos os pensadores</a>', `<a href="#/metodo">${A.how}</a> · <a href="/${T.dir}/">${A.all}</a>`);
   swap(">Apoie o projeto<", `>${A.support}<`);
   swap(">Instalar o app<", `>${A.install}<`);
