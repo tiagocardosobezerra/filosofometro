@@ -65,6 +65,7 @@
     <span><a href="#/metodo">Cómo calculamos</a> · <a href="/es/pensadores/">Todos los pensadores</a><span class="hidden" id="supportLink"> · <a href="#/apoie">Apoya el proyecto</a></span><button class="install-btn hidden" id="installBtn" type="button">Instalar la app</button></span>
   </div>
   <p class="made-by">Desarrollado por <a class="errantes" href="https://errantes.com.br/" target="_blank" rel="noopener" aria-label="Errantes"><img class="logo-light" src="/marca/errantes-logo-animado-preto.svg" alt="" width="115" height="15"><img class="logo-dark" src="/marca/errantes-logo-animado-amarelo.svg" alt="" width="115" height="15"></a></p>
+  <script>(()=>{const a=document.querySelector("footer a.errantes");let n=0;a&&a.addEventListener("mouseenter",()=>{if(!matchMedia("(hover:hover) and (prefers-reduced-motion:no-preference)").matches)return;n++;a.querySelectorAll("img").forEach(i=>{const c=i.cloneNode();c.src=i.src.split("?")[0]+"?vez="+n;(c.decode?c.decode():Promise.resolve()).catch(()=>{}).then(()=>i.replaceWith(c))})})})()</script>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="tip" id="tip" role="tooltip" aria-live="polite"></div>

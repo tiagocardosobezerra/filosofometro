@@ -2,7 +2,7 @@
 // Site files: network first, so a new version always wins when online; the cached copy is the offline fallback.
 // Portraits and fonts from other hosts: served from cache when present, refreshed in the background.
 // Link previews (/api, /s, /c) are never cached: they must always come from the server.
-const CACHE = "filosofometro-v18";
+const CACHE = "filosofometro-v19";
 const SHELL = ["/", "/index.html", "/styles.css", "/data.js", "/engine.js", "/verify.js", "/support.js", "/covers.js", "/correntes.js", "/i18n.js", "/app.js", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/favicon-32.png"];
 
 self.addEventListener("install", e => {
@@ -16,6 +16,8 @@ self.addEventListener("fetch", e => {
   if (req.method !== "GET") return;
   if (url.origin === location.origin) {
     if (/^\/(api|s|c|_vercel)\//.test(url.pathname)) return;
+    // The footer logo replays on hover by loading "?vez=N"; those copies are not kept, only the plain file is.
+    if (url.pathname.startsWith("/marca/") && url.search) return;
     // The app shell is one page, so its navigations share the "/" entry; the static thinker pages keep their own.
     const shell = req.mode === "navigate" && /^\/(index\.html)?$/.test(url.pathname);
     e.respondWith(fetch(req).then(res => {

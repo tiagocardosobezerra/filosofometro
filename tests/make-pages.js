@@ -187,6 +187,7 @@ ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replac
     <span><a href="${T.app}#/metodo">${T.how}</a> · <a href="${dir}">${T.all}</a> · <a href="${cdir}">${T.allSchools}</a>${lang === "pt" && S.SUPPORT.pixKey ? ` · <a href="/#/apoie">${T.support}</a>` : ""} · ${Object.keys(LANGS).filter(l => l !== lang && has(l, id, kind)).map(l => `<a href="${urlOf(l, id, kind).replace(SITE, "")}" hreflang="${LANGS[l].html}" lang="${LANGS[l].html}">${{ pt: "Português", en: "English", es: "Español" }[l]}</a>`).join(" · ")}</span>
   </div>
   <p class="made-by">${T.credit} <a class="errantes" href="https://errantes.com.br/" target="_blank" rel="noopener" aria-label="Errantes"><img class="logo-light" src="/marca/errantes-logo-animado-preto.svg" alt="" width="115" height="15"><img class="logo-dark" src="/marca/errantes-logo-animado-amarelo.svg" alt="" width="115" height="15"></a></p>
+  <script>(()=>{const a=document.querySelector("footer a.errantes");let n=0;a&&a.addEventListener("mouseenter",()=>{if(!matchMedia("(hover:hover) and (prefers-reduced-motion:no-preference)").matches)return;n++;a.querySelectorAll("img").forEach(i=>{const c=i.cloneNode();c.src=i.src.split("?")[0]+"?vez="+n;(c.decode?c.decode():Promise.resolve()).catch(()=>{}).then(()=>i.replaceWith(c))})})})()</script>
 </footer>
 </body>
 </html>
