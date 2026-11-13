@@ -85,7 +85,7 @@ function sharePage(info, origin, imageQuery) {
 <meta name="twitter:title" content="${esc(info.title)}">
 <meta name="twitter:description" content="${esc(info.description)}">
 <meta name="twitter:image" content="${esc(image)}">
-<link rel="canonical" href="${esc(self)}">
+<meta name="robots" content="noindex,follow">
 <meta http-equiv="refresh" content="0;url=${esc(target)}">
 <script>location.replace(${JSON.stringify(target)})</script>
 </head><body style="background:#0F0E0C;color:#F1EADC;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0">

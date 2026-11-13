@@ -7,6 +7,8 @@ module.exports = (req, res) => {
   const info = q.a ? P.compareInfo(q.a, q.b, q.na, q.nb, q.lang) : P.inviteInfo(q.code, q.name, q.lang);
   const proto = req.headers["x-forwarded-proto"] || "https", host = req.headers["x-forwarded-host"] || req.headers.host;
   const origin = `${proto}://${host}`;
+  // Each link is one person's result: chat apps read the preview, search engines must not list it.
+  res.setHeader("X-Robots-Tag", "noindex, follow");
   if (!info) { res.statusCode = 302; res.setHeader("Location", `${origin}/${["en", "es"].includes(q.lang) ? `${q.lang}/` : ""}`); res.end(); return; }
   const v = P.E.fingerprint();
   const params = new URLSearchParams(info.kind === "compare"

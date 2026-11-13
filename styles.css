@@ -1281,3 +1281,5 @@ body.rv-open{overflow:hidden}
    menu never pushes the page sideways. */
 @media (max-width:350px){.brand{font-size:0;gap:0}.brand svg{width:26px;height:26px}}
 html{overflow-x:clip}
+/* The plain-HTML home in index.html is for crawlers and visitors without JavaScript; the app replaces it. */
+.js .prerender{display:none}

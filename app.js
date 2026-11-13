@@ -487,13 +487,16 @@ function newProgress(level,base=[]){
 }
 function renderLevelPick(){
   const vs=store.get("vs");
+  // First visit: the 6-minute level is the one highlighted; the longer ones are offered after a result.
+  const rec=store.get("last")?2:1;
+  const tag=(l,i)=>rec===1&&l.id===1?L`Recomendado para começar`:rec===1&&l.id===2?L`Mais preciso`:i.tag;
   mount(`
   <section class="wrap section" style="padding-top:clamp(28px,6vh,64px)">
     <span class="eyebrow">${vs?L`Desafio aceito`:L`Antes de começar`}</span>
     <h1 class="h2" style="font-size:clamp(44px,min(7vw,10vh),96px)">${L`Quanto você quer <em class="it accent">ir fundo?</em>`}</h1>
     <p class="lede lv-lede" style="margin-top:14px;max-width:56ch">${L`Os três níveis usam os mesmos 11 temas. Quanto mais afirmações, mais preciso fica o resultado. Dá para começar no Rápido e aprofundar depois, sem perder nada.`}</p>
-    <div class="levels">${E.LEVELS.map(l=>{const i=LEVEL_INFO[l.id];return `<a class="level ${l.id===2?"rec":""}" href="#/teste/${l.id}">
-      <span class="lv-tag">${esc(i.tag)}</span>
+    <div class="levels">${E.LEVELS.map(l=>{const i=LEVEL_INFO[l.id];return `<a class="level ${l.id===rec?"rec":""}" href="#/teste/${l.id}">
+      <span class="lv-tag">${esc(tag(l,i))}</span>
       <span class="lv-name">${esc(t(l.name))}</span>
       <span class="lv-n">${L`<b>${l.n}</b> afirmações · ≈ ${l.minutes} min`}</span>
       <span class="lv-bars" aria-hidden="true">${[1,2,3].map(k=>`<i class="${k<=l.id?"on":""}"></i>`).join("")}</span>
@@ -957,10 +960,48 @@ const compareURL=(a,b,nA,nB)=>{const tail=`${a}/${b}${nA||nB?`/${encName(nA)}/${
 const challengeText=r=>r.directionless?L`Fiz o Filosofômetro. Qual filósofo pensa como você? Faz o teste e compara comigo:`:L`Sou ${archetype(r.scores).name} e penso parecido com ${r.top.p.n} (${r.top.pct}% de afinidade). Faz o teste e vê em quantos dos 11 temas a gente concorda:`;
 // Native share sheet on phones; copy to clipboard elsewhere.
 async function challenge(r){
+  if(!(await ensureName()))return;
   track("/evento/convite");
   const url=inviteURL(r),text=challengeText(r);
   if(navigator.share){try{await navigator.share({title:"Filosofômetro",text,url});return}catch(e){if(e.name==="AbortError")return}}
   try{await navigator.clipboard.writeText(`${text} ${url}`);toast(L`Convite copiado. Agora é só mandar!`)}catch(e){prompt(L`Copie o convite:`,url)}
+}
+// The invite reads "Name te desafiou". The name field sits at the end of the result page, so most people
+// never saw it and their invites said "Alguém". Before the first invite, ask once; skipping is remembered.
+// Resolves false when the dialog is closed, so the share is cancelled.
+async function ensureName(){
+  if(store.get("name")||store.get("nameAsked"))return true;
+  const n=await askName();
+  if(n===null)return false;
+  store.set("nameAsked",true);
+  if(n)store.set("name",n);
+  const f=document.getElementById("myName");if(f)f.value=n;
+  return true;
+}
+function askName(){
+  return new Promise(done=>{
+    const prev=document.activeElement,d=document.createElement("div");
+    d.className="story-modal";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-labelledby","askNameH");
+    d.innerHTML=`<form class="sm-card name-ask"><div class="sm-side"><h2 class="serif" id="askNameH">${L`Seu nome no convite`}</h2><p class="muted">${L`Quem abrir o link vê quem fez o desafio. Sem nome, aparece “Alguém te desafiou”.`}</p><label class="sr" for="askName">${L`Seu nome (opcional)`}</label><input class="search sm" id="askName" maxlength="24" autocomplete="given-name" placeholder="${L`Seu nome`}"><div class="sm-actions"><button type="submit" class="btn accent">${L`Continuar`}</button><button type="button" class="btn ghost" data-a="skip">${L`Seguir sem nome`}</button></div></div></form>`;
+    const input=d.querySelector("input");
+    const end=v=>{document.removeEventListener("keydown",key);d.remove();if(prev&&prev.focus)prev.focus();done(v)};
+    const key=e=>{if(e.key==="Escape")end(null)};
+    document.addEventListener("keydown",key);
+    d.querySelector("form").addEventListener("submit",e=>{e.preventDefault();end(cleanName(input.value))});
+    d.querySelector('[data-a="skip"]').addEventListener("click",()=>end(""));
+    d.addEventListener("click",e=>{if(e.target===d)end(null)});
+    document.body.appendChild(d);
+    input.focus();
+  });
+}
+// Story apps keep the picture and drop the text and the link, so the invite link goes to the clipboard
+// before the share sheet opens (ready for the story's link sticker), and into the text for apps that use
+// it as a caption. Returns false when the phone cannot share files, so the caller shows the picture instead.
+async function shareStory(file,text,url){
+  if(!(navigator.canShare&&navigator.canShare({files:[file]})))return false;
+  if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast(L`Link do convite copiado: cole no adesivo de link do story.`,6000),()=>{});
+  try{await navigator.share({files:[file],text:`${text} ${url}`})}catch(e){if(e.name!=="AbortError")return false}
+  return true;
 }
 function invitePanelHTML(r){
   return `<div class="panel compare-cta">
@@ -1165,7 +1206,7 @@ async function shareCompare(ra,rb,nameA,nameB,url){
   if(!blob){toast(L`Não foi possível gerar a imagem`);return}
   const file=new File([blob],"filosofometro-comparacao.jpg",{type:"image/jpeg"});
   const text=L`Concordamos em ${same} de 11 temas no Filosofômetro. Faz o teste e vê em quantos você concorda com a gente:`;
-  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text,url});return}catch(e){if(e.name==="AbortError")return}}
+  if(await shareStory(file,text,url))return;
   storyModal(c,blob,file,text,url);
 }
 
@@ -1812,7 +1853,9 @@ async function shareCanvases(r){
 }
 // Share: pick a card, then the phone's share sheet, or the picture with download and copy options.
 async function shareResult(r){
-  if(shareResult.busy)return;shareResult.busy=true;
+  if(shareResult.busy)return;
+  if(!(await ensureName()))return;
+  shareResult.busy=true;
   const b=document.getElementById("shareBtn"),keep=b&&b.innerHTML;
   if(b){b.disabled=true;b.innerHTML=`<span class="spin" aria-hidden="true"></span> ${L`Gerando imagem…`}`}
   let cards;try{cards=await shareCanvases(r)}finally{shareResult.busy=false;if(b){b.disabled=false;b.innerHTML=keep}}
@@ -1830,7 +1873,7 @@ async function shareResult(r){
     const [,c,slug]=cards[pick];track(`/evento/story-${slug}`);
     const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.92));const file=new File([blob],`filosofometro-${slug}.jpg`,{type:"image/jpeg"});
     close();
-    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:challengeText(r),url:inviteURL(r)});return}catch(err){if(err.name==="AbortError")return}}
+    if(await shareStory(file,challengeText(r),inviteURL(r)))return;
     storyModal(c,blob,file,challengeText(r),inviteURL(r));
   });
 }

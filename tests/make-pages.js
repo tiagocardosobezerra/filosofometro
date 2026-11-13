@@ -432,6 +432,7 @@ function appPage(lang) {
   swap(">Instalar o app<", `>${A.install}<`);
   swap(">O Filosofômetro precisa de JavaScript para funcionar.<", `>${A.noscript}<`);
   swap('<meta name="apple-mobile-web-app-title" content="Filosofômetro">', '<meta name="apple-mobile-web-app-title" content="Filosofômetro">');
+  s = s.replace(HOME_RE, () => homeStatic(lang));
   swap("<!--lang-pack-->", `<script src="/i18n/${lang}.js"></script>`);
   swap('<link rel="manifest" href="/manifest.webmanifest">', `<link rel="manifest" href="/${lang}/manifest.webmanifest">`);
   fs.mkdirSync(path.join(ROOT, lang), { recursive: true });
@@ -440,6 +441,58 @@ function appPage(lang) {
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "manifest.webmanifest"), "utf8"));
   Object.assign(manifest, { id: `/${lang}/`, name: A.title, description: A.app, lang: T.html, start_url: `/${lang}/?source=app`, scope: `/${lang}/` });
   fs.writeFileSync(path.join(ROOT, lang, "manifest.webmanifest"), JSON.stringify(manifest, null, 2) + "\n");
+}
+
+// The home as plain HTML inside <main id="app"> of each app entry page. The app draws everything with
+// JavaScript, so crawlers that do not run it (AI bots, link checkers) used to get an empty page. The block is
+// hidden as soon as JavaScript runs (class "js" on <html>) and replaced by the app's own home. Its text
+// comes from the same interface strings as the app's home, translated by the language packs.
+const Engine = require(path.join(ROOT, "engine.js"));
+function homeStatic(lang) {
+  const T = LANGS[lang], { D, ALL, CORR } = CATALOG[lang];
+  const ui = lang === "pt" ? null : require(path.join(ROOT, "i18n", `${lang}.js`)).ui;
+  const tr = (key, ...args) => {
+    if (ui && !Object.prototype.hasOwnProperty.call(ui, key)) throw new Error(`${lang} pack has no key: ${key}`);
+    return (ui ? ui[key] : key).replace(/\{(\d+)\}/g, (_, n) => args[n]);
+  };
+  const LEVELS = Engine.create(D).LEVELS, total = ALL.length, app = T.app;
+  const dir = `/${T.dir}/`, cdir = `/${T.cdir}/`;
+  return `<!--home--><div class="prerender">
+<section class="wrap hero"><div>
+  <span class="eyebrow">${tr("Teste filosófico")}</span>
+  <h1 class="display">${tr("Qual filósofo")} ${tr("pensa como")} <em class="it accent">${tr("você?")}</em></h1>
+  <p class="lede">${tr("Responda afirmações sobre verdade, liberdade, moral e poder. Leve um retrato do seu jeito de pensar: seu arquétipo, o pensador mais parecido com você entre {0}, onde você puxa para dois lados e os 11 temas desenhados na sua mandala.", total)}</p>
+  <div class="cta-row"><a class="btn accent" href="${app}#/teste">${tr("Começar o teste")}</a> <a class="btn ghost" href="${app}#/metodo">${tr("Como funciona")}</a></div>
+  <ul class="facts"><li>${tr("<b>3</b> níveis: {0} afirmações", LEVELS.map(l => l.n).join(", "))}</li><li>${tr("<b>11</b> temas")}</li><li>${tr("<b>462</b> arquétipos")}</li><li>${tr("<b>{0}</b> pensadores", total)}</li><li>${tr("Sem cadastro")}</li></ul>
+  <ul>${LEVELS.map(l => `<li><a href="${app}#/teste/${l.id}">${esc(tr(l.name))}</a>: ${tr("<b>{0}</b> afirmações · ≈ {1} min", l.n, l.minutes)}</li>`).join("")}</ul>
+</div></section>
+<section class="wrap section">
+  <span class="eyebrow">${tr("O mapa")}</span><h2 class="h2">${tr("Onze tensões que <em class=\"it\">definem</em> um pensamento")}</h2>
+  <p>${tr("Cada tema opõe duas respostas legítimas a uma pergunta antiga. Não existe lado certo: existe o seu lado, e quem esteve nele antes de você.")}</p>
+  <ol class="axes-list">${D.AXES.map(a => `<li>${esc(cap(a.name))}: ${esc(a.l)} × ${esc(a.r)}</li>`).join("")}</ol>
+</section>
+<section class="wrap section">
+  <span class="eyebrow">${tr("O método")}</span><h2 class="h2">${tr("Sem caixa-preta")}</h2>
+  <p>${tr("O cálculo inteiro aparece no seu resultado: cada resposta, cada tema, cada distância. Você pode refazer a conta à mão.")}</p>
+  <ol>
+    <li><h3>${tr("Você responde")}</h3><p>${tr("Escolha o nível e concorde ou discorde das afirmações. Elas vêm misturadas, e, em cada tema, metade das afirmações puxa para cada lado.")}</p></li>
+    <li><h3>${tr("Mapeamos seu formato")}</h3><p>${tr("Suas respostas viram uma posição em cada um dos 11 temas. Comparamos o formato desse perfil com o de {0} pensadores.", total)}</p></li>
+    <li><h3>${tr("Você audita")}</h3><p>${tr("Veja passo a passo por que deu quem deu, compare com qualquer pensador e baixe os dados.")}</p></li>
+  </ol>
+</section>
+<section class="wrap section">
+  <h2 class="h2"><a href="${dir}">${esc(T.count(total))}</a></h2>
+  <p>${ALL.map(p => `<a href="${dir}${p.id}/">${esc(p.n)}</a>`).join(" · ")}</p>
+  <h2 class="h2"><a href="${cdir}">${esc(T.cCount(CORR.length))}</a></h2>
+  <p>${CORR.map(c => `<a href="${cdir}${c.id}/">${esc(c.n)}</a>`).join(" · ")}</p>
+</section>
+</div><!--/home-->`;
+}
+const HOME_RE = /<!--home-->[\s\S]*?<!--\/home-->/;
+{
+  const f = path.join(ROOT, "index.html"), s = fs.readFileSync(f, "utf8");
+  if (!HOME_RE.test(s)) throw new Error("index.html changed, cannot find the <!--home--> block");
+  fs.writeFileSync(f, s.replace(HOME_RE, () => homeStatic("pt")));
 }
 
 const urls = [`${SITE}/`, `${SITE}/en/`, `${SITE}/es/`];
