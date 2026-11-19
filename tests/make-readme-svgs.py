@@ -139,7 +139,7 @@ def hero():
           f'stroke-linejoin="round"/><circle cx="13" cy="15.5" r="3" fill="{C["acc"]}"/></g>')
     s.add(s.text(100, 80, 'Filosofômetro', 'SR', 30))
     s.add(f'<line x1="64" y1="146" x2="98" y2="146" stroke="{C["ink2"]}" stroke-opacity=".7"/>')
-    s.add(s.text(112, 151, 'TESTE FILOSÓFICO · CÓDIGO À VISTA', 'T6', 13, C['ink2'], ls=2.2))
+    s.add(s.text(112, 151, 'TESTE FILOSÓFICO · CÓDIGO ABERTO', 'T6', 13, C['ink2'], ls=2.2))
     s.add(s.text(60, 232, 'O teste de filosofia', 'SR', 74, extra=' letter-spacing="-1"'))
     s.add(s.text(60, 312, 'que mostra a conta.', 'SI', 74, C['acc'], extra=' letter-spacing="-1"'))
     for k, line in enumerate(['Responda afirmações do dia a dia sobre verdade, liberdade,',

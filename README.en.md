@@ -18,6 +18,7 @@
   <img alt="No build" src="https://img.shields.io/badge/build-none-F1EADC?style=flat-square" />
   <img alt="Vanilla JavaScript" src="https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
   <img alt="Portuguese, English and Spanish" src="https://img.shields.io/badge/languages-PT%20%C2%B7%20EN%20%C2%B7%20ES-918877?style=flat-square" />
+  <img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" />
 </p>
 
 **Filosofômetro** is a free philosophy test with no sign-up. You respond to everyday statements about truth,
@@ -316,3 +317,5 @@ Made by **[Tiago Cardoso Bezerra](https://github.com/tiagocardosobezerra)** and 
 [Tribunal](https://github.com/tiagocardosobezerra/tribunal) (take any idea to trial),
 [Vegapunk](https://github.com/tiagocardosobezerra/vegapunk), [Senku](https://github.com/tiagocardosobezerra/senku)
 and [Deidara](https://github.com/tiagocardosobezerra/deidara).
+
+Code under the MIT license ([`LICENSE`](LICENSE)). The fonts in `fonts/` are OFL, `vendor/qrcode.js` is MIT (Kazuhiko Arase) and each portrait follows the license shown on Wikimedia Commons.
