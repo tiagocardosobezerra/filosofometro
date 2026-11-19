@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filosofômetro · o teste de filosofia que mostra a conta</title>
+<meta name="description" content="Código à vista: um teste filosófico com 132 afirmações, 11 temas e 180 pensadores em três idiomas, um motor de cálculo auditável, uma segunda implementação que confere cada resultado e testes contra viés. Grátis, sem cadastro, em três idiomas.">
+<link rel="canonical" href="https://tiagocardosobezerra.github.io/filosofometro/">
+<meta property="og:title" content="Filosofômetro · o teste de filosofia que mostra a conta">
+<meta property="og:description" content="132 afirmações, 11 temas, 180 pensadores e um motor que você pode auditar número por número. Grátis e sem cadastro.">
+<meta property="og:image" content="https://tiagocardosobezerra.github.io/filosofometro/img/og-projeto.png">
+<meta property="og:url" content="https://tiagocardosobezerra.github.io/filosofometro/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0F0E0C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2316130F'/%3E%3Cpath d='M16 6 25 25H7z' fill='none' stroke='%23F06A43' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F0E0C; --bg2:#14120F; --card:#15130F; --card2:#1A1814; --ink:#F1EADC; --ink2:#CBC2B2; --muted:#918877; --faint:#6b6356;
+  --accent:#F06A43; --accent2:#F4A184; --on-accent:#140B07; --line:rgba(241,234,220,.13); --line2:rgba(241,234,220,.28);
+  --ok:#3fa86a;
+  --sf:'Instrument Serif',Georgia,'Times New Roman',serif; --tx:'Inter Tight',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --w:1180px; --g:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--tx);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+main,header,footer{position:relative;z-index:1}
+img{max-width:100%;display:block}
+.hero-grid>*,.sec-head>*,.res>*,.audit>*,.run>*,.cards>*,.bias>*,.regions>*,.priv>*{min-width:0}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--w);margin:0 auto;padding:0 var(--g)}
+h1,h2,h3,p{margin:0}
+h1,h2{font-family:var(--sf);font-weight:400;letter-spacing:-.5px}
+h1 em,h2 em{color:var(--accent);font-style:italic}
+h2{font-size:clamp(40px,5.4vw,68px);line-height:1.02;margin:16px 0 18px}
+h3{font:600 19px/1.3 var(--tx)}
+.kicker{display:inline-flex;align-items:center;gap:14px;font:600 12.5px/1 var(--tx);letter-spacing:2.2px;text-transform:uppercase;color:var(--ink2)}
+.kicker::before{content:"";width:40px;height:1px;background:var(--ink2);opacity:.7}
+.lead{font-size:clamp(17px,1.5vw,19px);color:var(--ink2);max-width:620px}
+section{padding:120px 0;position:relative}
+.sec-head{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:end;margin-bottom:56px}
+.sec-head .lead{padding-bottom:10px}
+.mono{font-family:var(--mono);font-size:.88em}
+.btn{display:inline-flex;align-items:center;gap:12px;font:600 16px/1 var(--tx);padding:18px 28px;border-radius:99px;border:1px solid transparent;transition:transform .15s,background .15s,border-color .15s;white-space:nowrap}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-a{background:var(--accent);color:var(--on-accent)}
+.btn-a:hover{background:#f57d59}
+.btn-g{color:var(--ink);border-color:var(--line2)}
+.btn-g:hover{background:var(--card2);border-color:var(--ink2)}
+.btn svg{width:18px;height:18px}
+
+/* barra */
+.top{position:sticky;top:0;z-index:50;background:rgba(15,14,12,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.sc{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:68px}
+.brand{display:flex;align-items:center;gap:11px;font:400 27px/1 var(--sf);color:var(--ink);letter-spacing:-.3px}
+.brand:hover{text-decoration:none}
+.brand svg{width:26px;height:26px}
+.top ul{display:flex;gap:26px;list-style:none;margin:0 0 0 auto;padding:0}
+.top ul a{color:var(--ink2);font-size:15px;font-weight:500}
+.top ul a:hover{color:var(--ink);text-decoration:none}
+.top .cta{background:var(--ink);color:var(--bg);font:600 15px/1 var(--tx);padding:11px 18px;border-radius:99px}
+.top .cta:hover{text-decoration:none;background:#fff}
+.top .gh{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:99px;border:1px solid var(--line2);color:var(--ink)}
+.top .gh svg{width:18px;height:18px;fill:currentColor}
+.top .gh:hover{background:var(--card2)}
+
+/* herói */
+.hero{padding:84px 0 72px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-260px -10% auto;height:900px;background:radial-gradient(ellipse 50% 50% at 72% 30%,rgba(240,106,67,.13),transparent 70%);pointer-events:none}
+.hero .hero-grid{position:relative;display:grid;grid-template-columns:1.12fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(54px,7.4vw,104px);line-height:.95;margin:26px 0 28px;letter-spacing:-1.5px}
+.hero .lead{margin-bottom:36px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.hero-meta{display:flex;gap:10px 26px;flex-wrap:wrap;margin-top:34px;color:var(--muted);font-size:15px}
+.hero-meta b{color:var(--ink);font-weight:600}
+.mandala-box{position:relative;max-width:540px;width:100%;margin-left:auto}
+.mandala-box svg{width:100%;aspect-ratio:1;display:block;overflow:visible}
+.mandala-box .tag{position:relative;margin:-26px auto 0;width:max-content;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px;box-shadow:0 20px 50px rgba(0,0,0,.45);max-width:300px}
+.mandala-box .tag small{display:block;font:600 11px/1 var(--tx);letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.mandala-box .tag strong{display:block;font:italic 400 30px/1.02 var(--sf);color:var(--accent)}
+.mandala-box .tag span{display:block;margin-top:8px;color:var(--ink2);font-size:15px}
+.mandala-box .tag span b{color:var(--ink)}
+.legend{display:flex;gap:18px;font-size:13px;color:var(--muted);position:absolute;right:2%;top:2%}
+.legend i{display:inline-block;width:22px;height:0;border-top:2px solid var(--accent);vertical-align:middle;margin-right:7px}
+.legend i.d{border-top:2px dashed var(--ink2)}
+.ax-l{font:500 14px var(--tx);fill:var(--muted)}
+.m-grid{fill:none;stroke:var(--line)}
+.m-user{fill:rgba(240,106,67,.16);stroke:var(--accent);stroke-width:2.6;stroke-linejoin:round}
+.m-think{fill:none;stroke:var(--ink2);stroke-width:1.6;stroke-dasharray:5 6;opacity:.85}
+.m-dot{fill:var(--accent)}
+@media (prefers-reduced-motion:no-preference){
+  .m-user{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);fill-opacity:0;animation:draw 2.4s .3s cubic-bezier(.6,0,.2,1) forwards,fillin 1s 2.2s forwards}
+  .m-think{opacity:0;animation:fade 1s 2.6s forwards}
+  .m-dot{opacity:0;animation:fade .4s forwards}
+  .mandala-box .tag{opacity:0;transform:translateY(12px);animation:rise .8s 2.9s forwards}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s}
+  .reveal.on{opacity:1;transform:none}
+}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fillin{to{fill-opacity:1}}
+@keyframes fade{to{opacity:.85}}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* faixa de nomes */
+.band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:22px 0;white-space:nowrap}
+.band .track{display:inline-flex;gap:38px;animation:slide 90s linear infinite;font:400 30px/1 var(--sf);color:var(--ink2)}
+.band .track span:nth-child(4n+2){font-style:italic;color:var(--accent)}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.band .track{animation:none}}
+
+/* números */
+.stats{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin-top:72px}
+.stat{padding:26px 22px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font:400 54px/1 var(--sf);color:var(--ink);letter-spacing:-1px}
+.stat span{display:block;margin-top:10px;color:var(--muted);font-size:14px;line-height:1.4}
+
+/* resultado */
+.res{display:grid;grid-template-columns:380px 1fr;gap:64px;align-items:start}
+.res figure{margin:0;position:sticky;top:96px}
+.res figure img{border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.res figcaption{margin-top:14px;color:var(--muted);font-size:14px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{display:grid;grid-template-columns:64px 1fr;gap:6px;padding:24px 0;border-top:1px solid var(--line)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps li::before{counter-increment:s;content:counter(s,decimal-leading-zero);font:400 34px/1 var(--sf);color:var(--muted)}
+.steps small{display:block;font:600 12px/1 var(--tx);letter-spacing:1.8px;text-transform:uppercase;color:var(--accent);margin:6px 0 10px}
+.steps p{color:var(--ink2)}
+.steps q{font:400 23px/1.25 var(--sf);color:var(--ink);quotes:"\201C" "\201D"}
+.wide-shot{margin-top:72px;border-radius:24px;overflow:hidden;border:1px solid var(--line)}
+
+/* temas */
+.axes{border-top:1px solid var(--line)}
+.axis{display:grid;grid-template-columns:44px 1fr 1.25fr 1fr;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.axis .n{font:500 13px var(--mono);color:var(--faint)}
+.axis .l,.axis .r{font:400 clamp(24px,2.6vw,34px)/1.05 var(--sf)}
+.axis .r{text-align:right}
+.axis .bar{position:relative;height:34px;margin-top:8px}
+.axis .bar::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--line2)}
+.axis .bar span{position:absolute;top:-6px;transform:translate(-50%,-50%);font:600 10.5px/1 var(--tx);letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);background:var(--bg);padding:3px 8px;left:50%}
+.axis .bar i{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);left:50%;transition:left 1.4s cubic-bezier(.5,0,.2,1);box-shadow:0 0 0 5px rgba(240,106,67,.18)}
+.axis .bar i.k{background:transparent;border:1.5px dashed var(--ink2);box-shadow:none;width:14px;height:14px}
+.axes-note{margin-top:18px;color:var(--muted);font-size:14px;display:flex;gap:22px;flex-wrap:wrap}
+.axes-note i{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:-1px}
+.axes-note i.k{background:transparent;border:1.5px dashed var(--ink2)}
+
+/* motor */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px}
+.card .num{font:italic 400 44px/1 var(--sf);color:var(--accent)}
+.card h3{margin:14px 0 10px}
+.card p{color:var(--ink2);font-size:16px}
+.formula{margin-top:18px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font:400 13.5px/1.6 var(--mono);color:var(--ink);overflow-x:auto;white-space:pre}
+.formula .c{color:var(--muted)}
+.formula .o{color:var(--accent2)}
+
+/* auditoria */
+.audit{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:center}
+.audit img{border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.checks{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px}
+.checks li{display:grid;grid-template-columns:28px 1fr;gap:12px;color:var(--ink2)}
+.checks li::before{content:"";width:22px;height:22px;border-radius:50%;background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;margin-top:2px}
+.checks b{color:var(--ink);font-weight:600}
+.fp{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.fp span{font:400 13px var(--mono);color:var(--ink2);border:1px solid var(--line);border-radius:99px;padding:7px 13px}
+.fp span b{color:var(--accent2);font-weight:500}
+
+/* viés */
+.bias{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.bias .card{padding:26px}
+.bias .card b{display:block;font:400 48px/1 var(--sf);color:var(--ink)}
+.bias .card b em{color:var(--accent);font-style:italic}
+.bias .card p{margin-top:12px}
+.stab{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.stab .card{display:flex;flex-direction:column;gap:12px}
+.stab .meter{height:8px;border-radius:99px;background:var(--card2);overflow:hidden}
+.stab .meter i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width 1.6s cubic-bezier(.5,0,.2,1)}
+.stab .row{display:flex;justify-content:space-between;align-items:baseline}
+.stab .row h3{font:400 30px/1 var(--sf)}
+.stab .row span{font:400 34px/1 var(--sf);color:var(--accent)}
+.stab p{color:var(--muted);font-size:15px}
+
+/* regiões */
+.regions{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.region{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;display:flex;flex-direction:column}
+.region .flag{display:flex;height:4px;border-radius:4px;overflow:hidden;margin-bottom:22px}
+.region .flag i{flex:1}
+.region small{font:600 12px/1 var(--tx);letter-spacing:1.8px;text-transform:uppercase;color:var(--muted)}
+.region h3{font:400 34px/1.05 var(--sf);margin:10px 0 6px}
+.region .cnt{color:var(--accent2);font-size:15px;margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips span{font-size:13.5px;color:var(--ink2);border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+.region a{margin-top:auto;padding-top:20px;font-weight:600}
+
+/* privacidade */
+.priv{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.priv .card{padding:26px}
+.priv svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.priv h3{margin:18px 0 8px}
+
+/* rodar */
+.run{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;align-items:start}
+.term{background:#0b0a08;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.term .bar{display:flex;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.term .bar i{width:11px;height:11px;border-radius:50%;background:var(--line2)}
+.term pre{margin:0;padding:20px 22px;font:400 14px/1.85 var(--mono);color:var(--ink);overflow-x:auto}
+.term .c{color:var(--muted)}
+.term .p{color:var(--accent)}
+.files{margin-top:26px;border-top:1px solid var(--line)}
+.files div{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px;color:var(--ink2)}
+.files code{font:500 13.5px var(--mono);color:var(--accent2)}
+
+/* limites */
+.limits{display:grid;grid-template-columns:repeat(2,1fr);gap:0 56px;list-style:none;margin:0;padding:0}
+.limits li{padding:22px 0;border-top:1px solid var(--line);color:var(--ink2)}
+.limits li b{display:block;color:var(--ink);font:400 26px/1.15 var(--sf);margin-bottom:8px}
+
+/* final */
+.final{text-align:center;padding:150px 0 140px;overflow:hidden}
+.final::before{content:"";position:absolute;inset:auto 0 -200px;height:600px;background:radial-gradient(ellipse 40% 50% at 50% 100%,rgba(240,106,67,.16),transparent 70%);pointer-events:none}
+.final h2{font-size:clamp(60px,9vw,128px);line-height:.92;margin:22px 0 26px}
+.final .lead{margin:0 auto 38px}
+.final .ctas{justify-content:center}
+
+footer{border-top:1px solid var(--line);padding:44px 0 56px;color:var(--muted);font-size:14.5px}
+footer .wrap{display:flex;gap:24px 48px;flex-wrap:wrap;justify-content:space-between}
+footer a{color:var(--ink2)}
+footer p+p{margin-top:6px}
+
+@media (max-width:1020px){
+  .hero .hero-grid,.sec-head,.res,.audit,.run{grid-template-columns:1fr}
+  .mandala-box{margin:0 auto}
+  .res figure{position:static;max-width:380px}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat:nth-child(3){border-right:0}
+  .stat:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .bias,.regions,.stab{grid-template-columns:1fr}
+  .priv{grid-template-columns:repeat(2,1fr)}
+  .top ul{display:none}
+  .top .cta{margin-left:auto}
+}
+@media (max-width:640px){
+  :root{--g:16px}
+  body{font-size:16px}
+  section{padding:84px 0}
+  .hero{padding-top:44px}
+  .cards,.priv,.limits{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat{border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)}
+  .stat:nth-child(2n){border-right:0!important}
+  .stat:nth-last-child(-n+2){border-bottom:0}
+  .stat b{font-size:44px}
+  .axis{grid-template-columns:1fr 1fr;gap:6px 12px}
+  .axis .n{display:none}
+  .axis .bar{grid-column:1/-1;grid-row:2}
+  .mandala-box .tag{width:auto;max-width:none;margin-top:-6px}
+  .legend{position:static;justify-content:center;margin-bottom:8px}
+  .files div{grid-template-columns:1fr;gap:4px}
+  .top .gh{display:none}
+  .btn{padding:16px 22px}
+  .band .track{font-size:24px}
+}
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Filosofômetro, início desta página">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 28 27H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="16" cy="19" r="3.2" fill="#F06A43"/></svg>
+      Filosofômetro
+    </a>
+    <ul>
+      <li><a href="#resultado">O resultado</a></li>
+      <li><a href="#motor">O motor</a></li>
+      <li><a href="#auditoria">Auditoria</a></li>
+      <li><a href="#vies">Contra viés</a></li>
+      <li><a href="#rodar">Código</a></li>
+    </ul>
+    <a class="cta" href="https://filosofometro.com.br/?utm_source=github&amp;utm_medium=site&amp;utm_campaign=pagina-projeto">Fazer o teste</a>
+    <a class="gh" href="https://github.com/tiagocardosobezerra/filosofometro" aria-label="Código no GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="kicker">Teste filosófico · código à vista</span>
+      <h1>O teste de filosofia que <em>mostra a conta.</em></h1>
+      <p class="lead">O Filosofômetro compara o seu jeito de pensar com o de 104 pensadores do ranking geral e mais os do seu idioma, como Lao Tsé, Kant, Simone de Beauvoir e Ailton Krenak. São 180 no total. Você responde afirmações do dia a dia sobre verdade, liberdade, moral e poder. O motor devolve o seu arquétipo, o pensador mais parecido com você e cada número que levou até ele.</p>
+      <div class="ctas">
+        <a class="btn btn-a" href="https://filosofometro.com.br/?utm_source=github&amp;utm_medium=site&amp;utm_campaign=pagina-projeto">Fazer o teste <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-g" href="https://github.com/tiagocardosobezerra/filosofometro">Ver o código</a>
+      </div>
+      <div class="hero-meta"><span><b>Grátis</b> e sem cadastro</span><span>Rápido: <b>44</b> afirmações, uns 6 minutos</span><span><b>PT · EN · ES</b></span></div>
+    </div>
+    <div class="mandala-box" role="img" aria-label="Mandala dos 11 temas de um resultado de exemplo: o perfil da pessoa em laranja e o de Kant em tracejado, 93% de afinidade.">
+      <div class="legend"><span><i></i>Você</span><span><i class="d"></i>Kant</span></div>
+      <svg id="mandala" viewBox="-300 -300 600 600" role="img" aria-hidden="true"></svg>
+      <div class="tag"><small>Resultado de exemplo</small><strong>Deontologista da Liberdade</strong><span>Pensa parecido com <b>Kant</b> · 93%</span></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>132</b><span>afirmações em 3 níveis: 44, 88 ou 132</span></div>
+      <div class="stat"><b>11</b><span>temas, cada um com dois lados legítimos</span></div>
+      <div class="stat"><b>180</b><span>pensadores: 104 no ranking geral e 76 nos regionais</span></div>
+      <div class="stat"><b>2</b><span>implementações do cálculo, sem código em comum</span></div>
+      <div class="stat"><b>208</b><span>verificações automáticas no motor e no catálogo</span></div>
+      <div class="stat"><b>0</b><span>cadastros e nenhum banco de respostas</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="band" aria-hidden="true"><div class="track" id="band"></div></div>
+
+<section id="resultado">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">O que você leva</span><h2>Seu jeito de pensar tem nome. <em>E conta.</em></h2></div>
+      <p class="lead">Este é o resultado de exemplo que o próprio site mostra, com as 132 afirmações respondidas. Tudo foi calculado pelo mesmo motor que vai ler as suas respostas.</p>
+    </div>
+    <div class="res">
+      <figure class="reveal"><img src="img/resultado-exemplo.webp" width="896" height="1418" alt="Cartão do resultado: Deontologista da Liberdade, pensa parecido com Kant, 93%. Abaixo, a mandala dos 11 temas com o perfil da pessoa e o de Kant sobrepostos." loading="lazy"><figcaption>A mandala desenha os 11 temas. A linha tracejada é Kant.</figcaption></figure>
+      <ol class="steps">
+        <li class="reveal"><div><small>Seu arquétipo</small><p>Um nome para o seu jeito de pensar, formado pelos seus dois lados mais fortes: <b>Deontologista da Liberdade</b>. São mais de 400 combinações possíveis.</p></div></li>
+        <li class="reveal"><div><small>O pensador com o formato mais parecido</small><p>A afinidade em porcentagem, os mais parecidos depois dele e onde vocês concordam e discordam, tema por tema.</p></div></li>
+        <li class="reveal"><div><small>Frente a frente</small><p style="margin-bottom:4px">Afirmação do teste:</p><q>Mentir é errado, mesmo para salvar alguém.</q><p style="margin-top:8px">A sua resposta ao lado do que o pensador diria, em paráfrase.</p></div></li>
+        <li class="reveal"><div><small>Quem mais discordaria de você</small><p>O seu oposto no catálogo, com os temas em que vocês mais se afastam.</p></div></li>
+        <li class="reveal"><div><small>Quem pensa como você perto de casa</small><p>Um ranking regional: 27 brasileiros em português, 26 do mundo de língua inglesa em inglês e 26 ibero-americanos em espanhol.</p></div></li>
+        <li class="reveal"><div><small>Na história</small><p>Uma linha do tempo de 571 a.C. até hoje, com o lugar do seu par e do seu oposto.</p></div></li>
+        <li class="reveal"><div><small>Para mostrar e para discutir</small><p>Três cards prontos para o story, um link com prévia e o desafio: um amigo faz o teste e vocês descobrem em quantos dos 11 temas concordam.</p></div></li>
+        <li class="reveal"><div><small>Por onde começar a ler</small><p>Três livros de cada pensador, para dar o primeiro passo na leitura, com links de associado da Amazon.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="temas" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">O mapa</span><h2>Onze tensões que definem <em>um pensamento.</em></h2></div>
+      <p class="lead">Cada tema opõe duas respostas legítimas a uma pergunta antiga. Não existe lado certo. O teste mede para onde você puxa, e com que força.</p>
+    </div>
+    <div class="axes" id="axes"></div>
+    <div class="axes-note"><span><i></i>O resultado de exemplo acima</span><span><i class="k"></i>Kant, no catálogo</span><span>Cada tema tem 4, 8 ou 12 afirmações, metade puxando para cada lado.</span></div>
+  </div>
+</section>
+
+<section id="motor">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">Como o motor calcula</span><h2>Quatro passos. <em>Nenhuma caixa-preta.</em></h2></div>
+      <p class="lead">O motor é um arquivo só, <span class="mono">engine.js</span>, com funções puras e sem acesso à página. Quem mostra o resultado não calcula nada: só exibe o que o motor devolve.</p>
+    </div>
+    <div class="cards">
+      <div class="card reveal"><span class="num">i.</span><h3>Você responde</h3><p>Cada resposta vale de +2 a −2 e é multiplicada pela direção da afirmação. A posição em cada tema é a soma das contribuições dividida pelo máximo possível.</p><div class="formula"><span class="c">// por tema</span>
+posição = Σ (resposta × direção) ÷ máximo</div></div>
+      <div class="card reveal"><span class="num">ii.</span><h3>O formato, não a força</h3><p>O seu perfil e o de cada pensador são ajustados para a mesma intensidade média do catálogo. Assim o teste compara o formato do pensamento, e quem responde com cautela não fica sem par.</p><div class="formula">fator = <span class="o">mín</span>(3, intensidade do catálogo ÷ a sua)
+<span class="c">// abaixo de 0,05: perfil sem direção, sem percentual</span></div></div>
+      <div class="card reveal"><span class="num">iii.</span><h3>A distância</h3><p>A distância é a média das diferenças nos 11 temas. A afinidade sai de uma curva fixa, a mesma para todos os pensadores.</p><div class="formula">afinidade = <span class="o">round</span>(100 × e<sup>−(d ÷ 0,77)²</sup>)
+<span class="c">// limitada entre 1 e 100</span></div></div>
+      <div class="card reveal"><span class="num">iv.</span><h3>O ranking</h3><p>Ordena por distância. Empate de verdade (diferença até 10<sup>−9</sup>) desempata pela distância bruta e depois pelo identificador (id) do pensador. O mesmo conjunto de respostas sempre dá o mesmo resultado.</p><div class="formula">ordem = distância → distância bruta → id
+<span class="c">// determinístico, sem sorteio</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="auditoria" style="padding-top:40px">
+  <div class="wrap audit">
+    <div class="reveal">
+      <span class="kicker">Auditoria</span>
+      <h2>Qualquer pessoa confere <em>qualquer resultado.</em></h2>
+      <p class="lead">A página Verificar refaz a conta com uma segunda implementação, <span class="mono">verify.js</span>, escrita sem nenhum código em comum com o motor. Ela compara cada número, da primeira resposta ao último percentual.</p>
+      <ul class="checks">
+        <li><span><b>Auditoria em JSON</b> em todo resultado, com todos os números em precisão completa. O arquivo basta, sozinho, para refazer o ranking inteiro.</span></li>
+        <li><span><b>Duas impressões digitais:</b> uma do catálogo (eixos, afirmações e posições dos pensadores) e outra do código do motor. Se algo mudar, a auditoria mostra.</span></li>
+        <li><span><b>Método por escrito</b> no próprio site, com as constantes do cálculo à vista.</span></li>
+      </ul>
+      <div class="fp"><span>motor <b>v1.2.0</b></span><span>catálogo <b>503c9e4e</b></span><span>código <b>554efb62</b></span><span>τ = <b>0,77</b></span></div>
+      <div class="ctas" style="margin-top:30px"><a class="btn btn-g" href="https://filosofometro.com.br/?utm_source=github&amp;utm_medium=site&amp;utm_campaign=pagina-projeto#/metodo">Ler o método</a></div>
+    </div>
+    <img class="reveal" src="img/verificar.webp" width="1200" height="1190" alt="Página Verificar do Filosofômetro: tudo confere, o motor e o verificador independente chegam aos mesmos números, Kant com 93% de afinidade. Abaixo, oito checagens aprovadas, como 132 de 132 respostas e 104 de 104 posições do ranking." loading="lazy">
+  </div>
+</section>
+
+<section id="vies">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">Contra viés</span><h2>Testado para não ter <em>favoritos.</em></h2></div>
+      <p class="lead">Muito teste de internet acaba mandando quase todo mundo para os mesmos poucos resultados. Aqui, a cada mudança no catálogo ou no motor, uma bateria de verificações confere que isso não acontece.</p>
+    </div>
+    <div class="bias">
+      <div class="card reveal"><b>104 <em>de</em> 104</b><p>pensadores vencem quando alguém responde exatamente como eles. Ninguém no catálogo é inalcançável.</p></div>
+      <div class="card reveal"><b>4,2<em>%</em></b><p>é o máximo que um único pensador leva numa simulação de 60 mil pessoas espalhadas por todas as respostas possíveis. O limite do teste é 6%.</p></div>
+      <div class="card reveal"><b><em>Centro</em></b><p>Quem concorda com tudo, ou discorda de tudo, cai exatamente no centro dos 11 temas. Inverter todas as respostas inverte todos os temas.</p></div>
+      <div class="card reveal"><b>22 <em>polos</em></b><p>Nos 22 polos, quem puxa forte para um lado recebe um par desse lado em 65% ou mais das vezes.</p></div>
+      <div class="card reveal"><b>5 <em>épocas</em></b><p>Nenhuma época é favorecida: Antiguidade, Medieval, Modernidade, Contemporâneos e Oriente aparecem perto do seu peso no catálogo.</p></div>
+      <div class="card reveal"><b>3 <em>idiomas</em></b><p>O ranking geral dá o mesmo resultado em português, inglês e espanhol, e cada ranking regional é conferido dentro do seu idioma.</p></div>
+    </div>
+    <div class="stab">
+      <div class="card reveal"><div class="row"><h3>Rápido</h3><span>55%</span></div><div class="meter"><i data-w="55"></i></div><p>44 afirmações, uns 6 minutos. Mesmo resultado ao refazer em 55% das vezes.</p></div>
+      <div class="card reveal"><div class="row"><h3>Completo</h3><span>83%</span></div><div class="meter"><i data-w="83"></i></div><p>88 afirmações, uns 12 minutos. Mesmo resultado ao refazer em 83% das vezes.</p></div>
+      <div class="card reveal"><div class="row"><h3>Profundo</h3><span>94%</span></div><div class="meter"><i data-w="94"></i></div><p>132 afirmações, uns 18 minutos. Mesmo resultado ao refazer em 94% das vezes.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="regioes" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">Três idiomas</span><h2>Cada idioma tem <em>os seus pensadores.</em></h2></div>
+      <p class="lead">Além dos 104 pensadores do ranking geral, cada idioma traz o seu próprio ranking, com quem pensou perto de quem vai fazer o teste.</p>
+    </div>
+    <div class="regions" id="regions"></div>
+  </div>
+</section>
+
+<section id="privacidade" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">Privacidade</span><h2>Seu jeito de pensar <em>é seu.</em></h2></div>
+      <p class="lead">O site é estático. O cálculo roda no seu aparelho e nenhuma resposta fica guardada num servidor: não existe banco de dados de respostas.</p>
+    </div>
+    <div class="priv">
+      <div class="card reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M3 3l18 18"/></svg><h3>Sem cadastro</h3><p>Nem e-mail, nem login. É abrir e responder.</p></div>
+      <div class="card reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 10.5l2 2 4-4"/></svg><h3>Tudo no navegador</h3><p>O cálculo roda no seu aparelho. O link de resultado guarda só o código das respostas, que vai ao servidor apenas para montar a prévia, sem ser guardado.</p></div>
+      <div class="card reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><h3>Medição sem cookies</h3><p>A contagem de visitas não usa cookies e não recebe as suas respostas.</p></div>
+      <div class="card reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg><h3>Funciona offline</h3><p>Dá para instalar como app no celular e usar sem internet depois da primeira visita.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="rodar" style="padding-top:40px">
+  <div class="wrap run">
+    <div class="reveal">
+      <span class="kicker">Código à vista</span>
+      <h2>Sem build. <em>Sem banco de dados.</em></h2>
+      <p class="lead">HTML, CSS e JavaScript puro, servidos como arquivos. Só as prévias de link usam duas funções pequenas na Vercel. Dá para rodar na sua máquina em um comando.</p>
+      <div class="files">
+        <div><code>data.js</code><span>o catálogo: temas, afirmações e posições dos pensadores. Só dados.</span></div>
+        <div><code>engine.js</code><span>o motor. Funções puras, com trilha de auditoria.</span></div>
+        <div><code>verify.js</code><span>a segunda implementação, usada pela página Verificar e pelos testes.</span></div>
+        <div><code>app.js</code><span>a interface. Não calcula nada.</span></div>
+        <div><code>tests/</code><span>motor, alcance de cada pensador e calibração contra viés.</span></div>
+      </div>
+    </div>
+    <div class="term reveal">
+      <div class="bar"><i></i><i></i><i></i></div>
+<pre><span class="c"># baixar</span>
+<span class="p">$</span> git clone https://github.com/tiagocardosobezerra/filosofometro
+<span class="p">$</span> cd filosofometro
+
+<span class="c"># rodar em http://localhost:5173</span>
+<span class="p">$</span> npx serve@14.2.4 -l 5173 .
+
+<span class="c"># motor e catálogo: 162 verificações</span>
+<span class="p">$</span> node tests/engine-test.js
+<span class="c">162 passed, 0 failed</span>
+
+<span class="c"># todo pensador é alcançável?</span>
+<span class="p">$</span> node tests/reachability.js
+
+<span class="c"># viés por época, polo e nível: 46 verificações</span>
+<span class="p">$</span> node tests/calibration.js</pre>
+    </div>
+  </div>
+</section>
+
+<section id="limites" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><span class="kicker">Limites honestos</span><h2>O que o Filosofômetro <em>não é.</em></h2></div>
+      <p class="lead">Mostrar a conta também é mostrar onde ela para.</p>
+    </div>
+    <ul class="limits">
+      <li class="reveal"><b>Não é diagnóstico.</b>É um retrato do que você respondeu hoje, sobre 11 temas. Não mede inteligência, caráter nem personalidade.</li>
+      <li class="reveal"><b>As posições dos pensadores são leituras.</b>Resumir um filósofo em 11 números é discutível. As posições passaram por revisão, mas continuam abertas a debate, e estão todas à vista no catálogo.</li>
+      <li class="reveal"><b>O nível Rápido é uma prévia.</b>Com 44 afirmações, o mesmo resultado volta em 55% das vezes. Para um retrato firme, faça o Profundo.</li>
+      <li class="reveal"><b>Os retratos têm licenças diferentes.</b>As imagens vêm da Wikimedia Commons, com crédito. Quem não tem foto livre ganha um retrato desenhado pela própria mandala.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <span class="kicker">Inscrito no templo de Apolo, em Delfos</span>
+    <h2>Conhece-te <br><em>a ti mesmo.</em></h2>
+    <p class="lead">Uns seis minutos, 44 afirmações e nenhum cadastro. A conta fica com você.</p>
+    <div class="ctas"><a class="btn btn-a" href="https://filosofometro.com.br/?utm_source=github&amp;utm_medium=site&amp;utm_campaign=pagina-projeto">Começar o teste <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn-g" href="https://github.com/tiagocardosobezerra/filosofometro">Ver o código</a></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p>Feito por <a href="https://github.com/tiagocardosobezerra">Tiago Cardoso Bezerra</a> e pela <b style="color:var(--ink2);font-weight:600">Errantes</b>.</p>
+      <p>Retratos: Wikimedia Commons, com crédito em cada pensador. Os pensadores não endossam este teste.</p>
+    </div>
+    <div>
+      <p><a href="https://filosofometro.com.br/?utm_source=github&amp;utm_medium=site&amp;utm_campaign=pagina-projeto">filosofometro.com.br</a> · <a href="https://github.com/tiagocardosobezerra/filosofometro">GitHub</a></p>
+      <p>Também do autor: <a href="https://tiagocardosobezerra.github.io/tribunal/">Tribunal</a>, <a href="https://github.com/tiagocardosobezerra/vegapunk">Vegapunk</a>, <a href="https://github.com/tiagocardosobezerra/senku">Senku</a>, <a href="https://github.com/tiagocardosobezerra/deidara">Deidara</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Dados reais: perfil normalizado do resultado de exemplo (SAMPLE_CODE do app) e posições de Kant em data.js.
+  var AX=[["conhecimento","Razão","Experiência"],["vontade","Destino","Liberdade"],["sentido","Sentido dado","Sentido criado"],["ética","Dever","Consequência"],["vida social","Indivíduo","Comunidade"],["felicidade","Prazer","Virtude"],["realidade","Matéria","Espírito"],["verdade","Certeza","Dúvida"],["mudança","Tradição","Ruptura"],["sofrimento","Aceitar","Resistir"],["poder","Autoridade","Autonomia"]];
+  var U=[-0.611,0.999,-0.167,-1.277,0.389,0.888,0,0,0.555,-0.056,-0.666];
+  var K=[-0.6,0.7,-0.5,-1,0.3,0.6,0.4,-0.2,0.2,0,-0.4];
+  var NS="http://www.w3.org/2000/svg", R=200;
+  function rad(v){var c=Math.max(-1.35,Math.min(1.35,v));return R*(0.52+c*0.34);}
+  function pt(i,r){var a=-Math.PI/2+i*2*Math.PI/11;return [r*Math.cos(a),r*Math.sin(a)];}
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;}
+  var svg=document.getElementById("mandala");
+  if(svg){
+    [0.25,0.5,0.75,1].forEach(function(f){el("circle",{cx:0,cy:0,r:R*f,"class":"m-grid"});});
+    el("circle",{cx:0,cy:0,r:R*1.18,"class":"m-grid"});
+    for(var i=0;i<11;i++){var p=pt(i,R);el("line",{x1:0,y1:0,x2:p[0],y2:p[1],"class":"m-grid"});
+      var q=pt(i,R*1.32),t=el("text",{x:q[0],y:q[1]+5,"class":"ax-l","text-anchor":Math.abs(q[0])<20?"middle":(q[0]>0?"start":"end")});t.textContent=AX[i][0];}
+    function poly(v,cls){var d=v.map(function(x,i){var p=pt(i,rad(x));return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");return el("polygon",{points:d,"class":cls});}
+    poly(K,"m-think");
+    var u=poly(U,"m-user");var len=Math.ceil(u.getTotalLength?u.getTotalLength():2000);u.style.setProperty("--len",len);
+    U.forEach(function(x,i){var p=pt(i,rad(x));var c=el("circle",{cx:p[0],cy:p[1],r:5,"class":"m-dot"});c.style.animationDelay=(0.4+i*0.19)+"s";});
+  }
+  // temas
+  var axes=document.getElementById("axes");
+  if(axes){AX.forEach(function(a,i){var row=document.createElement("div");row.className="axis reveal";
+    row.innerHTML='<span class="n">'+String(i+1).padStart(2,"0")+'</span><span class="l">'+a[1]+'</span><span class="bar"><span>'+a[0]+'</span><i class="k" data-v="'+K[i]+'"></i><i data-v="'+U[i]+'"></i></span><span class="r">'+a[2]+'</span>';
+    axes.appendChild(row);});}
+  // faixa de nomes
+  var names=["Heráclito","Lélia Gonzalez","Platão","Simone de Beauvoir","Confúcio","Nise da Silveira","Kant","Ailton Krenak","Hannah Arendt","Nietzsche","Paulo Freire","Lao Tsé","Spinoza","Sor Juana Inés de la Cruz","Frederick Douglass","Epicuro","Marilena Chauí","Buda","Sartre","bell hooks","Montaigne","Abdias do Nascimento","Marco Aurélio","María Zambrano","Byung-Chul Han","Hume","Monja Coen","Diógenes"];
+  var band=document.getElementById("band");
+  if(band){var h=names.concat(names).map(function(n){return "<span>"+n+"</span>";}).join("");band.innerHTML=h;}
+  // regiões (nomes de i18n/en.js, i18n/es.js e data.js)
+  var REG=[
+    {k:"Em português",t:"Brasil",n:27,c:["#F06A43","#F4A184","#CBC2B2"],href:"https://filosofometro.com.br/?utm_source=github&utm_medium=site&utm_campaign=pagina-projeto",l:"Fazer em português",p:["Paulo Freire","Lélia Gonzalez","Ailton Krenak","Nise da Silveira","Marilena Chauí","Abdias do Nascimento","Monja Coen","Mário Ferreira dos Santos","Padre Antônio Vieira","Oswald de Andrade","Vilém Flusser","Newton da Costa"]},
+    {k:"In English",t:"English-speaking world",n:26,c:["#F4A184","#CBC2B2","#F06A43"],href:"https://filosofometro.com.br/en/?utm_source=github&utm_medium=site&utm_campaign=pagina-projeto",l:"Take it in English",p:["Mary Astell","Thomas Paine","Frederick Douglass","Jane Addams","W. E. B. Du Bois","Emma Goldman","B. R. Ambedkar","Iris Murdoch","Martin Luther King Jr.","Martha Nussbaum","bell hooks","Kwame Anthony Appiah"]},
+    {k:"En español",t:"Iberoamérica",n:26,c:["#CBC2B2","#F06A43","#F4A184"],href:"https://filosofometro.com.br/es/?utm_source=github&utm_medium=site&utm_campaign=pagina-projeto",l:"Hacerlo en español",p:["Sor Juana Inés de la Cruz","José Martí","María Zambrano","Ortega y Gasset","Miguel de Unamuno","Enrique Dussel","Mario Bunge","Gloria Anzaldúa","Gabriela Mistral","Jorge Luis Borges","Octavio Paz","Bartolomé de las Casas"]}
+  ];
+  var reg=document.getElementById("regions");
+  if(reg){REG.forEach(function(r){var d=document.createElement("div");d.className="region reveal";
+    d.innerHTML='<div class="flag">'+r.c.map(function(c){return '<i style="background:'+c+'"></i>';}).join("")+'</div><small>'+r.k+'</small><h3>'+r.t+'</h3><div class="cnt">'+r.n+' pensadores no ranking próprio</div><div class="chips">'+r.p.map(function(n){return "<span>"+n+"</span>";}).join("")+'<span>e mais</span></div><a href="'+r.href+'">'+r.l+' →</a>';
+    reg.appendChild(d);});}
+  // revelar ao rolar
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function place(scope){scope.querySelectorAll(".axis .bar i").forEach(function(i){var v=Math.max(-1,Math.min(1,+i.dataset.v));i.style.left=(50+v*46)+"%";});
+    scope.querySelectorAll(".meter i").forEach(function(i){i.style.width=i.dataset.w+"%";});}
+  var items=document.querySelectorAll(".reveal");
+  if(!reduce&&"IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("on");place(e.target);io.unobserve(e.target);}});},{rootMargin:"0px 0px -8% 0px"});
+    items.forEach(function(x){io.observe(x);});
+  } else {items.forEach(function(x){x.classList.add("on");});place(document);}
+  var top=document.getElementById("top");
+  window.addEventListener("scroll",function(){top.classList.toggle("sc",window.scrollY>8);},{passive:true});
+})();
+</script>
+</body>
+</html>
